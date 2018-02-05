@@ -1,9 +1,6 @@
 @media only screen and (min-width: 650px)
 {
   /*Navigation responsive*/
-  .home-flag {
-    text-align: center;
-  }
   .top-nav ul li {
     display: inline-block;
     width: 24%;
