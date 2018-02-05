@@ -1,10 +1,55 @@
-@media only screen and (min-width: 680px, max-width: 1280px)
+@media only screen and (min-width: 650px)
 {
-  nav {
+  /*Navigation responsive*/
+  .home-flag {
     text-align: center;
   }
-  .top-nav ul li, .menu-icon {
+  .top-nav ul li {
     display: inline-block;
-    text-align: center;
+    width: 24%;
+    border-top: 0;
+  }
+  .top-nav ul {
+    margin-left: 10%;
+    margin-right: 10%;
+    border-top: 1px solid #FFFFFF;
+  }
+  /*Image responsive*/
+  #Yellow-image, #Purple-image {
+    display: inline-block;
+    width: 47%;
+  }
+}
+
+@media only screen and (min-width: 1000px)
+{
+  /*Navigation responsive*/
+  .top-nav .logo {
+    display: inline-block;
+    width: 5%;
+    margin-top: 0.4%;
+    text-align: left;
+  }
+  .top-nav ul {
+    display: inline-block;
+    width: 50%;
+    border-top: 0;
+    float: right;
+    margin-top: 1.4%;
+    margin-right: 0;
+  }
+  /*Image responsive*/
+  .photo-cell {
+    width: 47%;
+    display: inline-block;
+  }
+  #Yellow-image, #Purple-image {
+    display: inline-block;
+    width: 22.5%;
+    margin-right: 0;
+  }
+  #Purple-image {
+    margin-left: 1%;
+    margin-right: 0.7%;
   }
 }
