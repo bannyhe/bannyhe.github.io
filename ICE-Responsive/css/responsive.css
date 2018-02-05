@@ -1,0 +1,10 @@
+@media only screen and (min-width: 680px, max-width: 1280px)
+{
+  nav {
+    text-align: center;
+  }
+  .top-nav ul li, .menu-icon {
+    display: inline-block;
+    text-align: center;
+  }
+}
