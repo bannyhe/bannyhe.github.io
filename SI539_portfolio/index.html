@@ -14,36 +14,53 @@
     <link href="https://fonts.googleapis.com/css?family=Marck+Script" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome.min.css">
   </head>
-  <body>
-    <header>
-      <div class="navbar">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle Navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a href="index.html" class="mhlogo"><img src="img/mh_logo.png" alt="MH" width="100" height="100"></a>
-            <br />
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="index.html">Home</a></html></li>
-              <li><a href="visual.html">Visual</a></html></li>
-              <li><a href="about.html">About</a></html></li>
-              <li><a href="contact.html">Contact</a></html></li>
+  <body id="page-top">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navstyle" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+          <img class="mhlogo" src="img/mh_logo.png" alt="My Logo" width="15%" >
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-expanded="false" aria-controls="navbarResponsive" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav nav navbar ml-auto navbar-right">
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger portfolioactive" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="visual.html">Visual</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="contact.html">Contact</a>
+              </li>
             </ul>
           </div>
         </div>
-      </div>
+      </nav>
+      <!--     Header  -->
+    <header class="myheader">
+      <div class="introdiv">
+        <div class="myname"> Hi, I'm Mu He. </div><br/>
+          <div class="heading">
+              <p> Learner, Achiever, Innovator </p>
+          </div>
+        </div>
+    </header>
 
       <!-- Self Introduction -->
-      <div class="mycarousel row text-center">
-        <h2 class="intro-1"> Hello, I am Mu He</h2>
-        <h2 class="intro-2">Learner, Achiever, Innovator</h2>
-      </div>
+      <header class="masthead">
+        <div class="container">
+          <h2 class="intro-1"> Hello, I am Mu He</h2>
+          <h2 class="intro-2">Learner, Achiever, Innovator</h2>
+        </div>
+      </header>
+      <!-- carousel -->
 
       <section class="row text-center">
         <div class="container">
@@ -58,9 +75,9 @@
       <section class="p-0" id="portfolio">
          <div class="container-fluid">
            <div class="row no-gutter popup-gallery" >
-             <div class="col-lg-4  row text-center">
+             <div class="col-lg-4">
                <a class="portfolio-box" href="project_1.html">
-                 <img class="img-port" src="img/m_fitness.png" width="80%" alt="M-Fitness">
+                 <img class="img-port" src="img/m_fitness.png" alt="M-Fitness">
                  <div class="portfolio-box-caption">
                    <div class="portfolio-box-caption-content">
                      <h2 class="project-category text-faded">
@@ -73,9 +90,9 @@
                  </div>
                </a>
              </div>
-             <div class="col-lg-4  row text-center">
+             <div class="col-lg-4">
                <a class="portfolio-box" href="project_2.html">
-                 <img class="img-port" src="img/AI.png" width="80%" alt="MOOC Financial Tracking">
+                 <img class="img-port" src="img/AI.png" alt="MOOC Financial Tracking">
                  <div class="portfolio-box-caption">
                    <div class="portfolio-box-caption-content">
                      <h2 class="project-category text-faded">
@@ -88,9 +105,9 @@
                  </div>
                </a>
              </div>
-             <div class="col-lg-4  row text-center">
+             <div class="col-lg-4">
                <a class="portfolio-box" href="project_3.html">
-                 <img class="img-port" src="img/IH_thumbnail.png" width="80%" alt="Inmate Healthcare">
+                 <img class="img-port" src="img/IH_thumbnail.png" alt="Inmate Healthcare">
                  <div class="portfolio-box-caption">
                    <div class="portfolio-box-caption-content">
                      <h2 class="project-category text-faded">
@@ -106,8 +123,17 @@
            </div>
          </div>
        </section>
-    </header>
     <br><br>
+    <section id="contacts">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h4 class="section-heading">STAY CONNECTED</h4>
+            <hr class="main">
+          </div>
+        </div>
+      </div>
+    </section>
     <!-- FOOTER -->
 <footer class="text-center">
     <div class="footer-above">
@@ -146,7 +172,11 @@
     </div>
     <a href="#" class="go-top"><span class="glyphicon glyphicon-chevron-up"></span> Back to Top</a>
   </footer>
+  <!-- /.container -->
 
+
+      <!-- Bootstrap core JavaScript -->
+      <!-- Placed at the end of the document so the pages load faster -->
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

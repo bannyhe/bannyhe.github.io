@@ -7,24 +7,24 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-			$(document).ready(function() {
-				$('#useBilling').on("change", function(){
-					if (this.checked) {
-						$("[name='homeAdd']").val($("[name='billingAdd']").val());
-						$("[name='homeAdd']").prop('disabled', true); //Cannot change the typed value
+      // YOUR CODE HERE
+			$(document).ready(function(){
+				$("#useBilling").on("change", function(){
+					if (this.checked){
+						$("#home").val($("#billing").val());
+						$("#home").prop('disabled',true);
 					}
-					else {
+					else{
 						$("#home").val("");
-						$("#home").prop('disabled', false); //Can change the typed value
+						$("#home").prop("disabled",false);
 					}
+				})
 			});
-
-		});
     </script>
 </head>
 <body>
     <h1>Challenge Two</h1>
-    <form action="challenge3.html">
+    <form action="challenge5.html">
       <fieldset>
         <legend>Billing Information</legend>
         <div>
@@ -40,7 +40,7 @@
         <br>
         <textarea name="homeAdd" id="home"></textarea>
         </div>
-        <input type = "submit" value = "Go To Challenge 3">
+        <input type = "submit" value = "Go To Challenge 5">
       </fieldset>
 </body>
 </html>

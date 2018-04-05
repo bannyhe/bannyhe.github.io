@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+}
+
 .section-heading{
   margin-top: 5%;
 	font-family: noto-serif;
@@ -46,12 +50,28 @@ h4{
   width:40%;
   height:40%;
 }
+.fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+.navbar {
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+}
+
 .navbar-toggle .icon-bar {
   display: block;
   width: 22px;
   height: 2px;
   border-radius: 1px;
 }
+
 #map {
   height: 400px;
   width: 100%;
@@ -73,7 +93,7 @@ h4{
 /*	padding-top: 5%;*/
   padding-left: 1%;
   font-size:28pt;
-  font-family: sans-serif;
+  font-family: font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   text-transform: uppercase;
   color: black;
 }
@@ -112,7 +132,54 @@ margin-bottom: 5%;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
+.project-title h2{
+  text-align: center;
+  font-size: 20px;
+  bottom: 0;
+  color: black;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.project-type{
+  line-height: 21px;
+}
+.project-bio{
+  padding-top: 1%;
+}
+.btn-primary {
+  color: white;
+  border-color: #ffc107;
+  background-color:#ffc107; }
+.btn-primary:hover {
+    color: white;
+    border-color: #ff9800;
+    background-color: #ff9800; }
+
+.resume-btn{
+	margin-left: 20%;
+  margin-bottom: 2%;
+}
+
+.img-port{
+	width: 95%;
+	margin-bottom: 5%;
+}
+.img-port-detail{
+  display: block;
+  width:70%;
+  height: 70%;
+  margin:auto;
+}
+
+.port-sub{
+	width: 50%;
+  display: block;
+  margin:auto;
+}
+
 .mhlogo {
+  float: left;
+  position: relative;
   display: inline;
   margin-left: auto;
   margin-right: auto;
@@ -123,21 +190,104 @@ margin-bottom: 5%;
   margin-right: auto;
 }
 
+.introdiv{
+  font-size:1.4em;
+/*  background-color: #eeeeee;
+*/  text-align: center;
+  padding-top: 15%;
+  padding-bottom: 15%;
+  /*background-image: url('../img/header.jpg');*/
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-repeat: no-repeat;
+
+}
 .intro {
+  font-family: 'Times';
+  font-size: 1em;
   line-height: 1.5em;
 }
 
 .intro-1 {
-  font-family: Times;
+  font-family: 'Architects Daughter', cursive;
+  color: #eee;
+  font-size: 40pt;
+  text-align: center;
 }
 
 .intro-2 {
-  font-family: Georgia;
+  font-family: 'La Belle Aurore', cursive;
+  text-align: center;
+  color:#eee;
+  font-size: 20pt;
 }
 
 .projects{
   margin: 3% 10%;
 }
+
+figcaption{
+  text-align: center;
+}
+
+.mycarousel{
+  height: 400px;
+  background-image: url("../img/home_11.jpg");
+}
+.project-para-detail{
+  margin:5%;
+/*  line-height: 5px;*/
+}
+.btn-social {
+  font-size: 20px;
+  line-height: 45px;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 100%; }
+
+.portfolio-box {
+  position: relative;
+  display: block;
+  max-width: 500px;
+  margin: 0 auto; }
+.portfolio-box .portfolio-box-caption {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 95%;
+    height: 100%;
+    text-align: center;
+    opacity: 0;
+    color: white;
+    background: rgba(255, 193, 7, 0.9);
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s; }
+ .portfolio-box .portfolio-box-caption .portfolio-box-caption-content {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      text-align: center; }
+      .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-category,
+      .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-name {
+        padding: 0 15px;
+        font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; }
+      .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-category {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase; }
+      .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-name {
+        font-size: 18px; }
+  .portfolio-box:hover .portfolio-box-caption {
+    opacity: 1; }
+  .portfolio-box:focus {
+    outline: none; }
 
 .sm-pic{
   width: 100%;
@@ -152,4 +302,116 @@ margin-bottom: 5%;
 .ih-logo {
   width: 75%;
   margin: 3% 10%;
+}
+
+#mainNav {
+    background-color: white;
+    box-shadow: 0 0 10px 0 #D3D3D3;
+}
+#mainNav .navbar-nav .nav-item .nav-link {
+  color: #292929;
+  font-weight: 500;
+  font-size: 1.5em;
+  /*text-decoration: underline;*/
+  padding-bottom: 10%;
+
+}
+
+#mainNav .navbar-nav .nav-item .nav-link:hover {
+  color: blue;
+  font-weight: 500;
+  /*text-decoration: underline;*/
+  padding-bottom: 10%;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link:active{
+  color: #292929;
+  font-weight: 500;
+  border-bottom: .16em solid #365da3;
+  padding-bottom: 10%;
+}
+
+#mainNav .navbar-toggler {
+  float: right;
+  position: relative;
+  font-size: 12px;
+  right: 0;
+  padding: 13px;
+  text-transform: uppercase;
+  color: white;
+  border: 0;
+  background-color: #365da3;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#mainNav .navbar-brand {
+    float: left;
+    margin-left: 0;
+    position: relative;
+    font-size: 1.5em;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+
+#mainNav.navbar-shrink .navbar-brand {
+    font-size: 1.25em;
+    padding: 12px 0;
+  }
+
+
+
+.portfolioactive, .visualactive, .contactactive, .aboutactive{
+  font-color: #365da3 !important;
+  font-weight: 500;
+  border-bottom: .16em solid #365da3;
+  padding-bottom: 0;
+}
+
+
+/*Media queries*/
+@media(min-width:768px) {
+  header.masthead {
+    text-align: left;
+    padding: 0;
+    color: black;
+    background-image: none;
+  }
+@media (min-width: 992px)
+#mainNav {
+    padding-top: 10px;
+    padding-bottom: 0px;
+    transition: padding-top 0.3s, padding-bottom 0.3s;
+    border: none;
+}
+
+@media (min-width: 992px)
+.navbar-expand-lg {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-flow: row nowrap;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+}
+
+
+@media (max-width: 480px) {
+.intro{
+  padding-top: 20%;
+}
+}
+@media (min-width: 481px){
+.intro{
+  padding-top: 10%;
+}
+}
+@media (min-width: 768px) {
+  .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-category {
+    font-size: 16px; }
+  .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-name {
+    font-size: 22px; } }
+}
+@media screen and (min-width: 350px) and (max-width: 769px){
+.resume-btn{
+margin-left: 30%;
 }
