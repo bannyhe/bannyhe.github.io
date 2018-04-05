@@ -1,0 +1,155 @@
+.section-heading{
+  margin-top: 5%;
+	font-family: noto-serif;
+}
+
+.go-top{
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  text-decoration: none;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 15px;
+  padding: 1em;
+  display: none;
+  font-family: 'noto-serif';
+  font-weight: 10px;
+}
+.go-top:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+  text-decoration: none;
+  color: white;
+}
+
+.tips{
+  margin: 5% 10%;
+}
+
+.personal{
+  margin: 2% 0;
+  font-size: 1.2em;
+}
+
+h3{
+  color: #D1D1D1;
+}
+
+h4{
+	font-family: noto-serif;
+}
+.logo-item{
+  display: inline;
+  width: 15%;
+}
+.social-icon {
+  width:40%;
+  height:40%;
+}
+.navbar-toggle .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+}
+#map {
+  height: 400px;
+  width: 100%;
+}
+.main{
+  max-width: 50px;
+  border-width: 3px;
+  border-color: rgb(255,193,7) }
+
+.selfintro{
+	padding-top: 0;
+  padding-left: 1%;
+  padding-bottom: 0;
+  font-family: sans-serif;
+  font-size: 1.2em;
+}
+
+.selfintroheading{
+/*	padding-top: 5%;*/
+  padding-left: 1%;
+  font-size:28pt;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  color: black;
+}
+
+.AI_logo{
+  display: inline-block;
+  width: 25%;
+  margin: 0;
+}
+
+.project_thumbnail {
+  width: 80%;
+  margin: 3% 10%;
+}
+
+.ps {
+  font-size: 16px;
+}
+
+.section-subheading{
+margin-bottom: 5%;
+}
+
+.img-self{
+  margin-top: 5%;
+/*  width: 60%;*/
+}
+
+#contacts{
+	padding-top: 5%;
+}
+
+.portfolio-heading{
+  font-size: 90px;
+  font-weight: 900;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.mhlogo {
+  display: inline;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container-fluid {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.intro {
+  line-height: 1.5em;
+}
+
+.intro-1 {
+  font-family: Times;
+}
+
+.intro-2 {
+  font-family: Georgia;
+}
+
+.projects{
+  margin: 3% 10%;
+}
+
+.sm-pic{
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.xs-pic{
+  width: 30%;
+  margin: 3% 1.5%;
+}
+
+.ih-logo {
+  width: 75%;
+  margin: 3% 10%;
+}
