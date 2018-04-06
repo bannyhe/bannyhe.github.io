@@ -4,9 +4,11 @@
 
 .section-heading{
   margin-top: 5%;
-	font-family: noto-serif;
+	font-family: "Open Sans";
 }
-
+.graphic {
+  margin-top: 80px;
+}
 .go-top{
   position: fixed;
   bottom: 2em;
@@ -58,18 +60,12 @@ h4{
     z-index: 1030;
 }
 .navbar {
-    display: flex;
+    margin-bottom: 0;
+    border-radius: 0;
     -webkit-box-align: center;
     -ms-flex-pack: justify;
     justify-content: space-between;
     padding: .5rem 1rem;
-}
-
-.navbar-toggle .icon-bar {
-  display: block;
-  width: 22px;
-  height: 2px;
-  border-radius: 1px;
 }
 
 #map {
@@ -85,12 +81,11 @@ h4{
 	padding-top: 0;
   padding-left: 1%;
   padding-bottom: 0;
-  font-family: sans-serif;
+  font-family: 'Open Sans';
   font-size: 1.2em;
 }
 
 .selfintroheading{
-/*	padding-top: 5%;*/
   padding-left: 1%;
   font-size:28pt;
   font-family: font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
@@ -107,8 +102,11 @@ h4{
 .project_thumbnail {
   width: 80%;
   margin: 3% 10%;
+  margin-top: 80px;
 }
-
+.Inmatetop{
+  margin-top: 120px;
+}
 .ps {
   font-size: 16px;
 }
@@ -177,12 +175,25 @@ margin-bottom: 5%;
   margin:auto;
 }
 
+.navbar-header {
+  padding-top: 10px;
+  padding-bottom: 0;
+}
+
+.navbar-text{
+  text-align: left;
+  font-size: 1.5em;
+  padding-left: 3%;
+}
+
 .mhlogo {
-  float: left;
-  position: relative;
-  display: inline;
-  margin-left: auto;
-  margin-right: auto;
+  max-height: 60px;
+  padding-bottom: 10px;
+  margin-left: 100%;
+}
+
+.ml-auto {
+  margin-left: auto !important;
 }
 
 .container-fluid {
@@ -192,8 +203,7 @@ margin-bottom: 5%;
 
 .introdiv{
   font-size:1.4em;
-/*  background-color: #eeeeee;
-*/  text-align: center;
+  text-align: center;
   padding-top: 15%;
   padding-bottom: 15%;
   /*background-image: url('../img/header.jpg');*/
@@ -204,24 +214,20 @@ margin-bottom: 5%;
   background-repeat: no-repeat;
 
 }
-.intro {
-  font-family: 'Times';
-  font-size: 1em;
-  line-height: 1.5em;
-}
 
 .intro-1 {
+  padding-top: 100px;
   font-family: 'Architects Daughter', cursive;
   color: #eee;
-  font-size: 40pt;
+  font-size: 36pt;
   text-align: center;
 }
 
 .intro-2 {
-  font-family: 'La Belle Aurore', cursive;
+  font-family: 'Crafty Girls', cursive;
   text-align: center;
   color:#eee;
-  font-size: 20pt;
+  font-size: 16pt;
 }
 
 .projects{
@@ -233,9 +239,12 @@ figcaption{
 }
 
 .mycarousel{
+  margin-top: 72px;
   height: 400px;
-  background-image: url("../img/home_11.jpg");
+  background-image: url("../img/carousel.jpg");
+  max-width: 100%;
 }
+
 .project-para-detail{
   margin:5%;
 /*  line-height: 5px;*/
@@ -254,7 +263,8 @@ figcaption{
   position: relative;
   display: block;
   max-width: 500px;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 .portfolio-box .portfolio-box-caption {
     position: absolute;
     bottom: 0;
@@ -264,7 +274,7 @@ figcaption{
     text-align: center;
     opacity: 0;
     color: white;
-    background: rgba(255, 193, 7, 0.9);
+    background: rgba(255, 200, 10, 15);
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;
     transition: all 0.2s; }
@@ -284,10 +294,35 @@ figcaption{
         text-transform: uppercase; }
       .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-name {
         font-size: 18px; }
-  .portfolio-box:hover .portfolio-box-caption {
-    opacity: 1; }
+  .portfolio-box:hover .portfolio-box-caption{
+    opacity: 0.95;
+  }
   .portfolio-box:focus {
-    outline: none; }
+    outline: none;
+  }
+  /**********************/
+  #portfolio .portfolio-item:hover .portfolio-link .portfolio-hover {
+    opacity: 1.0;
+  }
+
+  #portfolio .portfolio-item .portfolio-link .portfolio-hover {
+    position: absolute;
+    -webkit-transition: all ease 0.25s;
+    -moz-transition: all ease 0.25s;
+    transition: all ease 0.25s;
+    opacity: 0;
+    background: #eeeeee;
+  }
+
+  #portfolio .portfolio-item .portfolio-link .portfolio-hover:hover {
+    opacity: 0.95;
+  }
+
+  /*Center text on hover*/
+  #portfolio .portfolio-hover{
+    position: relative;
+  }
+  /***********************/
 
 .sm-pic{
   width: 100%;
@@ -304,14 +339,22 @@ figcaption{
   margin: 3% 10%;
 }
 
+
 #mainNav {
     background-color: white;
     box-shadow: 0 0 10px 0 #D3D3D3;
+    height: 12%;
 }
+
+.nav-item {
+  padding: 20px 0;
+}
+
 #mainNav .navbar-nav .nav-item .nav-link {
   color: #292929;
   font-weight: 500;
-  font-size: 1.5em;
+  font-size: 1.3em;
+  font-family: 'Open Sans';
   /*text-decoration: underline;*/
   padding-bottom: 10%;
 
@@ -331,34 +374,53 @@ figcaption{
   padding-bottom: 10%;
 }
 
-#mainNav .navbar-toggler {
-  float: right;
-  position: relative;
-  font-size: 12px;
-  right: 0;
-  padding: 13px;
-  text-transform: uppercase;
-  color: white;
-  border: 0;
-  background-color: #365da3;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@media only screen and (min-width:768px) and (max-width: 992px) {
+  .navbar-brand {
+      float: left;
+      margin-left: 0;
+      position: relative;
+      font-size: 1.5em;
+      text-align: center;
+      -webkit-transition: all 0.3s;
+      -moz-transition: all 0.3s;
+      transition: all 0.3s;
+    }
+    .mhlogo {
+      max-height: 60px;
+      padding-bottom: 10px;
+      margin-left: 100%;
+    }
 }
 
-#mainNav .navbar-brand {
-    float: left;
-    margin-left: 0;
+@media only screen (min-width:480px) and (max-width: 768px) {
+  .navbar-nav .nav .navbar .right{
+
+  }
+  .navbar-brand{
+    width: 50%;
+    top: 0;
     position: relative;
-    font-size: 1.5em;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
+    left: 50%;
+    margin-left: -55px !important;
+    display: block;
   }
-
-#mainNav.navbar-shrink .navbar-brand {
-    font-size: 1.25em;
-    padding: 12px 0;
+  .mhlogo{
+  	margin-top: 10px;
+  	background-image: url("../img/mhlogo.png");
+    background-size: 150px 60px;
+  	width: 150px;
+  	height: 65px;
+}
+  .navbar-toggle{
+    float: right;
+    position: absolute;
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
   }
-
+}
 
 
 .portfolioactive, .visualactive, .contactactive, .aboutactive{
@@ -377,7 +439,7 @@ figcaption{
     color: black;
     background-image: none;
   }
-@media (min-width: 992px)
+@media (min-width: 1200px)
 #mainNav {
     padding-top: 10px;
     padding-bottom: 0px;
@@ -385,33 +447,9 @@ figcaption{
     border: none;
 }
 
-@media (min-width: 992px)
-.navbar-expand-lg {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    flex-flow: row nowrap;
-    -webkit-box-pack: start;
-    justify-content: flex-start;
-}
-
-
-@media (max-width: 480px) {
-.intro{
-  padding-top: 20%;
-}
-}
-@media (min-width: 481px){
-.intro{
-  padding-top: 10%;
-}
-}
 @media (min-width: 768px) {
   .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-category {
     font-size: 16px; }
   .portfolio-box .portfolio-box-caption .portfolio-box-caption-content .project-name {
     font-size: 22px; } }
-}
-@media screen and (min-width: 350px) and (max-width: 769px){
-.resume-btn{
-margin-left: 30%;
 }
