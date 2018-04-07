@@ -401,6 +401,10 @@ figcaption{
     background-image: none;
   }
 
+  .graphic img{
+    width: 60%;
+  }
+
 /*Media queries*/
 @media(max-width:767px) {
   .mhlogo {
