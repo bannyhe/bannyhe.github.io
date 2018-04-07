@@ -6,9 +6,7 @@
   margin-top: 5%;
 	font-family: "Open Sans";
 }
-.graphic {
-  margin-top: 80px;
-}
+
 .go-top{
   position: fixed;
   bottom: 2em;
@@ -46,7 +44,7 @@ h4{
 }
 .logo-item{
   display: inline;
-  width: 15%;
+  width: 12%;
 }
 .social-icon {
   width:40%;
@@ -62,10 +60,11 @@ h4{
 .navbar {
     margin-bottom: 0;
     border-radius: 0;
-    -webkit-box-align: center;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: .5rem 1rem;
+    background-color: none;
+    color: #FFF;
+    padding: 1% 0;
+    font-size: 1.2em;
+    border: 0;
 }
 
 #map {
@@ -176,6 +175,7 @@ margin-bottom: 5%;
 }
 
 .navbar-header {
+  display: flex;
   padding-top: 10px;
   padding-bottom: 0;
 }
@@ -184,12 +184,6 @@ margin-bottom: 5%;
   text-align: left;
   font-size: 1.5em;
   padding-left: 3%;
-}
-
-.mhlogo {
-  max-height: 60px;
-  padding-bottom: 10px;
-  margin-left: 100%;
 }
 
 .ml-auto {
@@ -339,7 +333,6 @@ figcaption{
   margin: 3% 10%;
 }
 
-
 #mainNav {
     background-color: white;
     box-shadow: 0 0 10px 0 #D3D3D3;
@@ -374,55 +367,6 @@ figcaption{
   padding-bottom: 10%;
 }
 
-
-@media only screen and (min-width:768px) and (max-width: 992px) {
-  .navbar-brand {
-      float: left;
-      margin-left: 0;
-      position: relative;
-      font-size: 1.5em;
-      text-align: center;
-      -webkit-transition: all 0.3s;
-      -moz-transition: all 0.3s;
-      transition: all 0.3s;
-    }
-    .mhlogo {
-      max-height: 60px;
-      padding-bottom: 10px;
-      margin-left: 100%;
-    }
-}
-
-@media only screen (min-width:480px) and (max-width: 768px) {
-  .navbar-nav .nav .navbar .right{
-
-  }
-  .navbar-brand{
-    width: 50%;
-    top: 0;
-    position: relative;
-    left: 50%;
-    margin-left: -55px !important;
-    display: block;
-  }
-  .mhlogo{
-  	margin-top: 10px;
-  	background-image: url("../img/mhlogo.png");
-    background-size: 150px 60px;
-  	width: 150px;
-  	height: 65px;
-}
-  .navbar-toggle{
-    float: right;
-    position: absolute;
-    display: block;
-    width: 22px;
-    height: 2px;
-    border-radius: 1px;
-  }
-}
-
-
 .portfolioactive, .visualactive, .contactactive, .aboutactive{
   font-color: #365da3 !important;
   font-weight: 500;
@@ -430,15 +374,59 @@ figcaption{
   padding-bottom: 0;
 }
 
+  .navbar-brand {
+    order: 1;
+    float: left;
+    min-height: 55px;
+    padding: 0;
+  }
+  .navbar-inverse .navbar-nav .active a, .navbar-inverse .navbar-nav .active a:focus,
+  .navbar-inverse .navbar-nav .active a:hover {
+    color: #FFF;
+    background-color: #5E4485;
+  }
+  .navbar-inverse .navbar-nav li a {
+    color: #D5D5D5;
+  }
 
-/*Media queries*/
-@media(min-width:768px) {
+  .mhlogo {
+    display: block;
+    max-height: 60px;
+    margin-left: 100%;
+  }
   header.masthead {
     text-align: left;
     padding: 0;
     color: black;
     background-image: none;
   }
+
+/*Media queries*/
+@media(max-width:767px) {
+  .mhlogo {
+    display: block;
+    position: relative;
+    top: -65px;
+    vertical-align: baseline;
+    max-height: 60px;
+  }
+  .nav-item .active {
+    color: none !important;
+  }
+  .navbar-collapse{
+    background-color: white;
+    width: 100%;
+    right: 20px !important;
+  }
+  .navbar-toggle {
+    background-image: url("../img/icon/hamburger.png");
+    left: 350px;
+    width: 60px;
+    height: 45px;
+  }
+
+}
+
 @media (min-width: 1200px)
 #mainNav {
     padding-top: 10px;
