@@ -4,14 +4,29 @@
     <meta charset="utf-8">
     <title>Mu He</title>
     <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+    function hideStuff(id){
+      document.getElementById(id).style.display = 'none';
+  //    document.getElementById('right').style.display = 'none';
+    }
+    function showStuff(id){
+      document.getElementById(id).style.display = 'inline';
+    }
+    </script>
   </head>
-  <body>
+  <body background="images/sun-pattern.png">
+  <div class="bg">
     <h1>Mu He</h1>
-    <img src="images/examPic.JPG" alt="Photo" class="imgBorder"/>
-    <img src="images/UMSI-logo.jpg" alt="UMSI logo" class="imgBorder"/>
+    <span id="left">
+      <img src="images/examPic.JPG" alt="Photo" class="imgBorder"/>
+    </span>
+    <span id="right">
+      <img src="images/UMSI-logo.jpg" alt="UMSI logo" class="imgBorder"/>
+    </span>
     <div class="buttons">
-      <button type="button">Hide Image</button>
-      <button type="button">Show Image</button>
+      <button type="button" onclick="hideStuff('left'); return false;">Hide Image</button>
+      <button type="button" onclick="showStuff('left'); return false;">Show Image</button>
     </div>
+  </div>
   </body>
 </html>

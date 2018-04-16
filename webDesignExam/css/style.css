@@ -1,12 +1,25 @@
-body {
-  background-image: url(images/sun-pattern.png);
+.bg {
+    /* The image used */
+    background: url("images/sun-pattern.png");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-size: cover;
 }
 
 img{
-  width: 35%;
-}
-.imgBorder {
-  border-width: 5px;
-  border-color: blue;
+  display: inline;
+  width: 39%;
+  border: 5px solid blue;
   padding: 5%;
+}
+
+#left{
+  width: 50%;
+}
+#right{
+  width:50%;
 }
