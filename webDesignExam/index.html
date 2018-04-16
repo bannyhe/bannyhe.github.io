@@ -7,10 +7,16 @@
     <script type="text/javascript">
     function hideStuff(id){
       document.getElementById(id).style.display = 'none';
-//      document.getElementById('right').style.display = 'inline';
+      document.getElementById('right').style.display = 'block';
+      document.getElementById('right').style.margin = '0 25%';
+      document.getElementById('right').style.width = '100%';
+      document.getElementById('button').style.display= "block";
+      document.getElementById('button').style.margin = '0 42%';
     }
     function showStuff(id){
       document.getElementById(id).style.display = 'inline';
+      document.getElementById('right').style.margin = 'auto';
+      document.getElementById('button').style.margin = 'auto';
     }
     </script>
   </head>
@@ -24,7 +30,7 @@
     <span id="right">
       <img src="images/UMSI-logo.jpg" alt="UMSI logo" class="imgBorder"/>
     </span>
-    <div class="buttons">
+    <div class="buttons" id="button">
       <button type="button" onclick="hideStuff('left'); return false;">Hide Image</button>
       <button type="button" onclick="showStuff('left'); return false;">Show Image</button>
     </div>

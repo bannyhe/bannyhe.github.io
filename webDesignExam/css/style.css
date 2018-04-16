@@ -12,8 +12,18 @@
 
 img{
   float: left;
-  display: inline;
+  display: flex;
   width: 39%;
   border: 5px solid blue;
   padding: 5%;
+}
+
+span{
+  display: block;
+}
+
+buttons {
+  display: block;
+  position: relative;
+  margin-bottom: 10px;
 }
