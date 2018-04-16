@@ -1,0 +1,12 @@
+body {
+  background-image: url(images/sun-pattern.png);
+}
+
+img{
+  width: 35%;
+}
+.imgBorder {
+  border-width: 5px;
+  border-color: blue;
+  padding: 5%;
+}
