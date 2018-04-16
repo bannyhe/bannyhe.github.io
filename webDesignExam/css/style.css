@@ -11,15 +11,9 @@
 }
 
 img{
+  float: left;
   display: inline;
   width: 39%;
   border: 5px solid blue;
   padding: 5%;
-}
-
-#left{
-  width: 50%;
-}
-#right{
-  width:50%;
 }
