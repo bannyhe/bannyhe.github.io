@@ -72,7 +72,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
         className="w-full max-w-7xl"
       >
         {/* Full-width card matching nav content bounds */}
-        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-900/80 dark:via-purple-950/30 dark:to-gray-900/80 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl shadow-2xl pt-16 pb-16 px-6 md:px-12">
+        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-900/80 dark:via-purple-950/30 dark:to-gray-900/80 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl shadow-2xl pt-16 pb-4 px-6 md:px-12">
           {/* Form stays at a sensible width, centered */}
           <div className="max-w-sm mx-auto w-full">
             <div className="flex flex-col items-center mb-8">
@@ -115,7 +115,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               {error === "network-error" && (
                 <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Cannot reach the analytics server.</p>
               )}
-              <div className="flex justify-center pt-12">
+              <div className="h-36 flex items-center justify-center">
                 <button
                   type="submit"
                   disabled={!key || loading}
