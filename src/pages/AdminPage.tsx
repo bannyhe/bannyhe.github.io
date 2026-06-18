@@ -4,7 +4,8 @@ import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Sankey,
 } from "recharts";
-import { Lock, RefreshCw, LogOut, Users, Eye, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet } from "lucide-react";
+import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet } from "lucide-react";
+import { useTheme } from "../contexts/ThemeContext";
 
 const BASE = import.meta.env.VITE_ANALYTICS_URL ?? "http://localhost:3001";
 const KEY_STORAGE = "admin_api_key";
@@ -33,19 +34,32 @@ async function apiFetch<T>(path: string, key: string): Promise<T | null> {
   }
 }
 
+type LoginResult = "ok" | "wrong-key" | "network-error";
+
+async function loginCheck(key: string): Promise<LoginResult> {
+  try {
+    const res = await fetch(`${BASE}/api/dashboard/overview`, { headers: { "x-api-key": key } });
+    if (res.ok) return "ok";
+    return "wrong-key";
+  } catch {
+    return "network-error";
+  }
+}
+
 // ── Login screen ───────────────────────────────────────────────────────────────
 function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
   const [key, setKey] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<LoginResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showKey, setShowKey] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    setError(false);
-    const data = await apiFetch<Overview>("/api/dashboard/overview", key);
+    setError(null);
+    const result = await loginCheck(key);
     setLoading(false);
-    if (data === null) { setError(true); return; }
+    if (result !== "ok") { setError(result); return; }
     localStorage.setItem(KEY_STORAGE, key);
     onLogin(key);
   }
@@ -60,28 +74,42 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
         <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
             <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4">
-              <Lock className="w-7 h-7 text-purple-600 dark:text-purple-400" />
+              <Lock className="w-7 h-7 text-purple-700 dark:text-purple-300" />
             </div>
             <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Admin</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Enter your dashboard API key</p>
+            <p className="text-sm text-gray-700 dark:text-gray-200 mt-1">Enter your dashboard API key</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="password"
-              value={key}
-              onChange={e => setKey(e.target.value)}
-              placeholder="API key"
-              autoFocus
-              className="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-gray-700/50 border border-white/60 dark:border-gray-600/40 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            {error && (
-              <p className="text-sm text-red-500 text-center">Incorrect API key.</p>
+            <div className="relative">
+              <input
+                type={showKey ? "text" : "password"}
+                value={key}
+                onChange={e => setKey(e.target.value)}
+                placeholder="API key"
+                autoFocus
+                className="w-full px-4 py-3 pr-12 rounded-xl bg-white/50 dark:bg-gray-700/50 border border-white/60 dark:border-gray-600/40 text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowKey(v => !v)}
+                tabIndex={-1}
+                aria-label={showKey ? "Hide API key" : "Show API key"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+              >
+                {showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+            {error === "wrong-key" && (
+              <p className="text-sm text-red-700 dark:text-red-400 text-center">Incorrect API key.</p>
+            )}
+            {error === "network-error" && (
+              <p className="text-sm text-red-700 dark:text-red-400 text-center">Cannot reach the analytics server.</p>
             )}
             <button
               type="submit"
               disabled={!key || loading}
-              className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-semibold transition"
+              className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white font-semibold transition"
             >
               {loading ? "Checking…" : "Enter"}
             </button>
@@ -98,12 +126,12 @@ function StatCard({ icon: Icon, label, value, sub }: { icon: React.ElementType; 
     <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <Icon className="w-5 h-5 text-purple-700 dark:text-purple-300" />
         </div>
-        <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
+        <span className="text-sm text-gray-700 dark:text-gray-200">{label}</span>
       </div>
       <p className="text-3xl font-bold text-gray-800 dark:text-white">{value.toLocaleString()}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{sub}</p>}
     </div>
   );
 }
@@ -113,6 +141,9 @@ const CHART_COLORS = ["#8b5cf6", "#a78bfa", "#c4b5fd", "#ddd6fe"];
 
 // ── Dashboard ──────────────────────────────────────────────────────────────────
 function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void }) {
+  const { theme } = useTheme();
+  const tickColor = theme === "dark" ? "#d1d5db" : "#4b5563"; // gray-300 : gray-600
+
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
   const [pages, setPages]       = useState<PageRow[]>([]);
@@ -181,7 +212,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Analytics</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Your portfolio visitor insights</p>
+          <p className="text-gray-700 dark:text-gray-200 text-sm mt-1">Your portfolio visitor insights</p>
         </div>
         <div className="flex gap-2">
           <motion.button
@@ -206,7 +237,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
       {loading && !overview ? (
         <div className="flex items-center justify-center h-64">
-          <RefreshCw className="w-8 h-8 text-purple-400 animate-spin" />
+          <RefreshCw className="w-8 h-8 text-purple-500 animate-spin" />
         </div>
       ) : (
         <AnimatePresence>
@@ -236,8 +267,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(139,92,246,0.1)" />
-                  <XAxis dataKey="date" tickFormatter={d => d.slice(5)} tick={{ fontSize: 11, fill: "#9ca3af" }} />
-                  <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} />
+                  <XAxis dataKey="date" tickFormatter={d => d.slice(5)} tick={{ fontSize: 11, fill: tickColor }} />
+                  <YAxis tick={{ fontSize: 11, fill: tickColor }} />
                   <Tooltip
                     contentStyle={{ background: "rgba(17,24,39,0.8)", border: "1px solid rgba(139,92,246,0.3)", borderRadius: 12, color: "#e5e7eb" }}
                     labelFormatter={d => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
@@ -258,14 +289,14 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     <div key={p.path} className="flex items-center gap-3">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{p.path || "/"}</p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-600 dark:text-gray-300">
                           avg {formatMs(p.avg_duration_ms)} · scroll {Math.round((p.avg_scroll_depth ?? 0) * 100)}%
                         </p>
                       </div>
-                      <span className="text-sm font-semibold text-purple-600 dark:text-purple-400 shrink-0">{p.views}</span>
+                      <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 shrink-0">{p.views}</span>
                     </div>
                   ))}
-                  {pages.length === 0 && <p className="text-sm text-gray-400">No data yet.</p>}
+                  {pages.length === 0 && <p className="text-sm text-gray-600 dark:text-gray-300">No data yet.</p>}
                 </div>
               </div>
 
@@ -283,7 +314,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between mb-1">
                             <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{g.location}</span>
-                            <span className="text-sm font-semibold text-purple-600 dark:text-purple-400 ml-2">{g.visitors}</span>
+                            <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 ml-2">{g.visitors}</span>
                           </div>
                           <div className="h-1.5 rounded-full bg-gray-200 dark:bg-gray-700">
                             <div className="h-1.5 rounded-full bg-purple-500" style={{ width: `${(g.visitors / max) * 100}%` }} />
@@ -292,7 +323,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       </div>
                     );
                   })}
-                  {geo.length === 0 && <p className="text-sm text-gray-400">No data yet.</p>}
+                  {geo.length === 0 && <p className="text-sm text-gray-600 dark:text-gray-300">No data yet.</p>}
                 </div>
               </div>
             </div>
@@ -310,16 +341,16 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       <div key={d.device} className="flex flex-col items-center gap-1">
                         <Icon className="w-6 h-6 text-purple-500" />
                         <span className="text-lg font-bold text-gray-800 dark:text-white">{Math.round(d.count / total * 100)}%</span>
-                        <span className="text-xs text-gray-400 capitalize">{d.device}</span>
+                        <span className="text-xs text-gray-600 dark:text-gray-300 capitalize">{d.device}</span>
                       </div>
                     );
                   })}
                 </div>
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 mt-4">Top Browsers</h3>
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 mt-4">Top Browsers</h3>
                 <ResponsiveContainer width="100%" height={120}>
                   <BarChart data={devices?.byBrowser.slice(0, 5) ?? []} layout="vertical" margin={{ left: 0, right: 20 }}>
                     <XAxis type="number" hide />
-                    <YAxis type="category" dataKey="browser" tick={{ fontSize: 11, fill: "#9ca3af" }} width={60} />
+                    <YAxis type="category" dataKey="browser" tick={{ fontSize: 11, fill: tickColor }} width={60} />
                     <Tooltip
                       contentStyle={{ background: "rgba(17,24,39,0.8)", border: "1px solid rgba(139,92,246,0.3)", borderRadius: 12, color: "#e5e7eb" }}
                     />
@@ -356,7 +387,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     </Sankey>
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400">Not enough navigation data yet — visit a few pages first.</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Not enough navigation data yet — visit a few pages first.</p>
                 )}
               </div>
             </div>
@@ -367,7 +398,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-400 border-b border-white/20 dark:border-gray-700/30">
+                    <tr className="text-left text-gray-600 dark:text-gray-300 border-b border-white/20 dark:border-gray-700/30">
                       <th className="pb-3 pr-4 font-medium">Location</th>
                       <th className="pb-3 pr-4 font-medium">Device</th>
                       <th className="pb-3 pr-4 font-medium">Browser</th>
@@ -381,16 +412,16 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                         <td className="py-2.5 pr-4 text-gray-700 dark:text-gray-300">
                           {v.country
                             ? `${countryFlag(null)} ${v.city ? v.city + ", " : ""}${v.country}`.trim()
-                            : <span className="font-mono text-xs text-gray-400">{v.ip_masked ?? "—"}</span>}
+                            : <span className="font-mono text-xs text-gray-600 dark:text-gray-300">{v.ip_masked ?? "—"}</span>}
                         </td>
-                        <td className="py-2.5 pr-4 text-gray-600 dark:text-gray-400 capitalize">{v.device}</td>
-                        <td className="py-2.5 pr-4 text-gray-600 dark:text-gray-400">{v.browser ?? "—"}</td>
-                        <td className="py-2.5 pr-4 text-purple-600 dark:text-purple-400 font-medium">{v.page_view_count}</td>
-                        <td className="py-2.5 text-gray-400 text-xs">{formatDate(v.first_seen_at)}</td>
+                        <td className="py-2.5 pr-4 text-gray-600 dark:text-gray-300 capitalize">{v.device}</td>
+                        <td className="py-2.5 pr-4 text-gray-600 dark:text-gray-300">{v.browser ?? "—"}</td>
+                        <td className="py-2.5 pr-4 text-purple-700 dark:text-purple-300 font-medium">{v.page_view_count}</td>
+                        <td className="py-2.5 text-gray-600 dark:text-gray-300 text-xs">{formatDate(v.first_seen_at)}</td>
                       </tr>
                     ))}
                     {visitors.length === 0 && (
-                      <tr><td colSpan={5} className="py-6 text-center text-gray-400">No visitors yet.</td></tr>
+                      <tr><td colSpan={5} className="py-6 text-center text-gray-600 dark:text-gray-300">No visitors yet.</td></tr>
                     )}
                   </tbody>
                 </table>
