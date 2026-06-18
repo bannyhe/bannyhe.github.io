@@ -1,7 +1,7 @@
 // Analytics client — fire-and-forget, never blocks the UI.
 // All failures are swallowed so tracking never disrupts the visitor's experience.
 
-const BASE_URL = import.meta.env.VITE_ANALYTICS_URL ?? "http://localhost:3001";
+const BASE_URL = import.meta.env.VITE_ANALYTICS_URL || "http://localhost:3001";
 const SESSION_KEY = "portfolio_session_id";
 const SESSION_EXPIRY_KEY = "portfolio_session_expiry";
 // Session lasts 30 minutes of inactivity

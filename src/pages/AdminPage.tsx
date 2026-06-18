@@ -7,7 +7,7 @@ import {
 import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 
-const BASE = import.meta.env.VITE_ANALYTICS_URL ?? "http://localhost:3001";
+const BASE = import.meta.env.VITE_ANALYTICS_URL || "http://localhost:3001";
 const KEY_STORAGE = "admin_api_key";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
