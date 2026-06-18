@@ -118,7 +118,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               <button
                 type="submit"
                 disabled={!key || loading}
-                className="block mx-auto mt-2 px-10 py-2.5 rounded-xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] hover:from-[#0d2543] hover:to-[#153d63] dark:from-[#6DB2FF] dark:to-[#5a9ae6] dark:hover:from-[#5a9ae6] dark:hover:to-[#4882cc] text-white dark:text-gray-900 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="block mx-auto mt-2 px-10 py-2.5 rounded-xl bg-[#123157] hover:bg-[#0e2d55] dark:bg-[#6DB2FF] dark:hover:bg-[#5a9ae6] text-white dark:text-gray-900 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {loading ? "Checking…" : "Enter"}
               </button>
