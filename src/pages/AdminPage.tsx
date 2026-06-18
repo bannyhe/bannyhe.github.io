@@ -85,10 +85,10 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {/*
-                Flex wrapper so input text and eye icon share one visible border.
-                px-4 on input = 16px left gap. pr-4 on button = 16px right gap — symmetric.
+                Container owns the border/background. Input is unstyled (transparent).
+                right-4 = 16px from right border, mirrors pl-4 = 16px left text gap — symmetric.
               */}
-              <div className="flex items-center rounded-xl bg-white/80 dark:bg-gray-800/90 border border-purple-200/70 dark:border-purple-600/40 focus-within:ring-2 focus-within:ring-purple-500 overflow-hidden transition">
+              <div className="relative rounded-xl bg-white/80 dark:bg-gray-800/90 border border-purple-200/70 dark:border-purple-600/40 focus-within:ring-2 focus-within:ring-purple-500 transition">
                 <input
                   id="api-key"
                   aria-label="API key"
@@ -97,17 +97,16 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
                   onChange={e => setKey(e.target.value)}
                   placeholder="API key"
                   autoFocus
-                  className="flex-1 min-w-0 px-4 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none"
+                  className="block w-full pl-4 pr-11 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none"
                 />
-                {/* pl-2 separates icon from text; pr-4 = 16px matches input's px-4 left gap */}
                 <button
                   type="button"
                   onClick={() => setShowKey(v => !v)}
                   tabIndex={-1}
                   aria-label={showKey ? "Hide API key" : "Show API key"}
-                  className="flex items-center pl-2 pr-4 shrink-0 self-stretch text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+                  className="absolute top-1/2 -translate-y-1/2 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
                 >
-                  {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
               {error === "wrong-key" && (
@@ -116,10 +115,15 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               {error === "network-error" && (
                 <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Cannot reach the analytics server.</p>
               )}
+              {/*
+                disabled:bg-purple-700/50 reduces ONLY the background opacity, so text-white
+                stays at full opacity and remains readable. disabled:opacity-50 would fade the
+                text too, making white invisible against the light card background.
+              */}
               <button
                 type="submit"
                 disabled={!key || loading}
-                className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white font-semibold transition"
+                className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:bg-purple-700/50 disabled:cursor-not-allowed text-white font-semibold transition"
               >
                 {loading ? "Checking…" : "Enter"}
               </button>
