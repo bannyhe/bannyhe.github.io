@@ -65,55 +65,61 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center px-4 pt-24 pb-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-sm"
+        className="w-full max-w-7xl"
       >
-        <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-8 shadow-2xl">
-          <div className="flex flex-col items-center mb-8">
-            <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4">
-              <Lock className="w-7 h-7 text-purple-700 dark:text-purple-300" />
+        {/* Card spans full content width — matches nav header bounds */}
+        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-800/70 dark:via-purple-900/20 dark:to-gray-800/70 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl p-10 md:p-16 shadow-2xl">
+          {/* Form centered inside the wide card */}
+          <div className="max-w-sm mx-auto">
+            <div className="flex flex-col items-center mb-8">
+              <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4">
+                <Lock className="w-7 h-7 text-purple-700 dark:text-purple-300" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Admin</h1>
+              <p className="text-sm text-gray-700 dark:text-gray-200 mt-1">Enter your dashboard API key</p>
             </div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Admin</h1>
-            <p className="text-sm text-gray-700 dark:text-gray-200 mt-1">Enter your dashboard API key</p>
-          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative">
-              <input
-                type={showKey ? "text" : "password"}
-                value={key}
-                onChange={e => setKey(e.target.value)}
-                placeholder="API key"
-                autoFocus
-                className="w-full px-4 py-3 pr-12 rounded-xl bg-white/50 dark:bg-gray-700/50 border border-white/60 dark:border-gray-600/40 text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-              />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative">
+                <input
+                  type={showKey ? "text" : "password"}
+                  value={key}
+                  onChange={e => setKey(e.target.value)}
+                  placeholder="API key"
+                  autoFocus
+                  className="w-full px-4 py-3 pr-11 rounded-xl bg-white/70 dark:bg-gray-700/50 border border-purple-200/70 dark:border-purple-700/40 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                />
+                {/* Eye icon sits flush inside the input border */}
+                <button
+                  type="button"
+                  onClick={() => setShowKey(v => !v)}
+                  tabIndex={-1}
+                  aria-label={showKey ? "Hide API key" : "Show API key"}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+                >
+                  {showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {error === "wrong-key" && (
+                <p className="text-sm text-red-700 dark:text-red-400 text-center">Incorrect API key.</p>
+              )}
+              {error === "network-error" && (
+                <p className="text-sm text-red-700 dark:text-red-400 text-center">Cannot reach the analytics server.</p>
+              )}
+              {/* #102F56 is the portfolio primary navy — white text is ~16:1 contrast */}
               <button
-                type="button"
-                onClick={() => setShowKey(v => !v)}
-                tabIndex={-1}
-                aria-label={showKey ? "Hide API key" : "Show API key"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+                type="submit"
+                disabled={!key || loading}
+                className="w-full py-3 rounded-xl bg-[#102F56] hover:bg-[#1a3d6e] dark:bg-purple-700 dark:hover:bg-purple-600 disabled:opacity-50 text-white font-semibold transition"
               >
-                {showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {loading ? "Checking…" : "Enter"}
               </button>
-            </div>
-            {error === "wrong-key" && (
-              <p className="text-sm text-red-700 dark:text-red-400 text-center">Incorrect API key.</p>
-            )}
-            {error === "network-error" && (
-              <p className="text-sm text-red-700 dark:text-red-400 text-center">Cannot reach the analytics server.</p>
-            )}
-            <button
-              type="submit"
-              disabled={!key || loading}
-              className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white font-semibold transition"
-            >
-              {loading ? "Checking…" : "Enter"}
-            </button>
-          </form>
+            </form>
+          </div>
         </div>
       </motion.div>
     </div>
