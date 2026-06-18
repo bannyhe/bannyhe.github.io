@@ -113,7 +113,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
                 <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Incorrect API key.</p>
               )}
               {error === "network-error" && (
-                <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Cannot reach the analytics server.</p>
+                <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Analytics server is offline or not configured.</p>
               )}
               <div className="h-36 flex items-center justify-center">
                 <button
