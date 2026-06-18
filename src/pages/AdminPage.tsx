@@ -71,10 +71,10 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-7xl"
       >
-        {/* Card spans full content width — matches nav header bounds */}
-        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-800/70 dark:via-purple-900/20 dark:to-gray-800/70 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl p-10 md:p-16 shadow-2xl">
-          {/* Form centered inside the wide card */}
-          <div className="max-w-sm mx-auto">
+        {/* Full-width card matching nav content bounds */}
+        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-900/80 dark:via-purple-950/30 dark:to-gray-900/80 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl shadow-2xl py-14 px-6 md:px-12">
+          {/* Form stays at a sensible width, centered */}
+          <div className="max-w-sm mx-auto w-full">
             <div className="flex flex-col items-center mb-8">
               <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4">
                 <Lock className="w-7 h-7 text-purple-700 dark:text-purple-300" />
@@ -84,24 +84,24 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="relative">
+              {/* Flex wrapper: input and eye button share one styled border — no absolute positioning */}
+              <div className="flex items-center rounded-xl bg-white/80 dark:bg-gray-800/90 border border-purple-200/70 dark:border-purple-600/40 focus-within:ring-2 focus-within:ring-purple-500 overflow-hidden transition">
                 <input
                   type={showKey ? "text" : "password"}
                   value={key}
                   onChange={e => setKey(e.target.value)}
                   placeholder="API key"
                   autoFocus
-                  className="w-full px-4 py-3 pr-11 rounded-xl bg-white/70 dark:bg-gray-700/50 border border-purple-200/70 dark:border-purple-700/40 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                  className="flex-1 min-w-0 px-4 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none"
                 />
-                {/* Eye icon sits flush inside the input border */}
                 <button
                   type="button"
                   onClick={() => setShowKey(v => !v)}
                   tabIndex={-1}
                   aria-label={showKey ? "Hide API key" : "Show API key"}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
+                  className="flex items-center justify-center w-10 shrink-0 self-stretch text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
                 >
-                  {showKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {error === "wrong-key" && (
@@ -110,11 +110,10 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               {error === "network-error" && (
                 <p className="text-sm text-red-700 dark:text-red-400 text-center">Cannot reach the analytics server.</p>
               )}
-              {/* #102F56 is the portfolio primary navy — white text is ~16:1 contrast */}
               <button
                 type="submit"
                 disabled={!key || loading}
-                className="w-full py-3 rounded-xl bg-[#102F56] hover:bg-[#1a3d6e] dark:bg-purple-700 dark:hover:bg-purple-600 disabled:opacity-50 text-white font-semibold transition"
+                className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-50 text-white font-semibold transition"
               >
                 {loading ? "Checking…" : "Enter"}
               </button>
