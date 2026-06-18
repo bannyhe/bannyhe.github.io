@@ -115,7 +115,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               {error === "network-error" && (
                 <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Cannot reach the analytics server.</p>
               )}
-              <div className="flex justify-center pt-8">
+              <div className="flex justify-center pt-20">
                 <button
                   type="submit"
                   disabled={!key || loading}
