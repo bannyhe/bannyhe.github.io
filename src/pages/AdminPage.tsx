@@ -4,11 +4,16 @@ import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Sankey,
 } from "recharts";
-import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet } from "lucide-react";
+import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 
 const BASE = import.meta.env.VITE_ANALYTICS_URL || "http://localhost:3001";
 const KEY_STORAGE = "admin_api_key";
+const SERVER_URL_STORAGE = "admin_server_url";
+
+function getServerBase(): string {
+  try { return localStorage.getItem(SERVER_URL_STORAGE) || BASE; } catch { return BASE; }
+}
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 interface Overview {
@@ -25,7 +30,7 @@ interface VisitorRow    { id: string; country: string | null; city: string | nul
 // ── API helper ─────────────────────────────────────────────────────────────────
 async function apiFetch<T>(path: string, key: string): Promise<T | null> {
   try {
-    const res = await fetch(`${BASE}${path}`, { headers: { "x-api-key": key } });
+    const res = await fetch(`${getServerBase()}${path}`, { headers: { "x-api-key": key } });
     if (res.status === 401) return null;
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json() as Promise<T>;
@@ -38,7 +43,7 @@ type LoginResult = "ok" | "wrong-key" | "network-error";
 
 async function loginCheck(key: string): Promise<LoginResult> {
   try {
-    const res = await fetch(`${BASE}/api/dashboard/overview`, { headers: { "x-api-key": key } });
+    const res = await fetch(`${getServerBase()}/api/dashboard/overview`, { headers: { "x-api-key": key } });
     if (res.ok) return "ok";
     return "wrong-key";
   } catch {
@@ -52,6 +57,20 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
   const [error, setError] = useState<LoginResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [showKey, setShowKey] = useState(false);
+  const [showServerConfig, setShowServerConfig] = useState(false);
+  const [serverUrlDraft, setServerUrlDraft] = useState(() => getServerBase());
+
+  function saveServerUrl() {
+    const url = serverUrlDraft.trim();
+    if (url) {
+      localStorage.setItem(SERVER_URL_STORAGE, url);
+    } else {
+      localStorage.removeItem(SERVER_URL_STORAGE);
+      setServerUrlDraft(BASE);
+    }
+    setError(null);
+    setShowServerConfig(false);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -113,9 +132,11 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
                 <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Incorrect API key.</p>
               )}
               {error === "network-error" && (
-                <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Analytics server is offline or not configured.</p>
+                <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">
+                  Cannot reach server. Check the server URL below.
+                </p>
               )}
-              <div className="h-36 flex items-center justify-center">
+              <div className="h-36 flex flex-col items-center justify-center gap-4">
                 <button
                   type="submit"
                   disabled={!key || loading}
@@ -123,8 +144,54 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
                 >
                   {loading ? "Checking…" : "Enter"}
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setShowServerConfig(v => !v)}
+                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                >
+                  <Settings className="w-3 h-3" />
+                  Server
+                </button>
               </div>
             </form>
+
+            {/* Server URL config — outside the form so Enter doesn't trigger login submit */}
+            <AnimatePresence>
+              {showServerConfig && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pb-8 space-y-2">
+                    <label className="block text-xs text-gray-600 dark:text-gray-300 font-medium">
+                      Analytics server URL
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        value={serverUrlDraft}
+                        onChange={e => setServerUrlDraft(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && saveServerUrl()}
+                        placeholder="http://localhost:3001"
+                        className="flex-1 px-3 py-2 text-xs rounded-lg bg-white/80 dark:bg-gray-800/90 border border-purple-200/70 dark:border-purple-600/40 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={saveServerUrl}
+                        className="px-3 py-2 text-xs rounded-lg bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 font-medium hover:opacity-90 transition"
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Use a public URL (e.g. ngrok) to connect from anywhere.
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </motion.div>
