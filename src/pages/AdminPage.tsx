@@ -115,15 +115,10 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               {error === "network-error" && (
                 <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Cannot reach the analytics server.</p>
               )}
-              {/*
-                disabled:bg-purple-700/50 reduces ONLY the background opacity, so text-white
-                stays at full opacity and remains readable. disabled:opacity-50 would fade the
-                text too, making white invisible against the light card background.
-              */}
               <button
                 type="submit"
                 disabled={!key || loading}
-                className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:bg-purple-700/50 disabled:cursor-not-allowed text-gray-900 dark:text-white font-semibold transition"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] hover:from-[#0d2543] hover:to-[#153d63] dark:from-[#6DB2FF] dark:to-[#5a9ae6] dark:hover:from-[#5a9ae6] dark:hover:to-[#4882cc] text-white dark:text-gray-900 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {loading ? "Checking…" : "Enter"}
               </button>
