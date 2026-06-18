@@ -2,3 +2,10 @@ node_modules
 build
 .DS_Store
 *.local
+
+# Backend — secrets and runtime data
+server/.env
+server/analytics.db
+server/analytics.db-shm
+server/analytics.db-wal
+.env

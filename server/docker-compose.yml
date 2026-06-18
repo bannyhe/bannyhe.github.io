@@ -1,0 +1,23 @@
+# This file is only needed if you switch to PostgreSQL in production.
+# For local development, the project uses SQLite (file:./dev.db) — no Docker needed.
+#
+# To use PostgreSQL locally (optional):
+#   1. Change prisma/schema.prisma provider to "postgresql"
+#   2. Update DATABASE_URL in .env to a postgres:// connection string
+#   3. Run: docker compose up -d
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portfolio_analytics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
