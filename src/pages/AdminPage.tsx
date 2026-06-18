@@ -84,31 +84,37 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Flex wrapper: input and eye button share one styled border — no absolute positioning */}
+              {/*
+                Flex wrapper so input text and eye icon share one visible border.
+                px-4 on input = 16px left gap. pr-4 on button = 16px right gap — symmetric.
+              */}
               <div className="flex items-center rounded-xl bg-white/80 dark:bg-gray-800/90 border border-purple-200/70 dark:border-purple-600/40 focus-within:ring-2 focus-within:ring-purple-500 overflow-hidden transition">
                 <input
+                  id="api-key"
+                  aria-label="API key"
                   type={showKey ? "text" : "password"}
                   value={key}
                   onChange={e => setKey(e.target.value)}
                   placeholder="API key"
                   autoFocus
-                  className="flex-1 min-w-0 px-4 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none"
+                  className="flex-1 min-w-0 px-4 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none"
                 />
+                {/* pl-2 separates icon from text; pr-4 = 16px matches input's px-4 left gap */}
                 <button
                   type="button"
                   onClick={() => setShowKey(v => !v)}
                   tabIndex={-1}
                   aria-label={showKey ? "Hide API key" : "Show API key"}
-                  className="flex items-center justify-center w-10 shrink-0 self-stretch text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
+                  className="flex items-center pl-2 pr-4 shrink-0 self-stretch text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition"
                 >
                   {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {error === "wrong-key" && (
-                <p className="text-sm text-red-700 dark:text-red-400 text-center">Incorrect API key.</p>
+                <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Incorrect API key.</p>
               )}
               {error === "network-error" && (
-                <p className="text-sm text-red-700 dark:text-red-400 text-center">Cannot reach the analytics server.</p>
+                <p className="text-sm text-red-700 dark:text-red-300 text-center" role="alert">Cannot reach the analytics server.</p>
               )}
               <button
                 type="submit"
