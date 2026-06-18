@@ -72,7 +72,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
         className="w-full max-w-7xl"
       >
         {/* Full-width card matching nav content bounds */}
-        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-900/80 dark:via-purple-950/30 dark:to-gray-900/80 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl shadow-2xl py-14 px-6 md:px-12">
+        <div className="backdrop-blur-xl bg-gradient-to-br from-indigo-50/90 via-purple-50/80 to-pink-50/90 dark:from-gray-900/80 dark:via-purple-950/30 dark:to-gray-900/80 border border-purple-200/50 dark:border-purple-700/30 rounded-2xl shadow-2xl pt-14 pb-20 px-6 md:px-12">
           {/* Form stays at a sensible width, centered */}
           <div className="max-w-sm mx-auto w-full">
             <div className="flex flex-col items-center mb-8">
@@ -118,7 +118,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               <button
                 type="submit"
                 disabled={!key || loading}
-                className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] hover:from-[#0d2543] hover:to-[#153d63] dark:from-[#6DB2FF] dark:to-[#5a9ae6] dark:hover:from-[#5a9ae6] dark:hover:to-[#4882cc] text-white dark:text-gray-900 font-semibold shadow-lg disabled:grayscale disabled:cursor-not-allowed transition-all"
+                className="w-fit mx-auto mt-2 h-10 px-6 rounded-md bg-gradient-to-r from-[#102F56] to-[#1a4d7a] hover:from-[#0d2543] hover:to-[#153d63] dark:from-[#6DB2FF] dark:to-[#5a9ae6] dark:hover:from-[#5a9ae6] dark:hover:to-[#4882cc] text-white dark:text-gray-900 text-sm font-medium shadow-lg disabled:grayscale disabled:cursor-not-allowed transition-all"
               >
                 {loading ? "Checking…" : "Enter"}
               </button>
