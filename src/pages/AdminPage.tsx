@@ -97,7 +97,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
                   onChange={e => setKey(e.target.value)}
                   placeholder="API key"
                   autoFocus
-                  className="block w-full pl-4 pr-11 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none"
+                  className="block w-full pl-6 pr-11 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-600 dark:placeholder-gray-400 focus:outline-none"
                 />
                 <button
                   type="button"
@@ -123,7 +123,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               <button
                 type="submit"
                 disabled={!key || loading}
-                className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:bg-purple-700/50 disabled:cursor-not-allowed text-white font-semibold transition"
+                className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 disabled:bg-purple-700/50 disabled:cursor-not-allowed text-gray-900 dark:text-white font-semibold transition"
               >
                 {loading ? "Checking…" : "Enter"}
               </button>
