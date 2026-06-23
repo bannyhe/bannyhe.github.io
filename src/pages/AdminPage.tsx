@@ -296,7 +296,11 @@ function makeAcyclic(data: FlowData): FlowData | null {
 // ── Dashboard ──────────────────────────────────────────────────────────────────
 function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void }) {
   const { theme } = useTheme();
-  const tickColor = theme === "dark" ? "#d1d5db" : "#4b5563"; // gray-300 : gray-600
+  const tickColor = theme === "dark" ? "#d1d5db" : "#4b5563";
+  const tooltipContentStyle = theme === "dark"
+    ? { background: "rgba(17,24,39,0.95)", border: "1px solid rgba(139,92,246,0.35)", borderRadius: 12, color: "#e5e7eb" }
+    : { background: "rgba(255,255,255,0.98)", border: "1px solid rgba(139,92,246,0.30)", borderRadius: 12, color: "#1f2937", boxShadow: "0 4px 16px rgba(0,0,0,0.10)" };
+  const tooltipLabelStyle = theme === "dark" ? { color: "#d1d5db" } : { color: "#374151" };
 
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
@@ -425,7 +429,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                   <XAxis dataKey="date" tickFormatter={d => d.slice(5)} tick={{ fontSize: 11, fill: tickColor }} />
                   <YAxis tick={{ fontSize: 11, fill: tickColor }} />
                   <Tooltip
-                    contentStyle={{ background: "rgba(17,24,39,0.8)", border: "1px solid rgba(139,92,246,0.3)", borderRadius: 12, color: "#e5e7eb" }}
+                    contentStyle={tooltipContentStyle}
+                    labelStyle={tooltipLabelStyle}
                     labelFormatter={d => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   />
                   <Area type="monotone" dataKey="sessions"  stroke="#8b5cf6" fill="url(#gSessions)" strokeWidth={2} name="Visitors" />
@@ -507,7 +512,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     <XAxis type="number" hide />
                     <YAxis type="category" dataKey="browser" tick={{ fontSize: 11, fill: tickColor }} width={60} />
                     <Tooltip
-                      contentStyle={{ background: "rgba(17,24,39,0.8)", border: "1px solid rgba(139,92,246,0.3)", borderRadius: 12, color: "#e5e7eb" }}
+                      contentStyle={tooltipContentStyle}
+                      labelStyle={tooltipLabelStyle}
                     />
                     <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Visitors">
                       {(devices?.byBrowser.slice(0, 5) ?? []).map((_, i) => (
@@ -537,7 +543,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       node={{ fill: "#8b5cf6", stroke: "#7c3aed", strokeWidth: 1 }}
                     >
                       <Tooltip
-                        contentStyle={{ background: "rgba(17,24,39,0.85)", border: "1px solid rgba(139,92,246,0.3)", borderRadius: 10, color: "#e5e7eb", fontSize: 12 }}
+                        contentStyle={{ ...tooltipContentStyle, fontSize: 12 }}
+                        labelStyle={tooltipLabelStyle}
                       />
                     </Sankey>
                   </div>
