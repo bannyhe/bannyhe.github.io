@@ -534,7 +534,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                         </div>
                         <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700 mb-1.5">
                           <div
-                            className="h-2 rounded-full bg-gradient-to-r from-purple-500 to-violet-400 dark:from-purple-400 dark:to-violet-300"
+                            className="h-2 rounded-full bg-purple-500 dark:bg-purple-400"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
