@@ -518,11 +518,12 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     <XAxis type="number" hide />
                     <YAxis type="category" dataKey="browser" tick={{ fontSize: 11, fill: tickColor }} width={60} />
                     <Tooltip
+                      cursor={false}
                       contentStyle={tooltipContentStyle}
                       labelStyle={tooltipLabelStyle}
                       itemStyle={tooltipItemStyle}
                     />
-                    <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Visitors">
+                    <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Visitors" activeBar={{ fillOpacity: 0.65 }}>
                       {(devices?.byBrowser.slice(0, 5) ?? []).map((_, i) => (
                         <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
                       ))}
