@@ -360,6 +360,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
   function formatPath(path: string): string {
     const MAP: Record<string, string> = {
       "/": "Home", "": "Home",
+      "/admin": "Admin",
       "/about": "About",
       "/resume": "Resume",
       "/project/malware-prevention": "Malware Prevention",
@@ -516,19 +517,33 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top pages */}
               <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Top Pages</h2>
-                <div className="space-y-3">
-                  {pages.slice(0, 8).map(p => (
-                    <div key={p.path} className="flex items-center gap-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{p.path || "/"}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-300">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-6">Top Pages</h2>
+                <div className="space-y-5">
+                  {pages.slice(0, 6).map(p => {
+                    const max = pages[0]?.views ?? 1;
+                    const pct = Math.round((p.views / max) * 100);
+                    return (
+                      <div key={p.path}>
+                        <div className="flex items-baseline justify-between gap-3 mb-2">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                            {formatPath(p.path || "/")}
+                          </span>
+                          <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
+                            {p.views} views
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700 mb-1.5">
+                          <div
+                            className="h-2 rounded-full bg-gradient-to-r from-purple-500 to-violet-400 dark:from-purple-400 dark:to-violet-300"
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                           avg {formatMs(p.avg_duration_ms)} · scroll {Math.round((p.avg_scroll_depth ?? 0) * 100)}%
                         </p>
                       </div>
-                      <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 shrink-0">{p.views}</span>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {pages.length === 0 && <p className="text-sm text-gray-600 dark:text-gray-300">No data yet.</p>}
                 </div>
               </div>
