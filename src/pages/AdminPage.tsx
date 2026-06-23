@@ -517,13 +517,14 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top pages */}
               <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-6">Top Pages</h2>
-                <div className="space-y-5">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Top Pages</h2>
+                <div className="divide-y divide-gray-200/60 dark:divide-gray-700/40">
                   {pages.slice(0, 6).map(p => {
                     const max = pages[0]?.views ?? 1;
-                    const pct = Math.round((p.views / max) * 100);
+                    const pct = Math.max(2, Math.round((p.views / max) * 100));
+                    const barColor = theme === "dark" ? "#a78bfa" : "#8b5cf6";
                     return (
-                      <div key={p.path}>
+                      <div key={p.path} className="py-4 first:pt-1 last:pb-0">
                         <div className="flex items-baseline justify-between gap-3 mb-2">
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
                             {formatPath(p.path || "/")}
@@ -532,10 +533,10 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                             {p.views} views
                           </span>
                         </div>
-                        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700 mb-1.5">
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700 mb-2">
                           <div
-                            className="h-2 rounded-full bg-purple-500 dark:bg-purple-400"
-                            style={{ width: `${pct}%` }}
+                            className="h-2 rounded-full"
+                            style={{ width: `${pct}%`, backgroundColor: barColor }}
                           />
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
