@@ -306,6 +306,11 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
   // itemStyle.color wins and lets us enforce readable text over series colors.
   const tooltipLabelStyle = theme === "dark" ? { color: "#f8fafc", fontWeight: 500 } : { color: "#0f172a", fontWeight: 500 };
   const tooltipItemStyle  = theme === "dark" ? { color: "#e2e8f0" } : { color: "#1e293b" };
+  // Dark mode: brightness filter brightens the hovered bar against a dark background.
+  // Light mode: opacity-dim creates subtle contrast against a light background.
+  const activeBarStyle = theme === "dark"
+    ? { style: { filter: "brightness(1.4)" } }
+    : { fillOpacity: 0.65 };
 
   const [sankeyHover, setSankeyHover] = useState<{ index: number; type: "node" | "link" } | null>(null);
 
@@ -585,7 +590,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       labelStyle={tooltipLabelStyle}
                       itemStyle={tooltipItemStyle}
                     />
-                    <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Visitors" activeBar={{ fillOpacity: 0.65 }}>
+                    <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Visitors" activeBar={activeBarStyle}>
                       {(devices?.byBrowser.slice(0, 5) ?? []).map((_, i) => (
                         <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
                       ))}
