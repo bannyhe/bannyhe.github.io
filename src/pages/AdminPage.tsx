@@ -22,7 +22,7 @@ interface Overview {
 }
 interface TimelineRow   { date: string; sessions: number; pageViews: number }
 interface PageRow       { path: string; views: number; avg_duration_ms: number; avg_scroll_depth: number }
-interface GeoRow        { location: string; country_code: string; visitors: number }
+interface GeoRow        { location: string; country_code: string | null; visitors: number }
 interface DeviceData    { byDevice: { device: string; count: number }[]; byBrowser: { browser: string; count: number }[] }
 interface FlowData      { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] }
 interface VisitorRow    { id: string; country: string | null; city: string | null; device: string; browser: string | null; first_seen_at: string; page_view_count: number; ip_masked: string | null }
@@ -218,6 +218,81 @@ function StatCard({ icon: Icon, label, value, sub }: { icon: React.ElementType; 
 const DEVICE_ICON: Record<string, React.ElementType> = { mobile: Smartphone, tablet: Tablet, desktop: Monitor };
 const CHART_COLORS = ["#8b5cf6", "#a78bfa", "#c4b5fd", "#ddd6fe"];
 
+// Convert potentially cyclic flow data into a DAG safe for Sankey rendering.
+// Strategy: skip self-loops, keep only the stronger direction for bidirectional
+// pairs, then do a DFS reachability check to drop any remaining back-edges.
+function makeAcyclic(data: FlowData): FlowData | null {
+  if (data.nodes.length < 2 || !data.links.length) return null;
+
+  // Aggregate edges, skip self-loops
+  const edgeMap = new Map<string, number>();
+  for (const link of data.links) {
+    if (link.source === link.target) continue;
+    const key = `${link.source}-${link.target}`;
+    edgeMap.set(key, (edgeMap.get(key) ?? 0) + link.value);
+  }
+
+  // For each bidirectional pair keep only the stronger direction
+  const candidates: { source: number; target: number; value: number }[] = [];
+  const seen = new Set<string>();
+  for (const [key, val] of edgeMap) {
+    const [s, t] = key.split("-").map(Number);
+    const rev = `${t}-${s}`;
+    if (seen.has(key) || seen.has(rev)) continue;
+    seen.add(key); seen.add(rev);
+    const revVal = edgeMap.get(rev) ?? 0;
+    if (val >= revVal) candidates.push({ source: s, target: t, value: val });
+    else candidates.push({ source: t, target: s, value: revVal });
+  }
+
+  // DFS reachability check — drop any edge that would close a cycle
+  const adj = new Map<number, Set<number>>();
+  const dagLinks: typeof candidates = [];
+
+  const reachable = (from: number, to: number): boolean => {
+    const visited = new Set<number>();
+    const stack = [from];
+    while (stack.length) {
+      const n = stack.pop()!;
+      if (n === to) return true;
+      if (visited.has(n)) continue;
+      visited.add(n);
+      for (const nb of (adj.get(n) ?? new Set())) stack.push(nb);
+    }
+    return false;
+  };
+
+  for (const link of candidates.sort((a, b) => b.value - a.value)) {
+    if (!adj.has(link.source)) adj.set(link.source, new Set());
+    if (!adj.has(link.target)) adj.set(link.target, new Set());
+    if (reachable(link.target, link.source)) continue;
+    adj.get(link.source)!.add(link.target);
+    dagLinks.push(link);
+  }
+
+  if (!dagLinks.length) return null;
+
+  // Compact node list to only those that appear in surviving edges
+  const usedNodes = new Set<number>();
+  for (const link of dagLinks) { usedNodes.add(link.source); usedNodes.add(link.target); }
+
+  const oldToNew = new Map<number, number>();
+  const newNodes: { name: string }[] = [];
+  for (const idx of Array.from(usedNodes).sort((a, b) => a - b)) {
+    oldToNew.set(idx, newNodes.length);
+    newNodes.push(data.nodes[idx]);
+  }
+
+  return newNodes.length < 2 ? null : {
+    nodes: newNodes,
+    links: dagLinks.map(link => ({
+      source: oldToNew.get(link.source)!,
+      target: oldToNew.get(link.target)!,
+      value: link.value,
+    })),
+  };
+}
+
 // ── Dashboard ──────────────────────────────────────────────────────────────────
 function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void }) {
   const { theme } = useTheme();
@@ -279,10 +354,11 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
     return MAP[path] ?? path;
   }
 
-  // Remap node names in flow data to human-readable labels
-  const sankeyData = flow.nodes.length > 1 ? {
-    nodes: flow.nodes.map(n => ({ name: formatPath(n.name) })),
-    links: flow.links,
+  // Convert to acyclic DAG then apply human-readable labels
+  const acyclicFlow = makeAcyclic(flow);
+  const sankeyData = acyclicFlow ? {
+    nodes: acyclicFlow.nodes.map(n => ({ name: formatPath(n.name) })),
+    links: acyclicFlow.links,
   } : null;
 
   return (

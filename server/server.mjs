@@ -287,21 +287,20 @@ on('GET', '/api/dashboard/pages', (req, res) => {
 
 on('GET', '/api/dashboard/geo', (req, res) => {
   if (!authGuard(req, res)) return;
-  // US visitors → "City, State"; others → "City, Country"; fallback → country only
+  // US visitors → "City, State"; others → "City, Country"; fallback → "Local / Private" for ungeolocatable IPs
   send(res, 200, db.prepare(`
     SELECT
       CASE
         WHEN country_code='US' AND city IS NOT NULL AND region IS NOT NULL THEN city||', '||region
         WHEN city IS NOT NULL AND country IS NOT NULL                       THEN city||', '||country
         WHEN country IS NOT NULL                                            THEN country
-        ELSE NULL
+        ELSE 'Local / Private'
       END AS location,
       country_code,
       COUNT(*) AS visitors
     FROM visitor_sessions
     WHERE is_bot=0
     GROUP BY location, country_code
-    HAVING location IS NOT NULL
     ORDER BY visitors DESC LIMIT 50
   `).all());
 });
@@ -334,6 +333,7 @@ on('GET', '/api/dashboard/flow', (req, res) => {
     JOIN page_views p2
       ON  p1.session_id = p2.session_id
       AND p2.entered_at > p1.entered_at
+      AND p1.path != p2.path
       AND NOT EXISTS (
         SELECT 1 FROM page_views p3
         WHERE p3.session_id = p1.session_id
