@@ -524,7 +524,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     const pct = Math.max(2, Math.round((p.views / max) * 100));
                     const barColor = theme === "dark" ? "#a78bfa" : "#8b5cf6";
                     return (
-                      <div key={p.path} className="py-4 first:pt-1 last:pb-0">
+                      <div key={p.path} className="py-3 first:pt-0 last:pb-0">
                         <div className="flex items-baseline justify-between gap-3 mb-2">
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
                             {formatPath(p.path || "/")}
