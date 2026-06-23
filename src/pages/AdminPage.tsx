@@ -297,10 +297,15 @@ function makeAcyclic(data: FlowData): FlowData | null {
 function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void }) {
   const { theme } = useTheme();
   const tickColor = theme === "dark" ? "#d1d5db" : "#4b5563";
+  // Fully opaque backgrounds so alpha-blending never reduces contrast.
+  // All color pairs verified ≥ 7:1 (WCAG AAA) against their backgrounds.
   const tooltipContentStyle = theme === "dark"
-    ? { background: "rgba(17,24,39,0.95)", border: "1px solid rgba(139,92,246,0.35)", borderRadius: 12, color: "#e5e7eb" }
-    : { background: "rgba(255,255,255,0.98)", border: "1px solid rgba(139,92,246,0.30)", borderRadius: 12, color: "#1f2937", boxShadow: "0 4px 16px rgba(0,0,0,0.10)" };
-  const tooltipLabelStyle = theme === "dark" ? { color: "#d1d5db" } : { color: "#374151" };
+    ? { background: "#0f172a", border: "1px solid rgba(139,92,246,0.5)", borderRadius: 12 }
+    : { background: "#ffffff", border: "1px solid rgba(139,92,246,0.35)", borderRadius: 12, boxShadow: "0 4px 16px rgba(0,0,0,0.12)" };
+  // labelStyle and itemStyle: Recharts spreads itemStyle after entry.color, so
+  // itemStyle.color wins and lets us enforce readable text over series colors.
+  const tooltipLabelStyle = theme === "dark" ? { color: "#f8fafc", fontWeight: 500 } : { color: "#0f172a", fontWeight: 500 };
+  const tooltipItemStyle  = theme === "dark" ? { color: "#e2e8f0" } : { color: "#1e293b" };
 
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
@@ -431,6 +436,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                   <Tooltip
                     contentStyle={tooltipContentStyle}
                     labelStyle={tooltipLabelStyle}
+                    itemStyle={tooltipItemStyle}
                     labelFormatter={d => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   />
                   <Area type="monotone" dataKey="sessions"  stroke="#8b5cf6" fill="url(#gSessions)" strokeWidth={2} name="Visitors" />
@@ -514,6 +520,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     <Tooltip
                       contentStyle={tooltipContentStyle}
                       labelStyle={tooltipLabelStyle}
+                      itemStyle={tooltipItemStyle}
                     />
                     <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Visitors">
                       {(devices?.byBrowser.slice(0, 5) ?? []).map((_, i) => (
@@ -545,6 +552,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       <Tooltip
                         contentStyle={{ ...tooltipContentStyle, fontSize: 12 }}
                         labelStyle={tooltipLabelStyle}
+                        itemStyle={tooltipItemStyle}
                       />
                     </Sankey>
                   </div>
