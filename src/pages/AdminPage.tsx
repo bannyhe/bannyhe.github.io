@@ -307,6 +307,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
   const tooltipLabelStyle = theme === "dark" ? { color: "#f8fafc", fontWeight: 500 } : { color: "#0f172a", fontWeight: 500 };
   const tooltipItemStyle  = theme === "dark" ? { color: "#e2e8f0" } : { color: "#1e293b" };
 
+  const [sankeyHover, setSankeyHover] = useState<{ index: number; type: "node" | "link" } | null>(null);
+
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
   const [pages, setPages]       = useState<PageRow[]>([]);
@@ -369,6 +371,66 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
     nodes: acyclicFlow.nodes.map(n => ({ name: formatPath(n.name) })),
     links: acyclicFlow.links,
   } : null;
+
+  // Custom Sankey link renderer — dims unrelated links and brightens the hovered one
+  const renderSankeyLink = (props: any) => {
+    const { sourceX, sourceY, sourceControlX, targetX, targetY, targetControlX, linkWidth, index } = props;
+    let opacity = 0.35;
+    if (sankeyHover) {
+      if (sankeyHover.type === "link") {
+        opacity = sankeyHover.index === index ? 0.75 : 0.07;
+      } else {
+        const lk = acyclicFlow?.links[index];
+        opacity = lk && (lk.source === sankeyHover.index || lk.target === sankeyHover.index) ? 0.65 : 0.07;
+      }
+    }
+    return (
+      <path
+        d={`M${sourceX},${sourceY} C${sourceControlX},${sourceY} ${targetControlX},${targetY} ${targetX},${targetY}`}
+        fill="none"
+        stroke="#8b5cf6"
+        strokeWidth={linkWidth}
+        style={{ strokeOpacity: opacity, transition: "stroke-opacity 0.15s ease" }}
+      />
+    );
+  };
+
+  // Custom Sankey node renderer — dims unrelated nodes, highlights active node, and draws labels
+  const renderSankeyNode = (props: any) => {
+    const { x, y, width, height, index, payload } = props;
+    const isActive = sankeyHover?.type === "node" && sankeyHover.index === index;
+    let fillOpacity = 1;
+    if (sankeyHover) {
+      if (sankeyHover.type === "node") {
+        fillOpacity = isActive ? 1 : 0.2;
+      } else {
+        const lk = acyclicFlow?.links[sankeyHover.index];
+        fillOpacity = lk && (lk.source === index || lk.target === index) ? 1 : 0.2;
+      }
+    }
+    return (
+      <g>
+        <rect
+          x={x} y={y} width={width} height={height}
+          fill={isActive ? "#a78bfa" : "#8b5cf6"}
+          stroke="#7c3aed" strokeWidth={1}
+          style={{ fillOpacity, transition: "fill-opacity 0.15s ease" }}
+        />
+        <text
+          x={x + width + 6} y={y + height / 2} dy="0.35em"
+          fontSize={10} textAnchor="start"
+          style={{
+            fill: tickColor,
+            opacity: fillOpacity < 0.5 ? 0.3 : 0.9,
+            transition: "opacity 0.15s ease",
+            userSelect: "none",
+          } as React.CSSProperties}
+        >
+          {payload.name}
+        </text>
+      </g>
+    );
+  };
 
   return (
     <div className="min-h-screen px-4 pt-32 pb-8 max-w-7xl mx-auto">
@@ -546,9 +608,13 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       data={sankeyData as any}
                       nodeWidth={12}
                       nodePadding={24}
-                      margin={{ top: 8, right: 120, bottom: 8, left: 8 }}
-                      link={{ stroke: "#8b5cf6", strokeOpacity: 0.35, fill: "none" }}
-                      node={{ fill: "#8b5cf6", stroke: "#7c3aed", strokeWidth: 1 }}
+                      margin={{ top: 8, right: 110, bottom: 8, left: 8 }}
+                      link={renderSankeyLink as any}
+                      node={renderSankeyNode as any}
+                      onMouseEnter={(el: any, type: string) =>
+                        setSankeyHover({ index: el.index, type: type as "node" | "link" })
+                      }
+                      onMouseLeave={() => setSankeyHover(null)}
                     >
                       <Tooltip
                         contentStyle={{ ...tooltipContentStyle, fontSize: 12 }}
