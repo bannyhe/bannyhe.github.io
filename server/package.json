@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": ">=22.5.0"
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0"
   }
 }

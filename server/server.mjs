@@ -1,8 +1,7 @@
-// Pure Node.js 22+ analytics server — zero npm dependencies.
-// Run: node --env-file=.env server.mjs
+// Analytics server. Run: node --env-file=.env server.mjs
 
 import { createServer } from 'node:http';
-import { DatabaseSync } from 'node:sqlite';
+import Database from 'better-sqlite3';
 import { createHash } from 'node:crypto';
 
 // ── Config ─────────────────────────────────────────────────────────────────────
@@ -16,7 +15,7 @@ const RATE_LIMIT_MAX   = parseInt(process.env.RATE_LIMIT_MAX ?? '200', 10);
 if (!DASHBOARD_KEY) { console.error('[config] DASHBOARD_API_KEY is required in .env'); process.exit(1); }
 
 // ── Database ───────────────────────────────────────────────────────────────────
-const db = new DatabaseSync(DB_PATH);
+const db = new Database(DB_PATH);
 db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;');
 db.exec(`
   CREATE TABLE IF NOT EXISTS visitor_sessions (
