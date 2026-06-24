@@ -30,7 +30,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 
 // Inner component — rendered inside <Router> so useLocation() works.
 function AppContent() {
-  useAnalytics();
+  const { trackEvent } = useAnalytics();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
@@ -87,6 +87,7 @@ function AppContent() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent('contact_click', href)}
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-12 h-12 rounded-full backdrop-blur-xl bg-white/20 dark:bg-gray-800/40 border border-white/30 dark:border-gray-600/30 flex items-center justify-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"

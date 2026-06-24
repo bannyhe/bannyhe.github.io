@@ -48,6 +48,9 @@ export function useAnalytics() {
   useEffect(() => {
     const currentPath = location.pathname;
 
+    // Don't track admin visits
+    if (currentPath === '/admin') return;
+
     // Finalize the previous page view before starting a new one
     const finalize = () => {
       if (pageViewId.current) {

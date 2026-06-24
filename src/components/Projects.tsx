@@ -6,6 +6,7 @@ import { ExternalLink, Github, ArrowRight, Lock } from "lucide-react";
 import { Button } from "./ui/button";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Link } from "react-router-dom";
+import { useAnalytics } from "../hooks/useAnalytics";
 
 // External project thumbnail links
 const malwarePreventionImg = "https://drive.google.com/thumbnail?id=11_e-o8v6AtoYnNBsgNKOsh_QT7IPt6ue&sz=w800";
@@ -60,6 +61,7 @@ const projects = [
 export function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const { trackEvent } = useAnalytics();
 
   return (
     <section id="projects" className="py-24 relative">
@@ -89,7 +91,7 @@ export function Projects() {
                 className="group"
               >
                 {project.hasDetailPage ? (
-                  <Link to={`/project/${project.id}`} className="block">
+                  <Link to={`/project/${project.id}`} className="block" onClick={() => trackEvent('project_view', project.id)}>
                     <motion.div
                       className="cursor-pointer transition-all duration-300"
                     >

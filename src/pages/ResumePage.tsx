@@ -2,10 +2,12 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Briefcase, GraduationCap, Download, Award, Cpu } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { useAnalytics } from "../hooks/useAnalytics";
 
 export function ResumePage() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const { trackEvent } = useAnalytics();
 
   const experience = [
     {
@@ -108,6 +110,7 @@ export function ResumePage() {
               href="https://drive.google.com/file/d/1eZm1HnJsfHarTDDubacR5mcdiTiKNc76/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent('resume_download', 'pdf')}
             >
               <Button className="cursor-pointer backdrop-blur-xl bg-white/30 dark:bg-gray-800/70 border border-white/20 dark:border-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-700/80 hover:border-white/30 dark:hover:border-gray-600/60 transition-all duration-300 shadow-sm hover:shadow-md text-sm">
                 <Download className="w-4 h-4 mr-2" />
