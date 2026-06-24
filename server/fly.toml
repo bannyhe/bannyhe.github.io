@@ -1,0 +1,35 @@
+app = "muheportfolio-analytics"
+primary_region = "sjc"
+
+[build]
+
+[env]
+  PORT              = "8080"
+  DB_PATH           = "/data/analytics.db"
+  CORS_ORIGINS      = "https://muheportfolio.com,https://bannyhe.github.io,http://localhost:5173,http://localhost:3000"
+  STORE_RAW_IP      = "false"
+  RATE_LIMIT_MAX    = "200"
+
+[[mounts]]
+  source      = "analytics_data"
+  destination = "/data"
+
+[http_service]
+  internal_port        = 8080
+  force_https          = true
+  auto_stop_machines   = "stop"
+  auto_start_machines  = true
+  min_machines_running = 1
+  processes            = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "5s"
+    interval     = "30s"
+    method       = "GET"
+    path         = "/health"
+    timeout      = "5s"
+
+[[vm]]
+  cpu_kind  = "shared"
+  cpus      = 1
+  memory_mb = 256

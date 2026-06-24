@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: muheportfolio-analytics
+    runtime: node
+    rootDir: server
+    buildCommand: echo "no build step"
+    startCommand: node server.mjs
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DB_PATH
+        value: ./analytics.db
+      - key: CORS_ORIGINS
+        value: "https://muheportfolio.com,https://bannyhe.github.io,http://localhost:5173,http://localhost:3000"
+      - key: STORE_RAW_IP
+        value: "false"
+      - key: RATE_LIMIT_MAX
+        value: "200"
+      - key: NODE_VERSION
+        value: "22.4.0"
+      - key: DASHBOARD_API_KEY
+        sync: false
