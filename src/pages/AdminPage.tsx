@@ -504,21 +504,42 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
         <AnimatePresence>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
 
-            {/* Stat cards */}
+            {/* Stat cards — single wide widget */}
             {(() => {
-              const label = TIME_RANGES.find(r => r.value === timeRange)?.label ?? '';
+              const rangeLabel = TIME_RANGES.find(r => r.value === timeRange)?.label ?? '';
+              const stats = [
+                { icon: Users,        label: 'Visitors',     value: overview?.allTime.totalSessions ?? 0 },
+                { icon: Eye,          label: 'Page Views',   value: overview?.allTime.totalPageViews ?? 0 },
+                { icon: MousePointer, label: 'Interactions', value: overview?.allTime.totalInteractions ?? 0 },
+              ];
               return (
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-                  <StatCard icon={Users}        label="Visitors"     value={overview?.allTime.totalSessions ?? 0}     sub={label} />
-                  <StatCard icon={Eye}          label="Page Views"   value={overview?.allTime.totalPageViews ?? 0}    sub={label} />
-                  <StatCard icon={MousePointer} label="Interactions" value={overview?.allTime.totalInteractions ?? 0} sub={label} />
+                <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl px-6 py-5 shadow-lg">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{rangeLabel}</p>
+                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40">
+                    {stats.map(({ icon: Icon, label, value }) => (
+                      <div key={label} className="flex-1 px-6 first:pl-0 last:pr-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0">
+                            <Icon className="w-4 h-4 text-purple-700 dark:text-purple-300" />
+                          </div>
+                          <span className="text-sm text-gray-600 dark:text-gray-300">{label}</span>
+                        </div>
+                        <p className="text-3xl font-bold text-gray-800 dark:text-white">{value.toLocaleString()}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               );
             })()}
 
             {/* Timeline chart */}
             <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Traffic — {TIME_RANGES.find(r => r.value === timeRange)?.label.toLowerCase()}</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Traffic</h2>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">
+                  {TIME_RANGES.find(r => r.value === timeRange)?.label}
+                </span>
+              </div>
               <ResponsiveContainer width="100%" height={220}>
                 <AreaChart data={timeline} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <defs>
