@@ -8,7 +8,18 @@ import { useEffect } from "react";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  useEffect(() => {
+    // Disable browser scroll restoration so it doesn't fight us on hash navigation
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    // requestAnimationFrame defers until after the new page has painted
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+  }, [pathname]);
   return null;
 }
 import { Navigation } from "./components/Navigation";
