@@ -558,20 +558,26 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                   <Globe className="w-5 h-5 text-purple-500" /> Visitors by Location
                 </h2>
-                <div className="space-y-3">
+                <div className="divide-y divide-gray-200/60 dark:divide-gray-700/40">
                   {geo.slice(0, 8).map((g, i) => {
                     const max = geo[0]?.visitors ?? 1;
+                    const pct = Math.max(2, Math.round((g.visitors / max) * 100));
+                    const barColor = theme === "dark" ? "#a78bfa" : "#8b5cf6";
                     return (
-                      <div key={i} className="flex items-center gap-3">
-                        <span className="text-lg w-7 shrink-0">{countryFlag(g.country_code)}</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between mb-1">
-                            <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{g.location}</span>
-                            <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 ml-2">{g.visitors}</span>
-                          </div>
-                          <div className="h-1.5 rounded-full bg-gray-200 dark:bg-gray-700">
-                            <div className="h-1.5 rounded-full bg-purple-500" style={{ width: `${(g.visitors / max) * 100}%` }} />
-                          </div>
+                      <div key={i} className="py-3 first:pt-0 last:pb-0">
+                        <div className="flex items-baseline justify-between gap-3 mb-2">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                            {countryFlag(g.country_code)} {g.location}
+                          </span>
+                          <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
+                            {g.visitors} visitors
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                          <div
+                            className="h-2 rounded-full"
+                            style={{ width: `${pct}%`, backgroundColor: barColor }}
+                          />
                         </div>
                       </div>
                     );
