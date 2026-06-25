@@ -113,15 +113,20 @@ export function Hero() {
     // Get navigation bar reference
     navBarRef.current = document.querySelector('nav');
 
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+
     // Use requestAnimationFrame to ensure layout is complete
     const initFrame = requestAnimationFrame(() => {
+      const tryInit = (attempt: number) => {
       // Use clientWidth/clientHeight instead of getBoundingClientRect for stable dimensions
       const containerWidth = container.clientWidth;
       const containerHeight = container.clientHeight;
 
-      // Ensure we have valid dimensions
+      // Retry up to 20 times (2 seconds total) if dimensions aren't ready yet
       if (containerWidth === 0 || containerHeight === 0) {
-        console.warn('Container has no dimensions yet');
+        if (attempt < 20) {
+          retryTimer = setTimeout(() => tryInit(attempt + 1), 100);
+        }
         return;
       }
 
@@ -495,16 +500,14 @@ export function Hero() {
       };
 
       animationFrameRef.current = requestAnimationFrame(animate);
+      }; // end tryInit
 
-      return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-      };
+      tryInit(0);
     });
 
     return () => {
       cancelAnimationFrame(initFrame);
+      if (retryTimer) clearTimeout(retryTimer);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

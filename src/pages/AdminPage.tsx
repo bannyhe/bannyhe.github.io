@@ -665,7 +665,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                       <th className="pb-3 pr-4 font-medium">Device</th>
                       <th className="pb-3 pr-4 font-medium">Browser</th>
                       <th className="pb-3 pr-4 font-medium">Pages</th>
-                      <th className="pb-3 font-medium">First Seen</th>
+                      <th className="pb-3 font-medium">First Seen (Pacific Time)</th>
                     </tr>
                   </thead>
                   <tbody>

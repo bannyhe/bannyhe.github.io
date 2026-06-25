@@ -2,8 +2,15 @@ import {
   HashRouter as Router,
   Routes,
   Route,
+  useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 import { Navigation } from "./components/Navigation";
 import { useAnalytics } from "./hooks/useAnalytics";
 
@@ -38,6 +45,7 @@ function AppContent() {
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-purple-100 via-transparent to-transparent dark:from-purple-900/20 opacity-60 pointer-events-none" />
 
       <div className="relative z-10">
+        <ScrollToTop />
         <Navigation />
         <Routes>
           <Route path="/" element={<HomePage />} />
