@@ -4,7 +4,7 @@ import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Sankey,
 } from "recharts";
-import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings } from "lucide-react";
+import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings, Clock } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 
 const BASE = import.meta.env.VITE_ANALYTICS_URL || "http://localhost:3001";
@@ -14,6 +14,15 @@ const SERVER_URL_STORAGE = "admin_server_url";
 function getServerBase(): string {
   try { return localStorage.getItem(SERVER_URL_STORAGE) || BASE; } catch { return BASE; }
 }
+
+// ── Time range filter ─────────────────────────────────────────────────────────
+const TIME_RANGES = [
+  { value: '1h',  label: 'Last 1 hour',   ms: 3_600_000,    days: 1  },
+  { value: '24h', label: 'Last 24 hours',  ms: 86_400_000,   days: 1  },
+  { value: '7d',  label: 'Last 7 days',    ms: 604_800_000,  days: 7  },
+  { value: '30d', label: 'Last 30 days',   ms: 2_592_000_000, days: 30 },
+] as const;
+type TimeRange = typeof TIME_RANGES[number]['value'];
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 interface Overview {
@@ -314,6 +323,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
   const [sankeyHover, setSankeyHover] = useState<{ index: number; type: "node" | "link" } | null>(null);
 
+  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
   const [pages, setPages]       = useState<PageRow[]>([]);
@@ -325,25 +335,28 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [ov, tl, pg, geo, dv, fl, vs] = await Promise.all([
-      apiFetch<Overview>("/api/dashboard/overview", apiKey),
-      apiFetch<TimelineRow[]>("/api/dashboard/timeline?days=30", apiKey),
-      apiFetch<PageRow[]>("/api/dashboard/pages", apiKey),
-      apiFetch<GeoRow[]>("/api/dashboard/geo", apiKey),
-      apiFetch<DeviceData>("/api/dashboard/devices", apiKey),
-      apiFetch<FlowData>("/api/dashboard/flow", apiKey),
-      apiFetch<{ visitors: VisitorRow[] }>("/api/dashboard/visitors?limit=10", apiKey),
+    const tr    = TIME_RANGES.find(r => r.value === timeRange)!;
+    const since = new Date(Date.now() - tr.ms).toISOString();
+    const s     = encodeURIComponent(since);
+    const [ov, tl, pg, geoData, dv, fl, vs] = await Promise.all([
+      apiFetch<Overview>(`/api/dashboard/overview?since=${s}`, apiKey),
+      apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}`, apiKey),
+      apiFetch<PageRow[]>(`/api/dashboard/pages?since=${s}`, apiKey),
+      apiFetch<GeoRow[]>(`/api/dashboard/geo?since=${s}`, apiKey),
+      apiFetch<DeviceData>(`/api/dashboard/devices?since=${s}`, apiKey),
+      apiFetch<FlowData>(`/api/dashboard/flow?since=${s}`, apiKey),
+      apiFetch<{ visitors: VisitorRow[] }>(`/api/dashboard/visitors?limit=10&since=${s}`, apiKey),
     ]);
     if (ov === null) { onLogout(); return; }
     setOverview(ov);
     setTimeline(tl ?? []);
     setPages(pg ?? []);
-    setGeo(geo ?? []);
+    setGeo(geoData ?? []);
     setDevices(dv ?? null);
     setFlow(fl ?? { nodes: [], links: [] });
     setVisitors(vs?.visitors ?? []);
     setLoading(false);
-  }, [apiKey, onLogout]);
+  }, [apiKey, onLogout, timeRange]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -450,7 +463,19 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Analytics</h1>
           <p className="text-gray-700 dark:text-gray-200 text-sm mt-1">Your portfolio visitor insights</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 text-gray-700 dark:text-gray-300">
+            <Clock className="w-4 h-4 shrink-0 text-purple-500" />
+            <select
+              value={timeRange}
+              onChange={e => setTimeRange(e.target.value as TimeRange)}
+              className="bg-transparent text-sm text-gray-700 dark:text-gray-300 focus:outline-none cursor-pointer"
+            >
+              {TIME_RANGES.map(r => (
+                <option key={r.value} value={r.value} className="bg-white dark:bg-gray-800">{r.label}</option>
+              ))}
+            </select>
+          </div>
           <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={load}
@@ -480,16 +505,20 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
 
             {/* Stat cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard icon={Users}        label="Total Visitors"   value={overview?.allTime.totalSessions ?? 0}     sub="All time" />
-              <StatCard icon={Eye}          label="Page Views"       value={overview?.allTime.totalPageViews ?? 0}    sub="All time" />
-              <StatCard icon={MousePointer} label="Interactions"     value={overview?.allTime.totalInteractions ?? 0} sub="All time" />
-              <StatCard icon={TrendingUp}   label="Visitors (30d)"   value={overview?.last30Days.sessions ?? 0}       sub="Last 30 days" />
-            </div>
+            {(() => {
+              const label = TIME_RANGES.find(r => r.value === timeRange)?.label ?? '';
+              return (
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                  <StatCard icon={Users}        label="Visitors"     value={overview?.allTime.totalSessions ?? 0}     sub={label} />
+                  <StatCard icon={Eye}          label="Page Views"   value={overview?.allTime.totalPageViews ?? 0}    sub={label} />
+                  <StatCard icon={MousePointer} label="Interactions" value={overview?.allTime.totalInteractions ?? 0} sub={label} />
+                </div>
+              );
+            })()}
 
             {/* Timeline chart */}
             <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Traffic — last 30 days</h2>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Traffic — {TIME_RANGES.find(r => r.value === timeRange)?.label.toLowerCase()}</h2>
               <ResponsiveContainer width="100%" height={220}>
                 <AreaChart data={timeline} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <defs>
