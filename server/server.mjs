@@ -335,6 +335,7 @@ on('GET', '/api/dashboard/flow', (req, res) => {
       AND p1.path != p2.path
       AND p1.path != '/admin'
       AND p2.path != '/admin'
+      AND p2.path != '/'
       AND NOT EXISTS (
         SELECT 1 FROM page_views p3
         WHERE p3.session_id = p1.session_id

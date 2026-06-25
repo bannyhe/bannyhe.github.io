@@ -25,7 +25,7 @@ interface PageRow       { path: string; views: number; avg_duration_ms: number; 
 interface GeoRow        { location: string; country_code: string | null; visitors: number }
 interface DeviceData    { byDevice: { device: string; count: number }[]; byBrowser: { browser: string; count: number }[] }
 interface FlowData      { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] }
-interface VisitorRow    { id: string; country: string | null; city: string | null; device: string; browser: string | null; first_seen_at: string; page_view_count: number; ip_masked: string | null }
+interface VisitorRow    { id: string; country: string | null; country_code: string | null; region: string | null; city: string | null; device: string; browser: string | null; first_seen_at: string; page_view_count: number; ip_masked: string | null }
 
 // ── API helper ─────────────────────────────────────────────────────────────────
 async function apiFetch<T>(path: string, key: string): Promise<T | null> {
@@ -668,9 +668,14 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     {visitors.map(v => (
                       <tr key={v.id} className="border-b border-white/10 dark:border-gray-700/20 last:border-0 hover:bg-white/10 transition">
                         <td className="py-2.5 pr-4 text-gray-700 dark:text-gray-300">
-                          {v.country
-                            ? `${countryFlag(null)} ${v.city ? v.city + ", " : ""}${v.country}`.trim()
-                            : <span className="font-mono text-xs text-gray-600 dark:text-gray-300">{v.ip_masked ?? "—"}</span>}
+                          {v.country ? (() => {
+                            const label = v.country_code === 'US' && v.city && v.region
+                              ? `${v.city}, ${v.region}`
+                              : v.city && v.country
+                              ? `${v.city}, ${v.country}`
+                              : v.country;
+                            return `${countryFlag(v.country_code)} ${label}`;
+                          })() : <span className="font-mono text-xs text-gray-600 dark:text-gray-300">{v.ip_masked ?? "—"}</span>}
                         </td>
                         <td className="py-2.5 pr-4 text-gray-600 dark:text-gray-300 capitalize">{v.device}</td>
                         <td className="py-2.5 pr-4 text-gray-600 dark:text-gray-300">{v.browser ?? "—"}</td>
