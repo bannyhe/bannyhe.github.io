@@ -513,8 +513,11 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                 { icon: MousePointer, label: 'Interactions', value: overview?.allTime.totalInteractions ?? 0 },
               ];
               return (
-                <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl px-6 py-5 shadow-lg">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{rangeLabel}</p>
+                <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Visitor Summary</h2>
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{rangeLabel}</span>
+                  </div>
                   <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40">
                     {stats.map(({ icon: Icon, label, value }) => (
                       <div key={label} className="flex-1 px-6 first:pl-0 last:pr-0">
@@ -571,7 +574,10 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top pages */}
               <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Top Pages</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Top Pages</h2>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+                </div>
                 <div className="divide-y divide-gray-200/60 dark:divide-gray-700/40">
                   {pages.slice(0, 6).map(p => {
                     const max = pages[0]?.views ?? 1;
@@ -605,9 +611,12 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
               {/* Geo */}
               <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-purple-500" /> Visitors by Location
-                </h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-purple-500" /> Visitors by Location
+                  </h2>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+                </div>
                 <div className="divide-y divide-gray-200/60 dark:divide-gray-700/40">
                   {geo.slice(0, 8).map((g, i) => {
                     const max = geo[0]?.visitors ?? 1;
@@ -641,7 +650,10 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Device breakdown */}
               <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Devices</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Devices</h2>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+                </div>
                 <div className="flex gap-6 mb-4">
                   {(devices?.byDevice ?? []).map(d => {
                     const Icon = DEVICE_ICON[d.device] ?? Monitor;
@@ -677,9 +689,12 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
               {/* Navigation flow Sankey */}
               <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                  <MousePointer className="w-5 h-5 text-purple-500" /> Navigation Flow
-                </h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                    <MousePointer className="w-5 h-5 text-purple-500" /> Navigation Flow
+                  </h2>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+                </div>
                 {sankeyData ? (
                   <div className="overflow-x-auto">
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -712,7 +727,10 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
             {/* Recent visitors */}
             <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Visitors</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Recent Visitors</h2>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
