@@ -255,14 +255,21 @@ on('POST', '/api/analytics/interaction', async (req, res) => {
 
 // ── Dashboard endpoints ────────────────────────────────────────────────────────
 
+// Computed location label used for filtering — mirrors the SELECT CASE in the geo endpoint
+const LOC_EXPR = `CASE WHEN country_code='US' AND city IS NOT NULL AND region IS NOT NULL THEN city||', '||region WHEN city IS NOT NULL AND country IS NOT NULL THEN city||', '||country WHEN country IS NOT NULL THEN country ELSE 'Local / Private' END`;
+
 on('GET', '/api/dashboard/overview', async (req, res) => {
   if (!authGuard(req, res)) return;
-  const url   = new URL('http://x' + req.url);
-  const since = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const url      = new URL('http://x' + req.url);
+  const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const location = url.searchParams.get('location') || null;
+  const vsLoc    = location ? ` AND (${LOC_EXPR})=?` : '';
+  const pvLoc    = location ? ` AND session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
+  const la       = location ? [location] : [];
   const [sessions, pageViews, interactions] = await Promise.all([
-    db.execute({ sql: 'SELECT COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=?', args: [since] }),
-    db.execute({ sql: 'SELECT COUNT(*) AS n FROM page_views WHERE entered_at>=?', args: [since] }),
-    db.execute({ sql: 'SELECT COUNT(*) AS n FROM interactions WHERE created_at>=?', args: [since] }),
+    db.execute({ sql: `SELECT COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=?${vsLoc}`, args: [since, ...la] }),
+    db.execute({ sql: `SELECT COUNT(*) AS n FROM page_views WHERE entered_at>=?${pvLoc}`, args: [since, ...la] }),
+    db.execute({ sql: `SELECT COUNT(*) AS n FROM interactions WHERE created_at>=?${pvLoc}`, args: [since, ...la] }),
   ]);
   const s = Number(sessions.rows[0]?.n ?? 0);
   const p = Number(pageViews.rows[0]?.n ?? 0);
@@ -275,15 +282,18 @@ on('GET', '/api/dashboard/overview', async (req, res) => {
 
 on('GET', '/api/dashboard/visitors', async (req, res) => {
   if (!authGuard(req, res)) return;
-  const url   = new URL('http://x' + req.url);
-  const page  = Math.max(1,   parseInt(url.searchParams.get('page')  ?? '1',  10));
-  const limit = Math.min(100, parseInt(url.searchParams.get('limit') ?? '20', 10));
-  const since = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const url      = new URL('http://x' + req.url);
+  const page     = Math.max(1,   parseInt(url.searchParams.get('page')  ?? '1',  10));
+  const limit    = Math.min(100, parseInt(url.searchParams.get('limit') ?? '20', 10));
+  const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const location = url.searchParams.get('location') || null;
+  const vsLoc    = location ? ` AND (${LOC_EXPR})=?` : '';
+  const la       = location ? [location] : [];
   const [totalRes, visitorsRes] = await Promise.all([
-    db.execute({ sql: 'SELECT COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=?', args: [since] }),
+    db.execute({ sql: `SELECT COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=?${vsLoc}`, args: [since, ...la] }),
     db.execute({
-      sql: `SELECT s.*,(SELECT COUNT(*) FROM page_views WHERE session_id=s.id) AS page_view_count,(SELECT COUNT(*) FROM interactions WHERE session_id=s.id) AS interaction_count FROM visitor_sessions s WHERE s.is_bot=0 AND s.first_seen_at>=? ORDER BY s.first_seen_at DESC LIMIT ? OFFSET ?`,
-      args: [since, limit, (page-1)*limit],
+      sql: `SELECT s.*,(SELECT COUNT(*) FROM page_views WHERE session_id=s.id) AS page_view_count,(SELECT COUNT(*) FROM interactions WHERE session_id=s.id) AS interaction_count FROM visitor_sessions s WHERE s.is_bot=0 AND s.first_seen_at>=?${vsLoc} ORDER BY s.first_seen_at DESC LIMIT ? OFFSET ?`,
+      args: [since, ...la, limit, (page-1)*limit],
     }),
   ]);
   const total = Number(totalRes.rows[0]?.n ?? 0);
@@ -303,9 +313,12 @@ on('GET', '/api/dashboard/visitors/:id', async (req, res, params) => {
 
 on('GET', '/api/dashboard/pages', async (req, res) => {
   if (!authGuard(req, res)) return;
-  const url   = new URL('http://x' + req.url);
-  const since = url.searchParams.get('since') ?? new Date(0).toISOString();
-  const r = await db.execute({ sql: `SELECT path,COUNT(*) AS views,AVG(duration) AS avg_duration_ms,AVG(scroll_depth) AS avg_scroll_depth FROM page_views WHERE entered_at>=? GROUP BY path ORDER BY views DESC LIMIT 50`, args: [since] });
+  const url      = new URL('http://x' + req.url);
+  const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const location = url.searchParams.get('location') || null;
+  const pvLoc    = location ? ` AND session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
+  const la       = location ? [location] : [];
+  const r = await db.execute({ sql: `SELECT path,COUNT(*) AS views,AVG(duration) AS avg_duration_ms,AVG(scroll_depth) AS avg_scroll_depth FROM page_views WHERE entered_at>=?${pvLoc} GROUP BY path ORDER BY views DESC LIMIT 50`, args: [since, ...la] });
   send(res, 200, r.rows);
 });
 
@@ -333,12 +346,15 @@ on('GET', '/api/dashboard/geo', async (req, res) => {
 
 on('GET', '/api/dashboard/devices', async (req, res) => {
   if (!authGuard(req, res)) return;
-  const url   = new URL('http://x' + req.url);
-  const since = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const url      = new URL('http://x' + req.url);
+  const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const location = url.searchParams.get('location') || null;
+  const vsLoc    = location ? ` AND (${LOC_EXPR})=?` : '';
+  const la       = location ? [location] : [];
   const [byDevice, byBrowser, byOs] = await Promise.all([
-    db.execute({ sql: `SELECT device,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=? GROUP BY device ORDER BY count DESC`, args: [since] }),
-    db.execute({ sql: `SELECT browser,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND browser IS NOT NULL AND first_seen_at>=? GROUP BY browser ORDER BY count DESC LIMIT 10`, args: [since] }),
-    db.execute({ sql: `SELECT os,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND os IS NOT NULL AND first_seen_at>=? GROUP BY os ORDER BY count DESC LIMIT 10`, args: [since] }),
+    db.execute({ sql: `SELECT device,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=?${vsLoc} GROUP BY device ORDER BY count DESC`, args: [since, ...la] }),
+    db.execute({ sql: `SELECT browser,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND browser IS NOT NULL AND first_seen_at>=?${vsLoc} GROUP BY browser ORDER BY count DESC LIMIT 10`, args: [since, ...la] }),
+    db.execute({ sql: `SELECT os,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND os IS NOT NULL AND first_seen_at>=?${vsLoc} GROUP BY os ORDER BY count DESC LIMIT 10`, args: [since, ...la] }),
   ]);
   send(res, 200, { byDevice: byDevice.rows, byBrowser: byBrowser.rows, byOs: byOs.rows });
 });
@@ -361,8 +377,11 @@ on('GET', '/api/dashboard/interactions', async (req, res) => {
 
 on('GET', '/api/dashboard/flow', async (req, res) => {
   if (!authGuard(req, res)) return;
-  const url   = new URL('http://x' + req.url);
-  const since = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const url      = new URL('http://x' + req.url);
+  const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
+  const location = url.searchParams.get('location') || null;
+  const flowLoc  = location ? ` AND p1.session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
+  const la       = location ? [location] : [];
   const r = await db.execute({ sql: `
     SELECT p1.path AS source_path, p2.path AS target_path, COUNT(*) AS value
     FROM page_views p1
@@ -373,7 +392,7 @@ on('GET', '/api/dashboard/flow', async (req, res) => {
       AND p1.path != '/admin'
       AND p2.path != '/admin'
       AND p2.path != '/'
-      AND p1.entered_at >= ?
+      AND p1.entered_at >= ?${flowLoc}
       AND NOT EXISTS (
         SELECT 1 FROM page_views p3
         WHERE p3.session_id = p1.session_id
@@ -383,7 +402,7 @@ on('GET', '/api/dashboard/flow', async (req, res) => {
     GROUP BY p1.path, p2.path
     ORDER BY value DESC
     LIMIT 30
-  `, args: [since] });
+  `, args: [since, ...la] });
   const flows = r.rows;
   if (!flows.length) return send(res, 200, { nodes: [], links: [] });
 
@@ -397,10 +416,14 @@ on('GET', '/api/dashboard/flow', async (req, res) => {
 
 on('GET', '/api/dashboard/timeline', async (req, res) => {
   if (!authGuard(req, res)) return;
-  const url   = new URL('http://x' + req.url);
-  const gran  = url.searchParams.get('granularity') ?? 'day'; // 'day' | 'hour' | '15min'
-  const days  = Math.min(90, parseInt(url.searchParams.get('days') ?? '30', 10));
-  const since = url.searchParams.get('since') ?? new Date(Date.now()-days*24*60*60*1000).toISOString();
+  const url      = new URL('http://x' + req.url);
+  const gran     = url.searchParams.get('granularity') ?? 'day'; // 'day' | 'hour' | '15min'
+  const days     = Math.min(90, parseInt(url.searchParams.get('days') ?? '30', 10));
+  const since    = url.searchParams.get('since') ?? new Date(Date.now()-days*24*60*60*1000).toISOString();
+  const location = url.searchParams.get('location') || null;
+  const vsLoc    = location ? ` AND (${LOC_EXPR})=?` : '';
+  const pvLoc    = location ? ` AND session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
+  const la       = location ? [location] : [];
 
   // SQL bucket expressions per granularity
   const bktS = gran === '15min'
@@ -415,8 +438,8 @@ on('GET', '/api/dashboard/timeline', async (req, res) => {
     : `substr(entered_at, 1, 10)`;
 
   const [sRes, pRes] = await Promise.all([
-    db.execute({ sql: `SELECT ${bktS} AS date, COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=? GROUP BY date`, args: [since] }),
-    db.execute({ sql: `SELECT ${bktP} AS date, COUNT(*) AS n FROM page_views WHERE entered_at>=? GROUP BY date`, args: [since] }),
+    db.execute({ sql: `SELECT ${bktS} AS date, COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=?${vsLoc} GROUP BY date`, args: [since, ...la] }),
+    db.execute({ sql: `SELECT ${bktP} AS date, COUNT(*) AS n FROM page_views WHERE entered_at>=?${pvLoc} GROUP BY date`, args: [since, ...la] }),
   ]);
   const sm = {}, pm = {};
   for (const r of sRes.rows) sm[r.date] = Number(r.n);

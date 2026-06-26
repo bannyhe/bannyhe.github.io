@@ -4,7 +4,7 @@ import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Sankey,
 } from "recharts";
-import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings, Clock } from "lucide-react";
+import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings, Clock, X } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 
 const BASE = import.meta.env.VITE_ANALYTICS_URL || "http://localhost:3001";
@@ -323,7 +323,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
   const [sankeyHover, setSankeyHover] = useState<{ index: number; type: "node" | "link" } | null>(null);
 
-  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
+  const [timeRange, setTimeRange]             = useState<TimeRange>('30d');
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
   const [pages, setPages]       = useState<PageRow[]>([]);
@@ -338,14 +339,15 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
     const tr    = TIME_RANGES.find(r => r.value === timeRange)!;
     const since = new Date(Date.now() - tr.ms).toISOString();
     const s     = encodeURIComponent(since);
+    const l     = selectedLocation ? `&location=${encodeURIComponent(selectedLocation)}` : '';
     const [ov, tl, pg, geoData, dv, fl, vs] = await Promise.all([
-      apiFetch<Overview>(`/api/dashboard/overview?since=${s}`, apiKey),
-      apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}&granularity=${tr.granularity}&since=${s}`, apiKey),
-      apiFetch<PageRow[]>(`/api/dashboard/pages?since=${s}`, apiKey),
+      apiFetch<Overview>(`/api/dashboard/overview?since=${s}${l}`, apiKey),
+      apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}&granularity=${tr.granularity}&since=${s}${l}`, apiKey),
+      apiFetch<PageRow[]>(`/api/dashboard/pages?since=${s}${l}`, apiKey),
       apiFetch<GeoRow[]>(`/api/dashboard/geo?since=${s}`, apiKey),
-      apiFetch<DeviceData>(`/api/dashboard/devices?since=${s}`, apiKey),
-      apiFetch<FlowData>(`/api/dashboard/flow?since=${s}`, apiKey),
-      apiFetch<{ visitors: VisitorRow[] }>(`/api/dashboard/visitors?limit=10&since=${s}`, apiKey),
+      apiFetch<DeviceData>(`/api/dashboard/devices?since=${s}${l}`, apiKey),
+      apiFetch<FlowData>(`/api/dashboard/flow?since=${s}${l}`, apiKey),
+      apiFetch<{ visitors: VisitorRow[] }>(`/api/dashboard/visitors?limit=10&since=${s}${l}`, apiKey),
     ]);
     if (ov === null) { onLogout(); return; }
     setOverview(ov);
@@ -356,7 +358,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
     setFlow(fl ?? { nodes: [], links: [] });
     setVisitors(vs?.visitors ?? []);
     setLoading(false);
-  }, [apiKey, onLogout, timeRange]);
+  }, [apiKey, onLogout, timeRange, selectedLocation]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -468,7 +470,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
             <Clock className="w-4 h-4 shrink-0 text-purple-500" />
             <select
               value={timeRange}
-              onChange={e => setTimeRange(e.target.value as TimeRange)}
+              onChange={e => { setTimeRange(e.target.value as TimeRange); setSelectedLocation(null); }}
               className="bg-transparent text-sm text-gray-700 dark:text-gray-300 focus:outline-none cursor-pointer"
             >
               {TIME_RANGES.map(r => (
@@ -648,15 +650,35 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                   <h2 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
                     <Globe className="w-5 h-5 text-purple-500" /> Visitors by Location
                   </h2>
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+                  <div className="flex items-center gap-2">
+                    {selectedLocation && (
+                      <button
+                        onClick={() => setSelectedLocation(null)}
+                        className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-purple-600 dark:bg-purple-500 text-white hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors max-w-[140px]"
+                      >
+                        <span className="truncate">{selectedLocation}</span>
+                        <X className="w-3 h-3 shrink-0" />
+                      </button>
+                    )}
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
+                  </div>
                 </div>
                 <div className="divide-y divide-gray-200/60 dark:divide-gray-700/40">
                   {geo.slice(0, 8).map((g, i) => {
-                    const max = geo[0]?.visitors ?? 1;
-                    const pct = Math.max(2, Math.round((g.visitors / max) * 100));
-                    const barColor = theme === "dark" ? "#a78bfa" : "#8b5cf6";
+                    const max        = geo[0]?.visitors ?? 1;
+                    const pct        = Math.max(2, Math.round((g.visitors / max) * 100));
+                    const barColor   = theme === "dark" ? "#a78bfa" : "#8b5cf6";
+                    const dimColor   = theme === "dark" ? "#374151" : "#e5e7eb";
+                    const isSelected = selectedLocation === g.location;
+                    const isDimmed   = selectedLocation !== null && !isSelected;
                     return (
-                      <div key={i} className="py-3 first:pt-0 last:pb-0">
+                      <div
+                        key={i}
+                        onClick={() => setSelectedLocation(prev => prev === g.location ? null : g.location)}
+                        className={`py-3 first:pt-0 last:pb-0 px-2 -mx-2 rounded-lg cursor-pointer transition-all duration-150 select-none
+                          ${isSelected ? 'ring-1 ring-purple-400/50 dark:ring-purple-500/40 bg-purple-50/60 dark:bg-purple-900/20' : 'hover:bg-gray-100/50 dark:hover:bg-gray-700/30'}
+                          ${isDimmed ? 'opacity-30' : 'opacity-100'}`}
+                      >
                         <div className="flex items-baseline justify-between gap-3 mb-2">
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
                             {countryFlag(g.country_code)} {g.location}
@@ -667,8 +689,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                         </div>
                         <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700">
                           <div
-                            className="h-2 rounded-full"
-                            style={{ width: `${pct}%`, backgroundColor: barColor }}
+                            className="h-2 rounded-full transition-colors duration-150"
+                            style={{ width: `${pct}%`, backgroundColor: isDimmed ? dimColor : barColor }}
                           />
                         </div>
                       </div>
