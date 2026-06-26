@@ -525,15 +525,13 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
               const StatCell = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) => (
                 <div className="flex-1 px-6 first:pl-0 last:pr-0">
-                  <div className="flex gap-3">
-                    <div className="w-7 h-7 rounded-lg bg-[#102F56]/10 dark:bg-blue-300/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-7 h-7 rounded-lg bg-[#102F56]/10 dark:bg-blue-300/15 flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4 text-[#102F56] dark:text-blue-300" />
                     </div>
-                    <div>
-                      <span className="text-sm text-gray-600 dark:text-gray-300 block mb-1.5">{label}</span>
-                      <p className="text-3xl font-medium text-gray-800 dark:text-white">{value}</p>
-                    </div>
+                    <span className="text-sm text-gray-600 dark:text-gray-300">{label}</span>
                   </div>
+                  <p className="text-3xl font-medium text-gray-800 dark:text-white pl-9">{value}</p>
                 </div>
               );
 
@@ -682,7 +680,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                           ${isDimmed ? 'opacity-30' : 'opacity-100'}`}
                       >
                         <div className="flex items-baseline justify-between gap-3 mb-2">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                          <span className="text-sm font-medium text-[#102F56] dark:text-blue-300 truncate">
                             {countryFlag(g.country_code)} {g.location}
                           </span>
                           <span className="text-sm font-medium text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
