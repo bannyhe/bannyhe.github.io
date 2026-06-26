@@ -525,13 +525,15 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
               const StatCell = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) => (
                 <div className="flex-1 px-6 first:pl-0 last:pr-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0">
-                      <Icon className="w-4 h-4 text-purple-700 dark:text-purple-300" />
+                  <div className="flex gap-3">
+                    <div className="w-7 h-7 rounded-lg bg-[#102F56]/10 dark:bg-blue-300/15 flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-4 h-4 text-[#102F56] dark:text-blue-300" />
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">{label}</span>
+                    <div>
+                      <span className="text-sm text-gray-600 dark:text-gray-300 block mb-1.5">{label}</span>
+                      <p className="text-3xl font-medium text-gray-800 dark:text-white">{value}</p>
+                    </div>
                   </div>
-                  <p className="text-3xl font-medium text-gray-800 dark:text-white">{value}</p>
                 </div>
               );
 
@@ -676,7 +678,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                         key={i}
                         onClick={() => setSelectedLocation(prev => prev === g.location ? null : g.location)}
                         className={`py-3 first:pt-0 last:pb-0 px-2 -mx-2 rounded-lg cursor-pointer transition-all duration-150 select-none
-                          ${isSelected ? 'ring-1 ring-purple-400/50 dark:ring-purple-500/40 bg-purple-50/60 dark:bg-purple-900/20' : 'hover:bg-gray-100/50 dark:hover:bg-gray-700/30'}
+                          ${isSelected ? 'ring-1 ring-purple-400/50 dark:ring-purple-500/40 bg-purple-50/60 dark:bg-purple-900/20' : 'hover:bg-blue-50/70 dark:hover:bg-blue-900/20'}
                           ${isDimmed ? 'opacity-30' : 'opacity-100'}`}
                       >
                         <div className="flex items-baseline justify-between gap-3 mb-2">
