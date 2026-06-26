@@ -364,11 +364,11 @@ export function NorthstarOnboardingPage() {
                 The goal of this project is promote usage of key networking and security features, and increase the financial outcome of the product revenue when users are satisfied with the onboarding experience. Thus, I initiated a discussion with PM and engineers to track the following metrics:
               </p>
             </div>
-            <div className="mt-8 overflow-hidden rounded-[10px]">
+            <div className="mt-8 overflow-hidden rounded-[10px]" style={{ aspectRatio: '1140 / 320' }}>
               <img
                 src={successMetricsImg}
                 alt="Success Metrics - Adoption, Revenue, Satisfaction"
-                className="w-full h-auto -my-[9%]"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
