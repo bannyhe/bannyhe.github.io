@@ -107,7 +107,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
               <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4">
                 <Lock className="w-7 h-7 text-purple-700 dark:text-purple-300" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Admin</h1>
+              <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Admin</h1>
               <p className="text-sm text-gray-700 dark:text-gray-200 mt-1">Enter your dashboard API key</p>
             </div>
 
@@ -218,7 +218,7 @@ function StatCard({ icon: Icon, label, value, sub }: { icon: React.ElementType; 
         </div>
         <span className="text-sm text-gray-700 dark:text-gray-200">{label}</span>
       </div>
-      <p className="text-3xl font-bold text-gray-800 dark:text-white">{value.toLocaleString()}</p>
+      <p className="text-3xl font-medium text-gray-800 dark:text-white">{value.toLocaleString()}</p>
       {sub && <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">{sub}</p>}
     </div>
   );
@@ -460,7 +460,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Analytics</h1>
+          <h1 className="text-3xl font-semibold text-gray-800 dark:text-white">Analytics</h1>
           <p className="text-gray-700 dark:text-gray-200 text-sm mt-1">Your portfolio visitor insights</p>
         </div>
         <div className="flex items-center gap-2">
@@ -529,7 +529,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     </div>
                     <span className="text-sm text-gray-600 dark:text-gray-300">{label}</span>
                   </div>
-                  <p className="text-3xl font-bold text-gray-800 dark:text-white">{value}</p>
+                  <p className="text-3xl font-medium text-gray-800 dark:text-white">{value}</p>
                 </div>
               );
 
@@ -622,7 +622,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
                             {formatPath(p.path || "/")}
                           </span>
-                          <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
+                          <span className="text-sm font-medium text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
                             {p.views} views
                           </span>
                         </div>
@@ -661,7 +661,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
                             {countryFlag(g.country_code)} {g.location}
                           </span>
-                          <span className="text-sm font-semibold text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
+                          <span className="text-sm font-medium text-purple-700 dark:text-purple-300 shrink-0 tabular-nums">
                             {g.visitors} visitors
                           </span>
                         </div>
@@ -694,7 +694,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     return (
                       <div key={d.device} className="flex flex-col items-center gap-1">
                         <Icon className="w-6 h-6 text-purple-500" />
-                        <span className="text-lg font-bold text-gray-800 dark:text-white">{Math.round(d.count / total * 100)}%</span>
+                        <span className="text-lg font-medium text-gray-800 dark:text-white">{Math.round(d.count / total * 100)}%</span>
                         <span className="text-xs text-gray-600 dark:text-gray-300 capitalize">{d.device}</span>
                       </div>
                     );
