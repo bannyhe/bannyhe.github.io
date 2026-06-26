@@ -512,19 +512,13 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
               const interactions = overview?.allTime.totalInteractions ?? 0;
               const avgPages   = sessions > 0 ? (pageViews / sessions).toFixed(1) : '—';
               const uniqueLocs = geo.length;
-              const topDevice  = devices?.byDevice[0]?.device
-                ? devices.byDevice[0].device.charAt(0).toUpperCase() + devices.byDevice[0].device.slice(1)
-                : '—';
 
-              const row1 = [
-                { icon: Users,        label: 'Visitors',        value: sessions.toLocaleString() },
-                { icon: Eye,          label: 'Page Views',      value: pageViews.toLocaleString() },
-                { icon: MousePointer, label: 'Interactions',    value: interactions.toLocaleString() },
-              ];
-              const row2 = [
-                { icon: TrendingUp,   label: 'Avg Pages / Visit',  value: avgPages },
-                { icon: Globe,        label: 'Unique Locations',   value: String(uniqueLocs) },
-                { icon: Monitor,      label: 'Top Device',         value: topDevice },
+              const stats = [
+                { icon: Users,        label: 'Visitors',          value: sessions.toLocaleString() },
+                { icon: Eye,          label: 'Page Views',        value: pageViews.toLocaleString() },
+                { icon: MousePointer, label: 'Interactions',      value: interactions.toLocaleString() },
+                { icon: TrendingUp,   label: 'Avg Pages / Visit', value: avgPages },
+                { icon: Globe,        label: 'Unique Locations',  value: String(uniqueLocs) },
               ];
 
               const StatCell = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) => (
@@ -541,15 +535,12 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
               return (
                 <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Visitor Summary</h2>
                     <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{rangeLabel}</span>
                   </div>
-                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40 mb-6">
-                    {row1.map(p => <StatCell key={p.label} {...p} />)}
-                  </div>
-                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40 pt-6 border-t border-gray-200/60 dark:border-gray-700/40">
-                    {row2.map(p => <StatCell key={p.label} {...p} />)}
+                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40">
+                    {stats.map(p => <StatCell key={p.label} {...p} />)}
                   </div>
                 </div>
               );
