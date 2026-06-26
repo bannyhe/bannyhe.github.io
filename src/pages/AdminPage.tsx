@@ -17,10 +17,10 @@ function getServerBase(): string {
 
 // ── Time range filter ─────────────────────────────────────────────────────────
 const TIME_RANGES = [
-  { value: '1h',  label: 'Last 1 hour',   ms: 3_600_000,    days: 1  },
-  { value: '24h', label: 'Last 24 hours',  ms: 86_400_000,   days: 1  },
-  { value: '7d',  label: 'Last 7 days',    ms: 604_800_000,  days: 7  },
-  { value: '30d', label: 'Last 30 days',   ms: 2_592_000_000, days: 30 },
+  { value: '1h',  label: 'Last 1 hour',   ms: 3_600_000,     days: 1,  granularity: '15min' },
+  { value: '24h', label: 'Last 24 hours',  ms: 86_400_000,    days: 1,  granularity: 'hour'  },
+  { value: '7d',  label: 'Last 7 days',    ms: 604_800_000,   days: 7,  granularity: 'day'   },
+  { value: '30d', label: 'Last 30 days',   ms: 2_592_000_000, days: 30, granularity: 'day'   },
 ] as const;
 type TimeRange = typeof TIME_RANGES[number]['value'];
 
@@ -340,7 +340,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
     const s     = encodeURIComponent(since);
     const [ov, tl, pg, geoData, dv, fl, vs] = await Promise.all([
       apiFetch<Overview>(`/api/dashboard/overview?since=${s}`, apiKey),
-      apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}`, apiKey),
+      apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}&granularity=${tr.granularity}&since=${s}`, apiKey),
       apiFetch<PageRow[]>(`/api/dashboard/pages?since=${s}`, apiKey),
       apiFetch<GeoRow[]>(`/api/dashboard/geo?since=${s}`, apiKey),
       apiFetch<DeviceData>(`/api/dashboard/devices?since=${s}`, apiKey),
@@ -504,32 +504,52 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
         <AnimatePresence>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
 
-            {/* Stat cards — single wide widget */}
+            {/* Visitor Summary — wide widget */}
             {(() => {
               const rangeLabel = TIME_RANGES.find(r => r.value === timeRange)?.label ?? '';
-              const stats = [
-                { icon: Users,        label: 'Visitors',     value: overview?.allTime.totalSessions ?? 0 },
-                { icon: Eye,          label: 'Page Views',   value: overview?.allTime.totalPageViews ?? 0 },
-                { icon: MousePointer, label: 'Interactions', value: overview?.allTime.totalInteractions ?? 0 },
+              const sessions   = overview?.allTime.totalSessions ?? 0;
+              const pageViews  = overview?.allTime.totalPageViews ?? 0;
+              const interactions = overview?.allTime.totalInteractions ?? 0;
+              const avgPages   = sessions > 0 ? (pageViews / sessions).toFixed(1) : '—';
+              const uniqueLocs = geo.length;
+              const topDevice  = devices?.byDevice[0]?.device
+                ? devices.byDevice[0].device.charAt(0).toUpperCase() + devices.byDevice[0].device.slice(1)
+                : '—';
+
+              const row1 = [
+                { icon: Users,        label: 'Visitors',        value: sessions.toLocaleString() },
+                { icon: Eye,          label: 'Page Views',      value: pageViews.toLocaleString() },
+                { icon: MousePointer, label: 'Interactions',    value: interactions.toLocaleString() },
               ];
+              const row2 = [
+                { icon: TrendingUp,   label: 'Avg Pages / Visit',  value: avgPages },
+                { icon: Globe,        label: 'Unique Locations',   value: String(uniqueLocs) },
+                { icon: Monitor,      label: 'Top Device',         value: topDevice },
+              ];
+
+              const StatCell = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) => (
+                <div className="flex-1 px-6 first:pl-0 last:pr-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4 text-purple-700 dark:text-purple-300" />
+                    </div>
+                    <span className="text-sm text-gray-600 dark:text-gray-300">{label}</span>
+                  </div>
+                  <p className="text-3xl font-bold text-gray-800 dark:text-white">{value}</p>
+                </div>
+              );
+
               return (
                 <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-6">
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Visitor Summary</h2>
                     <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{rangeLabel}</span>
                   </div>
-                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40">
-                    {stats.map(({ icon: Icon, label, value }) => (
-                      <div key={label} className="flex-1 px-6 first:pl-0 last:pr-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center shrink-0">
-                            <Icon className="w-4 h-4 text-purple-700 dark:text-purple-300" />
-                          </div>
-                          <span className="text-sm text-gray-600 dark:text-gray-300">{label}</span>
-                        </div>
-                        <p className="text-3xl font-bold text-gray-800 dark:text-white">{value.toLocaleString()}</p>
-                      </div>
-                    ))}
+                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40 mb-6">
+                    {row1.map(p => <StatCell key={p.label} {...p} />)}
+                  </div>
+                  <div className="flex divide-x divide-gray-200/60 dark:divide-gray-700/40 pt-6 border-t border-gray-200/60 dark:border-gray-700/40">
+                    {row2.map(p => <StatCell key={p.label} {...p} />)}
                   </div>
                 </div>
               );
@@ -556,13 +576,35 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(139,92,246,0.1)" />
-                  <XAxis dataKey="date" tickFormatter={d => d.slice(5)} tick={{ fontSize: 11, fill: tickColor }} />
+                  <XAxis dataKey="date" tickFormatter={d => {
+                    if (timeRange === '1h') {
+                      const time = d.split('T')[1] ?? '';
+                      const [h, m] = time.split(':').map(Number);
+                      return `${h % 12 || 12}:${String(m).padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`;
+                    }
+                    if (timeRange === '24h') {
+                      const h = parseInt(d.split('T')[1] ?? '0', 10);
+                      return `${h % 12 || 12} ${h >= 12 ? 'PM' : 'AM'}`;
+                    }
+                    return d.slice(5);
+                  }} tick={{ fontSize: 11, fill: tickColor }} />
                   <YAxis tick={{ fontSize: 11, fill: tickColor }} />
                   <Tooltip
                     contentStyle={tooltipContentStyle}
                     labelStyle={tooltipLabelStyle}
                     itemStyle={tooltipItemStyle}
-                    labelFormatter={d => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    labelFormatter={d => {
+                      if (timeRange === '1h') {
+                        const time = d.split('T')[1] ?? '';
+                        const [h, m] = time.split(':').map(Number);
+                        return `${h % 12 || 12}:${String(m).padStart(2,'0')}–${String(m + 15).padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`;
+                      }
+                      if (timeRange === '24h') {
+                        const h = parseInt(d.split('T')[1] ?? '0', 10);
+                        return `${h % 12 || 12}:00–${(h + 1) % 12 || 12}:00 ${h >= 12 ? 'PM' : 'AM'}`;
+                      }
+                      return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                    }}
                   />
                   <Area type="monotone" dataKey="sessions"  stroke="#8b5cf6" fill="url(#gSessions)" strokeWidth={2} name="Visitors" />
                   <Area type="monotone" dataKey="pageViews" stroke="#a78bfa" fill="url(#gPV)"       strokeWidth={2} name="Page Views" />

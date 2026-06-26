@@ -398,17 +398,62 @@ on('GET', '/api/dashboard/flow', async (req, res) => {
 on('GET', '/api/dashboard/timeline', async (req, res) => {
   if (!authGuard(req, res)) return;
   const url   = new URL('http://x' + req.url);
+  const gran  = url.searchParams.get('granularity') ?? 'day'; // 'day' | 'hour' | '15min'
   const days  = Math.min(90, parseInt(url.searchParams.get('days') ?? '30', 10));
-  const since = new Date(Date.now()-days*24*60*60*1000).toISOString();
+  const since = url.searchParams.get('since') ?? new Date(Date.now()-days*24*60*60*1000).toISOString();
+
+  // SQL bucket expressions per granularity
+  const bktS = gran === '15min'
+    ? `strftime('%Y-%m-%dT%H:', first_seen_at) || printf('%02d', (cast(strftime('%M', first_seen_at) as integer) / 15) * 15)`
+    : gran === 'hour'
+    ? `substr(first_seen_at, 1, 13)`
+    : `substr(first_seen_at, 1, 10)`;
+  const bktP = gran === '15min'
+    ? `strftime('%Y-%m-%dT%H:', entered_at) || printf('%02d', (cast(strftime('%M', entered_at) as integer) / 15) * 15)`
+    : gran === 'hour'
+    ? `substr(entered_at, 1, 13)`
+    : `substr(entered_at, 1, 10)`;
+
   const [sRes, pRes] = await Promise.all([
-    db.execute({ sql: `SELECT substr(first_seen_at,1,10) AS date,COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=? GROUP BY date`, args: [since] }),
-    db.execute({ sql: `SELECT substr(entered_at,1,10) AS date,COUNT(*) AS n FROM page_views WHERE entered_at>=? GROUP BY date`, args: [since] }),
+    db.execute({ sql: `SELECT ${bktS} AS date, COUNT(*) AS n FROM visitor_sessions WHERE is_bot=0 AND first_seen_at>=? GROUP BY date`, args: [since] }),
+    db.execute({ sql: `SELECT ${bktP} AS date, COUNT(*) AS n FROM page_views WHERE entered_at>=? GROUP BY date`, args: [since] }),
   ]);
   const sm = {}, pm = {};
   for (const r of sRes.rows) sm[r.date] = Number(r.n);
   for (const r of pRes.rows) pm[r.date] = Number(r.n);
+
+  const now = Date.now();
+  const sinceMs = new Date(since).getTime();
   const timeline = [];
-  for (let i=days-1; i>=0; i--) { const d=new Date(Date.now()-i*24*60*60*1000).toISOString().slice(0,10); timeline.push({date:d,sessions:sm[d]??0,pageViews:pm[d]??0}); }
+
+  if (gran === '15min' || gran === 'hour') {
+    const slotMs = gran === '15min' ? 15 * 60 * 1000 : 60 * 60 * 1000;
+    // Align end to the current slot boundary, iterate backward
+    const endSlot = Math.floor(now / slotMs) * slotMs;
+    const maxSlots = gran === '15min' ? 12 : 25;
+    const slots = [];
+    for (let i = maxSlots - 1; i >= 0; i--) {
+      const t = new Date(endSlot - i * slotMs);
+      if (t.getTime() < sinceMs) continue;
+      slots.push(t);
+    }
+    for (const t of slots) {
+      let d;
+      if (gran === '15min') {
+        const h = String(t.getUTCHours()).padStart(2, '0');
+        const m = String(Math.floor(t.getUTCMinutes() / 15) * 15).padStart(2, '0');
+        d = `${t.toISOString().slice(0, 10)}T${h}:${m}`;
+      } else {
+        d = t.toISOString().slice(0, 13);
+      }
+      timeline.push({ date: d, sessions: sm[d] ?? 0, pageViews: pm[d] ?? 0 });
+    }
+  } else {
+    for (let i = days-1; i >= 0; i--) {
+      const d = new Date(Date.now()-i*24*60*60*1000).toISOString().slice(0,10);
+      timeline.push({ date: d, sessions: sm[d]??0, pageViews: pm[d]??0 });
+    }
+  }
   send(res, 200, timeline);
 });
 
