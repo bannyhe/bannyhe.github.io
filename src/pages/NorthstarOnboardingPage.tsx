@@ -368,7 +368,7 @@ export function NorthstarOnboardingPage() {
               <img
                 src={successMetricsImg}
                 alt="Success Metrics - Adoption, Revenue, Satisfaction"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
               />
             </div>
           </div>
