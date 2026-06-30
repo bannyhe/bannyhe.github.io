@@ -65,6 +65,7 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
   const [key, setKey] = useState("");
   const [error, setError] = useState<LoginResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loginProgress, setLoginProgress] = useState(0);
   const [showKey, setShowKey] = useState(false);
   const [showServerConfig, setShowServerConfig] = useState(false);
   const [serverUrlDraft, setServerUrlDraft] = useState(() => getServerBase());
@@ -85,10 +86,21 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setLoginProgress(10);
+    const t1 = setTimeout(() => setLoginProgress(40), 200);
+    const t2 = setTimeout(() => setLoginProgress(70), 500);
+    const t3 = setTimeout(() => setLoginProgress(85), 900);
     const result = await loginCheck(key);
-    setLoading(false);
-    if (result !== "ok") { setError(result); return; }
+    clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+    if (result !== "ok") {
+      setLoading(false);
+      setLoginProgress(0);
+      setError(result);
+      return;
+    }
+    setLoginProgress(100);
     localStorage.setItem(KEY_STORAGE, key);
+    await new Promise(r => setTimeout(r, 350));
     onLogin(key);
   }
 
@@ -146,13 +158,25 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
                 </p>
               )}
               <div className="h-36 flex flex-col items-center justify-center gap-4">
-                <button
-                  type="submit"
-                  disabled={!key || loading}
-                  className="h-10 px-6 rounded-md bg-gradient-to-r from-[#102F56] to-[#1a4d7a] hover:from-[#0d2543] hover:to-[#153d63] dark:from-[#6DB2FF] dark:to-[#5a9ae6] dark:hover:from-[#5a9ae6] dark:hover:to-[#4882cc] text-white dark:text-gray-900 text-sm font-medium shadow-lg disabled:grayscale disabled:cursor-not-allowed transition-all"
-                >
-                  {loading ? "Checking…" : "Enter"}
-                </button>
+                {loading ? (
+                  <div className="w-full h-10 rounded-md bg-white/60 dark:bg-gray-800/60 border border-purple-200/60 dark:border-purple-700/30 flex items-center px-4 gap-3">
+                    <div className="flex-1 h-1.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] transition-all duration-500 ease-out"
+                        style={{ width: `${loginProgress}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums w-7 text-right">{loginProgress}%</span>
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={!key}
+                    className="h-10 px-6 rounded-md bg-gradient-to-r from-[#102F56] to-[#1a4d7a] hover:from-[#0d2543] hover:to-[#153d63] dark:from-[#6DB2FF] dark:to-[#5a9ae6] dark:hover:from-[#5a9ae6] dark:hover:to-[#4882cc] text-white dark:text-gray-900 text-sm font-medium shadow-lg disabled:grayscale disabled:cursor-not-allowed transition-all"
+                  >
+                    Enter
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowServerConfig(v => !v)}
