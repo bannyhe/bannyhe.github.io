@@ -18,6 +18,17 @@ if (!TURSO_URL)     { console.error('[config] TURSO_DATABASE_URL is required'); 
 // ── Database ───────────────────────────────────────────────────────────────────
 const db = createClient({ url: TURSO_URL, authToken: TURSO_TOKEN });
 
+// ── Response cache (in-memory, 60 s TTL) ──────────────────────────────────────
+const _cache = new Map();
+const CACHE_TTL = 60_000;
+function cacheGet(k) {
+  const e = _cache.get(k);
+  if (!e) return null;
+  if (Date.now() > e.exp) { _cache.delete(k); return null; }
+  return e.data;
+}
+function cacheSet(k, data) { _cache.set(k, { data, exp: Date.now() + CACHE_TTL }); }
+
 async function initDb() {
   await db.batch([
     `CREATE TABLE IF NOT EXISTS visitor_sessions (
@@ -260,6 +271,7 @@ const LOC_EXPR = `CASE WHEN country_code='US' AND city IS NOT NULL AND region IS
 
 on('GET', '/api/dashboard/overview', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url      = new URL('http://x' + req.url);
   const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
   const location = url.searchParams.get('location') || null;
@@ -274,14 +286,14 @@ on('GET', '/api/dashboard/overview', async (req, res) => {
   const s = Number(sessions.rows[0]?.n ?? 0);
   const p = Number(pageViews.rows[0]?.n ?? 0);
   const i = Number(interactions.rows[0]?.n ?? 0);
-  send(res, 200, {
-    allTime:    { totalSessions: s, totalPageViews: p, totalInteractions: i },
-    last30Days: { sessions: s },
-  });
+  const result = { allTime: { totalSessions: s, totalPageViews: p, totalInteractions: i }, last30Days: { sessions: s } };
+  cacheSet(req.url, result);
+  send(res, 200, result);
 });
 
 on('GET', '/api/dashboard/visitors', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url      = new URL('http://x' + req.url);
   const page     = Math.max(1,   parseInt(url.searchParams.get('page')  ?? '1',  10));
   const limit    = Math.min(100, parseInt(url.searchParams.get('limit') ?? '20', 10));
@@ -297,7 +309,9 @@ on('GET', '/api/dashboard/visitors', async (req, res) => {
     }),
   ]);
   const total = Number(totalRes.rows[0]?.n ?? 0);
-  send(res, 200, { visitors: visitorsRes.rows, total, page, limit, totalPages: Math.ceil(total/limit) });
+  const result = { visitors: visitorsRes.rows, total, page, limit, totalPages: Math.ceil(total/limit) };
+  cacheSet(req.url, result);
+  send(res, 200, result);
 });
 
 on('GET', '/api/dashboard/visitors/:id', async (req, res, params) => {
@@ -313,17 +327,20 @@ on('GET', '/api/dashboard/visitors/:id', async (req, res, params) => {
 
 on('GET', '/api/dashboard/pages', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url      = new URL('http://x' + req.url);
   const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
   const location = url.searchParams.get('location') || null;
   const pvLoc    = location ? ` AND session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
   const la       = location ? [location] : [];
   const r = await db.execute({ sql: `SELECT path,COUNT(*) AS views,AVG(duration) AS avg_duration_ms,AVG(scroll_depth) AS avg_scroll_depth FROM page_views WHERE entered_at>=?${pvLoc} GROUP BY path ORDER BY views DESC LIMIT 50`, args: [since, ...la] });
+  cacheSet(req.url, r.rows);
   send(res, 200, r.rows);
 });
 
 on('GET', '/api/dashboard/geo', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url   = new URL('http://x' + req.url);
   const since = url.searchParams.get('since') ?? new Date(0).toISOString();
   const r = await db.execute({ sql: `
@@ -341,11 +358,13 @@ on('GET', '/api/dashboard/geo', async (req, res) => {
     GROUP BY location, country_code
     ORDER BY visitors DESC LIMIT 50
   `, args: [since] });
+  cacheSet(req.url, r.rows);
   send(res, 200, r.rows);
 });
 
 on('GET', '/api/dashboard/devices', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url      = new URL('http://x' + req.url);
   const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
   const location = url.searchParams.get('location') || null;
@@ -356,7 +375,9 @@ on('GET', '/api/dashboard/devices', async (req, res) => {
     db.execute({ sql: `SELECT browser,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND browser IS NOT NULL AND first_seen_at>=?${vsLoc} GROUP BY browser ORDER BY count DESC LIMIT 10`, args: [since, ...la] }),
     db.execute({ sql: `SELECT os,COUNT(*) AS count FROM visitor_sessions WHERE is_bot=0 AND os IS NOT NULL AND first_seen_at>=?${vsLoc} GROUP BY os ORDER BY count DESC LIMIT 10`, args: [since, ...la] }),
   ]);
-  send(res, 200, { byDevice: byDevice.rows, byBrowser: byBrowser.rows, byOs: byOs.rows });
+  const result = { byDevice: byDevice.rows, byBrowser: byBrowser.rows, byOs: byOs.rows };
+  cacheSet(req.url, result);
+  send(res, 200, result);
 });
 
 on('GET', '/api/dashboard/referrers', async (req, res) => {
@@ -377,6 +398,7 @@ on('GET', '/api/dashboard/interactions', async (req, res) => {
 
 on('GET', '/api/dashboard/flow', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url      = new URL('http://x' + req.url);
   const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
   const location = url.searchParams.get('location') || null;
@@ -404,18 +426,21 @@ on('GET', '/api/dashboard/flow', async (req, res) => {
     LIMIT 30
   `, args: [since, ...la] });
   const flows = r.rows;
-  if (!flows.length) return send(res, 200, { nodes: [], links: [] });
+  if (!flows.length) { cacheSet(req.url, { nodes: [], links: [] }); return send(res, 200, { nodes: [], links: [] }); }
 
   const nodeSet = new Set();
   for (const f of flows) { nodeSet.add(f.source_path); nodeSet.add(f.target_path); }
   const nodes = Array.from(nodeSet).map(name => ({ name }));
   const nodeIdx = new Map(Array.from(nodeSet).map((name, i) => [name, i]));
   const links = flows.map(f => ({ source: nodeIdx.get(f.source_path), target: nodeIdx.get(f.target_path), value: f.value }));
-  send(res, 200, { nodes, links });
+  const result = { nodes, links };
+  cacheSet(req.url, result);
+  send(res, 200, result);
 });
 
 on('GET', '/api/dashboard/timeline', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url      = new URL('http://x' + req.url);
   const gran     = url.searchParams.get('granularity') ?? 'day'; // 'day' | 'hour' | '15min'
   const days     = Math.min(90, parseInt(url.searchParams.get('days') ?? '30', 10));
@@ -477,6 +502,7 @@ on('GET', '/api/dashboard/timeline', async (req, res) => {
       timeline.push({ date: d, sessions: sm[d]??0, pageViews: pm[d]??0 });
     }
   }
+  cacheSet(req.url, timeline);
   send(res, 200, timeline);
 });
 

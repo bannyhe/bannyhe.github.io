@@ -332,22 +332,27 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
   const [devices, setDevices]   = useState<DeviceData | null>(null);
   const [flow, setFlow]         = useState<FlowData>({ nodes: [], links: [] });
   const [visitors, setVisitors] = useState<VisitorRow[]>([]);
-  const [loading, setLoading]   = useState(true);
+  const [progress, setProgress] = useState(0); // 0 = idle, 1-99 = loading, 100 = done (briefly)
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setProgress(1);
+    let done = 0;
+    const tick = () => { done++; setProgress(Math.round((done / 7) * 100)); };
+    const wrap = <T,>(p: Promise<T | null>): Promise<T | null> =>
+      p.then(r => { tick(); return r; }).catch(() => { tick(); return null; });
+
     const tr    = TIME_RANGES.find(r => r.value === timeRange)!;
     const since = new Date(Date.now() - tr.ms).toISOString();
     const s     = encodeURIComponent(since);
     const l     = selectedLocation ? `&location=${encodeURIComponent(selectedLocation)}` : '';
     const [ov, tl, pg, geoData, dv, fl, vs] = await Promise.all([
-      apiFetch<Overview>(`/api/dashboard/overview?since=${s}${l}`, apiKey),
-      apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}&granularity=${tr.granularity}&since=${s}${l}`, apiKey),
-      apiFetch<PageRow[]>(`/api/dashboard/pages?since=${s}${l}`, apiKey),
-      apiFetch<GeoRow[]>(`/api/dashboard/geo?since=${s}`, apiKey),
-      apiFetch<DeviceData>(`/api/dashboard/devices?since=${s}${l}`, apiKey),
-      apiFetch<FlowData>(`/api/dashboard/flow?since=${s}${l}`, apiKey),
-      apiFetch<{ visitors: VisitorRow[] }>(`/api/dashboard/visitors?limit=10&since=${s}${l}`, apiKey),
+      wrap(apiFetch<Overview>(`/api/dashboard/overview?since=${s}${l}`, apiKey)),
+      wrap(apiFetch<TimelineRow[]>(`/api/dashboard/timeline?days=${tr.days}&granularity=${tr.granularity}&since=${s}${l}`, apiKey)),
+      wrap(apiFetch<PageRow[]>(`/api/dashboard/pages?since=${s}${l}`, apiKey)),
+      wrap(apiFetch<GeoRow[]>(`/api/dashboard/geo?since=${s}`, apiKey)),
+      wrap(apiFetch<DeviceData>(`/api/dashboard/devices?since=${s}${l}`, apiKey)),
+      wrap(apiFetch<FlowData>(`/api/dashboard/flow?since=${s}${l}`, apiKey)),
+      wrap(apiFetch<{ visitors: VisitorRow[] }>(`/api/dashboard/visitors?limit=10&since=${s}${l}`, apiKey)),
     ]);
     if (ov === null) { onLogout(); return; }
     setOverview(ov);
@@ -357,7 +362,8 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
     setDevices(dv ?? null);
     setFlow(fl ?? { nodes: [], links: [] });
     setVisitors(vs?.visitors ?? []);
-    setLoading(false);
+    setProgress(100);
+    setTimeout(() => setProgress(0), 600);
   }, [apiKey, onLogout, timeRange, selectedLocation]);
 
   useEffect(() => { load(); }, [load]);
@@ -478,15 +484,26 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
               ))}
             </select>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            onClick={load}
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 text-gray-700 dark:text-gray-300 text-sm hover:bg-white/50 transition disabled:opacity-50"
-          >
-            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
-            Refresh
-          </motion.button>
+          {progress > 0 ? (
+            <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 w-40">
+              <div className="flex-1 h-1.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-purple-500 transition-all duration-300 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums w-7 text-right">{progress}%</span>
+            </div>
+          ) : (
+            <motion.button
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onClick={load}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-xl bg-white/30 dark:bg-gray-800/40 border border-white/40 dark:border-gray-600/30 text-gray-700 dark:text-gray-300 text-sm hover:bg-white/50 transition"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </motion.button>
+          )}
           <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={onLogout}
@@ -498,9 +515,16 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
         </div>
       </div>
 
-      {loading && !overview ? (
-        <div className="flex items-center justify-center h-64">
-          <RefreshCw className="w-8 h-8 text-purple-500 animate-spin" />
+      {progress > 0 && !overview ? (
+        <div className="flex flex-col items-center justify-center h-64 gap-3">
+          <p className="text-sm text-gray-600 dark:text-gray-300">Loading analytics…</p>
+          <div className="w-56 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-purple-500 transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums">{progress}%</span>
         </div>
       ) : (
         <AnimatePresence>
