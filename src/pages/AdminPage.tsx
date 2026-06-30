@@ -332,7 +332,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
   const [devices, setDevices]   = useState<DeviceData | null>(null);
   const [flow, setFlow]         = useState<FlowData>({ nodes: [], links: [] });
   const [visitors, setVisitors] = useState<VisitorRow[]>([]);
-  const [progress, setProgress] = useState(0); // 0 = idle, 1-99 = loading, 100 = done (briefly)
+  const [progress, setProgress] = useState(1); // 0 = idle, 1-99 = loading, 100 = done (briefly)
 
   const load = useCallback(async () => {
     setProgress(1);
