@@ -166,12 +166,14 @@ export function NorthstarOnboardingPage() {
                 </p>
               </div>
               <div>
-                <img
-                  src={traditionalDataCenterImg}
-                  alt="Traditional Data Center"
-                  className="w-full h-auto"
-                  style={{ borderRadius: '10px' }}
-                />
+                <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
+                  <img
+                    src={traditionalDataCenterImg}
+                    alt="Traditional Data Center"
+                    className="w-full h-auto"
+                    style={{ transform: 'scale(1.05)', transformOrigin: 'center center' }}
+                  />
+                </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Traditional Data Center</p>
               </div>
             </div>
