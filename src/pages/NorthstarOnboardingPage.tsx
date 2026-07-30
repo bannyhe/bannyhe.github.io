@@ -230,12 +230,11 @@ export function NorthstarOnboardingPage() {
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                   {carouselSlides.map((slide, index) => (
-                    <div key={index} className="min-w-full relative">
+                    <div key={index} className="min-w-full relative aspect-[4/3] bg-[#1c2a35]">
                       <img
                         src={slide.src}
                         alt={slide.label}
-                        className="w-full h-auto"
-                        style={{ borderRadius: '10px' }}
+                        className="w-full h-full object-contain"
                       />
                       {/* Overlay Label */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
