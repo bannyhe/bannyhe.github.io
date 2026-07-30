@@ -191,7 +191,7 @@ export function NorthstarOnboardingPage() {
                     src={challengeImg}
                     alt="Private Cloud to Public Cloud Transition"
                     className="w-full h-auto"
-                    style={{ transform: 'scale(1.05)', transformOrigin: 'center center' }}
+                    style={{ transform: 'scale(1.1)', transformOrigin: 'center center' }}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">SaaS Transformation</p>
