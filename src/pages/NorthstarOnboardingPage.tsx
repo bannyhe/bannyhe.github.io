@@ -406,15 +406,6 @@ export function NorthstarOnboardingPage() {
                 With the goals and metrics in mind, I collaborated with key stakeholders on project requirements, and visualize the major steps a clear understanding on the representation of connections between cloud and on-premises environment. In this way, it would be more straightforward to illustrate the key areas that needs intuitive, instructional design for users.
               </p>
             </div>
-            <div className="mt-8 mb-10">
-              <img
-                src={optimizingWorkflowImg}
-                alt="Optimizing Workflow - Major Steps Overview"
-                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                style={{ borderRadius: '10px' }}
-                onClick={() => setExpandedImage({ src: optimizingWorkflowImg, alt: "Optimizing Workflow - Major Steps Overview" })}
-              />
-            </div>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
                 I try to align the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
@@ -431,14 +422,27 @@ export function NorthstarOnboardingPage() {
                 </li>
               </ul>
             </div>
-            <div className="mt-8">
-              <img
-                src={workflowDiagramImg}
-                alt="Optimized Workflow Diagram - Cloud and On-Premises Environment"
-                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                style={{ borderRadius: '10px' }}
-                onClick={() => setExpandedImage({ src: workflowDiagramImg, alt: "Optimized Workflow Diagram - Cloud and On-Premises Environment" })}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+              <div>
+                <img
+                  src={optimizingWorkflowImg}
+                  alt="Optimizing Workflow - Major Steps Overview"
+                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: optimizingWorkflowImg, alt: "Optimizing Workflow - Major Steps Overview" })}
+                />
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Before</p>
+              </div>
+              <div>
+                <img
+                  src={workflowDiagramImg}
+                  alt="Optimized Workflow Diagram - Cloud and On-Premises Environment"
+                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: workflowDiagramImg, alt: "Optimized Workflow Diagram - Cloud and On-Premises Environment" })}
+                />
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">After</p>
+              </div>
             </div>
           </div>
 
