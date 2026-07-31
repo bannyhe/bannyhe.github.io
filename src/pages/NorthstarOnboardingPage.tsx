@@ -230,11 +230,18 @@ export function NorthstarOnboardingPage() {
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                   {carouselSlides.map((slide, index) => (
-                    <div key={index} className="min-w-full relative aspect-[4/3] bg-[#1c2a35] flex items-center justify-center">
+                    <div key={index} className="min-w-full relative aspect-[4/3] bg-[#1c2a35] overflow-hidden flex items-center justify-center">
+                      {/* Blurred fill hides the side bands / dark seam without cropping the image */}
+                      <img
+                        src={slide.src}
+                        alt=""
+                        aria-hidden="true"
+                        className="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl"
+                      />
                       <img
                         src={slide.src}
                         alt={slide.label}
-                        className={index === 0 ? "w-full h-full object-contain" : "h-full w-auto max-w-none object-contain"}
+                        className={index === 0 ? "relative w-full h-full object-contain" : "relative h-full w-auto max-w-none object-contain"}
                         style={index === 0 ? undefined : { transform: 'scale(1.03)', transformOrigin: 'center center' }}
                       />
                       {/* Overlay Label */}
