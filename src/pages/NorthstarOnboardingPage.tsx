@@ -308,6 +308,7 @@ export function NorthstarOnboardingPage() {
                   style={{ borderRadius: '10px' }}
                   onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
                 />
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Persona</p>
               </div>
             </div>
           </div>
@@ -334,6 +335,7 @@ export function NorthstarOnboardingPage() {
                   style={{ borderRadius: '10px' }}
                   onClick={() => setExpandedImage({ src: redefineOnboardingImg, alt: "Redefine Onboarding Experience - Sales Led to Product Led" })}
                 />
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">End-to-End Experience</p>
               </div>
             </div>
           </div>
@@ -406,23 +408,7 @@ export function NorthstarOnboardingPage() {
                 With the goals and metrics in mind, I collaborated with key stakeholders on project requirements, and visualize the major steps a clear understanding on the representation of connections between cloud and on-premises environment. In this way, it would be more straightforward to illustrate the key areas that needs intuitive, instructional design for users.
               </p>
             </div>
-            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-              <p>
-                I try to align the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
-              </p>
-              <ul className="list-disc pl-6 space-y-4">
-                <li>
-                  Protect credential by introducing cloud gateway, which bridge the gap between cloud and on-premises data centers, with more user-trust on the safety of connection.
-                </li>
-                <li>
-                  Encourage user to explore features by making it intuitive, clear and simple.
-                </li>
-                <li>
-                  Provide onboarding guide to make users feel more confident with purchasing subscription.
-                </li>
-              </ul>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-10">
               <div>
                 <img
                   src={optimizingWorkflowImg}
@@ -443,6 +429,22 @@ export function NorthstarOnboardingPage() {
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">After</p>
               </div>
+            </div>
+            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
+              <p>
+                I try to align the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
+              </p>
+              <ul className="list-disc pl-6 space-y-4">
+                <li>
+                  Protect credential by introducing cloud gateway, which bridge the gap between cloud and on-premises data centers, with more user-trust on the safety of connection.
+                </li>
+                <li>
+                  Encourage user to explore features by making it intuitive, clear and simple.
+                </li>
+                <li>
+                  Provide onboarding guide to make users feel more confident with purchasing subscription.
+                </li>
+              </ul>
             </div>
           </div>
 
