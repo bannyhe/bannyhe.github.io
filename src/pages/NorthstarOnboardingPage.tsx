@@ -30,11 +30,11 @@ export function NorthstarOnboardingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const carouselSlides = [
-    { src: systemDashboardImg, label: "System Dashboard" },
-    { src: userGuideImg, label: "User Guide" },
-    { src: onboardingStepsImg, label: "Onboarding Steps" },
-    { src: transitionalPageImg, label: "Transitional Page During Deployment" },
-    { src: globalHomepageImg, label: "Global Homepage" }
+    { src: systemDashboardImg, label: "System Dashboard", aspect: 992 / 692 },
+    { src: userGuideImg, label: "User Guide", aspect: 893 / 702 },
+    { src: onboardingStepsImg, label: "Onboarding Steps", aspect: 905 / 786 },
+    { src: transitionalPageImg, label: "Transitional Page During Deployment", aspect: 902 / 702 },
+    { src: globalHomepageImg, label: "Global Homepage", aspect: 902 / 696 }
   ];
 
   // Scroll to top when component mounts
@@ -223,26 +223,24 @@ export function NorthstarOnboardingPage() {
             
             {/* Carousel */}
             <div className="relative">
-              <div className="overflow-hidden relative" style={{ borderRadius: '10px' }}>
+              <motion.div
+                className="overflow-hidden relative w-full"
+                style={{ borderRadius: '10px' }}
+                initial={false}
+                animate={{ paddingBottom: `${100 / carouselSlides[currentSlide].aspect}%` }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
                 <motion.div
-                  className="flex"
+                  className="flex absolute inset-0"
                   animate={{ x: `-${currentSlide * 100}%` }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                   {carouselSlides.map((slide, index) => (
-                    <div key={index} className="min-w-full relative aspect-[4/3] bg-[#1c2a35] overflow-hidden flex items-center justify-center">
-                      {/* Blurred fill hides the side bands / dark seam without cropping the image */}
-                      <img
-                        src={slide.src}
-                        alt=""
-                        aria-hidden="true"
-                        className="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl"
-                      />
+                    <div key={index} className="min-w-full h-full relative bg-[#1c2a35]">
                       <img
                         src={slide.src}
                         alt={slide.label}
-                        className={index === 0 ? "relative w-full h-full object-contain" : "relative h-full w-auto max-w-none object-contain"}
-                        style={index === 0 ? undefined : { transform: 'scale(1.03)', transformOrigin: 'center center' }}
+                        className="w-full h-full object-cover"
                       />
                       {/* Overlay Label */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
@@ -253,7 +251,7 @@ export function NorthstarOnboardingPage() {
                     </div>
                   ))}
                 </motion.div>
-              </div>
+              </motion.div>
               
               {/* Navigation Buttons */}
               <button
