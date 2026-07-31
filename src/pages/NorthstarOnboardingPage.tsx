@@ -170,8 +170,9 @@ export function NorthstarOnboardingPage() {
                   <img
                     src={traditionalDataCenterImg}
                     alt="Traditional Data Center"
-                    className="w-full h-auto"
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.05)', transformOrigin: 'center center' }}
+                    onClick={() => setExpandedImage({ src: traditionalDataCenterImg, alt: "Traditional Data Center" })}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Traditional Data Center</p>
@@ -190,8 +191,9 @@ export function NorthstarOnboardingPage() {
                   <img
                     src={challengeImg}
                     alt="Private Cloud to Public Cloud Transition"
-                    className="w-full h-auto"
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.1)', transformOrigin: 'center center' }}
+                    onClick={() => setExpandedImage({ src: challengeImg, alt: "Private Cloud to Public Cloud Transition" })}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">SaaS Transformation</p>
@@ -240,7 +242,8 @@ export function NorthstarOnboardingPage() {
                       <img
                         src={slide.src}
                         alt={slide.label}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                        onClick={() => setExpandedImage({ src: slide.src, alt: slide.label })}
                       />
                       {/* Overlay Label */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
@@ -301,8 +304,9 @@ export function NorthstarOnboardingPage() {
               <img
                 src={targetUserImg}
                 alt="IT Administrator Target User"
-                className="w-full h-auto"
+                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                 style={{ borderRadius: '10px' }}
+                onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
               />
             </div>
           </div>
@@ -325,8 +329,9 @@ export function NorthstarOnboardingPage() {
                 <img
                   src={redefineOnboardingImg}
                   alt="Redefine Onboarding Experience - Sales Led to Product Led"
-                  className="w-full h-auto"
+                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: redefineOnboardingImg, alt: "Redefine Onboarding Experience - Sales Led to Product Led" })}
                 />
               </div>
             </div>
@@ -357,8 +362,9 @@ export function NorthstarOnboardingPage() {
               <img
                 src={designPrinciplesImg}
                 alt="Design Principles - Efficient, Intuitive, Trustworthy"
-                className="w-full h-auto"
+                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                 style={{ borderRadius: '10px' }}
+                onClick={() => setExpandedImage({ src: designPrinciplesImg, alt: "Design Principles - Efficient, Intuitive, Trustworthy" })}
               />
             </div>
           </div>
@@ -377,7 +383,8 @@ export function NorthstarOnboardingPage() {
               <img
                 src={successMetricsImg}
                 alt="Success Metrics - Adoption, Revenue, Satisfaction"
-                className="w-full h-full object-cover" style={{ objectPosition: '50% 43%' }}
+                className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" style={{ objectPosition: '50% 43%' }}
+                onClick={() => setExpandedImage({ src: successMetricsImg, alt: "Success Metrics - Adoption, Revenue, Satisfaction" })}
               />
             </div>
           </div>
@@ -396,8 +403,9 @@ export function NorthstarOnboardingPage() {
               <img
                 src={optimizingWorkflowImg}
                 alt="Optimizing Workflow - Major Steps Overview"
-                className="w-full h-auto"
+                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                 style={{ borderRadius: '10px' }}
+                onClick={() => setExpandedImage({ src: optimizingWorkflowImg, alt: "Optimizing Workflow - Major Steps Overview" })}
               />
             </div>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
@@ -420,8 +428,9 @@ export function NorthstarOnboardingPage() {
               <img
                 src={workflowDiagramImg}
                 alt="Optimized Workflow Diagram - Cloud and On-Premises Environment"
-                className="w-full h-auto"
+                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                 style={{ borderRadius: '10px' }}
+                onClick={() => setExpandedImage({ src: workflowDiagramImg, alt: "Optimized Workflow Diagram - Cloud and On-Premises Environment" })}
               />
             </div>
           </div>
@@ -444,8 +453,9 @@ export function NorthstarOnboardingPage() {
                 <img
                   src={oldTransitionalPatternImg}
                   alt="Old Transitional Pattern"
-                  className="w-full h-auto"
+                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern" })}
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Old Transitional Pattern</p>
               </div>
@@ -453,8 +463,9 @@ export function NorthstarOnboardingPage() {
                 <img
                   src={proposedOnboardingGuideImg}
                   alt="Proposed Onboarding Guide"
-                  className="w-full h-auto"
+                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide" })}
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Proposed Onboarding Guide</p>
               </div>
