@@ -341,20 +341,22 @@ export function NorthstarOnboardingPage() {
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Design Principles
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
-                <img
-                  src={designPrinciplesImg}
-                  alt="Design Principles - Efficient, Intuitive, Trustworthy"
-                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                  style={{ transform: 'scale(1.25)', transformOrigin: 'center center' }}
-                  onClick={() => setExpandedImage({ src: designPrinciplesImg, alt: "Design Principles - Efficient, Intuitive, Trustworthy" })}
-                />
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <p>
                   To address these challenges and pain points, I collaborated with key stakeholders to empower security IT Administrators to onboard NSX+ with confidence. I led the design strategy with a focus on three core principles:
                 </p>
+                <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
+                  <img
+                    src={designPrinciplesImg}
+                    alt="Design Principles - Efficient, Intuitive, Trustworthy"
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ transform: 'scale(1.25)', transformOrigin: 'center center' }}
+                    onClick={() => setExpandedImage({ src: designPrinciplesImg, alt: "Design Principles - Efficient, Intuitive, Trustworthy" })}
+                  />
+                </div>
+              </div>
+              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-4">
                   <li>
                     <span className="text-gray-900 dark:text-gray-100">Efficiency:</span> The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.
