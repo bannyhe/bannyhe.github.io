@@ -239,8 +239,20 @@ html {
   .slick-prev {
     left: 10px !important;
   }
-  
+
   .slick-next {
     right: 10px !important;
   }
+}
+
+/*
+ * Northstar case study: keep body paragraphs consistent across sections.
+ * The base-typography rule in @layer base directly sizes <p> to --text-base
+ * whenever its container holds an inline text-* span, overriding the text-lg
+ * the section containers set. Force such paragraphs to inherit the container
+ * size (text-lg) + line-height so every section matches "What is NSX+".
+ */
+.northstar-body .text-lg p {
+  font-size: inherit;
+  line-height: inherit;
 }

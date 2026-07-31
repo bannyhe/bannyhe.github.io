@@ -108,7 +108,7 @@ export function NorthstarOnboardingPage() {
   ];
 
   return (
-    <main className="pt-20 pb-24">
+    <main className="pt-20 pb-24 northstar-body">
       {/* Full-width hero image */}
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto py-12">
