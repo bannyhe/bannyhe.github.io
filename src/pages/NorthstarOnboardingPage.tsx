@@ -235,7 +235,7 @@ export function NorthstarOnboardingPage() {
                         src={slide.src}
                         alt={slide.label}
                         className={index === 0 ? "w-full h-full object-contain" : "h-full w-auto max-w-none object-contain"}
-                        style={index === 0 ? undefined : { clipPath: 'inset(0 1.5%)' }}
+                        style={index === 0 ? undefined : { transform: 'scale(1.05)', transformOrigin: 'center center' }}
                       />
                       {/* Overlay Label */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
