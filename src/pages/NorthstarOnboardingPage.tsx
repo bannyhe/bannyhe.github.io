@@ -242,8 +242,7 @@ export function NorthstarOnboardingPage() {
                       <img
                         src={slide.src}
                         alt={slide.label}
-                        className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                        onClick={() => setExpandedImage({ src: slide.src, alt: slide.label })}
+                        className="w-full h-full object-cover"
                       />
                       {/* Overlay Label */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
