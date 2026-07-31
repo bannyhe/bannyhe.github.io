@@ -291,22 +291,24 @@ export function NorthstarOnboardingPage() {
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Target User & Pain Point
             </h2>
-            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-              <p>
-                The main target user is IT Administrator, who's responsible for managing the organization's virtual network infrastructure, maintaining system performance in IT department. Their main duties include configuring network settings, monitoring network health, and troubleshooting issues.
-              </p>
-              <p>
-                The key pain point for these administrators is the desire to self-onboard NSX+ using their actual data center rather than relying on sales personnel. They seek a streamlined, intuitive onboarding process that allows them to efficiently integrate NSX+ into their existing environment, enabling them to securely leverage real data and configurations under cloud environment.
-              </p>
-            </div>
-            <div className="mt-8">
-              <img
-                src={targetUserImg}
-                alt="IT Administrator Target User"
-                className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                style={{ borderRadius: '10px' }}
-                onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                <p>
+                  The main target user is IT Administrator, who's responsible for managing the organization's virtual network infrastructure, maintaining system performance in IT department. Their main duties include configuring network settings, monitoring network health, and troubleshooting issues.
+                </p>
+                <p>
+                  The key pain point for these administrators is the desire to self-onboard NSX+ using their actual data center rather than relying on sales personnel. They seek a streamlined, intuitive onboarding process that allows them to efficiently integrate NSX+ into their existing environment, enabling them to securely leverage real data and configurations under cloud environment.
+                </p>
+              </div>
+              <div>
+                <img
+                  src={targetUserImg}
+                  alt="IT Administrator Target User"
+                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
+                />
+              </div>
             </div>
           </div>
 
