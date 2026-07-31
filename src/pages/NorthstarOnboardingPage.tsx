@@ -377,18 +377,20 @@ export function NorthstarOnboardingPage() {
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Success Metrics
             </h2>
-            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-              <p>
-                The goal of this project is promote usage of key networking and security features, and increase the financial outcome of the product revenue when users are satisfied with the onboarding experience. Thus, I initiated a discussion with PM and engineers to track the following metrics:
-              </p>
-            </div>
-            <div className="mt-8 overflow-hidden rounded-[10px]" style={{ aspectRatio: '1140 / 320' }}>
-              <img
-                src={successMetricsImg}
-                alt="Success Metrics - Adoption, Revenue, Satisfaction"
-                className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" style={{ objectPosition: '50% 43%' }}
-                onClick={() => setExpandedImage({ src: successMetricsImg, alt: "Success Metrics - Adoption, Revenue, Satisfaction" })}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                <p>
+                  The goal of this project is promote usage of key networking and security features, and increase the financial outcome of the product revenue when users are satisfied with the onboarding experience. Thus, I initiated a discussion with PM and engineers to track the following metrics:
+                </p>
+              </div>
+              <div className="overflow-hidden rounded-[10px]" style={{ aspectRatio: '1140 / 320' }}>
+                <img
+                  src={successMetricsImg}
+                  alt="Success Metrics - Adoption, Revenue, Satisfaction"
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" style={{ objectPosition: '50% 43%' }}
+                  onClick={() => setExpandedImage({ src: successMetricsImg, alt: "Success Metrics - Adoption, Revenue, Satisfaction" })}
+                />
+              </div>
             </div>
           </div>
 
