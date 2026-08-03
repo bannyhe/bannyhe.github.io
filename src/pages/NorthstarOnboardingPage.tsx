@@ -432,17 +432,17 @@ export function NorthstarOnboardingPage() {
             </div>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
-                I align the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
+                I aligned the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
               </p>
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  Protect credential by introducing cloud gateway, which bridge the gap between cloud and on-premises data centers, with more user-trust on the safety of connection.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Protect credential</span> by introducing cloud gateway, which bridge the gap between cloud and on-premises data centers, with more user-trust on the safety of connection.
                 </li>
                 <li>
-                  Encourage user to explore features by making it intuitive, clear and simple.
+                  Encourage user to <span className="font-bold text-gray-900 dark:text-gray-100">explore features</span> by making it intuitive, clear and simple.
                 </li>
                 <li>
-                  Provide onboarding guide to make users feel more confident with purchasing subscription.
+                  Provide <span className="font-bold text-gray-900 dark:text-gray-100">onboarding guide</span> to make users feel more confident with purchasing subscription.
                 </li>
               </ul>
             </div>
