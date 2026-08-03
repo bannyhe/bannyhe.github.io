@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-const logoImage = "https://drive.google.com/thumbnail?id=18egiYJluCTnTQoA7fkoeIw69C5HCD9jP&sz=w200";
+import logoImage from "../assets/mh_logo.png";
 import { useTheme } from "../contexts/ThemeContext";
 
 export function Navigation() {
