@@ -516,7 +516,7 @@ export function NorthstarOnboardingPage() {
                   <span className="font-bold text-gray-900 dark:text-gray-100">Take the ownership</span> on as a design lead for guiding the project from concept to completion.
                 </li>
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Clarify the vagueness</span> together with stakeholders by sharing objectives and requirements.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Embrace the uncertainty</span> by sharing objectives with stakeholders and clarify the vagueness together.
                 </li>
                 <li>
                   <span className="font-bold text-gray-900 dark:text-gray-100">Proactive communication</span> with cross-functional teams to align design decisions with user needs and business goals.
