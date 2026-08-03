@@ -363,13 +363,13 @@ export function NorthstarOnboardingPage() {
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-4">
                   <li>
-                    <span className="text-gray-900 dark:text-gray-100">Efficiency:</span> The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.
+                    <span className="font-bold text-gray-900 dark:text-gray-100">Efficiency:</span> The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.
                   </li>
                   <li>
-                    <span className="text-gray-900 dark:text-gray-100">Intuitive:</span> Each step must be clear and instructional, providing guidance that eliminates the need for documentation or technical support.
+                    <span className="font-bold text-gray-900 dark:text-gray-100">Intuitive:</span> Each step must be clear and instructional, providing guidance that eliminates the need for documentation or technical support.
                   </li>
                   <li>
-                    <span className="text-gray-900 dark:text-gray-100">Trustworthy:</span> Users should feel secure and confident when connecting to their own data centers, fostering a sense of safety throughout the onboarding experience.
+                    <span className="font-bold text-gray-900 dark:text-gray-100">Trustworthy:</span> Users should feel secure and confident when connecting to their own data centers, fostering a sense of safety throughout the onboarding experience.
                   </li>
                 </ul>
               </div>
