@@ -432,7 +432,7 @@ export function NorthstarOnboardingPage() {
             </div>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
-                I try to align the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
+                I align the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
               </p>
               <ul className="list-disc pl-6 space-y-4">
                 <li>
@@ -513,13 +513,13 @@ export function NorthstarOnboardingPage() {
             <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  Take the ownership on as a design lead for guiding the project from concept to completion.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Take the ownership</span> on as a design lead for guiding the project from concept to completion.
                 </li>
                 <li>
-                  Clarify the vagueness together with stakeholders by sharing objectives and requirements.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Clarify the vagueness</span> together with stakeholders by sharing objectives and requirements.
                 </li>
                 <li>
-                  Proactive communication with cross-functional teams to align design decisions with user needs and business goals.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Proactive communication</span> with cross-functional teams to align design decisions with user needs and business goals.
                 </li>
               </ul>
             </div>
