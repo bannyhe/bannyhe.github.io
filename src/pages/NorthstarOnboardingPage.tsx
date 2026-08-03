@@ -24,7 +24,7 @@ const proposedOnboardingGuideImg = "https://drive.google.com/thumbnail?id=1FrPS9
 export function NorthstarOnboardingPage() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [expandedImage, setExpandedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [expandedImage, setExpandedImage] = useState<{ src: string; alt: string; clipPath?: string } | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -465,23 +465,31 @@ export function NorthstarOnboardingPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <img
-                  src={oldTransitionalPatternImg}
-                  alt="Old Transitional Pattern"
-                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                  style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern" })}
-                />
+                <div
+                  className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ borderRadius: '10px', aspectRatio: '1555.29 / 980' }}
+                  onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern", clipPath: "inset(0 0 0 1%)" })}
+                >
+                  <img
+                    src={oldTransitionalPatternImg}
+                    alt="Old Transitional Pattern"
+                    className="w-full h-full object-cover object-right"
+                  />
+                </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Old Transitional Pattern</p>
               </div>
               <div>
-                <img
-                  src={proposedOnboardingGuideImg}
-                  alt="Proposed Onboarding Guide"
-                  className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                  style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide" })}
-                />
+                <div
+                  className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ borderRadius: '10px', aspectRatio: '1555.29 / 980' }}
+                  onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide", clipPath: "inset(0 0 0 1%)" })}
+                >
+                  <img
+                    src={proposedOnboardingGuideImg}
+                    alt="Proposed Onboarding Guide"
+                    className="w-full h-full object-cover object-right"
+                  />
+                </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Proposed Onboarding Guide</p>
               </div>
             </div>
@@ -546,7 +554,7 @@ export function NorthstarOnboardingPage() {
               src={expandedImage.src}
               alt={expandedImage.alt}
               className="max-w-full max-h-[90vh] object-contain"
-              style={{ borderRadius: '10px' }}
+              style={{ borderRadius: '10px', clipPath: expandedImage.clipPath }}
               onClick={(e) => e.stopPropagation()}
             />
           </div>
