@@ -94,7 +94,7 @@ export function VcfNetworkPage() {
   };
 
   return (
-    <main className="pt-20 pb-24">
+    <main className="pt-20 pb-24 vcf-body">
       {/* Password Protection Overlay */}
       {!isAuthenticated && (
         <div className="fixed inset-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg z-50 flex items-center justify-center">

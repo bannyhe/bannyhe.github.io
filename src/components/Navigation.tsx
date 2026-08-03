@@ -58,9 +58,9 @@ export function Navigation() {
             className="flex items-center"
             onClick={handleLogoClick}
           >
-            <img 
-              src={logoImage} 
-              alt="Logo" 
+            <img
+              src={logoImage}
+              alt="Mu He — Home"
               className="h-14 w-auto transition-all duration-300"
               style={{
                 filter: theme === 'dark'
@@ -113,6 +113,9 @@ export function Navigation() {
               size="icon"
               className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-200"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </Button>
@@ -121,7 +124,7 @@ export function Navigation() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 py-4 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/20">
+          <div id="mobile-menu" className="md:hidden mt-4 py-4 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/20">
             {navLinks.map((link) => (
               <Link
                 key={link.path}

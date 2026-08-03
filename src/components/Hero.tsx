@@ -110,6 +110,12 @@ export function Hero() {
     const container = containerRef.current;
     if (!container) return;
 
+    // Respect users who prefer reduced motion: icons are still positioned and
+    // shown, but the continuous physics animation loop is not started.
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Get navigation bar reference
     navBarRef.current = document.querySelector('nav');
 
@@ -499,7 +505,10 @@ export function Hero() {
         animationFrameRef.current = requestAnimationFrame(animate);
       };
 
-      animationFrameRef.current = requestAnimationFrame(animate);
+      // Skip the continuous animation loop when reduced motion is preferred
+      if (!prefersReducedMotion) {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      }
       }; // end tryInit
 
       tryInit(0);

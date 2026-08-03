@@ -253,7 +253,22 @@ html {
  * text stays consistent across sections and pages.
  */
 .northstar-body .text-lg p,
-.about-body .text-lg p {
+.about-body .text-lg p,
+.malware-body .text-lg p,
+.vcf-body .text-lg p {
   font-size: inherit;
   line-height: inherit;
+}
+
+/* Respect users who prefer reduced motion: neutralize CSS animations/transitions.
+   (JS-driven motion, e.g. the Hero floating icons, is guarded separately in code.) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

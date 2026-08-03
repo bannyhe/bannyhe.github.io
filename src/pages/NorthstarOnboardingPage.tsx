@@ -258,6 +258,7 @@ export function NorthstarOnboardingPage() {
               {/* Navigation Buttons */}
               <button
                 onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : carouselSlides.length - 1))}
+                aria-label="Previous slide"
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm hover:bg-white p-3 shadow-lg transition-all"
                 style={{ borderRadius: '10px' }}
               >
@@ -265,6 +266,7 @@ export function NorthstarOnboardingPage() {
               </button>
               <button
                 onClick={() => setCurrentSlide((prev) => (prev < carouselSlides.length - 1 ? prev + 1 : 0))}
+                aria-label="Next slide"
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm hover:bg-white p-3 shadow-lg transition-all"
                 style={{ borderRadius: '10px' }}
               >
