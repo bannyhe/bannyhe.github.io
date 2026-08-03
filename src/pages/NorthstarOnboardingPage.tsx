@@ -467,13 +467,14 @@ export function NorthstarOnboardingPage() {
               <div>
                 <div
                   className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                  style={{ borderRadius: '10px', aspectRatio: '1555.29 / 980' }}
-                  onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern", clipPath: "inset(0 0 0 1%)" })}
+                  style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern", clipPath: "inset(1% 0 0 1%)" })}
                 >
                   <img
                     src={oldTransitionalPatternImg}
                     alt="Old Transitional Pattern"
-                    className="w-full h-full object-cover object-right"
+                    className="w-full h-auto block"
+                    style={{ transform: 'scale(1.0101)', transformOrigin: 'bottom right' }}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Old Transitional Pattern</p>
@@ -481,13 +482,14 @@ export function NorthstarOnboardingPage() {
               <div>
                 <div
                   className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                  style={{ borderRadius: '10px', aspectRatio: '1555.29 / 980' }}
-                  onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide", clipPath: "inset(0 0 0 1%)" })}
+                  style={{ borderRadius: '10px' }}
+                  onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide", clipPath: "inset(1% 0 0 1%)" })}
                 >
                   <img
                     src={proposedOnboardingGuideImg}
                     alt="Proposed Onboarding Guide"
-                    className="w-full h-full object-cover object-right"
+                    className="w-full h-auto block"
+                    style={{ transform: 'scale(1.0101)', transformOrigin: 'bottom right' }}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Proposed Onboarding Guide</p>
