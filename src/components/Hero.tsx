@@ -217,8 +217,8 @@ export function Hero() {
         const el = iconRefs.current[i];
         const rotEl = rotationRefs.current[i];
         if (el) {
-          el.style.left = `${pos.x}px`;
-          el.style.top = `${pos.y}px`;
+          // GPU-composited positioning (no layout/paint per frame)
+          el.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
           el.style.visibility = 'visible';
         }
         if (rotEl) {
@@ -488,8 +488,8 @@ export function Hero() {
           const el = iconRefs.current[i];
           const rotEl = rotationRefs.current[i];
           if (el) {
-            el.style.left = `${pos.x}px`;
-            el.style.top = `${pos.y}px`;
+            // GPU-composited positioning (no layout/paint per frame)
+            el.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
           }
           if (rotEl) {
             rotEl.style.transform = `rotate(${pos.rotation}deg)`;
@@ -525,19 +525,13 @@ export function Hero() {
         const isHovered = hoveredIcon === index;
 
         return (
-          <motion.div
+          <div
             key={index}
             ref={(el) => { iconRefs.current[index] = el; }}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 0.6, scale: 1 }}
-            transition={{
-              opacity: { duration: 1, delay: index * 0.1 },
-              scale: { duration: 1, delay: index * 0.1 },
-            }}
-            className="absolute pointer-events-auto z-0 -translate-x-1/2 -translate-y-1/2"
+            className="absolute top-0 left-0 pointer-events-auto z-0"
             style={{
               visibility: 'hidden',
-              willChange: 'left, top',
+              willChange: 'transform',
             }}
             onMouseEnter={() => {
               setHoveredIcon(index);
@@ -548,12 +542,26 @@ export function Hero() {
               hoveredIconRef.current = null;
             }}
           >
-            <div ref={(el) => { rotationRefs.current[index] = el; }}>
-              <div className={`bg-gradient-to-br ${iconConfig.color} rounded-full p-2 sm:p-2.5 shadow-lg backdrop-blur-sm transition-all duration-300 ${isHovered ? 'scale-110 shadow-2xl' : ''}`}>
-                <iconConfig.Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
-              </div>
+            {/* Centering layer: keeps the icon centered on its (x, y) point */}
+            <div className="-translate-x-1/2 -translate-y-1/2">
+              {/* Entrance/fade layer: Framer only drives opacity + scale here */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 0.6, scale: 1 }}
+                transition={{
+                  opacity: { duration: 1, delay: index * 0.1, ease: "easeOut" },
+                  scale: { duration: 1, delay: index * 0.1, ease: "easeOut" },
+                }}
+              >
+                {/* Rotation layer: JS drives transform: rotate() */}
+                <div ref={(el) => { rotationRefs.current[index] = el; }}>
+                  <div className={`bg-gradient-to-br ${iconConfig.color} rounded-full p-2 sm:p-2.5 shadow-lg transition-all duration-300 ${isHovered ? 'scale-110 shadow-2xl' : ''}`}>
+                    <iconConfig.Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+                  </div>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         );
       })}
 
