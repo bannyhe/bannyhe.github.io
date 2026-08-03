@@ -9,7 +9,7 @@ export function AboutPage() {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <main className="pt-32 pb-24">
+    <main className="pt-32 pb-24 about-body">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -46,7 +46,7 @@ export function AboutPage() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200">
+            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <p>
                 Mu is an aspiring product designer with 6+ years of experience, shaping the cutting-edge experience for B2B SaaS Networking & Security solutions at VMware LLC by Broadcom. Mu's design solutions have earned Gold Prize in the{" "}
                 <a 
