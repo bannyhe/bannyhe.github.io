@@ -493,13 +493,13 @@ export function NorthstarOnboardingPage() {
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  <span className="text-gray-900 dark:text-gray-100">80%+ adoption rate</span> from onboarding experience to subscribing to key networking and security features.
+                  <span className="text-gray-900 dark:text-gray-100"><span className="font-bold">80%+</span> adoption rate</span> from onboarding experience to subscribing to key networking and security features.
                 </li>
                 <li>
-                  <span className="text-gray-900 dark:text-gray-100">30% increase</span> in total revenue of NSX+ subscription.
+                  <span className="text-gray-900 dark:text-gray-100"><span className="font-bold">30%</span> increase</span> in total revenue of NSX+ subscription.
                 </li>
                 <li>
-                  <span className="text-gray-900 dark:text-gray-100">9 out of 10</span> in customer satisfaction rate.
+                  <span className="text-gray-900 dark:text-gray-100 font-bold">9/10</span> in customer satisfaction rate.
                 </li>
               </ul>
             </div>
@@ -516,7 +516,7 @@ export function NorthstarOnboardingPage() {
                   <span className="font-bold text-gray-900 dark:text-gray-100">Take the ownership</span> on as a design lead for guiding the project from concept to completion.
                 </li>
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Embrace the uncertainty</span> by sharing objectives with stakeholders and clarify the vagueness together.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Embrace the uncertainty</span> by sharing objectives with stakeholders and clarifying the vagueness together.
                 </li>
                 <li>
                   <span className="font-bold text-gray-900 dark:text-gray-100">Proactive communication</span> with cross-functional teams to align design decisions with user needs and business goals.
