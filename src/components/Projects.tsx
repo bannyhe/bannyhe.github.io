@@ -119,19 +119,19 @@ export function Projects() {
                             src={project.imageUrl}
                             alt={project.title}
                             style={project.imageStyle}
-                            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100 ${project.imageClassName || ""}`}
+                            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${project.imageClassName || ""}`}
                           />
                         ) : typeof project.image === 'string' ? (
                           <ImageWithFallback
                             src={`https://source.unsplash.com/800x600/?${project.image}`}
                             alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         ) : (
                           <img
                             src={project.image}
                             alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         )}
                       </div>
@@ -149,19 +149,19 @@ export function Projects() {
                         <img
                           src={project.imageUrl}
                           alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : typeof project.image === 'string' ? (
                         <ImageWithFallback
                           src={`https://source.unsplash.com/800x600/?${project.image}`}
                           alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
                         <img
                           src={project.image}
                           alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       )}
                     </div>
