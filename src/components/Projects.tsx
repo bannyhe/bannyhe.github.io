@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useInView } from "motion/react";
-import { useRef } from "react";
+import { useRef, type CSSProperties } from "react";
 import { Badge } from "./ui/badge";
 import { ExternalLink, Github, ArrowRight, Lock } from "lucide-react";
 import { Button } from "./ui/button";
@@ -14,12 +14,24 @@ const northstarOnboardingImg = "https://drive.google.com/thumbnail?id=1pYkECFpqc
 const vcfNetworkImg = "https://drive.google.com/thumbnail?id=1X309fVV7tuhg3LfdaHdF2-XoheDNVb72&sz=w800";
 const xenithImg = "https://drive.google.com/thumbnail?id=1pWmehNi_6kY5uX85BdoIt5trK0QKcU3L&sz=w800";
 
+// Trims 1% off a thumbnail's top edge: the image sits 1% higher and 1% taller,
+// so the bottom stays flush and the frame's overflow-hidden clips the top.
+// Avoids `transform`, which would share transform-origin with the hover zoom.
+const CROP_TOP_1: CSSProperties = {
+  position: "absolute",
+  top: "-1%",
+  left: 0,
+  right: 0,
+  height: "101%",
+};
+
 const projects = [
   {
     id: "malware-prevention",
     title: "Malware Prevention Dashboard",
     description: "Real-time malware detection and prevention system with file inspection and threat analysis.",
     imageUrl: malwarePreventionImg,
+    imageStyle: CROP_TOP_1,
     tags: ["React", "Security", "Analytics", "Real-time"],
     liveUrl: "#",
     githubUrl: "#",
@@ -106,6 +118,7 @@ export function Projects() {
                           <ImageWithFallback
                             src={project.imageUrl}
                             alt={project.title}
+                            style={project.imageStyle}
                             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 dark:brightness-90 dark:hover:brightness-100 ${project.imageClassName || ""}`}
                           />
                         ) : typeof project.image === 'string' ? (
