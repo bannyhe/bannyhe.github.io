@@ -90,8 +90,18 @@ function LoginScreen({ onLogin }: { onLogin: (key: string) => void }) {
     const t1 = setTimeout(() => setLoginProgress(40), 200);
     const t2 = setTimeout(() => setLoginProgress(70), 500);
     const t3 = setTimeout(() => setLoginProgress(85), 900);
+    // After 85% (at 1000ms+), crawl slowly toward 99% so the bar stays alive during slow cold starts
+    let crawlVal = 85;
+    let crawl: ReturnType<typeof setInterval> | null = null;
+    const t4 = setTimeout(() => {
+      crawl = setInterval(() => {
+        crawlVal = Math.min(99, crawlVal + (99 - crawlVal) * 0.08);
+        setLoginProgress(Math.round(crawlVal));
+      }, 600);
+    }, 1000);
     const result = await loginCheck(key);
-    clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+    clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
+    if (crawl !== null) clearInterval(crawl);
     if (result !== "ok") {
       setLoading(false);
       setLoginProgress(0);
