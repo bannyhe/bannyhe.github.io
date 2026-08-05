@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Sun, Moon, Monitor } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoImage from "../assets/mh_logo.png";
@@ -7,21 +7,20 @@ import { useTheme } from "../contexts/ThemeContext";
 
 const THEME_UI = {
   light: { Icon: Sun, label: "Light", next: "Dark", color: "text-yellow-500" },
-  dark: { Icon: Moon, label: "Dark", next: "Auto", color: "text-gray-700 dark:text-gray-200" },
-  auto: { Icon: Monitor, label: "Auto (following system)", next: "Light", color: "text-gray-700 dark:text-gray-200" },
+  dark: { Icon: Moon, label: "Dark", next: "Light", color: "text-gray-700 dark:text-gray-200" },
 } as const;
 
-/** Single button cycling light → dark → auto. The icon shows the mode you are in. */
+/** Light/dark toggle. The icon shows the theme you are currently in. */
 function ThemeToggle() {
-  const { mode, cycleTheme } = useTheme();
-  const { Icon, label, next, color } = THEME_UI[mode];
+  const { theme, toggleTheme } = useTheme();
+  const { Icon, label, next, color } = THEME_UI[theme];
 
   return (
     <Button
       variant="ghost"
       size="icon"
       className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-700/70 transition-colors"
-      onClick={cycleTheme}
+      onClick={toggleTheme}
       title={`Theme: ${label}`}
       aria-label={`Theme: ${label}. Switch to ${next}.`}
     >

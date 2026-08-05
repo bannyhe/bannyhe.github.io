@@ -1,38 +1,30 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-/** What the user picked. 'auto' defers to the operating system. */
-export type ThemeMode = 'light' | 'dark' | 'auto';
-/** What actually gets applied to the document. */
-type ResolvedTheme = 'light' | 'dark';
+type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
-  /** Resolved theme currently on the page — never 'auto'. */
-  theme: ResolvedTheme;
-  /** The stored preference, which may be 'auto'. */
-  mode: ThemeMode;
-  setMode: (mode: ThemeMode) => void;
-  /** Advances light → dark → auto → light. */
-  cycleTheme: () => void;
+  theme: Theme;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const MODE_ORDER: ThemeMode[] = ['light', 'dark', 'auto'];
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
-const systemTheme = (): ResolvedTheme =>
+const systemTheme = (): Theme =>
   window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>(() => {
+  // null means the visitor has never picked a side, so we mirror their device.
+  // Anything other than 'light'/'dark' in storage — including the 'auto' written
+  // by an earlier build — counts as no choice.
+  const [preference, setPreference] = useState<Theme | null>(() => {
     const saved = localStorage.getItem('theme');
-    // Visitors who already picked light or dark keep that choice; everyone
-    // else — including first-time visitors — starts on 'auto'.
-    return saved === 'light' || saved === 'dark' || saved === 'auto' ? saved : 'auto';
+    return saved === 'light' || saved === 'dark' ? saved : null;
   });
-  const [systemPreference, setSystemPreference] = useState<ResolvedTheme>(systemTheme);
+  const [systemPreference, setSystemPreference] = useState<Theme>(systemTheme);
 
-  // Keep 'auto' in sync when the OS flips theme while the page is open.
+  // Keep following the device if the OS flips while no choice has been made.
   useEffect(() => {
     const query = window.matchMedia(DARK_QUERY);
     const handleChange = (e: MediaQueryListEvent) =>
@@ -41,19 +33,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => query.removeEventListener('change', handleChange);
   }, []);
 
-  const theme: ResolvedTheme = mode === 'auto' ? systemPreference : mode;
+  const theme: Theme = preference ?? systemPreference;
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', mode);
-  }, [theme, mode]);
+  }, [theme]);
 
-  const cycleTheme = () => {
-    setMode(prev => MODE_ORDER[(MODE_ORDER.indexOf(prev) + 1) % MODE_ORDER.length]);
+  // Only an explicit toggle is persisted — that is what pins the choice.
+  const toggleTheme = () => {
+    const next: Theme = theme === 'light' ? 'dark' : 'light';
+    setPreference(next);
+    localStorage.setItem('theme', next);
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, mode, setMode, cycleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
