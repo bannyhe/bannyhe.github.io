@@ -1,42 +1,59 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-type Theme = 'light' | 'dark';
+/** What the user picked. 'auto' defers to the operating system. */
+export type ThemeMode = 'light' | 'dark' | 'auto';
+/** What actually gets applied to the document. */
+type ResolvedTheme = 'light' | 'dark';
 
 interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
+  /** Resolved theme currently on the page — never 'auto'. */
+  theme: ResolvedTheme;
+  /** The stored preference, which may be 'auto'. */
+  mode: ThemeMode;
+  setMode: (mode: ThemeMode) => void;
+  /** Advances light → dark → auto → light. */
+  cycleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const MODE_ORDER: ThemeMode[] = ['light', 'dark', 'auto'];
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+
+const systemTheme = (): ResolvedTheme =>
+  window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light';
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    // Check localStorage first, then system preference
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) return savedTheme;
-    
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const [mode, setMode] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem('theme');
+    // Visitors who already picked light or dark keep that choice; everyone
+    // else — including first-time visitors — starts on 'auto'.
+    return saved === 'light' || saved === 'dark' || saved === 'auto' ? saved : 'auto';
   });
+  const [systemPreference, setSystemPreference] = useState<ResolvedTheme>(systemTheme);
+
+  // Keep 'auto' in sync when the OS flips theme while the page is open.
+  useEffect(() => {
+    const query = window.matchMedia(DARK_QUERY);
+    const handleChange = (e: MediaQueryListEvent) =>
+      setSystemPreference(e.matches ? 'dark' : 'light');
+    query.addEventListener('change', handleChange);
+    return () => query.removeEventListener('change', handleChange);
+  }, []);
+
+  const theme: ResolvedTheme = mode === 'auto' ? systemPreference : mode;
 
   useEffect(() => {
-    // Apply theme to document
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', mode);
+  }, [theme, mode]);
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const cycleTheme = () => {
+    setMode(prev => MODE_ORDER[(MODE_ORDER.indexOf(prev) + 1) % MODE_ORDER.length]);
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, mode, setMode, cycleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

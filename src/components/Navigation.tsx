@@ -1,16 +1,41 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, Monitor } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoImage from "../assets/mh_logo.png";
 import { useTheme } from "../contexts/ThemeContext";
+
+const THEME_UI = {
+  light: { Icon: Sun, label: "Light", next: "Dark", color: "text-yellow-500" },
+  dark: { Icon: Moon, label: "Dark", next: "Auto", color: "text-gray-700 dark:text-gray-200" },
+  auto: { Icon: Monitor, label: "Auto (following system)", next: "Light", color: "text-gray-700 dark:text-gray-200" },
+} as const;
+
+/** Single button cycling light → dark → auto. The icon shows the mode you are in. */
+function ThemeToggle() {
+  const { mode, cycleTheme } = useTheme();
+  const { Icon, label, next, color } = THEME_UI[mode];
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-700/70 transition-colors"
+      onClick={cycleTheme}
+      title={`Theme: ${label}`}
+      aria-label={`Theme: ${label}. Switch to ${next}.`}
+    >
+      <Icon className={`w-5 h-5 ${color}`} />
+    </Button>
+  );
+}
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -86,28 +111,12 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-700/70 transition-colors"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-700" />}
-            </Button>
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-700/70 transition-colors"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-700" />}
-            </Button>
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="icon"
