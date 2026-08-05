@@ -12,7 +12,27 @@ import { useTheme } from "../contexts/ThemeContext";
  */
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const [isHovered, setIsHovered] = useState(false);
+  const [showFocusRing, setShowFocusRing] = useState(false);
   const isDark = theme === "dark";
+
+  // NOTE: this project ships a pre-built Tailwind stylesheet (src/index.css)
+  // rather than running Tailwind at build time, so arbitrary-value utilities
+  // (w-[60px], translate-x-[28px], dark:bg-[#…]/10) do not exist and silently
+  // do nothing. All geometry and colour therefore live in inline styles.
+  const track = isDark
+    ? {
+        background: isHovered ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.10)",
+        borderColor: "rgba(109,178,255,0.35)",
+      }
+    : {
+        background: isHovered ? "rgba(16,47,86,0.16)" : "rgba(16,47,86,0.10)",
+        borderColor: "rgba(16,47,86,0.20)",
+      };
+
+  const focusRing = isDark
+    ? "0 0 0 2px rgba(109,178,255,0.85)"
+    : "0 0 0 2px rgba(26,77,122,0.85)";
 
   return (
     <button
@@ -20,26 +40,81 @@ function ThemeToggle() {
       role="switch"
       aria-checked={isDark}
       onClick={toggleTheme}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={(e) => setShowFocusRing(e.currentTarget.matches(":focus-visible"))}
+      onBlur={() => setShowFocusRing(false)}
       title={isDark ? "Dark mode — switch to light" : "Light mode — switch to dark"}
       aria-label={isDark ? "Dark mode. Switch to light mode." : "Light mode. Switch to dark mode."}
-      className="relative inline-flex h-8 w-[60px] shrink-0 cursor-pointer items-center rounded-full border backdrop-blur-sm transition-colors duration-300 border-[#102F56]/20 bg-[#102F56]/10 hover:bg-[#102F56]/15 dark:border-[#6DB2FF]/30 dark:bg-white/10 dark:hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a4d7a] dark:focus-visible:ring-[#6DB2FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+      style={{
+        position: "relative",
+        display: "inline-flex",
+        alignItems: "center",
+        flexShrink: 0,
+        width: 64,
+        height: 34,
+        padding: 0,
+        border: "1px solid",
+        borderRadius: 9999,
+        cursor: "pointer",
+        WebkitBackdropFilter: "blur(4px)",
+        backdropFilter: "blur(4px)",
+        transition: "background-color 300ms, border-color 300ms, box-shadow 200ms",
+        outline: "none",
+        boxShadow: showFocusRing ? focusRing : "none",
+        ...track,
+      }}
     >
-      {/* Faint end hints */}
-      <Sun className="pointer-events-none absolute left-2 h-3.5 w-3.5 text-[#102F56]/35 dark:text-amber-200/40" />
-      <Moon className="pointer-events-none absolute right-2 h-3.5 w-3.5 text-[#102F56]/35 dark:text-[#6DB2FF]/50" />
+      {/* Faint end hints so both states read at a glance */}
+      <Sun
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: 10,
+          width: 14,
+          height: 14,
+          color: isDark ? "rgba(253,230,138,0.45)" : "rgba(16,47,86,0.35)",
+          pointerEvents: "none",
+        }}
+      />
+      <Moon
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          right: 10,
+          width: 14,
+          height: 14,
+          color: isDark ? "rgba(109,178,255,0.55)" : "rgba(16,47,86,0.35)",
+          pointerEvents: "none",
+        }}
+      />
 
       {/* Sliding knob carrying the active icon */}
       <span
-        className={`pointer-events-none absolute left-1 flex h-6 w-6 items-center justify-center rounded-full shadow-md transition-transform duration-300 ease-out ${
-          isDark
-            ? "translate-x-[28px] bg-gradient-to-br from-[#6DB2FF] to-[#5a9ae6]"
-            : "translate-x-0 bg-white"
-        }`}
+        style={{
+          position: "absolute",
+          left: 4,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 24,
+          height: 24,
+          borderRadius: 9999,
+          pointerEvents: "none",
+          transform: isDark ? "translateX(30px)" : "translateX(0)",
+          transition: "transform 300ms cubic-bezier(0.4, 0, 0.2, 1), background 300ms",
+          background: isDark
+            ? "linear-gradient(135deg, #6DB2FF, #5a9ae6)"
+            : "#ffffff",
+          boxShadow: isDark
+            ? "0 1px 4px rgba(0,0,0,0.45)"
+            : "0 1px 4px rgba(16,47,86,0.35)",
+        }}
       >
         {isDark ? (
-          <Moon className="h-3.5 w-3.5 text-[#102F56]" />
+          <Moon aria-hidden="true" style={{ width: 14, height: 14, color: "#102F56" }} />
         ) : (
-          <Sun className="h-3.5 w-3.5 text-amber-500" />
+          <Sun aria-hidden="true" style={{ width: 14, height: 14, color: "#f59e0b" }} />
         )}
       </span>
     </button>
