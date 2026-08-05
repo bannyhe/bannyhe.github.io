@@ -162,7 +162,7 @@ export function NorthstarOnboardingPage() {
                   NSX+ is a B2B SaaS cloud-native networking and security platform, designed to provide advanced networking capabilities and security services for traditional data centers.
                 </p>
                 <p>
-                  It extends the capabilities of VMware NSX, emphasizing integration with cloud environments, and simplify networking and security operations in complex environments, enhancing agility and security for businesses adopting cloud technologies.
+                  It extends the capabilities of VMware NSX, emphasizing integration with cloud environments and simplifying networking and security operations in complex deployments, enhancing agility and security for businesses adopting cloud technologies.
                 </p>
               </div>
               <div>
@@ -200,7 +200,7 @@ export function NorthstarOnboardingPage() {
               </div>
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <p>
-                  VMware NSX is facing the challenge of transforming from private cloud solutions to seamlessly integrate public cloud services.
+                  VMware NSX is facing the challenge of transforming from private cloud solutions to seamlessly integrating public cloud services.
                 </p>
                 <p>
                   This transition highlights the necessity for a holistic approach to selecting bundles and onboarding processes, which is essential for providing users with a smooth and engaging start.
@@ -219,7 +219,7 @@ export function NorthstarOnboardingPage() {
             </h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
-                The Northstar project aims to simplify free trial and onboarding process for users, optimizing workflow in complex environments. By integrating and adopting cloud technologies, businesses can enhance agility and security when managing their data centers.
+                The Northstar project aims to simplify the free trial and onboarding process for users, optimizing workflow in complex environments. By integrating and adopting cloud technologies, businesses can enhance agility and security when managing their data centers.
               </p>
             </div>
             
@@ -296,10 +296,10 @@ export function NorthstarOnboardingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <p>
-                  The main target user is IT Administrator, who's responsible for managing the organization's virtual network infrastructure, maintaining system performance in IT department. Their main duties include configuring network settings, monitoring network health, and troubleshooting issues.
+                  The main target user is the IT Administrator, who is responsible for managing the organization's virtual network infrastructure and maintaining system performance in the IT department. Their main duties include configuring network settings, monitoring network health, and troubleshooting issues.
                 </p>
                 <p>
-                  The key pain point for these administrators is the desire to self-onboard NSX+ using their actual data center rather than relying on sales personnel. They seek a streamlined, intuitive onboarding process that allows them to efficiently integrate NSX+ into their existing environment, enabling them to securely leverage real data and configurations under cloud environment.
+                  The key pain point for these administrators is the desire to self-onboard NSX+ using their actual data center rather than relying on sales personnel. They seek a streamlined, intuitive onboarding process that allows them to efficiently integrate NSX+ into their existing environment, enabling them to securely leverage real data and configurations in a cloud environment.
                 </p>
               </div>
               <div>
@@ -323,10 +323,10 @@ export function NorthstarOnboardingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <p>
-                  Previously, the onboarding process for user is to directly talk to sales when they encounter any issues for key features and relevant subscriptions.
+                  Previously, the onboarding process required users to talk directly to sales whenever they ran into issues with key features or related subscriptions.
                 </p>
                 <p>
-                  The goal is to make the onboarding process more intuitive and self-explanatory, user can explore it with customized recommendation base on their actual environment. To summarize, that is to switch the onboarding experience from <span className="text-gray-900 dark:text-gray-100">Sales Led → Product Led</span>.
+                  The goal is to make the onboarding process more intuitive and self-explanatory, so users can explore it with customized recommendations based on their actual environment. In short, this switches the onboarding experience from <span className="text-gray-900 dark:text-gray-100">Sales Led → Product Led</span>.
                 </p>
               </div>
               <div>
@@ -350,7 +350,7 @@ export function NorthstarOnboardingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <p>
-                  To address these challenges and pain points, I collaborated with key stakeholders to empower security IT Administrators to onboard NSX+ with confidence. I led the design strategy with a focus on three core principles:
+                  To address these challenges and pain points, I collaborated with key stakeholders to empower IT Administrators to onboard NSX+ with confidence. I led the design strategy with a focus on three core principles:
                 </p>
                 <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
                   <img
@@ -365,7 +365,7 @@ export function NorthstarOnboardingPage() {
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-4">
                   <li>
-                    <span className="font-bold text-gray-900 dark:text-gray-100">Efficiency:</span> The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.
+                    <span className="font-bold text-gray-900 dark:text-gray-100">Efficient:</span> The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.
                   </li>
                   <li>
                     <span className="font-bold text-gray-900 dark:text-gray-100">Intuitive:</span> Each step must be clear and instructional, providing guidance that eliminates the need for documentation or technical support.
@@ -386,7 +386,7 @@ export function NorthstarOnboardingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <p>
-                  The goal of this project is promote usage of key networking and security features, and increase the financial outcome of the product revenue when users are satisfied with the onboarding experience. Thus, I initiated a discussion with PM and engineers to track the following metrics:
+                  The goal of this project is to promote usage of key networking and security features and to increase product revenue as users grow satisfied with the onboarding experience. Thus, I initiated a discussion with PMs and engineers to track the following metrics:
                 </p>
               </div>
               <div className="overflow-hidden rounded-[10px]" style={{ aspectRatio: '1140 / 320' }}>
@@ -407,7 +407,7 @@ export function NorthstarOnboardingPage() {
             </h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
-                With the goals and metrics in mind, I collaborated with key stakeholders on project requirements, and visualize the major steps a clear understanding on the representation of connections between cloud and on-premises environment. In this way, it would be more straightforward to illustrate the key areas that needs intuitive, instructional design for users.
+                With the goals and metrics in mind, I collaborated with key stakeholders on project requirements and visualized the major steps to build a clear, shared understanding of how cloud and on-premises environments connect. This made it more straightforward to identify the key areas that need intuitive, instructional design.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-10">
@@ -434,17 +434,17 @@ export function NorthstarOnboardingPage() {
             </div>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
-                I aligned the gap by bring customer's voice to the table, the optimized workflow address key user concerns by:
+                I closed the gap by bringing the customer's voice to the table. The optimized workflow addresses key user concerns by:
               </p>
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Protect credential</span> by introducing cloud gateway, which bridge the gap between cloud and on-premises data centers, with more user-trust on the safety of connection.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Protecting credentials</span> by introducing a cloud gateway, which bridges the gap between cloud and on-premises data centers and builds user trust in the safety of the connection.
                 </li>
                 <li>
-                  Encourage user to <span className="font-bold text-gray-900 dark:text-gray-100">explore features</span> by making it intuitive, clear and simple.
+                  Encouraging users to <span className="font-bold text-gray-900 dark:text-gray-100">explore features</span> by making the process intuitive, clear, and simple.
                 </li>
                 <li>
-                  Provide <span className="font-bold text-gray-900 dark:text-gray-100">onboarding guide</span> to make users feel more confident with purchasing subscription.
+                  Providing an <span className="font-bold text-gray-900 dark:text-gray-100">onboarding guide</span> to make users feel more confident about purchasing a subscription.
                 </li>
               </ul>
             </div>
@@ -457,10 +457,10 @@ export function NorthstarOnboardingPage() {
             </h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
               <p>
-                The old transitional page provides limited capabilities to access to the home page, showing progress bar in a full page.
+                The old transitional page provided limited access to the home page, showing only a progress bar on a full page.
               </p>
               <p>
-                In the proposed pattern, it solves the pain point by showing progress bar and visualized instructions in a pop-up modal, with slideshow format in carousal. The experience provides IT admin and tenant with quick tutorials to learn more about their permissions to the system.
+                The proposed pattern solves this pain point by showing a progress bar and visual instructions in a pop-up modal, presented as a slideshow carousel. The experience gives IT admins and tenants quick tutorials to learn more about their permissions to the system.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -525,10 +525,10 @@ export function NorthstarOnboardingPage() {
             <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Take the ownership</span> on as a design lead for guiding the project from concept to completion.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Take ownership</span> as the design lead, guiding the project from concept to completion.
                 </li>
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Embrace the uncertainty</span> by sharing objectives with stakeholders and clarifying the vagueness together.
+                  <span className="font-bold text-gray-900 dark:text-gray-100">Embrace the uncertainty</span> by sharing objectives with stakeholders and clarifying ambiguity together.
                 </li>
                 <li>
                   <span className="font-bold text-gray-900 dark:text-gray-100">Proactive communication</span> with cross-functional teams to align design decisions with user needs and business goals.

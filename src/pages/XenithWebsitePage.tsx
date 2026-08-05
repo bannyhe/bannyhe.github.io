@@ -177,7 +177,7 @@ export function XenithWebsitePage() {
               Introduction
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-              In summer 2018, I interned at Xenith LLC's headquarter in downtown Detroit as a Product Design Intern on the Digital Strategy team. I conducted user research on previous version of the e-commerce website and participated on its redesign. Also, I developed serial UX workflow in front-end, where everyone in the team can access order details, track order status, and manage product specifications.
+              In summer 2018, I interned at Xenith LLC's headquarters in downtown Detroit as a Product Design Intern on the Digital Strategy team. I conducted user research on the previous version of the e-commerce website and participated in its redesign. I also developed a series of UX workflows on the front end, where everyone on the team can access order details, track order status, and manage product specifications.
             </p>
             <p className="text-center text-sm text-gray-600 dark:text-gray-400" style={{ fontFamily: 'monospace' }}>
               *** This project is partially subject to non-disclosure agreement (NDA) ***
@@ -190,7 +190,7 @@ export function XenithWebsitePage() {
               Process
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-              In the 10-week time span, I collaborated with marketing strategists, product managers, software engineers, and my design mentor Charles, to conduct research, design, prototype, iterate, and finally created seamless and logical user experience, which helped to enhance the number of page views and online purchase.
+              In the 10-week time span, I collaborated with marketing strategists, product managers, software engineers, and my design mentor Charles, to conduct research, design, prototype, iterate, and finally create a seamless and logical user experience, which helped increase page views and online purchases.
             </p>
             <div className="mb-8">
               <div className="bg-white dark:bg-white p-6 md:p-8" style={{ borderRadius: '10px' }}>
@@ -219,10 +219,10 @@ export function XenithWebsitePage() {
               Challenge: "We don't know what we don't know!"
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-6">
-              The quote above was from one of my team members, who have struggled by the issue for a long time. Since the previous version was built several years ago upon several different third-party applications. While Xenith has evolved new product series, most of the functionalities in old version are limited and outdated. Moreover, the information architecture is somewhat misleading, and the brand communication is not clear enough to attract buyers.
+              The quote above came from one of my team members, who had struggled with the issue for a long time. The previous version was built several years earlier on top of several different third-party applications, and while Xenith had since introduced new product lines, most of the functionality in the old version was limited and outdated. Moreover, the information architecture was somewhat misleading, and the brand communication was not clear enough to attract buyers.
             </p>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-              The overarching goal was to optimize sales channel with a simple and clear user experience, as well as providing more effective information to tell brand and product story to target users.
+              The overarching goal was to optimize the sales channel with a simple, clear user experience, and to present information more effectively so it told the brand and product story to target users.
             </p>
           </div>
 
@@ -232,7 +232,7 @@ export function XenithWebsitePage() {
               Break downs
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-              Before I get started with research and design, I decided to break down the challenge into various sub-tasks and solve them one by one. Here are the major steps of how I accomplish it:
+              Before getting started with research and design, I decided to break the challenge down into sub-tasks and solve them one by one. Here are the major steps of how I accomplished it:
             </p>
             
             {/* Subsection: Visualize User Behaviors on Heatmap */}
@@ -241,7 +241,7 @@ export function XenithWebsitePage() {
                 / Visualize User Behaviors on Heatmap
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Tracking user's behavior is an effective way to know website's popular content, so I recommended recording users clicks on Xenith's website and generate heatmap in Hotjar, which helped to discover their potential needs. Combining results of heatmap(left) and usability testing, I conducted the redesign of Xenith's website(right).
+                Tracking user behavior is an effective way to learn which content on a site is popular, so I recommended recording user clicks on Xenith's website and generating a heatmap in Hotjar, which helped uncover their potential needs. Combining the heatmap results (left) with usability testing, I carried out the redesign of Xenith's website (right).
               </p>
               
               {/* Two images side by side */}
@@ -274,7 +274,7 @@ export function XenithWebsitePage() {
                 / Information Architecture
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Since I don't have prior experience to the user flow or a clear understanding of the information architecture, I decided to construct an interaction map to generate a static representation of both interval and hierarchical relations between webpages, which visualizes all the possible interactions. In this way, it would be more efficient for me to discover what kind of values the website could provide for users.
+                Since I didn't have prior experience with the user flow or a clear understanding of the information architecture, I decided to construct an interaction map: a static representation of both the interval and hierarchical relations between webpages, visualizing all the possible interactions. This made it more efficient for me to discover what kind of value the website could provide for users.
               </p>
               
               {/* Interaction Map Image */}
@@ -297,7 +297,7 @@ export function XenithWebsitePage() {
                 / Prioritize key features by using Inverted Pyramid model
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Getting to know the site's information structure, I had a short conversation with both product manager and marketing strategist, and ranked the importance of target users. Base on that, I introduced an inverted pyramid model. As it is displayed in the chart below, the top represents the most substantial, interesting, and important information, whereas both importance and quantity of information decrease as moving downward. In this way, I was able to prioritize the main features by new product & key value, team sales & innovation, and product customization.
+                Getting to know the site's information structure, I had a short conversation with both the product manager and the marketing strategist, and ranked the importance of our target users. Based on that, I introduced an inverted pyramid model. As it is displayed in the chart below, the top represents the most substantial, interesting, and important information, whereas both the importance and the quantity of information decrease moving downward. In this way, I was able to prioritize the main features by new product & key value, team sales & innovation, and product customization.
               </p>
               
               {/* Two images side by side */}
@@ -334,7 +334,7 @@ export function XenithWebsitePage() {
               The Research
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-              During the project timeline, I worked closely with my team to conduct extensive user research during the first 4 weeks of my internship. Thus, my primary research task focused on synthesizing the research data and collecting key insights.
+              Over the first 4 weeks of my internship, I worked closely with my team to conduct extensive user research. My primary task was synthesizing the research data and collecting the key insights.
             </p>
             
             {/* Subsection: Understanding Users */}
@@ -343,7 +343,7 @@ export function XenithWebsitePage() {
                 / Understanding Users
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Base on the information my team provides and user demographics in Google Analytics, the primary buyers of Xenith's product include players, parents, and coaches. In order to illustrate our users and their goals, I created three primary personas and identified their needs, which helped me to find out what is important to our users, and how to build brand communication to convince them to buy our products.
+                Based on the information my team provided and user demographics in Google Analytics, the primary buyers of Xenith's products include players, parents, and coaches. To illustrate our users and their goals, I created three primary personas and identified their needs, which helped me find out what was important to them and how to build brand communication that would convince them to buy our products.
               </p>
               
               {/* Image Carousel/Slideshow Placeholder */}
@@ -392,12 +392,12 @@ export function XenithWebsitePage() {
                 / Heuristic Evaluation
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                I conducted heuristics evaluation based on Nielsen's ten key usability heuristics, and modified some of the checklists to make applicable evaluations for Xenith. I invited four colleagues who have previous experience of user research. The main findings include:
+                I conducted a heuristic evaluation based on Nielsen's ten key usability heuristics, modifying some of the checklists to make the evaluation applicable to Xenith. I invited four colleagues who had previous experience with user research. The main findings include:
               </p>
               
               <ul className="list-disc space-y-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-6 mb-8">
-                <li>The website doesn't provide effective comparison between similar products.</li>
-                <li>Product categories are not consistent between the header and footer in some pages.</li>
+                <li>The website didn't provide an effective comparison between similar products.</li>
+                <li>Product categories were not consistent between the header and footer on some pages.</li>
                 <li>The homepage didn't provide adequate feedback for user interactions.</li>
               </ul>
               
@@ -765,7 +765,7 @@ export function XenithWebsitePage() {
               2. Xenith's Mobile APP Mockups (future)
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-              Before my internship comes to an end, I realized that if Xenith becomes a giant brand like Nike in the future, creating an app will be helpful if more product lines are launched. Thus, I started this self-initiated project to create basic mockup screens for future reference of Xenith mobile app. Below are some sample of the screens I created, the full interaction link can be accessed here.
+              Before my internship came to an end, I realized that if Xenith were to become a giant brand like Nike, an app would be helpful as more product lines launched. So I started this self-initiated project to create basic mockup screens for future reference for a Xenith mobile app. Below are some samples of the screens I created; the full interactive prototype can be accessed here.
             </p>
             
             {/* 3x3 Grid of images */}
@@ -860,7 +860,7 @@ export function XenithWebsitePage() {
               3. Product Entry System UI
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-              Beside redesigning the Xenith's website, I also participated in creating user interface for Product Entry System of Xenith's Production Facility Lab, where thousands of orders needs to be processed everyday. After conducting a short onsite interview with workers in lab, I sorted out their demands and generated a user flow of a typical order processing procedure.
+              Besides redesigning Xenith's website, I also participated in creating the user interface for the Product Entry System of Xenith's Production Facility Lab, where thousands of orders need to be processed every day. After conducting a short onsite interview with workers in the lab, I sorted out their requirements and generated a user flow for a typical order processing procedure.
             </p>
             
             {/* Serial User Flow Chart Image */}
@@ -890,7 +890,7 @@ export function XenithWebsitePage() {
             </div>
             
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed my-8">
-              After a few reviewing iterations with my team, I designed and coded user interface in HTML/ CSS/ Javascript, where user can make easy transitions between pages (only able to display two pages due to confidentiality), by either clicking on 'New Order' button, or scanning barcode.
+              After a few review iterations with my team, I designed and coded the user interface in HTML/CSS/JavaScript, where users can move easily between pages (only two pages are shown, due to confidentiality) by either clicking the 'New Order' button or scanning a barcode.
             </p>
             
             {/* Two images side by side */}
@@ -928,7 +928,7 @@ export function XenithWebsitePage() {
                 / Understand B2C correlation via push & pull model
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Since the goal is to build a website for EVERYONE, but every type of user are able to find things they want. Base on my prior experience working as a PM, I introduced this model as the overarching guideline throughout my design process, in order to figure out the correlations between:
+                The goal was to build a website for EVERYONE, where every type of user could still find the things they want. Based on my prior experience working as a PM, I introduced this model as the overarching guideline throughout my design process, in order to figure out the correlations between:
               </p>
               
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
@@ -936,10 +936,10 @@ export function XenithWebsitePage() {
                   <span style={{ fontWeight: 'bold' }}>Visitor:</span> Who are our new buyers? What makes people visit the site? What do they want to find?
                 </p>
                 <p>
-                  <span style={{ fontWeight: 'bold' }}>Product:</span> What are their anxiety of not buying? Why should they buy our product online?
+                  <span style={{ fontWeight: 'bold' }}>Product:</span> What are their anxieties about not buying? Why should they buy our product online?
                 </p>
                 <p>
-                  <span style={{ fontWeight: 'bold' }}>Brand communication:</span> What are we trying to let buyers know about? What is doing wrong/not good to them?
+                  <span style={{ fontWeight: 'bold' }}>Brand communication:</span> What are we trying to let buyers know? What are we doing wrong, or not communicating well?
                 </p>
               </div>
               
@@ -991,16 +991,16 @@ export function XenithWebsitePage() {
             <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  Discover the real pain points of your clients, and understand users' potential needs by intensive research.
+                  Discover the real pain points of your clients, and understand users' potential needs through intensive research.
                 </li>
                 <li>
-                  Besides design, build effective brand communication, and present information effectively in business models.
+                  Beyond design, build strong brand communication and present information clearly within business models.
                 </li>
                 <li>
                   Follow design guidelines and utilize styles and patterns that are both hierarchical and consistent.
                 </li>
                 <li>
-                  Try to jump out of the box, focus on product lifecycle, create new patterns for future reference!
+                  Try to think outside the box, focus on the product lifecycle, and create new patterns for future reference!
                 </li>
               </ul>
             </div>
