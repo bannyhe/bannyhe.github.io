@@ -5,27 +5,44 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoImage from "../assets/mh_logo.png";
 import { useTheme } from "../contexts/ThemeContext";
 
-const THEME_UI = {
-  light: { Icon: Sun, label: "Light", next: "Dark", color: "text-yellow-500" },
-  dark: { Icon: Moon, label: "Dark", next: "Light", color: "text-gray-700 dark:text-gray-200" },
-} as const;
-
-/** Light/dark toggle. The icon shows the theme you are currently in. */
+/**
+ * Light/dark toggle switch. The knob sits on — and shows the icon of — the
+ * theme you are currently in; the opposite end stays visible as a faint hint.
+ * With no saved choice the theme follows the device (see ThemeContext).
+ */
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const { Icon, label, next, color } = THEME_UI[theme];
+  const isDark = theme === "dark";
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-700/70 transition-colors"
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isDark}
       onClick={toggleTheme}
-      title={`Theme: ${label}`}
-      aria-label={`Theme: ${label}. Switch to ${next}.`}
+      title={isDark ? "Dark mode — switch to light" : "Light mode — switch to dark"}
+      aria-label={isDark ? "Dark mode. Switch to light mode." : "Light mode. Switch to dark mode."}
+      className="relative inline-flex h-8 w-[60px] shrink-0 cursor-pointer items-center rounded-full border backdrop-blur-sm transition-colors duration-300 border-[#102F56]/20 bg-[#102F56]/10 hover:bg-[#102F56]/15 dark:border-[#6DB2FF]/30 dark:bg-white/10 dark:hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a4d7a] dark:focus-visible:ring-[#6DB2FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
     >
-      <Icon className={`w-5 h-5 ${color}`} />
-    </Button>
+      {/* Faint end hints */}
+      <Sun className="pointer-events-none absolute left-2 h-3.5 w-3.5 text-[#102F56]/35 dark:text-amber-200/40" />
+      <Moon className="pointer-events-none absolute right-2 h-3.5 w-3.5 text-[#102F56]/35 dark:text-[#6DB2FF]/50" />
+
+      {/* Sliding knob carrying the active icon */}
+      <span
+        className={`pointer-events-none absolute left-1 flex h-6 w-6 items-center justify-center rounded-full shadow-md transition-transform duration-300 ease-out ${
+          isDark
+            ? "translate-x-[28px] bg-gradient-to-br from-[#6DB2FF] to-[#5a9ae6]"
+            : "translate-x-0 bg-white"
+        }`}
+      >
+        {isDark ? (
+          <Moon className="h-3.5 w-3.5 text-[#102F56]" />
+        ) : (
+          <Sun className="h-3.5 w-3.5 text-amber-500" />
+        )}
+      </span>
+    </button>
   );
 }
 

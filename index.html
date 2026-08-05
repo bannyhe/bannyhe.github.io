@@ -22,6 +22,21 @@
     </head>
 
     <body>
+      <script>
+        // Apply the theme before first paint so a device in dark mode never
+        // flashes light. Mirrors ThemeContext: an explicit saved choice wins,
+        // otherwise follow the device appearance.
+        (function () {
+          try {
+            var saved = localStorage.getItem('theme');
+            var isDark =
+              saved === 'dark' ||
+              (saved !== 'light' &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', isDark);
+          } catch (e) {}
+        })();
+      </script>
       <div id="root"></div>
       <script type="module" src="/src/main.tsx"></script>
     </body>
