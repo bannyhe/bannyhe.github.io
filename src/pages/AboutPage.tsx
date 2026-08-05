@@ -48,7 +48,7 @@ export function AboutPage() {
           >
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <p>
-                Mu is an aspiring product designer with 6+ years of experience, shaping the cutting-edge experience for B2B SaaS Networking & Security solutions at VMware LLC by Broadcom. Mu's design solutions have earned Gold Prize in the{" "}
+                Mu is a product designer with 6+ years of experience, shaping cutting-edge experiences for B2B SaaS Networking & Security solutions at VMware LLC by Broadcom. Mu's design solutions have earned the Gold Prize in the{" "}
                 <a 
                   href="https://cybersecurity-excellence-awards.com/" 
                   target="_blank" 
@@ -60,15 +60,15 @@ export function AboutPage() {
               </p>
               
               <p>
-                As a creative and rigorous designer with a diverse background in both enterprise and customer-facing products, Mu's design philosophy emphasizes thinking outside the box and crafting user experiences from a panoramic view, while exploring potential consumer needs through iterative research and simulation, shaping user-centered experiences with empathy and innovation.
+                Mu is a creative and rigorous designer with a diverse background in both enterprise and customer-facing products. His design philosophy emphasizes thinking outside the box and crafting user experiences from a panoramic view, exploring potential consumer needs through iterative research and simulation, and shaping them with empathy and innovation.
               </p>
               
               <p>
-                Beyond his professional work, Mu is passionate about cooking, traveling, and photography. As the record-holder of 100-meter dash, and the starting power-forward of the men's basketball team back in college, Mu is passionate about pushing the boundaries through workout and challenges.
+                Beyond his professional work, Mu is passionate about cooking, traveling, and photography. A record-holder in the 100-meter dash and the starting power forward for his college men's basketball team, he also loves pushing his limits through workouts and new challenges.
               </p>
 
               <p>
-                For collaboration opportunities in design or inquiries, feel free to reach out to Mu at{" "}
+                For design collaboration opportunities or general inquiries, feel free to reach out to Mu at{" "}
                 <a 
                   href="mailto:bannyhe@umich.edu"
                   className="text-indigo-600 dark:text-indigo-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors underline"
