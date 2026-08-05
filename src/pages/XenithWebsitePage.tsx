@@ -274,7 +274,7 @@ export function XenithWebsitePage() {
                 / Information Architecture
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Since I didn't have prior experience with the user flow or a clear understanding of the information architecture, I decided to construct an interaction map: a static representation of both the interval and hierarchical relations between webpages, visualizing all the possible interactions. This made it more efficient for me to discover what kind of value the website could provide for users.
+                Since I didn't have prior experience with the user flow or a clear understanding of the information architecture, I decided to construct an interaction map: a static representation of both the lateral and hierarchical relations between webpages, visualizing all the possible interactions. This made it more efficient for me to discover what kind of value the website could provide for users.
               </p>
               
               {/* Interaction Map Image */}
@@ -426,7 +426,7 @@ export function XenithWebsitePage() {
                 / Key Features
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                Based on personas, heuristic evaluations, and usability tests I conducted, my team and I identified the key features that are important to the new webpage (icon credit).
+                Based on personas, heuristic evaluations, and usability tests I conducted, my team and I identified the key features that are important to the new webpage.
               </p>
               
               {/* Key Features Image */}
