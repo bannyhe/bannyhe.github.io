@@ -3,6 +3,7 @@
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
   import { fileURLToPath } from 'url';
+  import { ROUTE_META, SITE_URL } from './src/lib/routeMeta';
 
   // Plugin to handle ../src/assets paths - uses placeholder for missing files
   const assetPathPlugin = () => {
@@ -37,8 +38,153 @@
     };
   };
 
+  // Prerender: write one static HTML file per route.
+  //
+  // The app renders entirely on the client, so the shipped index.html has an
+  // empty <div id="root">. Crawlers and link-preview bots (Slack, LinkedIn,
+  // iMessage) therefore saw no title or description for any page — every shared
+  // link looked identical and bare. This copies the built index.html once per
+  // route with that route's metadata baked into the head, so previews and search
+  // results are correct without anyone executing JavaScript.
+  //
+  // It also emits 404.html. GitHub Pages has no SPA rewrite rule, but it serves
+  // 404.html for any path it has no file for — at the requested URL, without
+  // redirecting — which is exactly what BrowserRouter needs to handle deep links
+  // that were not prerendered.
+  const prerenderPlugin = () => {
+    const escapeHtml = (value: string) =>
+      value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+    return {
+      name: 'prerender-routes',
+      apply: 'build' as const,
+      closeBundle() {
+        const fs = require('fs');
+        const outDir = path.resolve(__dirname, './build');
+        const indexPath = path.join(outDir, 'index.html');
+
+        if (!fs.existsSync(indexPath)) {
+          this.warn('prerender: build/index.html not found, skipping');
+          return;
+        }
+
+        const template = fs.readFileSync(indexPath, 'utf-8');
+
+        // Swap a single tag's content. Uses a replacer function so that `$&`
+        // and friends inside a description are treated as literal text.
+        const swap = (html: string, pattern: RegExp, replacement: string) => {
+          if (!pattern.test(html)) {
+            this.warn(`prerender: no match for ${pattern} — head tag missing?`);
+            return html;
+          }
+          return html.replace(pattern, () => replacement);
+        };
+
+        const render = (meta: typeof ROUTE_META[number]) => {
+          const title = escapeHtml(meta.title);
+          const description = escapeHtml(meta.description);
+          const url = SITE_URL + (meta.path === '/' ? '/' : meta.path);
+
+          let html = template;
+          html = swap(html, /<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
+          html = swap(
+            html,
+            /<meta name="description" content="[^"]*"\s*\/?>/,
+            `<meta name="description" content="${description}" />`
+          );
+          html = swap(
+            html,
+            /<meta property="og:title" content="[^"]*"\s*\/?>/,
+            `<meta property="og:title" content="${title}" />`
+          );
+          html = swap(
+            html,
+            /<meta property="og:description" content="[^"]*"\s*\/?>/,
+            `<meta property="og:description" content="${description}" />`
+          );
+          html = swap(
+            html,
+            /<meta property="og:url" content="[^"]*"\s*\/?>/,
+            `<meta property="og:url" content="${url}" />`
+          );
+          html = swap(
+            html,
+            /<link rel="canonical" href="[^"]*"\s*\/?>/,
+            `<link rel="canonical" href="${url}" />`
+          );
+          html = swap(
+            html,
+            /<meta name="twitter:title" content="[^"]*"\s*\/?>/,
+            `<meta name="twitter:title" content="${title}" />`
+          );
+          html = swap(
+            html,
+            /<meta name="twitter:description" content="[^"]*"\s*\/?>/,
+            `<meta name="twitter:description" content="${description}" />`
+          );
+          return html;
+        };
+
+        const written: string[] = [];
+
+        for (const meta of ROUTE_META) {
+          if (meta.noIndex) continue;
+
+          const html = render(meta);
+
+          if (meta.path === '/') {
+            fs.writeFileSync(indexPath, html);
+          } else {
+            const dir = path.join(outDir, meta.path);
+            fs.mkdirSync(dir, { recursive: true });
+            fs.writeFileSync(path.join(dir, 'index.html'), html);
+          }
+          written.push(meta.path);
+        }
+
+        // SPA fallback for anything not prerendered (e.g. /admin, stale links).
+        fs.writeFileSync(path.join(outDir, '404.html'), template);
+
+        const indexable = ROUTE_META.filter((route) => !route.noIndex);
+        const sitemap =
+          '<?xml version="1.0" encoding="UTF-8"?>\n' +
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+          indexable
+            .map(
+              (route) =>
+                `  <url><loc>${SITE_URL}${
+                  route.path === '/' ? '/' : route.path
+                }</loc></url>`
+            )
+            .join('\n') +
+          '\n</urlset>\n';
+        fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap);
+
+        fs.writeFileSync(
+          path.join(outDir, 'robots.txt'),
+          [
+            'User-agent: *',
+            'Allow: /',
+            'Disallow: /admin',
+            '',
+            `Sitemap: ${SITE_URL}/sitemap.xml`,
+            '',
+          ].join('\n')
+        );
+
+        console.log(
+          `[prerender] ${written.length} routes + 404.html, sitemap.xml, robots.txt`
+        );
+      },
+    };
+  };
+
   export default defineConfig({
-    plugins: [react(), assetPathPlugin()],
+    plugins: [react(), assetPathPlugin(), prerenderPlugin()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {

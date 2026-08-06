@@ -260,6 +260,40 @@ html {
   line-height: inherit;
 }
 
+/* Hero headline.
+   Previously this was `white-space: nowrap` inside a section that clips its
+   overflow, so on phones and small tablets the headline — the one sentence that
+   positions Mu — was cut off at both ends. It now wraps, and `balance` keeps the
+   line lengths even rather than leaving one orphaned word on the second line.
+   The height is left to the content: the text is static, so nothing needs to be
+   reserved for it. */
+.hero-headline {
+  text-wrap: balance;
+}
+
+/* Rotating sub-headline.
+   This one DOES need a reserved height, because the typewriter swaps between
+   bullets of different lengths and the buttons below would otherwise jump on
+   every character. The longest bullet ("Solve complex problems in highly
+   specialized domains") needs two lines on a phone and one from `sm` up, so the
+   reservation shrinks as the viewport grows. Using min-height rather than a
+   fixed height means a wrap can never be clipped. */
+.hero-subline {
+  min-height: 3.25rem;
+}
+
+@media (min-width: 640px) {
+  .hero-subline {
+    min-height: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-subline {
+    min-height: 3rem;
+  }
+}
+
 /* Respect users who prefer reduced motion: neutralize CSS animations/transitions.
    (JS-driven motion, e.g. the Hero floating icons, is guarded separately in code.) */
 @media (prefers-reduced-motion: reduce) {
