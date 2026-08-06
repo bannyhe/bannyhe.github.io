@@ -352,7 +352,9 @@ on('GET', '/api/dashboard/geo', async (req, res) => {
         ELSE 'Local / Private'
       END AS location,
       country_code,
-      COUNT(*) AS visitors
+      COUNT(*) AS visitors,
+      AVG(latitude)  AS lat,
+      AVG(longitude) AS lon
     FROM visitor_sessions
     WHERE is_bot=0 AND first_seen_at>=?
     GROUP BY location, country_code

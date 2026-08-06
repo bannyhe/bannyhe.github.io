@@ -4,8 +4,10 @@ import {
   AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Sankey,
 } from "recharts";
-import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings, Clock, X } from "lucide-react";
+import { Lock, RefreshCw, LogOut, Users, Eye, EyeOff, MousePointer, TrendingUp, Globe, Monitor, Smartphone, Tablet, Settings, Clock, X, List, Map as MapIcon } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
+import { VisitorMap } from "../components/admin/VisitorMap";
+import { countryFlag } from "../components/admin/countryFlag";
 
 const BASE = import.meta.env.VITE_ANALYTICS_URL || "http://localhost:3001";
 const KEY_STORAGE = "admin_api_key";
@@ -31,7 +33,7 @@ interface Overview {
 }
 interface TimelineRow   { date: string; sessions: number; pageViews: number }
 interface PageRow       { path: string; views: number; avg_duration_ms: number; avg_scroll_depth: number }
-interface GeoRow        { location: string; country_code: string | null; visitors: number }
+interface GeoRow        { location: string; country_code: string | null; visitors: number; lat?: number | null; lon?: number | null }
 interface DeviceData    { byDevice: { device: string; count: number }[]; byBrowser: { browser: string; count: number }[] }
 interface FlowData      { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] }
 interface VisitorRow    { id: string; country: string | null; country_code: string | null; region: string | null; city: string | null; device: string; browser: string | null; first_seen_at: string; page_view_count: number; ip_masked: string | null }
@@ -359,6 +361,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 
   const [timeRange, setTimeRange]             = useState<TimeRange>('30d');
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [geoView, setGeoView] = useState<"list" | "map">("list");
   const [overview, setOverview] = useState<Overview | null>(null);
   const [timeline, setTimeline] = useState<TimelineRow[]>([]);
   const [pages, setPages]       = useState<PageRow[]>([]);
@@ -718,9 +721,60 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                         <X className="w-3 h-3 shrink-0" />
                       </button>
                     )}
+                    {/* List / map switch. Inline styles: the compiled Tailwind bundle
+                        is pre-built, so new utility classes would not exist. */}
+                    <div
+                      role="tablist"
+                      aria-label="Location view"
+                      className="flex items-center"
+                      style={{
+                        padding: 2,
+                        borderRadius: 9999,
+                        gap: 2,
+                        background: theme === "dark" ? "rgba(76,29,149,0.35)" : "#f1e9fe",
+                      }}
+                    >
+                      {([["list", List, "List"], ["map", MapIcon, "Map"]] as const).map(([key, Icon, label]) => {
+                        const on = geoView === key;
+                        return (
+                          <button
+                            key={key}
+                            role="tab"
+                            aria-selected={on}
+                            title={`${label} view`}
+                            onClick={() => setGeoView(key)}
+                            className="flex items-center gap-1"
+                            style={{
+                              fontSize: 12,
+                              fontWeight: 500,
+                              padding: "3px 10px",
+                              borderRadius: 9999,
+                              cursor: "pointer",
+                              transition: "background 0.15s ease, color 0.15s ease",
+                              background: on ? (theme === "dark" ? "#7c3aed" : "#ffffff") : "transparent",
+                              color: on
+                                ? (theme === "dark" ? "#ffffff" : "#6d28d9")
+                                : (theme === "dark" ? "#c4b5fd" : "#7c5cbf"),
+                              boxShadow: on ? "0 1px 3px rgba(0,0,0,0.14)" : "none",
+                            }}
+                          >
+                            <Icon className="w-3.5 h-3.5" />
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
                     <span className="text-xs px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">{TIME_RANGES.find(r => r.value === timeRange)?.label}</span>
                   </div>
                 </div>
+                {geoView === "map" ? (
+                  <VisitorMap
+                    rows={geo}
+                    theme={theme}
+                    selectedLocation={selectedLocation}
+                    onSelect={loc => setSelectedLocation(prev => (prev === loc ? null : loc))}
+                  />
+                ) : (
                 <div className="divide-y divide-gray-200/60 dark:divide-gray-700/40">
                   {geo.slice(0, 8).map((g, i) => {
                     const max        = geo[0]?.visitors ?? 1;
@@ -756,6 +810,7 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
                   })}
                   {geo.length === 0 && <p className="text-sm text-gray-600 dark:text-gray-300">No data yet.</p>}
                 </div>
+                )}
               </div>
             </div>
 
@@ -890,11 +945,6 @@ function Dashboard({ apiKey, onLogout }: { apiKey: string; onLogout: () => void 
 }
 
 // Country code → flag emoji
-function countryFlag(code: string | null): string {
-  if (!code) return "🌐";
-  return code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
-}
-
 // ── Main page ──────────────────────────────────────────────────────────────────
 export function AdminPage() {
   const [apiKey, setApiKey] = useState<string | null>(() => localStorage.getItem(KEY_STORAGE));
