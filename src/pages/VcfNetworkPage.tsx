@@ -16,8 +16,20 @@ export function VcfNetworkPage() {
   const [passwordInput, setPasswordInput] = useState("");
   const [error, setError] = useState(false);
 
-  // Password for this project (in a real app, this should be handled server-side)
-  const PROJECT_PASSWORD = "vcf2024";
+  // Access code for this case study, supplied at build time (see .env.example
+  // and the VITE_VCF_PROJECT_PASSWORD secret in the deploy workflow).
+  //
+  // Be clear about what this is and is not. Any check that runs in the browser
+  // ships its comparison value in the bundle, so this is a courtesy gate — it
+  // keeps the work off search results and away from casual browsing, and it is
+  // not a security control. Anything genuinely covered by an NDA should not be
+  // published here at all. Moving the value out of source keeps it from sitting
+  // in a public repository; it does not make the gate unbreakable.
+  //
+  // The page content itself is not rendered until this passes, so it is not
+  // sitting in the DOM behind the overlay.
+  const PROJECT_PASSWORD = import.meta.env.VITE_VCF_PROJECT_PASSWORD ?? "";
+  const isAccessConfigured = PROJECT_PASSWORD.length > 0;
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -85,7 +97,7 @@ export function VcfNetworkPage() {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === PROJECT_PASSWORD) {
+    if (isAccessConfigured && passwordInput === PROJECT_PASSWORD) {
       setIsAuthenticated(true);
       setError(false);
     } else {
@@ -114,6 +126,15 @@ export function VcfNetworkPage() {
                 </h2>
               </div>
 
+              {/* If the build had no access code, say so plainly rather than
+                  showing a field that can never succeed. Missing the secret in
+                  CI would otherwise look like the visitor's password is wrong. */}
+              {!isAccessConfigured ? (
+                <p className="text-center text-gray-700 dark:text-gray-200">
+                  Access for this case study isn't set up right now. Please get
+                  in touch and I'll share it with you directly.
+                </p>
+              ) : (
               <form onSubmit={handlePasswordSubmit} className="space-y-6">
                 <div>
                   <input
@@ -150,6 +171,7 @@ export function VcfNetworkPage() {
                   Unlock Project
                 </Button>
               </form>
+              )}
 
               <div className="mt-6 text-center">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
