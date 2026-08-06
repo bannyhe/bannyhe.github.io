@@ -260,6 +260,46 @@ html {
   line-height: inherit;
 }
 
+/* Route-level loading and the 404 page.
+   These reserve roughly a page's worth of height so the footer does not jump
+   up and then back down while a split chunk loads.
+   Written by hand because this project ships a pre-built Tailwind stylesheet:
+   arbitrary-value utilities like `min-h-[60vh]`, `animate-spin` and
+   `border-t-[#102F56]` are not in it and would silently do nothing. */
+.page-min-height {
+  min-height: 60vh;
+}
+
+.route-spinner {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  border: 2px solid rgba(16, 47, 86, 0.15);
+  border-top-color: #102f56;
+  animation: route-spin 0.8s linear infinite;
+}
+
+.dark .route-spinner {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #6db2ff;
+}
+
+@keyframes route-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hero section height.
+   `h-screen` (100vh) on mobile browsers measures the viewport as if the
+   collapsing address bar were hidden, so part of the hero sat below the fold
+   and the scroll cue was pushed off screen. `dvh` tracks the visible area.
+   The vh line stays first as the fallback for browsers without dvh. */
+.hero-viewport {
+  height: 100vh;
+  height: 100dvh;
+}
+
 /* Hero headline.
    Previously this was `white-space: nowrap` inside a section that clips its
    overflow, so on phones and small tablets the headline — the one sentence that

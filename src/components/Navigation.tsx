@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -121,12 +121,19 @@ function ThemeToggle() {
   );
 }
 
+const MOBILE_MENU_BUTTON_ID = "mobile-menu-button";
+
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  // The shared <Button> is a plain function component on React 18, so it cannot
+  // take a ref — resolve the trigger by id instead.
+  const getMenuButton = () =>
+    document.getElementById(MOBILE_MENU_BUTTON_ID) as HTMLButtonElement | null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,6 +142,77 @@ export function Navigation() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Dismissal for the mobile menu. It previously closed only when a link was
+  // chosen, so Escape did nothing, tapping the page behind it did nothing, and
+  // focus stayed behind the panel — a keyboard user could tab into the page
+  // underneath while the menu was still covering it.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const closeAndRestoreFocus = () => {
+      setIsMobileMenuOpen(false);
+      getMenuButton()?.focus();
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeAndRestoreFocus();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      // Keep Tab inside the open panel (the trigger counts as part of it, so
+      // shift-tabbing back to the button still feels natural).
+      const focusable = mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])',
+      );
+      if (!focusable || focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && (active === first || active === getMenuButton())) {
+        event.preventDefault();
+        last.focus();
+      }
+    };
+
+    const onPointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (
+        !mobileMenuRef.current?.contains(target) &&
+        !getMenuButton()?.contains(target)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("touchstart", onPointerDown);
+
+    // Move focus into the panel so the next Tab continues from the menu.
+    mobileMenuRef.current
+      ?.querySelector<HTMLElement>('a[href], button:not([disabled])')
+      ?.focus();
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("touchstart", onPointerDown);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Any route change closes the panel, including browser back/forward.
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { label: "Home", path: "/" },
@@ -209,6 +287,7 @@ export function Navigation() {
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
             <Button
+              id={MOBILE_MENU_BUTTON_ID}
               variant="ghost"
               size="icon"
               className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-200"
@@ -224,7 +303,7 @@ export function Navigation() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div id="mobile-menu" className="md:hidden mt-4 py-4 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/20">
+          <div ref={mobileMenuRef} id="mobile-menu" className="md:hidden mt-4 py-4 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/20">
             {navLinks.map((link) => (
               <Link
                 key={link.path}

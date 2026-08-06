@@ -77,7 +77,11 @@ export const ROUTE_META: RouteMeta[] = [
   },
 ];
 
-/** Exact-match lookup; falls back to the site defaults for unknown paths. */
+/**
+ * Exact-match lookup. Anything unknown is a 404 — the catch-all route renders
+ * NotFoundPage, so the tab should say so rather than claim to be the portfolio
+ * home page.
+ */
 export function metaForPath(pathname: string): RouteMeta {
   const normalized =
     pathname.length > 1 && pathname.endsWith("/")
@@ -87,8 +91,9 @@ export function metaForPath(pathname: string): RouteMeta {
   return (
     ROUTE_META.find((route) => route.path === normalized) ?? {
       path: normalized,
-      title: DEFAULT_TITLE,
+      title: "Page not found — Mu He",
       description: DEFAULT_DESCRIPTION,
+      noIndex: true,
     }
   );
 }
