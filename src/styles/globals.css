@@ -311,6 +311,28 @@ html {
   text-wrap: balance;
 }
 
+/* From tablet-landscape up the headline is held on a single line: it is the
+   sentence that positions Mu, and breaking it across rows weakens it.
+   On phones it still wraps — a forced single line there is what clipped it at
+   both ends in the first place.
+
+   The line measures roughly 25.6x the font size at this weight and tracking, so
+   the size is capped at 2.25rem — the size lg:text-4xl already gave it, so wide
+   screens look exactly as before — and otherwise derived from the viewport,
+   which keeps exactly one line without ever overflowing. From about 1160px the
+   cap wins; below that the type eases down a few pixels rather than wrapping.
+   The 48px allows for the gutter and a scrollbar.
+
+   Note the root font-size here is 19.2px, not the usual 16px, so 2.25rem is
+   43.2px. Do not assume 16px when adjusting this. */
+@media (min-width: 960px) {
+  .hero-headline {
+    white-space: nowrap;
+    text-wrap: nowrap;
+    font-size: min(2.25rem, calc((100vw - 48px) / 25.6));
+  }
+}
+
 /* Rotating sub-headline.
    This one DOES need a reserved height, because the typewriter swaps between
    bullets of different lengths and the buttons below would otherwise jump on
