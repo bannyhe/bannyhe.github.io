@@ -4,7 +4,14 @@ import { useRef, useEffect, useState } from "react";
 import { ExternalLink, ChevronUp, X, Lock } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-import vcfNetworkImg from "../src/assets/501379d39119b51053303c522aca3c66a3cc264a.png";
+// Case study assets, exported from the NetOps deck.
+// The previous hero import pointed at src/assets/501379d3….png, which is not a
+// PNG at all — it is an ASCII file containing base64 — so it could never render.
+import netopsOverviewImg from "../assets/netops/netops-overview.png";
+import netopsContextImg from "../assets/netops/netops-context.png";
+import netopsIaImg from "../assets/netops/netops-ia.png";
+import netopsFirstVersionImg from "../assets/netops/netops-first-version.png";
+import netopsFinalImg from "../assets/netops/netops-final.png";
 
 export function VcfNetworkPage() {
   const ref = useRef(null);
@@ -196,8 +203,8 @@ export function VcfNetworkPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto py-12">
               <img
-                src={vcfNetworkImg}
-                alt="VCF Network Operations"
+                src={netopsOverviewImg}
+                alt="VCF Network Operations title card, showing the Network Operations dashboard with network inventory, alert trends and traffic summary widgets."
                 className="w-full h-auto"
                 style={{ borderRadius: '10px' }}
               />
@@ -223,7 +230,9 @@ export function VcfNetworkPage() {
                 </h1>
 
                 <p className="text-xl text-gray-700 dark:text-gray-200 mb-10">
-                  Integrating advanced network capabilities
+                  Integrating advanced network capabilities into cloud-infra
+                  monitoring, addressing uncertainties in a real business
+                  environment.
                 </p>
 
                 {/* Project Metadata in 2x2 Grid */}
@@ -288,9 +297,18 @@ export function VcfNetworkPage() {
                     </p>
                   </div>
                   <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
+                    <img
+                      src={netopsContextImg}
+                      alt="Anita, a VI Admin, looking at VCF Operations. Compute, Storage and Network are listed as capabilities, with Network highlighted and mapped to Network Insights (vRNI) Operations for Network."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsContextImg,
+                          alt: "Anita, a VI Admin, and the VCF Operations capability map",
+                        })
+                      }
+                    />
                   </div>
                 </div>
               </div>
@@ -305,19 +323,26 @@ export function VcfNetworkPage() {
                   features and integrating them into Ops navigation, with a
                   customizable dashboard and quick-link navigation to pages.
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {[1, 2, 3, 4].map((index) => (
-                    <div key={index}>
-                      <div 
-                        className="w-full h-auto mb-4 bg-gray-200 dark:bg-gray-700 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
-                        style={{ borderRadius: '10px', height: '400px' }}
-                      >
-                        <span className="text-gray-500 dark:text-gray-400">Placeholder Image {index}</span>
-                      </div>
-                      <p className="text-center text-gray-700 dark:text-gray-200">[Description {index}]</p>
-                    </div>
-                  ))}
-                </div>
+                {/* One wide diagram rather than the template's 2x2 grid: this is
+                    a single two-stage flow and splitting it would break it. */}
+                <figure>
+                  <img
+                    src={netopsIaImg}
+                    alt="Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration."
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsIaImg,
+                        alt: "Information architecture: grouping vRNI features and mapping them into Ops navigation",
+                      })
+                    }
+                  />
+                  <figcaption className="text-center text-gray-700 dark:text-gray-200 mt-4">
+                    Stage 1 groups the vRNI features; stage 2 maps each group into
+                    the existing Ops navigation.
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Design Challenge */}
@@ -385,11 +410,24 @@ export function VcfNetworkPage() {
                       </ul>
                     </div>
                   </div>
-                  <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
-                  </div>
+                  <figure className="md:sticky md:top-28">
+                    <img
+                      src={netopsFirstVersionImg}
+                      alt="The first Network Operations proposal inside VCF Ops: an Overview tab alongside three custom boards, with Network Alerts, Top Network Insights, NSX Enabled, Traffic Summary and Top Anomalies widgets."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsFirstVersionImg,
+                          alt: "First version of the Network Operations page",
+                        })
+                      }
+                    />
+                    <figcaption className="text-gray-700 dark:text-gray-200 mt-4">
+                      The first proposal: all vRNI features surfaced on VCF Ops,
+                      mostly as quick links.
+                    </figcaption>
+                  </figure>
                 </div>
               </div>
 
@@ -455,21 +493,25 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Final Implementation
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {[1, 2, 3, 4].map((index) => (
-                    <div key={index}>
-                      <div 
-                        className="w-full h-auto bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
-                        style={{ borderRadius: '10px', height: '300px' }}
-                      >
-                        <span className="text-gray-500 dark:text-gray-400">Placeholder Image/Video {index}</span>
-                      </div>
-                      <p className="text-left text-gray-700 dark:text-gray-200 mt-4">
-                        {String.fromCharCode(96 + index)}. [Description of implementation {index}]
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                <figure>
+                  <img
+                    src={netopsFinalImg}
+                    alt="The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows."
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsFinalImg,
+                        alt: "The revised Network Operations page after the scope change",
+                      })
+                    }
+                  />
+                  <figcaption className="text-gray-700 dark:text-gray-200 mt-4">
+                    After the scope change: the custom boards and quick links are
+                    gone, and what remains is integrated into Ops navigation and
+                    focused on a small number of high-value views.
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Impact */}
