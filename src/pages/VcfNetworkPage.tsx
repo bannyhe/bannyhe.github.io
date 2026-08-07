@@ -57,7 +57,7 @@ export function VcfNetworkPage() {
         "design-challenge",
         "approach-strategy",
         "final-implementation",
-        "impact",
+        // "impact",  // IMPACT: re-enable together with the section markup
         "learnings-reflections"
       ];
 
@@ -98,7 +98,7 @@ export function VcfNetworkPage() {
     { id: "design-challenge", label: "Design Challenge" },
     { id: "approach-strategy", label: "Approach & Strategy" },
     { id: "final-implementation", label: "Final Implementation" },
-    { id: "impact", label: "Impact" },
+    // { id: "impact", label: "Impact" },  // IMPACT: re-enable with the section
     { id: "learnings-reflections", label: "Learnings & Reflections" }
   ];
 
@@ -251,7 +251,7 @@ export function VcfNetworkPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Timeline</p>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">[Timeline Placeholder]</p>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">March 2024 - March 2025</p>
                   </div>
                 </div>
               </div>
@@ -514,39 +514,23 @@ export function VcfNetworkPage() {
                 </figure>
               </div>
 
-              {/* Impact */}
-              <div className="mb-16" id="impact">
-                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Impact
-                </h2>
-                <div className="space-y-3 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                  <ul className="list-disc pl-6 space-y-3">
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Impact Item 1</span> – [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Impact Item 2</span> – [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Impact Item 3</span> – [Description]
-                    </li>
-                  </ul>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
-                    <p className="text-left text-gray-700 dark:text-gray-200 mt-4">[Impact visualization 1]</p>
-                  </div>
-                  <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
-                    <p className="text-left text-gray-700 dark:text-gray-200 mt-4">[Impact visualization 2]</p>
-                  </div>
-                </div>
-              </div>
+              {/*
+                IMPACT — not rendered yet, on purpose.
+
+                The metrics and visuals are coming separately. Rendering the
+                template's "[Impact Item 1] - [Description]" bullets and grey
+                "Placeholder Image" boxes would put visible filler on a live
+                page, so the whole section is omitted until there is something
+                real to show.
+
+                To restore, do all three:
+                  1. Re-add the section markup here, between Final
+                     Implementation and Learnings & Reflections. The original
+                     is in git history — `git show <this commit>^:src/pages/VcfNetworkPage.tsx`.
+                  2. Uncomment "impact" in the `sections` array used by the
+                     scroll-spy (search: IMPACT).
+                  3. Uncomment the Impact entry in `tableOfContents`.
+              */}
 
               {/* Learnings & Reflections */}
               <div className="mb-16" id="learnings-reflections">
