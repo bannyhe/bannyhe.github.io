@@ -222,6 +222,10 @@ export function VcfNetworkPage() {
                   VCF Network Operations
                 </h1>
 
+                <p className="text-xl text-gray-700 dark:text-gray-200 mb-10">
+                  Integrating advanced network capabilities
+                </p>
+
                 {/* Project Metadata in 2x2 Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   <div>
@@ -248,9 +252,21 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Brief
                 </h2>
-                <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  [Brief description placeholder - Add project overview and context here]
-                </p>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p>
+                    VCF Network Insights (vRNI) provides real-time visibility and
+                    analytics of network traffic, performance, and security,
+                    enabling proactive issue detection, efficient management, and
+                    enhanced network optimization.
+                  </p>
+                  <p>
+                    VCF Operations simplifies IT operations management by providing
+                    comprehensive monitoring, analytics, and optimization for
+                    applications, infrastructure, and cloud environments. With vRNI
+                    integrated, VI admins will experience a next level VCF
+                    Operations which is enhanced with network optimization.
+                  </p>
+                </div>
               </div>
 
               {/* Problem */}
@@ -261,7 +277,14 @@ export function VcfNetworkPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
-                      [Problem statement placeholder - Describe the main challenges and pain points]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        VI Admin
+                      </span>{" "}
+                      — monitor infrastructure on VCF Operations.
+                    </p>
+                    <p>
+                      Integrating Network Insights (vRNI) into VCF Operations as
+                      the core Network capability, along with Compute and Storage.
                     </p>
                   </div>
                   <div>
@@ -277,6 +300,11 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Solution Overview
                 </h2>
+                <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
+                  Integration of Information Architecture by grouping vRNI
+                  features and integrating them into Ops navigation, with a
+                  customizable dashboard and quick-link navigation to pages.
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {[1, 2, 3, 4].map((index) => (
                     <div key={index}>
@@ -297,11 +325,65 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Design Challenge
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                    <p>
-                      [Design challenge placeholder - Describe the key design challenges faced]
-                    </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        1st Version
+                      </h3>
+                      <p>
+                        For the first vRNI integration proposal, Network
+                        Operations only includes and shows vRNI data:
+                      </p>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>All vRNI features are available on VCF Ops;</li>
+                        <li>Most of the vRNI features are quick links;</li>
+                        <li>
+                          Those features are not embedded with VCF Ops navigation,
+                          and one of the reasons is because the search
+                          technologies between vRNI and Ops are different, which
+                          will not happen for 9.0.
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        Scope Change
+                      </h3>
+                      <p>
+                        The direction of vRNI integration changed, so the scope
+                        and requirements changed accordingly:
+                      </p>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>
+                          Network Operations is a home for both NSX and vRNI;
+                        </li>
+                        <li>
+                          Instead of bringing all features to Ops without mapping
+                          them to Ops navigation properly, only focus on the top
+                          2–3 features;
+                        </li>
+                        <li>
+                          There is no quick link, and all the features are
+                          integrated with Ops.
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        Key Constraints
+                      </h3>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>
+                          The timeline for UX and engineering is restricted;
+                        </li>
+                        <li>
+                          It was unclear what data would be shown on NetOps.
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   <div>
                     <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
@@ -316,21 +398,55 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Approach & Strategy
                 </h2>
-                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <p>
-                    [Approach & Strategy placeholder - Describe the methodology and strategic approach]
-                  </p>
-                  <ul className="list-disc pl-6 space-y-3">
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Phase 1:</span> [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Phase 2:</span> [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Phase 3:</span> [Description]
-                    </li>
-                  </ul>
+                <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <div className="space-y-4">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                      Research Insights
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>
+                        Refer to the product managers' guideline between VCF and
+                        NSX to determine what data should be included in NetOps;
+                      </li>
+                      <li>
+                        Research sessions are planned as the reference for 9.1.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                      Convert Customized Patterns to Design Library
+                    </h3>
+                    <p>
+                      As a major step of the integration process, I broke the
+                      pattern conversion down into three phases, based on the time
+                      and effort each takes.
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Phase 1:
+                        </span>{" "}
+                        Documented vRNI customized patterns and looked for the
+                        equivalent Clarity Design patterns;
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Phase 2:
+                        </span>{" "}
+                        Started from simple components like fonts, links and
+                        buttons;
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Phase 3:
+                        </span>{" "}
+                        Continued to align on complex patterns like widgets and
+                        list views.
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
@@ -398,16 +514,29 @@ export function VcfNetworkPage() {
                 <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                   <ul className="list-disc pl-6 space-y-4">
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 1</span>: [Description]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Break down large projects into manageable steps
+                      </span>
+                      : It's common to feel overwhelmed by the scope while working
+                      on a complex project. By dividing the overall objective into
+                      small, digestible tasks.
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 2</span>: [Description]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Ambiguity is opportunity, not barrier
+                      </span>
+                      : As a designer, while dealing with user scenarios with no
+                      clarity or prior experience, I view it as a time for
+                      innovation rather than a roadblock, and find aspects to
+                      explore and break through with creativity.
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 3</span>: [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 4</span>: [Description]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Strategic thinking is embedded in design decisions
+                      </span>
+                      : A product designer should not only create beautiful
+                      interfaces, but also think holistically and strategically
+                      about every design decision before implementing.
                     </li>
                   </ul>
                 </div>
