@@ -36,6 +36,7 @@ jobs:
         run: npm run build
         env:
           VITE_ANALYTICS_URL: ${{ secrets.VITE_ANALYTICS_URL }}
+          VITE_VCF_PROJECT_PASSWORD: ${{ secrets.VITE_VCF_PROJECT_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

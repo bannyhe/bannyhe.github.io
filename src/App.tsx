@@ -4,7 +4,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { metaForPath } from "./lib/routeMeta";
 
 function ScrollToTop() {
@@ -49,14 +49,43 @@ function DocumentTitle() {
 import { Navigation } from "./components/Navigation";
 import { useAnalytics } from "./hooks/useAnalytics";
 
+// The home page is what almost every visit starts on, so it stays in the main
+// bundle. Everything else is split out: the four case studies carry most of the
+// imagery and copy, and the admin dashboard pulls in the charting and world-map
+// code that no ordinary visitor ever needs. Before this, all of it shipped in
+// one ~1.19 MB chunk that had to parse before anything appeared on screen.
 import { HomePage } from "./pages/HomePage";
-import { AboutPage } from "./pages/AboutPage";
-import { ResumePage } from "./pages/ResumePage";
-import { MalwarePreventionPage } from "./pages/MalwarePreventionPage";
-import { NorthstarOnboardingPage } from "./pages/NorthstarOnboardingPage";
-import { VcfNetworkPage } from "./pages/VcfNetworkPage";
-import { XenithWebsitePage } from "./pages/XenithWebsitePage";
-import { AdminPage } from "./pages/AdminPage";
+
+const AboutPage = lazy(() =>
+  import("./pages/AboutPage").then((m) => ({ default: m.AboutPage })),
+);
+const ResumePage = lazy(() =>
+  import("./pages/ResumePage").then((m) => ({ default: m.ResumePage })),
+);
+const MalwarePreventionPage = lazy(() =>
+  import("./pages/MalwarePreventionPage").then((m) => ({
+    default: m.MalwarePreventionPage,
+  })),
+);
+const NorthstarOnboardingPage = lazy(() =>
+  import("./pages/NorthstarOnboardingPage").then((m) => ({
+    default: m.NorthstarOnboardingPage,
+  })),
+);
+const VcfNetworkPage = lazy(() =>
+  import("./pages/VcfNetworkPage").then((m) => ({ default: m.VcfNetworkPage })),
+);
+const XenithWebsitePage = lazy(() =>
+  import("./pages/XenithWebsitePage").then((m) => ({
+    default: m.XenithWebsitePage,
+  })),
+);
+const AdminPage = lazy(() =>
+  import("./pages/AdminPage").then((m) => ({ default: m.AdminPage })),
+);
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })),
+);
 import { Toaster } from "./components/ui/sonner";
 import {
   Github,
@@ -66,6 +95,25 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { ThemeProvider } from "./contexts/ThemeContext";
+
+/**
+ * Shown while a split route chunk loads. Deliberately quiet — it reserves the
+ * vertical space a page occupies so the footer does not jump up and back, and
+ * announces itself to assistive tech without stealing focus. On a warm cache
+ * this is typically never seen.
+ */
+function RouteFallback() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="page-min-height flex items-center justify-center"
+    >
+      <span className="sr-only">Loading page…</span>
+      <span aria-hidden="true" className="route-spinner" />
+    </div>
+  );
+}
 
 // Inner component — rendered inside <Router> so useLocation() works.
 function AppContent() {
@@ -80,28 +128,31 @@ function AppContent() {
         <ScrollToTop />
         <DocumentTitle />
         <Navigation />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/resume" element={<ResumePage />} />
-          <Route
-            path="/project/malware-prevention"
-            element={<MalwarePreventionPage />}
-          />
-          <Route
-            path="/project/northstar-onboarding"
-            element={<NorthstarOnboardingPage />}
-          />
-          <Route
-            path="/project/vcf-network"
-            element={<VcfNetworkPage />}
-          />
-          <Route
-            path="/project/xenith-website"
-            element={<XenithWebsitePage />}
-          />
-          <Route path="/admin" element={<AdminPage />} />
-        </Routes>
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/resume" element={<ResumePage />} />
+            <Route
+              path="/project/malware-prevention"
+              element={<MalwarePreventionPage />}
+            />
+            <Route
+              path="/project/northstar-onboarding"
+              element={<NorthstarOnboardingPage />}
+            />
+            <Route
+              path="/project/vcf-network"
+              element={<VcfNetworkPage />}
+            />
+            <Route
+              path="/project/xenith-website"
+              element={<XenithWebsitePage />}
+            />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
         <footer className="relative text-gray-600 dark:text-gray-300 py-8 mt-24">
           <div className="container mx-auto px-4 text-center">
             <div className="flex items-center justify-center gap-4 mb-6">

@@ -3,6 +3,7 @@ import { ArrowRight, Cloud, Shield, Lock, Network, Server, Database, Zap, Globe,
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 interface IconPhysics {
   x: number;
@@ -20,6 +21,15 @@ export function Hero() {
     "Design intuitive & seamless user experience"
   ];
   
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  // With reduced motion the bullets are not typed out one at a time — the
+  // rotation never stops on its own, which both violates WCAG 2.2.2 (no way to
+  // pause auto-updating content) and means a visitor has to wait through three
+  // cycles to read three short claims. Showing them together is calmer and
+  // strictly more informative.
+  const staticSecondary = bulletPoints.join(" · ");
+
   const [displayedSecondary, setDisplayedSecondary] = useState("");
   const [currentBulletIndex, setCurrentBulletIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
@@ -67,6 +77,12 @@ export function Hero() {
   const REPULSION_FORCE = 0.05; // Gentle repulsion to keep icons spread out
 
   useEffect(() => {
+    // Reduced motion: render every bullet at once and never start the loop.
+    if (prefersReducedMotion) {
+      setDisplayedSecondary(staticSecondary);
+      return;
+    }
+
     const currentBullet = bulletPoints[currentBulletIndex];
     let charIndex = 0;
     let typingTimeout: NodeJS.Timeout;
@@ -103,7 +119,7 @@ export function Hero() {
     }
 
     return () => clearTimeout(typingTimeout);
-  }, [currentBulletIndex, isTyping]);
+  }, [currentBulletIndex, isTyping, prefersReducedMotion, staticSecondary]);
 
   // Initialize physics
   useEffect(() => {
@@ -527,7 +543,7 @@ export function Hero() {
     <section
       id="home"
       ref={containerRef}
-      className="h-screen flex flex-col items-center justify-center relative overflow-hidden pt-20 pb-16"
+      className="hero-viewport flex flex-col items-center justify-center relative overflow-hidden pt-20 pb-16"
     >
       {/* Floating icons with physics - 20 animated icons */}
       {floatingIcons.map((iconConfig, index) => {
@@ -584,7 +600,7 @@ export function Hero() {
             transition={{ duration: 0.8 }}
             className="relative z-50"
           >
-            <motion.p
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -597,14 +613,16 @@ export function Hero() {
               }}
             >
               <motion.span
-                animate={{
-                  backgroundPosition: ["0% 50%", "100% 50%"],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
+                animate={
+                  prefersReducedMotion
+                    ? undefined
+                    : { backgroundPosition: ["0% 50%", "100% 50%"] }
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 8, repeat: Infinity, ease: "linear" }
+                }
                 className="bg-gradient-to-r from-pink-500 via-purple-500 via-indigo-500 via-blue-500 via-cyan-500 to-pink-500 dark:from-pink-300 dark:via-purple-300 dark:via-indigo-300 dark:via-blue-300 dark:via-cyan-300 dark:to-pink-300 bg-clip-text text-transparent text-center"
                 style={{
                   backgroundSize: "200% 100%",
@@ -614,7 +632,7 @@ export function Hero() {
               >
                 {primaryText}
               </motion.span>
-            </motion.p>
+            </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -634,7 +652,9 @@ export function Hero() {
               >
                 {displayedSecondary}
               </span>
-              {isTyping && displayedSecondary.length < bulletPoints[currentBulletIndex].length && (
+              {!prefersReducedMotion &&
+                isTyping &&
+                displayedSecondary.length < bulletPoints[currentBulletIndex].length && (
                 <span 
                   className="animate-pulse ml-2 text-indigo-600 dark:text-indigo-300"
                   style={{
@@ -674,26 +694,45 @@ export function Hero() {
         transition={{ duration: 0.6, delay: 1.2 }}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 cursor-pointer"
+        {/* A real <button>: this was a div with onClick, so it was invisible to
+            keyboard and screen-reader users even though it is the only in-page
+            shortcut to the work. */}
+        <motion.button
+          type="button"
+          animate={prefersReducedMotion ? undefined : { y: [0, 10, 0] }}
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+          }
+          className="flex flex-col items-center gap-2 cursor-pointer bg-transparent border-0 p-2 rounded-lg"
           onClick={() => {
             const projectsSection = document.getElementById('projects');
             if (projectsSection) {
-              projectsSection.scrollIntoView({ behavior: 'smooth' });
+              projectsSection.scrollIntoView({
+                behavior: prefersReducedMotion ? 'auto' : 'smooth',
+              });
+              // Move focus as well as the viewport, so a keyboard user actually
+              // lands in the section rather than resuming from the hero.
+              projectsSection.setAttribute('tabindex', '-1');
+              projectsSection.focus({ preventScroll: true });
             }
           }}
         >
           <span className="text-sm text-gray-600 dark:text-gray-300">Scroll for more</span>
-          <div className="w-6 h-10 rounded-full border-2 border-gray-400 dark:border-gray-500 flex items-start justify-center p-1">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-1.5 h-1.5 rounded-full bg-gradient-to-b from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400"
+          <span className="w-6 h-10 rounded-full border-2 border-gray-400 dark:border-gray-500 flex items-start justify-center p-1">
+            <motion.span
+              aria-hidden="true"
+              animate={prefersReducedMotion ? undefined : { y: [0, 12, 0] }}
+              transition={
+                prefersReducedMotion
+                  ? undefined
+                  : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+              }
+              className="block w-1.5 h-1.5 rounded-full bg-gradient-to-b from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400"
             />
-          </div>
-        </motion.div>
+          </span>
+        </motion.button>
       </motion.div>
     </section>
   );
