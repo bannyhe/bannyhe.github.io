@@ -588,7 +588,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 relative z-50 flex justify-center items-center h-[60px] sm:h-[72px] md:h-[90px] px-4"
+              className="hero-headline text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 relative z-50 flex justify-center items-center px-4"
               style={{
                 filter: "drop-shadow(0 0 20px rgba(99, 102, 241, 0.3)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15))",
                 WebkitTextStroke: "0.3px rgba(99, 102, 241, 0.2)",
@@ -610,7 +610,6 @@ export function Hero() {
                   backgroundSize: "200% 100%",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  whiteSpace: "nowrap",
                 }}
               >
                 {primaryText}
@@ -621,7 +620,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 relative z-50 text-center h-[32px] sm:h-[40px] md:h-[48px] flex items-center justify-center px-4"
+              className="hero-subline text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 relative z-50 text-center flex items-center justify-center px-4"
             >
               <span
                 className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-300 dark:via-purple-300 dark:to-pink-300 bg-clip-text text-transparent"

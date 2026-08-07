@@ -1,10 +1,11 @@
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
+import { metaForPath } from "./lib/routeMeta";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -22,11 +23,31 @@ function ScrollToTop() {
   }, [pathname]);
   return null;
 }
+
+/**
+ * Keeps the tab title and meta description in step with the current route.
+ * First paint already carries the right values — the build writes a static HTML
+ * file per route — so this only has to cover client-side navigation after that.
+ */
+function DocumentTitle() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const { title, description } = metaForPath(pathname);
+    document.title = title;
+
+    const descriptionTag = document.querySelector(
+      'meta[name="description"]',
+    );
+    if (descriptionTag) {
+      descriptionTag.setAttribute("content", description);
+    }
+  }, [pathname]);
+
+  return null;
+}
 import { Navigation } from "./components/Navigation";
 import { useAnalytics } from "./hooks/useAnalytics";
-
-// External logo/favicon link
-const logoImage = "https://drive.google.com/thumbnail?id=18egiYJluCTnTQoA7fkoeIw69C5HCD9jP&sz=w200";
 
 import { HomePage } from "./pages/HomePage";
 import { AboutPage } from "./pages/AboutPage";
@@ -57,6 +78,7 @@ function AppContent() {
 
       <div className="relative z-10">
         <ScrollToTop />
+        <DocumentTitle />
         <Navigation />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -128,22 +150,6 @@ function AppContent() {
 }
 
 export default function App() {
-  useEffect(() => {
-    document.title = "MU HE";
-
-    const link = document.querySelector(
-      "link[rel~='icon']",
-    ) as HTMLLinkElement;
-    if (link) {
-      link.href = logoImage;
-    } else {
-      const newLink = document.createElement("link");
-      newLink.rel = "icon";
-      newLink.href = logoImage;
-      document.head.appendChild(newLink);
-    }
-  }, []);
-
   return (
     <ThemeProvider>
       <Router>
