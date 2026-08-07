@@ -4,7 +4,14 @@ import { useRef, useEffect, useState } from "react";
 import { ExternalLink, ChevronUp, X, Lock } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-import vcfNetworkImg from "../src/assets/501379d39119b51053303c522aca3c66a3cc264a.png";
+// Case study assets, exported from the NetOps deck.
+// The previous hero import pointed at src/assets/501379d3….png, which is not a
+// PNG at all — it is an ASCII file containing base64 — so it could never render.
+import netopsOverviewImg from "../assets/netops/netops-overview.png";
+import netopsContextImg from "../assets/netops/netops-context.png";
+import netopsIaImg from "../assets/netops/netops-ia.png";
+import netopsFirstVersionImg from "../assets/netops/netops-first-version.png";
+import netopsFinalImg from "../assets/netops/netops-final.png";
 
 export function VcfNetworkPage() {
   const ref = useRef(null);
@@ -50,7 +57,7 @@ export function VcfNetworkPage() {
         "design-challenge",
         "approach-strategy",
         "final-implementation",
-        "impact",
+        // "impact",  // IMPACT: re-enable together with the section markup
         "learnings-reflections"
       ];
 
@@ -91,7 +98,7 @@ export function VcfNetworkPage() {
     { id: "design-challenge", label: "Design Challenge" },
     { id: "approach-strategy", label: "Approach & Strategy" },
     { id: "final-implementation", label: "Final Implementation" },
-    { id: "impact", label: "Impact" },
+    // { id: "impact", label: "Impact" },  // IMPACT: re-enable with the section
     { id: "learnings-reflections", label: "Learnings & Reflections" }
   ];
 
@@ -196,8 +203,8 @@ export function VcfNetworkPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto py-12">
               <img
-                src={vcfNetworkImg}
-                alt="VCF Network Operations"
+                src={netopsOverviewImg}
+                alt="VCF Network Operations title card, showing the Network Operations dashboard with network inventory, alert trends and traffic summary widgets."
                 className="w-full h-auto"
                 style={{ borderRadius: '10px' }}
               />
@@ -222,6 +229,12 @@ export function VcfNetworkPage() {
                   VCF Network Operations
                 </h1>
 
+                <p className="text-xl text-gray-700 dark:text-gray-200 mb-10">
+                  Integrating advanced network capabilities into cloud-infra
+                  monitoring, addressing uncertainties in a real business
+                  environment.
+                </p>
+
                 {/* Project Metadata in 2x2 Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   <div>
@@ -238,7 +251,7 @@ export function VcfNetworkPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Timeline</p>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">[Timeline Placeholder]</p>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">March 2024 - March 2025</p>
                   </div>
                 </div>
               </div>
@@ -248,9 +261,21 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Brief
                 </h2>
-                <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  [Brief description placeholder - Add project overview and context here]
-                </p>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p>
+                    VCF Network Insights (vRNI) provides real-time visibility and
+                    analytics of network traffic, performance, and security,
+                    enabling proactive issue detection, efficient management, and
+                    enhanced network optimization.
+                  </p>
+                  <p>
+                    VCF Operations simplifies IT operations management by providing
+                    comprehensive monitoring, analytics, and optimization for
+                    applications, infrastructure, and cloud environments. With vRNI
+                    integrated, VI admins will experience a next level VCF
+                    Operations which is enhanced with network optimization.
+                  </p>
+                </div>
               </div>
 
               {/* Problem */}
@@ -261,13 +286,29 @@ export function VcfNetworkPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
-                      [Problem statement placeholder - Describe the main challenges and pain points]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        VI Admin
+                      </span>{" "}
+                      — monitor infrastructure on VCF Operations.
+                    </p>
+                    <p>
+                      Integrating Network Insights (vRNI) into VCF Operations as
+                      the core Network capability, along with Compute and Storage.
                     </p>
                   </div>
                   <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
+                    <img
+                      src={netopsContextImg}
+                      alt="Anita, a VI Admin, looking at VCF Operations. Compute, Storage and Network are listed as capabilities, with Network highlighted and mapped to Network Insights (vRNI) Operations for Network."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsContextImg,
+                          alt: "Anita, a VI Admin, and the VCF Operations capability map",
+                        })
+                      }
+                    />
                   </div>
                 </div>
               </div>
@@ -277,19 +318,31 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Solution Overview
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {[1, 2, 3, 4].map((index) => (
-                    <div key={index}>
-                      <div 
-                        className="w-full h-auto mb-4 bg-gray-200 dark:bg-gray-700 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
-                        style={{ borderRadius: '10px', height: '400px' }}
-                      >
-                        <span className="text-gray-500 dark:text-gray-400">Placeholder Image {index}</span>
-                      </div>
-                      <p className="text-center text-gray-700 dark:text-gray-200">[Description {index}]</p>
-                    </div>
-                  ))}
-                </div>
+                <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
+                  Integration of Information Architecture by grouping vRNI
+                  features and integrating them into Ops navigation, with a
+                  customizable dashboard and quick-link navigation to pages.
+                </p>
+                {/* One wide diagram rather than the template's 2x2 grid: this is
+                    a single two-stage flow and splitting it would break it. */}
+                <figure>
+                  <img
+                    src={netopsIaImg}
+                    alt="Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration."
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsIaImg,
+                        alt: "Information architecture: grouping vRNI features and mapping them into Ops navigation",
+                      })
+                    }
+                  />
+                  <figcaption className="text-center text-gray-700 dark:text-gray-200 mt-4">
+                    Stage 1 groups the vRNI features; stage 2 maps each group into
+                    the existing Ops navigation.
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Design Challenge */}
@@ -297,17 +350,84 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Design Challenge
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                    <p>
-                      [Design challenge placeholder - Describe the key design challenges faced]
-                    </p>
-                  </div>
-                  <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        1st Version
+                      </h3>
+                      <p>
+                        For the first vRNI integration proposal, Network
+                        Operations only includes and shows vRNI data:
+                      </p>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>All vRNI features are available on VCF Ops;</li>
+                        <li>Most of the vRNI features are quick links;</li>
+                        <li>
+                          Those features are not embedded with VCF Ops navigation,
+                          and one of the reasons is because the search
+                          technologies between vRNI and Ops are different, which
+                          will not happen for 9.0.
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        Scope Change
+                      </h3>
+                      <p>
+                        The direction of vRNI integration changed, so the scope
+                        and requirements changed accordingly:
+                      </p>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>
+                          Network Operations is a home for both NSX and vRNI;
+                        </li>
+                        <li>
+                          Instead of bringing all features to Ops without mapping
+                          them to Ops navigation properly, only focus on the top
+                          2–3 features;
+                        </li>
+                        <li>
+                          There is no quick link, and all the features are
+                          integrated with Ops.
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        Key Constraints
+                      </h3>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>
+                          The timeline for UX and engineering is restricted;
+                        </li>
+                        <li>
+                          It was unclear what data would be shown on NetOps.
+                        </li>
+                      </ul>
                     </div>
                   </div>
+                  <figure className="md:sticky md:top-28">
+                    <img
+                      src={netopsFirstVersionImg}
+                      alt="The first Network Operations proposal inside VCF Ops: an Overview tab alongside three custom boards, with Network Alerts, Top Network Insights, NSX Enabled, Traffic Summary and Top Anomalies widgets."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsFirstVersionImg,
+                          alt: "First version of the Network Operations page",
+                        })
+                      }
+                    />
+                    <figcaption className="text-gray-700 dark:text-gray-200 mt-4">
+                      The first proposal: all vRNI features surfaced on VCF Ops,
+                      mostly as quick links.
+                    </figcaption>
+                  </figure>
                 </div>
               </div>
 
@@ -316,21 +436,55 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Approach & Strategy
                 </h2>
-                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <p>
-                    [Approach & Strategy placeholder - Describe the methodology and strategic approach]
-                  </p>
-                  <ul className="list-disc pl-6 space-y-3">
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Phase 1:</span> [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Phase 2:</span> [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Phase 3:</span> [Description]
-                    </li>
-                  </ul>
+                <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <div className="space-y-4">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                      Research Insights
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>
+                        Refer to the product managers' guideline between VCF and
+                        NSX to determine what data should be included in NetOps;
+                      </li>
+                      <li>
+                        Research sessions are planned as the reference for 9.1.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                      Convert Customized Patterns to Design Library
+                    </h3>
+                    <p>
+                      As a major step of the integration process, I broke the
+                      pattern conversion down into three phases, based on the time
+                      and effort each takes.
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Phase 1:
+                        </span>{" "}
+                        Documented vRNI customized patterns and looked for the
+                        equivalent Clarity Design patterns;
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Phase 2:
+                        </span>{" "}
+                        Started from simple components like fonts, links and
+                        buttons;
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Phase 3:
+                        </span>{" "}
+                        Continued to align on complex patterns like widgets and
+                        list views.
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
@@ -339,56 +493,44 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Final Implementation
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {[1, 2, 3, 4].map((index) => (
-                    <div key={index}>
-                      <div 
-                        className="w-full h-auto bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
-                        style={{ borderRadius: '10px', height: '300px' }}
-                      >
-                        <span className="text-gray-500 dark:text-gray-400">Placeholder Image/Video {index}</span>
-                      </div>
-                      <p className="text-left text-gray-700 dark:text-gray-200 mt-4">
-                        {String.fromCharCode(96 + index)}. [Description of implementation {index}]
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                <figure>
+                  <img
+                    src={netopsFinalImg}
+                    alt="The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows."
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsFinalImg,
+                        alt: "The revised Network Operations page after the scope change",
+                      })
+                    }
+                  />
+                  <figcaption className="text-gray-700 dark:text-gray-200 mt-4">
+                    After the scope change: the custom boards and quick links are
+                    gone, and what remains is integrated into Ops navigation and
+                    focused on a small number of high-value views.
+                  </figcaption>
+                </figure>
               </div>
 
-              {/* Impact */}
-              <div className="mb-16" id="impact">
-                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Impact
-                </h2>
-                <div className="space-y-3 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
-                  <ul className="list-disc pl-6 space-y-3">
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Impact Item 1</span> – [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Impact Item 2</span> – [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Impact Item 3</span> – [Description]
-                    </li>
-                  </ul>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
-                    <p className="text-left text-gray-700 dark:text-gray-200 mt-4">[Impact visualization 1]</p>
-                  </div>
-                  <div>
-                    <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center" style={{ borderRadius: '10px' }}>
-                      <span className="text-gray-500 dark:text-gray-400">Placeholder Image</span>
-                    </div>
-                    <p className="text-left text-gray-700 dark:text-gray-200 mt-4">[Impact visualization 2]</p>
-                  </div>
-                </div>
-              </div>
+              {/*
+                IMPACT — not rendered yet, on purpose.
+
+                The metrics and visuals are coming separately. Rendering the
+                template's "[Impact Item 1] - [Description]" bullets and grey
+                "Placeholder Image" boxes would put visible filler on a live
+                page, so the whole section is omitted until there is something
+                real to show.
+
+                To restore, do all three:
+                  1. Re-add the section markup here, between Final
+                     Implementation and Learnings & Reflections. The original
+                     is in git history — `git show <this commit>^:src/pages/VcfNetworkPage.tsx`.
+                  2. Uncomment "impact" in the `sections` array used by the
+                     scroll-spy (search: IMPACT).
+                  3. Uncomment the Impact entry in `tableOfContents`.
+              */}
 
               {/* Learnings & Reflections */}
               <div className="mb-16" id="learnings-reflections">
@@ -398,16 +540,29 @@ export function VcfNetworkPage() {
                 <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                   <ul className="list-disc pl-6 space-y-4">
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 1</span>: [Description]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Break down large projects into manageable steps
+                      </span>
+                      : It's common to feel overwhelmed by the scope while working
+                      on a complex project. By dividing the overall objective into
+                      small, digestible tasks.
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 2</span>: [Description]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Ambiguity is opportunity, not barrier
+                      </span>
+                      : As a designer, while dealing with user scenarios with no
+                      clarity or prior experience, I view it as a time for
+                      innovation rather than a roadblock, and find aspects to
+                      explore and break through with creativity.
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 3</span>: [Description]
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">Learning 4</span>: [Description]
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Strategic thinking is embedded in design decisions
+                      </span>
+                      : A product designer should not only create beautiful
+                      interfaces, but also think holistically and strategically
+                      about every design decision before implementing.
                     </li>
                   </ul>
                 </div>
