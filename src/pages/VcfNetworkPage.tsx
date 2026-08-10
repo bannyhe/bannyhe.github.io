@@ -352,39 +352,34 @@ export function VcfNetworkPage() {
                   </p>
                   <ul className="list-disc pl-6 space-y-3">
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
                         Milestone 1:
                       </span>{" "}
-                      Grouped vRNI's features and mapped them onto the navigation
-                      Ops already had.
+                      Integration of Information Architecture
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
                         Milestone 2:
                       </span>{" "}
-                      Put the full feature set in front of stakeholders, mostly as
-                      quick links.
+                      Network Operations 1st Version
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
                         Milestone 3:
                       </span>{" "}
-                      Direction changed — one home for NSX and vRNI, narrowed to
-                      the top few features and integrated rather than linked.
+                      Scope Change for Network Operations
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
                         Milestone 4:
                       </span>{" "}
-                      Audited the custom patterns against Clarity and converted
-                      them in phases.
+                      Convert Customized Patterns to Clarity
                     </li>
                     <li>
-                      <span className="text-gray-900 dark:text-gray-100">
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
                         Milestone 5:
                       </span>{" "}
-                      Kept the integration aligned with product and engineering as
-                      it shipped.
+                      Continuous Collaboration across Components
                     </li>
                   </ul>
                 </div>
