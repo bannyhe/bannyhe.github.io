@@ -98,7 +98,7 @@ export function VcfNetworkPage() {
     { id: "problem", label: "Problem" },
     { id: "process", label: "Process" },
     { id: "solution-overview", label: "Integration of Information Architecture" },
-    { id: "design-challenge", label: "Design Challenge" },
+    { id: "design-challenge", label: "Network Operations 1st Version" },
     { id: "approach-strategy", label: "Approach & Strategy" },
     { id: "final-implementation", label: "Final Implementation" },
     // { id: "impact", label: "Impact" },  // IMPACT: re-enable with the section
@@ -427,17 +427,16 @@ export function VcfNetworkPage() {
                 </div>
               </div>
 
-              {/* Design Challenge */}
+              {/* Network Operations 1st Version.
+                  The id stays "design-challenge" so links already shared against
+                  this anchor keep working; only the label changed. */}
               <div className="mb-16" id="design-challenge">
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Design Challenge
+                  Network Operations 1st Version
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                   <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <div className="space-y-4">
-                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                        1st Version
-                      </h3>
                       <p>
                         For the first vRNI integration proposal, Network
                         Operations only includes and shows vRNI data:
@@ -505,10 +504,6 @@ export function VcfNetworkPage() {
                         })
                       }
                     />
-                    <figcaption className="text-gray-700 dark:text-gray-200 mt-4">
-                      The first proposal: all vRNI features surfaced on VCF Ops,
-                      mostly as quick links.
-                    </figcaption>
                   </figure>
                 </div>
               </div>
