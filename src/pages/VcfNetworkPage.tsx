@@ -220,20 +220,16 @@ export function VcfNetworkPage() {
             >
               {/* Header */}
               <div className="mb-16">
-                {/* Page title. Added for heading structure: these pages had no h1 —
-                    and in fact no visible project name at all, only the hero image. */}
-                <h1
-                  className="text-4xl md:text-5xl mb-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent"
-                  style={{ lineHeight: "1.3" }}
-                >
-                  VCF Network Operations
-                </h1>
+                {/* The title card at the top of the page already carries the
+                    project name and the tagline, so both were repeating on
+                    screen immediately underneath it and have been dropped.
 
-                <p className="text-xl text-gray-700 dark:text-gray-200 mb-10">
-                  Integrating advanced network capabilities into cloud-infra
-                  monitoring, addressing uncertainties in a real business
-                  environment.
-                </p>
+                    The h1 stays, visually hidden. A title card is an image, so
+                    without this the page would have no heading at all: nothing
+                    for a screen reader to announce as the page title, nothing
+                    for the document outline, and nothing for search results.
+                    `sr-only` keeps it available to those without drawing it. */}
+                <h1 className="sr-only">VCF Network Operations</h1>
 
                 {/* Project Metadata in 2x2 Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -247,7 +243,7 @@ export function VcfNetworkPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Team</p>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">2 Product Managers, 8 Engineers</p>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">3 Product Managers, 20+ Engineers</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Timeline</p>
