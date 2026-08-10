@@ -17,7 +17,11 @@ import netopsFinalImg from "../assets/netops/netops-final.png";
 export function VcfNetworkPage() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [expandedImage, setExpandedImage] = useState<{ src: string; alt: string } | null>(null);
+  // `cropped` mirrors the 1% trim the two product screenshots get in the page,
+  // so the expanded view shows the same framing rather than the raw capture.
+  const [expandedImage, setExpandedImage] = useState<
+    { src: string; alt: string; cropped?: boolean } | null
+  >(null);
   const [activeSection, setActiveSection] = useState<string>("");
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -463,6 +467,7 @@ export function VcfNetworkPage() {
                       setExpandedImage({
                         src: netopsFirstVersionImg,
                         alt: "First version of the Network Operations page",
+                        cropped: true,
                       })
                     }
                   >
@@ -544,6 +549,7 @@ export function VcfNetworkPage() {
                       setExpandedImage({
                         src: netopsFinalImg,
                         alt: "The revised Network Operations page after the scope change",
+                        cropped: true,
                       })
                     }
                   >
@@ -679,12 +685,24 @@ export function VcfNetworkPage() {
               >
                 <X className="w-8 h-8" />
               </button>
-              <div className="max-w-7xl max-h-[90vh] relative">
+              <div
+                className="max-w-7xl max-h-[90vh] relative"
+                style={
+                  expandedImage.cropped
+                    ? { overflow: 'hidden', borderRadius: '10px' }
+                    : undefined
+                }
+              >
                 <img
                   src={expandedImage.src}
                   alt={expandedImage.alt}
-                  className="max-w-full max-h-[90vh] object-contain"
-                  style={{ borderRadius: '10px' }}
+                  className="max-w-full max-h-[90vh] object-contain block"
+                  style={{
+                    borderRadius: '10px',
+                    ...(expandedImage.cropped
+                      ? { transform: 'scale(1.0204)' }
+                      : {}),
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
