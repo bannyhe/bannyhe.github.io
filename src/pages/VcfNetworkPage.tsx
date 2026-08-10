@@ -392,36 +392,35 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Integration of Information Architecture
                 </h2>
-                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-                  <p>
-                    The starting point was an inventory: everything vRNI shipped,
-                    written out flat — features like dashboards, alerts, flow
-                    insights, etc.
-                  </p>
-                  <p>
-                    I focused on grouping vRNI features into similar categories.
-                  </p>
-                  <p>
-                    I compared and envisioned how does each category fit under
-                    existing Ops Navigation.
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <p>
+                      The starting point was an inventory: everything vRNI
+                      shipped, written out flat — features like dashboards,
+                      alerts, flow insights, etc. I focused on grouping vRNI
+                      features into similar categories. I compared and envisioned
+                      how does each category fit under existing Ops Navigation.
+                    </p>
+                  </div>
+
+                  {/* The diagram carries a lot of small type, so it is clickable
+                      to open full size — at half a column the feature names are
+                      legible but tight. */}
+                  <figure>
+                    <img
+                      src={netopsIaImg}
+                      alt="Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsIaImg,
+                          alt: "Information architecture: grouping vRNI features and mapping them into Ops navigation",
+                        })
+                      }
+                    />
+                  </figure>
                 </div>
-                {/* One wide diagram rather than the template's 2x2 grid: this is
-                    a single two-stage flow and splitting it would break it. */}
-                <figure>
-                  <img
-                    src={netopsIaImg}
-                    alt="Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration."
-                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                    style={{ borderRadius: '10px' }}
-                    onClick={() =>
-                      setExpandedImage({
-                        src: netopsIaImg,
-                        alt: "Information architecture: grouping vRNI features and mapping them into Ops navigation",
-                      })
-                    }
-                  />
-                </figure>
               </div>
 
               {/* Design Challenge */}
