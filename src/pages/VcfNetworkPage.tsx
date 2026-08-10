@@ -284,24 +284,20 @@ export function VcfNetworkPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                   <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
-                      <span className="text-gray-900 dark:text-gray-100">
-                        Our main persona, Anita, is a VI Admin.
-                      </span>{" "}
-                      She monitors her infrastructure from VCF Operations, while
-                      Compute and Storage are already established as core
-                      capabilities, Network is the missing piece for bringing
-                      VMware's core products together under VCF Operations.
+                      Our main persona, Anita, is a VI Admin. She monitors her
+                      infrastructure from VCF Operations, while Compute and
+                      Storage are already established as core capabilities,
+                      Network is the missing piece for bringing VMware's core
+                      products together under VCF Operations.
                     </p>
                     <p>
-                      The work was to integrate the core Network Insights (vRNI)
-                      capabilities into the existing Operations branch.
-                    </p>
-                    <p>
-                      That framing set the constraint behind every decision that
-                      followed: preserve the workflows admins already depend on.
-                      Network had to arrive as a natural extension of the
-                      navigation Anita already knows, widening what she can see
-                      rather than changing how she works.
+                      Our goal was to integrate the core Network Insights (vRNI)
+                      capabilities into the existing Operations branch, which set
+                      the constraint behind every decision that followed:
+                      preserve the workflows admins already depend on. Network
+                      had to arrive as a natural extension of the navigation
+                      Anita already knows, widening what she can see rather than
+                      changing how she works.
                     </p>
                   </div>
                   <div>
