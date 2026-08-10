@@ -325,52 +325,31 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Process
                 </h2>
-                <div className="process-layout">
-                  <div className="process-copy space-y-6 text-gray-700 dark:text-gray-200">
-                    <p>
-                      The work ran from June to December 2024. It moved from
-                      structure, to a first proposal, through a change of
-                      direction halfway in, and finished on system-level
-                      alignment rather than new screens.
-                    </p>
+                {/* Bullets are keyed to the numbers on the graphic rather than
+                    repeating each milestone's name and dates, which the graphic
+                    already carries. */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <ul className="list-disc pl-6 space-y-3">
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
-                          Integration of Information Architecture
-                        </span>{" "}
-                        — grouped the vRNI feature set and mapped each group onto
-                        the navigation VCF Operations already had.
+                        Grouped vRNI's features and mapped them onto the
+                        navigation Ops already had.
                       </li>
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
-                          Network Operations 1st Version
-                        </span>{" "}
-                        — surfaced the full vRNI feature set inside VCF Ops,
-                        mostly as quick links, and put it in front of
-                        stakeholders.
+                        Put the full feature set in front of stakeholders, mostly
+                        as quick links.
                       </li>
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
-                          Scope Change for Network Operations
-                        </span>{" "}
-                        — the direction shifted: one home for both NSX and vRNI,
-                        narrowed to the top two or three features and integrated
-                        into Ops rather than linked out of it.
+                        Direction changed: one home for NSX and vRNI, narrowed to
+                        the top few features and integrated rather than linked.
                       </li>
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
-                          Convert Customized Patterns to Clarity
-                        </span>{" "}
-                        — audited vRNI's custom patterns against Clarity and
-                        converted them in phases, taking type, links and buttons
-                        before the complex widgets.
+                        Audited the custom patterns against Clarity and converted
+                        them in phases.
                       </li>
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
-                          Continuous Collaboration across Components
-                        </span>{" "}
-                        — ongoing alignment with product and engineering as the
-                        integration landed across component teams.
+                        Kept the integration aligned with product and engineering
+                        as it shipped.
                       </li>
                     </ul>
                   </div>
