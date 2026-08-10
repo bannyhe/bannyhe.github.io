@@ -57,6 +57,7 @@ export function VcfNetworkPage() {
         "process",
         "solution-overview",
         "design-challenge",
+        "scope-change",
         "approach-strategy",
         "final-implementation",
         // "impact",  // IMPACT: re-enable together with the section markup
@@ -99,6 +100,7 @@ export function VcfNetworkPage() {
     { id: "process", label: "Process" },
     { id: "solution-overview", label: "Integration of Information Architecture" },
     { id: "design-challenge", label: "Network Operations 1st Version" },
+    { id: "scope-change", label: "Scope Change" },
     { id: "approach-strategy", label: "Approach & Strategy" },
     { id: "final-implementation", label: "Final Implementation" },
     // { id: "impact", label: "Impact" },  // IMPACT: re-enable with the section
@@ -435,76 +437,96 @@ export function VcfNetworkPage() {
                   Network Operations 1st Version
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                    <div className="space-y-4">
-                      <p>
-                        For the first vRNI integration proposal, Network
-                        Operations only includes and shows vRNI data:
-                      </p>
-                      <ul className="list-disc pl-6 space-y-3">
-                        <li>All vRNI features are available on VCF Ops;</li>
-                        <li>Most of the vRNI features are quick links;</li>
-                        <li>
-                          Those features are not embedded with VCF Ops navigation,
-                          and one of the reasons is because the search
-                          technologies between vRNI and Ops are different, which
-                          will not happen for 9.0.
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                        Scope Change
-                      </h3>
-                      <p>
-                        The direction of vRNI integration changed, so the scope
-                        and requirements changed accordingly:
-                      </p>
-                      <ul className="list-disc pl-6 space-y-3">
-                        <li>
-                          Network Operations is a home for both NSX and vRNI;
-                        </li>
-                        <li>
-                          Instead of bringing all features to Ops without mapping
-                          them to Ops navigation properly, only focus on the top
-                          2–3 features;
-                        </li>
-                        <li>
-                          There is no quick link, and all the features are
-                          integrated with Ops.
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                        Key Constraints
-                      </h3>
-                      <ul className="list-disc pl-6 space-y-3">
-                        <li>
-                          The timeline for UX and engineering is restricted;
-                        </li>
-                        <li>
-                          It was unclear what data would be shown on NetOps.
-                        </li>
-                      </ul>
-                    </div>
+                  <div className="space-y-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <p>
+                      For the first vRNI integration proposal, Network Operations
+                      only includes and shows vRNI data:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>All vRNI features are available on VCF Ops;</li>
+                      <li>Most of the vRNI features are quick links;</li>
+                      <li>
+                        Those features are not embedded with VCF Ops navigation,
+                        and one of the reasons is because the search technologies
+                        between vRNI and Ops are different, which will not happen
+                        for 9.0.
+                      </li>
+                    </ul>
                   </div>
-                  <figure className="md:sticky md:top-28">
+                  {/* 1% trimmed off every edge. The wrapper clips and the image
+                      is scaled by 100/98, so the visible frame still fills the
+                      column rather than sitting inside a transparent margin. */}
+                  <figure
+                    className="md:sticky md:top-28 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsFirstVersionImg,
+                        alt: "First version of the Network Operations page",
+                      })
+                    }
+                  >
                     <img
                       src={netopsFirstVersionImg}
                       alt="The first Network Operations proposal inside VCF Ops: an Overview tab alongside three custom boards, with Network Alerts, Top Network Insights, NSX Enabled, Traffic Summary and Top Anomalies widgets."
-                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                      style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsFirstVersionImg,
-                          alt: "First version of the Network Operations page",
-                        })
-                      }
+                      className="w-full h-auto block"
+                      style={{ transform: 'scale(1.0204)' }}
                     />
                   </figure>
+                </div>
+              </div>
+
+              {/* Scope Change — promoted from a sub-heading to its own section.
+                  Key Constraints and Research Insights sit under it, which is the
+                  order they appear in the deck. */}
+              <div className="mb-16" id="scope-change">
+                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  Scope Change
+                </h2>
+                <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <div className="space-y-4">
+                    <p>
+                      The direction of vRNI integration changed, so the scope and
+                      requirements changed accordingly:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>Network Operations is a home for both NSX and vRNI;</li>
+                      <li>
+                        Instead of bringing all features to Ops without mapping
+                        them to Ops navigation properly, only focus on the top 2–3
+                        features;
+                      </li>
+                      <li>
+                        There is no quick link, and all the features are integrated
+                        with Ops.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                      Key Constraints
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>The timeline for UX and engineering is restricted;</li>
+                      <li>It was unclear what data would be shown on NetOps.</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                      Research Insights
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>
+                        Refer to product managers guideline between VCF and NSX to
+                        determine what data to be included in NetOps;
+                      </li>
+                      <li>
+                        Research sessions are planned as the reference for 9.1;
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
@@ -514,21 +536,6 @@ export function VcfNetworkPage() {
                   Approach & Strategy
                 </h2>
                 <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <div className="space-y-4">
-                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                      Research Insights
-                    </h3>
-                    <ul className="list-disc pl-6 space-y-3">
-                      <li>
-                        Refer to the product managers' guideline between VCF and
-                        NSX to determine what data should be included in NetOps;
-                      </li>
-                      <li>
-                        Research sessions are planned as the reference for 9.1.
-                      </li>
-                    </ul>
-                  </div>
-
                   <div className="space-y-4">
                     <h3 className="text-xl text-gray-900 dark:text-gray-100">
                       Convert Customized Patterns to Design Library
