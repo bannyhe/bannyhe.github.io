@@ -395,25 +395,15 @@ export function VcfNetworkPage() {
                 <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
                   <p>
                     The starting point was an inventory: everything vRNI shipped,
-                    written out flat — eighteen entries covering dashboards,
-                    alerts, thresholds, outliers, path, flow insights, incidents,
-                    migrations and settings.
+                    written out flat — features like dashboards, alerts, flow
+                    insights, etc.
                   </p>
                   <p>
-                    The first stage grouped them by what they are for rather than
-                    where they already sat, collapsing eighteen entries into ten:
-                    flow analysis, a NetOps landing page, network path, network
-                    map, applications, network troubleshooting, migration
-                    planning, security planning, crown jewel analysis and
-                    settings.
+                    I focused on grouping vRNI features into similar categories.
                   </p>
                   <p>
-                    The second stage placed each group into navigation VCF
-                    Operations already had, rather than adding a branch of its
-                    own. Five existing destinations absorbed the whole set:
-                    Analyze, Network Operations and Workload Mobility under
-                    Infrastructure Operations, Security Planning under Security,
-                    and Control Panel under Administration.
+                    I compared and envisioned how does each category fit under
+                    existing Ops Navigation.
                   </p>
                 </div>
                 {/* One wide diagram rather than the template's 2x2 grid: this is
