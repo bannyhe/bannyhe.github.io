@@ -97,7 +97,7 @@ export function VcfNetworkPage() {
     { id: "brief", label: "Brief" },
     { id: "problem", label: "Problem" },
     { id: "process", label: "Process" },
-    { id: "solution-overview", label: "Solution Overview" },
+    { id: "solution-overview", label: "Integration of Information Architecture" },
     { id: "design-challenge", label: "Design Challenge" },
     { id: "approach-strategy", label: "Approach & Strategy" },
     { id: "final-implementation", label: "Final Implementation" },
@@ -390,16 +390,37 @@ export function VcfNetworkPage() {
                 </div>
               </div>
 
-              {/* Solution Overview */}
+              {/* Integration of Information Architecture.
+                  The id stays "solution-overview" so any link already shared
+                  against this anchor keeps working; only the label changed. */}
               <div className="mb-16" id="solution-overview">
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Solution Overview
+                  Integration of Information Architecture
                 </h2>
-                <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-                  Integration of Information Architecture by grouping vRNI
-                  features and integrating them into Ops navigation, with a
-                  customizable dashboard and quick-link navigation to pages.
-                </p>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
+                  <p>
+                    The starting point was an inventory: everything vRNI shipped,
+                    written out flat — eighteen entries covering dashboards,
+                    alerts, thresholds, outliers, path, flow insights, incidents,
+                    migrations and settings.
+                  </p>
+                  <p>
+                    The first stage grouped them by what they are for rather than
+                    where they already sat, collapsing eighteen entries into ten:
+                    flow analysis, a NetOps landing page, network path, network
+                    map, applications, network troubleshooting, migration
+                    planning, security planning, crown jewel analysis and
+                    settings.
+                  </p>
+                  <p>
+                    The second stage placed each group into navigation VCF
+                    Operations already had, rather than adding a branch of its
+                    own. Five existing destinations absorbed the whole set:
+                    Analyze, Network Operations and Workload Mobility under
+                    Infrastructure Operations, Security Planning under Security,
+                    and Control Panel under Administration.
+                  </p>
+                </div>
                 {/* One wide diagram rather than the template's 2x2 grid: this is
                     a single two-stage flow and splitting it would break it. */}
                 <figure>
@@ -415,10 +436,6 @@ export function VcfNetworkPage() {
                       })
                     }
                   />
-                  <figcaption className="text-center text-gray-700 dark:text-gray-200 mt-4">
-                    Stage 1 groups the vRNI features; stage 2 maps each group into
-                    the existing Ops navigation.
-                  </figcaption>
                 </figure>
               </div>
 
