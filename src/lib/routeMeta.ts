@@ -14,6 +14,21 @@
 export const SITE_URL = "https://muheportfolio.com";
 export const SITE_NAME = "Mu He";
 
+/**
+ * Every page's browser tab reads exactly this, by request.
+ *
+ * Worth knowing what it costs, since it is easy to change back: with several
+ * tabs open none of them can be told apart, every bookmark saves under the same
+ * name, and a search result shows "MU HE" instead of the page's subject. The
+ * per-route `title` values below are therefore still used for og:title and
+ * twitter:title, so links shared into Slack or LinkedIn keep a meaningful
+ * headline even though the tab does not.
+ *
+ * To restore per-page tabs, use `metaForPath(...).title` in place of this in
+ * DocumentTitle (src/App.tsx) and in the prerender plugin (vite.config.ts).
+ */
+export const BROWSER_TITLE = "MU HE";
+
 /** Shown for any path with no entry below (mistyped URLs, removed pages). */
 export const DEFAULT_TITLE = "Mu He — Product Designer";
 export const DEFAULT_DESCRIPTION =

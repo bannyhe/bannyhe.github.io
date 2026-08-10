@@ -5,7 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
-import { metaForPath } from "./lib/routeMeta";
+import { metaForPath, BROWSER_TITLE } from "./lib/routeMeta";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -25,7 +25,10 @@ function ScrollToTop() {
 }
 
 /**
- * Keeps the tab title and meta description in step with the current route.
+ * Keeps the meta description in step with the current route. The tab title is
+ * deliberately the same on every page (see BROWSER_TITLE), so it is set here
+ * only to override whatever the previous route left behind.
+ *
  * First paint already carries the right values — the build writes a static HTML
  * file per route — so this only has to cover client-side navigation after that.
  */
@@ -33,8 +36,8 @@ function DocumentTitle() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const { title, description } = metaForPath(pathname);
-    document.title = title;
+    const { description } = metaForPath(pathname);
+    document.title = BROWSER_TITLE;
 
     const descriptionTag = document.querySelector(
       'meta[name="description"]',
