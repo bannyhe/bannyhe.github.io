@@ -325,55 +325,68 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Process
                 </h2>
-                {/* Graphic first, then the copy. The bullets stay keyed to the
-                    numbers on the graphic rather than repeating each milestone's
-                    name and dates, which the graphic already carries. */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <figure>
-                    <img
-                      src={netopsProcessImg}
-                      alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
-                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
-                      style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsProcessImg,
-                          alt: "Project timeline across five milestones, June to December 2024",
-                        })
-                      }
-                    />
-                  </figure>
+                {/* Full width, stacked: the timeline is a wide graphic with five
+                    labelled stops, and it only becomes properly legible at the
+                    full column width. */}
+                <figure className="mb-10">
+                  <img
+                    src={netopsProcessImg}
+                    alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsProcessImg,
+                        alt: "Project timeline across five milestones, June to December 2024",
+                      })
+                    }
+                  />
+                </figure>
 
-                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                    <p>
-                      The work ran from June to December 2024. It moved from
-                      structure, to a first proposal, through a change of
-                      direction halfway in, and finished on system-level
-                      alignment rather than new screens.
-                    </p>
-                    <ul className="list-disc pl-6 space-y-3">
-                      <li>
-                        Grouped vRNI's features and mapped them onto the
-                        navigation Ops already had.
-                      </li>
-                      <li>
-                        Put the full feature set in front of stakeholders, mostly
-                        as quick links.
-                      </li>
-                      <li>
-                        Direction changed: one home for NSX and vRNI, narrowed to
-                        the top few features and integrated rather than linked.
-                      </li>
-                      <li>
-                        Audited the custom patterns against Clarity and converted
-                        them in phases.
-                      </li>
-                      <li>
-                        Kept the integration aligned with product and engineering
-                        as it shipped.
-                      </li>
-                    </ul>
-                  </div>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p>
+                    The project ran from June to December 2024. It moved from
+                    structure, to a first proposal, through a change of direction
+                    halfway in, and finished on system-level alignment, which is a
+                    paradigm for real-world product integration.
+                  </p>
+                  <ul className="list-disc pl-6 space-y-3">
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Milestone 1:
+                      </span>{" "}
+                      Grouped vRNI's features and mapped them onto the navigation
+                      Ops already had.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Milestone 2:
+                      </span>{" "}
+                      Put the full feature set in front of stakeholders, mostly as
+                      quick links.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Milestone 3:
+                      </span>{" "}
+                      Direction changed — one home for NSX and vRNI, narrowed to
+                      the top few features and integrated rather than linked.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Milestone 4:
+                      </span>{" "}
+                      Audited the custom patterns against Clarity and converted
+                      them in phases.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100">
+                        Milestone 5:
+                      </span>{" "}
+                      Kept the integration aligned with product and engineering as
+                      it shipped.
+                    </li>
+                  </ul>
                 </div>
               </div>
 
