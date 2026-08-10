@@ -279,17 +279,33 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Problem
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                {/* items-start, not items-center: the copy is now taller than the
+                    diagram, and centring left the image floating mid-column. */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                   <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
                       <span className="text-gray-900 dark:text-gray-100">
-                        VI Admin
+                        Anita is a VI Admin.
                       </span>{" "}
-                      — monitor infrastructure on VCF Operations.
+                      She monitors her infrastructure from VCF Operations, where
+                      Compute and Storage are already established as core
+                      capabilities. Network is the missing third — and until it is
+                      there, understanding what the network is doing means leaving
+                      the console for a separate appliance.
                     </p>
                     <p>
-                      Integrating Network Insights (vRNI) into VCF Operations as
-                      the core Network capability, along with Compute and Storage.
+                      Networking is a crucial part of bringing VMware's core
+                      products together under VCF Operations. The work was to
+                      integrate the core Network Insights (vRNI) capabilities into
+                      the existing Operations branch, alongside Compute and
+                      Storage — not to attach a second product beside it.
+                    </p>
+                    <p>
+                      That framing set the constraint behind every decision that
+                      followed: preserve the workflows admins already depend on.
+                      Network had to arrive as a natural extension of the
+                      navigation Anita already knows, widening what she can see
+                      rather than changing how she works.
                     </p>
                   </div>
                   <div>
