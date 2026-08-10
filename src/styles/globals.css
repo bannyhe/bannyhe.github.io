@@ -260,6 +260,32 @@ html {
   line-height: inherit;
 }
 
+/* Process section: narrative on the left, timeline graphic on the right.
+   An even split would squeeze the timeline — it is a wide graphic with five
+   labelled stops — so the image is given the larger share. Hand-written because
+   the shipped Tailwind stylesheet has no col-span-* utilities and stops at
+   grid-cols-3, so the usual "2 of 5 columns" approach is not available. */
+.process-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .process-layout {
+    grid-template-columns: 2fr 3fr;
+    gap: 2.5rem;
+  }
+}
+
+/* A step down from the page's text-lg: this column is narrow, and five bullets
+   at body size would run much longer than the graphic beside them. */
+.process-copy {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 /* Route-level loading and the 404 page.
    These reserve roughly a page's worth of height so the footer does not jump
    up and then back down while a split chunk loads.

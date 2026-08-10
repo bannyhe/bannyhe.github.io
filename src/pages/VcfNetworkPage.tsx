@@ -325,20 +325,71 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Process
                 </h2>
-                <figure>
-                  <img
-                    src={netopsProcessImg}
-                    alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
-                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
-                    style={{ borderRadius: '10px' }}
-                    onClick={() =>
-                      setExpandedImage({
-                        src: netopsProcessImg,
-                        alt: "Project timeline across five milestones, June to December 2024",
-                      })
-                    }
-                  />
-                </figure>
+                <div className="process-layout">
+                  <div className="process-copy space-y-6 text-gray-700 dark:text-gray-200">
+                    <p>
+                      The work ran from June to December 2024. It moved from
+                      structure, to a first proposal, through a change of
+                      direction halfway in, and finished on system-level
+                      alignment rather than new screens.
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Integration of Information Architecture
+                        </span>{" "}
+                        — grouped the vRNI feature set and mapped each group onto
+                        the navigation VCF Operations already had.
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Network Operations 1st Version
+                        </span>{" "}
+                        — surfaced the full vRNI feature set inside VCF Ops,
+                        mostly as quick links, and put it in front of
+                        stakeholders.
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Scope Change for Network Operations
+                        </span>{" "}
+                        — the direction shifted: one home for both NSX and vRNI,
+                        narrowed to the top two or three features and integrated
+                        into Ops rather than linked out of it.
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Convert Customized Patterns to Clarity
+                        </span>{" "}
+                        — audited vRNI's custom patterns against Clarity and
+                        converted them in phases, taking type, links and buttons
+                        before the complex widgets.
+                      </li>
+                      <li>
+                        <span className="text-gray-900 dark:text-gray-100">
+                          Continuous Collaboration across Components
+                        </span>{" "}
+                        — ongoing alignment with product and engineering as the
+                        integration landed across component teams.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <figure>
+                    <img
+                      src={netopsProcessImg}
+                      alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsProcessImg,
+                          alt: "Project timeline across five milestones, June to December 2024",
+                        })
+                      }
+                    />
+                  </figure>
+                </div>
               </div>
 
               {/* Solution Overview */}
