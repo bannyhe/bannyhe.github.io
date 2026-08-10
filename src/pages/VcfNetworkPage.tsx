@@ -243,11 +243,11 @@ export function VcfNetworkPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Team</p>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">3 Product Managers, 20+ Engineers</p>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">1 Product Manager, 1 IX, 1 Accessibility, 10+ Engineers</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Timeline</p>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">March 2024 - March 2025</p>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">June 2024 - December 2024</p>
                   </div>
                 </div>
               </div>
