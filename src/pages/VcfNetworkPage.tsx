@@ -534,18 +534,24 @@ export function VcfNetworkPage() {
                       is the outcome of this scope change, so it belongs beside
                       the copy describing it. Sticky so it stays in view while
                       reading the constraints and research notes. */}
-                  <figure className="md:sticky md:top-28">
+                  {/* 1% trimmed off every edge, matching the 1st Version
+                      screenshot: the figure clips and the image is scaled by
+                      100/98, so the trimmed frame still fills the column. */}
+                  <figure
+                    className="md:sticky md:top-28 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsFinalImg,
+                        alt: "The revised Network Operations page after the scope change",
+                      })
+                    }
+                  >
                     <img
                       src={netopsFinalImg}
                       alt="The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows."
-                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                      style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsFinalImg,
-                          alt: "The revised Network Operations page after the scope change",
-                        })
-                      }
+                      className="w-full h-auto block"
+                      style={{ transform: 'scale(1.0204)' }}
                     />
                   </figure>
                 </div>
