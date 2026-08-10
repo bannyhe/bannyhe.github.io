@@ -59,7 +59,7 @@ export function VcfNetworkPage() {
         "design-challenge",
         "scope-change",
         "approach-strategy",
-        "final-implementation",
+        // "final-implementation",  // FINAL IMPLEMENTATION: re-enable with the section
         // "impact",  // IMPACT: re-enable together with the section markup
         "learnings-reflections"
       ];
@@ -101,8 +101,8 @@ export function VcfNetworkPage() {
     { id: "solution-overview", label: "Integration of Information Architecture" },
     { id: "design-challenge", label: "Network Operations 1st Version" },
     { id: "scope-change", label: "Scope Change" },
-    { id: "approach-strategy", label: "Approach & Strategy" },
-    { id: "final-implementation", label: "Final Implementation" },
+    { id: "approach-strategy", label: "Convert Customized Patterns to Design Library" },
+    // { id: "final-implementation", label: "Final Implementation" },  // FINAL IMPLEMENTATION
     // { id: "impact", label: "Impact" },  // IMPACT: re-enable with the section
     { id: "learnings-reflections", label: "Learnings & Reflections" }
   ];
@@ -483,63 +483,83 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Scope Change
                 </h2>
-                <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <div className="space-y-4">
-                    <p>
-                      The direction of vRNI integration changed, so the scope and
-                      requirements changed accordingly:
-                    </p>
-                    <ul className="list-disc pl-6 space-y-3">
-                      <li>Network Operations is a home for both NSX and vRNI;</li>
-                      <li>
-                        Instead of bringing all features to Ops without mapping
-                        them to Ops navigation properly, only focus on the top 2–3
-                        features;
-                      </li>
-                      <li>
-                        There is no quick link, and all the features are integrated
-                        with Ops.
-                      </li>
-                    </ul>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <div className="space-y-4">
+                      <p>
+                        The direction of vRNI integration changed, so the scope
+                        and requirements changed accordingly:
+                      </p>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>Network Operations is a home for both NSX and vRNI;</li>
+                        <li>
+                          Instead of bringing all features to Ops without mapping
+                          them to Ops navigation properly, only focus on the top
+                          2–3 features;
+                        </li>
+                        <li>
+                          There is no quick link, and all the features are
+                          integrated with Ops.
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        Key Constraints
+                      </h3>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>The timeline for UX and engineering is restricted;</li>
+                        <li>It was unclear what data would be shown on NetOps.</li>
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
+                        Research Insights
+                      </h3>
+                      <ul className="list-disc pl-6 space-y-3">
+                        <li>
+                          Refer to product managers guideline between VCF and NSX
+                          to determine what data to be included in NetOps;
+                        </li>
+                        <li>
+                          Research sessions are planned as the reference for 9.1;
+                        </li>
+                      </ul>
+                    </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                      Key Constraints
-                    </h3>
-                    <ul className="list-disc pl-6 space-y-3">
-                      <li>The timeline for UX and engineering is restricted;</li>
-                      <li>It was unclear what data would be shown on NetOps.</li>
-                    </ul>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                      Research Insights
-                    </h3>
-                    <ul className="list-disc pl-6 space-y-3">
-                      <li>
-                        Refer to product managers guideline between VCF and NSX to
-                        determine what data to be included in NetOps;
-                      </li>
-                      <li>
-                        Research sessions are planned as the reference for 9.1;
-                      </li>
-                    </ul>
-                  </div>
+                  {/* The revised design, moved up from Final Implementation: it
+                      is the outcome of this scope change, so it belongs beside
+                      the copy describing it. Sticky so it stays in view while
+                      reading the constraints and research notes. */}
+                  <figure className="md:sticky md:top-28">
+                    <img
+                      src={netopsFinalImg}
+                      alt="The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsFinalImg,
+                          alt: "The revised Network Operations page after the scope change",
+                        })
+                      }
+                    />
+                  </figure>
                 </div>
               </div>
 
-              {/* Approach & Strategy */}
+              {/* Convert Customized Patterns to Design Library — promoted from a
+                  sub-heading. The id stays "approach-strategy" so links already
+                  shared against this anchor keep working. */}
               <div className="mb-16" id="approach-strategy">
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Approach & Strategy
+                  Convert Customized Patterns to Design Library
                 </h2>
                 <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                   <div className="space-y-4">
-                    <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                      Convert Customized Patterns to Design Library
-                    </h3>
                     <p>
                       As a major step of the integration process, I broke the
                       pattern conversion down into three phases, based on the time
@@ -572,31 +592,18 @@ export function VcfNetworkPage() {
                 </div>
               </div>
 
-              {/* Final Implementation */}
-              <div className="mb-16" id="final-implementation">
-                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Final Implementation
-                </h2>
-                <figure>
-                  <img
-                    src={netopsFinalImg}
-                    alt="The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows."
-                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                    style={{ borderRadius: '10px' }}
-                    onClick={() =>
-                      setExpandedImage({
-                        src: netopsFinalImg,
-                        alt: "The revised Network Operations page after the scope change",
-                      })
-                    }
-                  />
-                  <figcaption className="text-gray-700 dark:text-gray-200 mt-4">
-                    After the scope change: the custom boards and quick links are
-                    gone, and what remains is integrated into Ops navigation and
-                    focused on a small number of high-value views.
-                  </figcaption>
-                </figure>
-              </div>
+              {/*
+                FINAL IMPLEMENTATION — removed, not hidden.
+
+                Its only content was the revised-design screenshot, which now
+                sits beside the Scope Change copy that explains it. A heading
+                with nothing under it reads as a broken page, so the section is
+                gone rather than empty.
+
+                To bring it back: re-add the markup here, and uncomment the two
+                entries marked FINAL IMPLEMENTATION in the scroll-spy list and
+                in tableOfContents.
+              */}
 
               {/*
                 IMPACT — not rendered yet, on purpose.
