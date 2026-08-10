@@ -393,13 +393,17 @@ export function VcfNetworkPage() {
                   Integration of Information Architecture
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
-                      The starting point was an inventory: everything vRNI
-                      shipped, written out flat — features like dashboards,
-                      alerts, flow insights, etc. I focused on grouping vRNI
-                      features into similar categories. I compared and envisioned
-                      how does each category fit under existing Ops Navigation.
+                      To begin with, I broke down the Information Architecture by
+                      a few major steps. The starting point was an inventory:
+                      everything vRNI shipped, as a flat list of features like
+                      dashboards, alerts, flow insights, etc.
+                    </p>
+                    <p>
+                      Then, I focused on grouping vRNI features into similar
+                      categories, and synthesized the workflows on how each
+                      category may fit under existing Ops Navigation.
                     </p>
                   </div>
 
