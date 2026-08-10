@@ -285,20 +285,16 @@ export function VcfNetworkPage() {
                   <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
                       <span className="text-gray-900 dark:text-gray-100">
-                        Anita is a VI Admin.
+                        Our main persona, Anita, is a VI Admin.
                       </span>{" "}
-                      She monitors her infrastructure from VCF Operations, where
+                      She monitors her infrastructure from VCF Operations, while
                       Compute and Storage are already established as core
-                      capabilities. Network is the missing third — and until it is
-                      there, understanding what the network is doing means leaving
-                      the console for a separate appliance.
+                      capabilities, Network is the missing piece for bringing
+                      VMware's core products together under VCF Operations.
                     </p>
                     <p>
-                      Networking is a crucial part of bringing VMware's core
-                      products together under VCF Operations. The work was to
-                      integrate the core Network Insights (vRNI) capabilities into
-                      the existing Operations branch, alongside Compute and
-                      Storage — not to attach a second product beside it.
+                      The work was to integrate the core Network Insights (vRNI)
+                      capabilities into the existing Operations branch.
                     </p>
                     <p>
                       That framing set the constraint behind every decision that
