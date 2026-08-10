@@ -9,6 +9,7 @@ import { Badge } from "../components/ui/badge";
 // PNG at all — it is an ASCII file containing base64 — so it could never render.
 import netopsOverviewImg from "../assets/netops/netops-overview.png";
 import netopsContextImg from "../assets/netops/netops-context.png";
+import netopsProcessImg from "../assets/netops/netops-process.png";
 import netopsIaImg from "../assets/netops/netops-ia.png";
 import netopsFirstVersionImg from "../assets/netops/netops-first-version.png";
 import netopsFinalImg from "../assets/netops/netops-final.png";
@@ -53,6 +54,7 @@ export function VcfNetworkPage() {
       const sections = [
         "brief",
         "problem",
+        "process",
         "solution-overview",
         "design-challenge",
         "approach-strategy",
@@ -94,6 +96,7 @@ export function VcfNetworkPage() {
   const tableOfContents = [
     { id: "brief", label: "Brief" },
     { id: "problem", label: "Problem" },
+    { id: "process", label: "Process" },
     { id: "solution-overview", label: "Solution Overview" },
     { id: "design-challenge", label: "Design Challenge" },
     { id: "approach-strategy", label: "Approach & Strategy" },
@@ -315,6 +318,27 @@ export function VcfNetworkPage() {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Process */}
+              <div className="mb-16" id="process">
+                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  Process
+                </h2>
+                <figure>
+                  <img
+                    src={netopsProcessImg}
+                    alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
+                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                    style={{ borderRadius: '10px' }}
+                    onClick={() =>
+                      setExpandedImage({
+                        src: netopsProcessImg,
+                        alt: "Project timeline across five milestones, June to December 2024",
+                      })
+                    }
+                  />
+                </figure>
               </div>
 
               {/* Solution Overview */}
