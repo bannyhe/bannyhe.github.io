@@ -3,7 +3,7 @@
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
   import { fileURLToPath } from 'url';
-  import { ROUTE_META, SITE_URL } from './src/lib/routeMeta';
+  import { ROUTE_META, SITE_URL, BROWSER_TITLE } from './src/lib/routeMeta';
 
   // Plugin to handle ../src/assets paths - uses placeholder for missing files
   const assetPathPlugin = () => {
@@ -90,7 +90,14 @@
           const url = SITE_URL + (meta.path === '/' ? '/' : meta.path);
 
           let html = template;
-          html = swap(html, /<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
+          // The tab title is the same site-wide by request; og:title and
+          // twitter:title below stay per-route so shared links keep a
+          // meaningful headline.
+          html = swap(
+            html,
+            /<title>[\s\S]*?<\/title>/,
+            `<title>${escapeHtml(BROWSER_TITLE)}</title>`
+          );
           html = swap(
             html,
             /<meta name="description" content="[^"]*"\s*\/?>/,
