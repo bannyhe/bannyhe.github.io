@@ -573,9 +573,12 @@ export function VcfNetworkPage() {
                     </ul>
                   </div>
 
-                  {/* Converted patterns in place. Cropped 1% like the other
-                      screen captures on this page, and clickable to open full
-                      size — at half a column the interface type is small. */}
+                  {/* Converted patterns in place. These two are cropped in the
+                      files themselves — 1% off the sides and top, 20% off the
+                      bottom, where the capture had a band of empty canvas — so
+                      the page and the expanded view agree without any CSS to
+                      keep in step. Clickable, since interface type is small at
+                      half a column. */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {[
                       {
@@ -591,13 +594,11 @@ export function VcfNetworkPage() {
                     ].map((shot) => (
                       <figure
                         key={shot.src}
-                        className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                        style={{ borderRadius: '10px' }}
+                        className="cursor-pointer hover:opacity-90 transition-opacity"
                         onClick={() =>
                           setExpandedImage({
                             src: shot.src,
                             alt: shot.expandedAlt,
-                            cropped: true,
                           })
                         }
                       >
@@ -605,7 +606,7 @@ export function VcfNetworkPage() {
                           src={shot.src}
                           alt={shot.alt}
                           className="w-full h-auto block"
-                          style={{ transform: 'scale(1.0204)' }}
+                          style={{ borderRadius: '10px' }}
                         />
                       </figure>
                     ))}
