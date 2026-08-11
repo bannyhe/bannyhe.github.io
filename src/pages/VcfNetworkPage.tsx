@@ -361,39 +361,7 @@ export function VcfNetworkPage() {
                     halfway in, and finished on system-level alignment, which is a
                     paradigm for real-world product integration.
                   </p>
-                  <ul className="list-disc pl-6 space-y-3">
-                    <li>
-                      <span className="font-bold text-gray-900 dark:text-gray-100">
-                        Milestone 1:
-                      </span>{" "}
-                      Integration of Information Architecture
-                    </li>
-                    <li>
-                      <span className="font-bold text-gray-900 dark:text-gray-100">
-                        Milestone 2:
-                      </span>{" "}
-                      Network Operations 1st Version
-                    </li>
-                    <li>
-                      <span className="font-bold text-gray-900 dark:text-gray-100">
-                        Milestone 3:
-                      </span>{" "}
-                      Scope Change for Network Operations
-                    </li>
-                    <li>
-                      <span className="font-bold text-gray-900 dark:text-gray-100">
-                        Milestone 4:
-                      </span>{" "}
-                      Convert Customized Patterns to Clarity
-                    </li>
-                    <li>
-                      <span className="font-bold text-gray-900 dark:text-gray-100">
-                        Milestone 5:
-                      </span>{" "}
-                      Continuous Collaboration across Components
-                    </li>
-                  </ul>
-                  </div>
+                                    </div>
                 </div>
               </div>
 
@@ -582,21 +550,21 @@ export function VcfNetworkPage() {
                     </p>
                     <ul className="list-disc pl-6 space-y-3">
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
+                        <span className="font-bold text-gray-900 dark:text-gray-100">
                           Phase 1:
                         </span>{" "}
                         Documented vRNI customized patterns and looked for the
                         equivalent Clarity Design patterns;
                       </li>
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
+                        <span className="font-bold text-gray-900 dark:text-gray-100">
                           Phase 2:
                         </span>{" "}
                         Started from simple components like fonts, links and
                         buttons;
                       </li>
                       <li>
-                        <span className="text-gray-900 dark:text-gray-100">
+                        <span className="font-bold text-gray-900 dark:text-gray-100">
                           Phase 3:
                         </span>{" "}
                         Continued to align on complex patterns like widgets and
@@ -708,8 +676,18 @@ export function VcfNetworkPage() {
                   </div>
 
                   {/* Conceptual illustration, not a screen capture: no 1% trim
-                      and no click-to-expand, since there is no detail to read. */}
-                  <figure>
+                      and no click-to-expand, since there is no detail to read.
+
+                      Held below the column width and centred in its cell. At full
+                      width it stood taller than the copy beside it, and the
+                      artwork's own generous margins made it read larger still. */}
+                  <figure
+                    style={{
+                      maxWidth: '460px',
+                      marginInline: 'auto',
+                      alignSelf: 'center',
+                    }}
+                  >
                     <img
                       src={netopsLearningsImg}
                       alt="Illustration of five people fitting four large jigsaw pieces together."
