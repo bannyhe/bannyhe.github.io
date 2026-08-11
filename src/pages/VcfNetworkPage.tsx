@@ -15,6 +15,7 @@ import netopsFirstVersionImg from "../assets/netops/netops-first-version.png";
 import netopsFinalImg from "../assets/netops/netops-final.png";
 import netopsClarityFlowsImg from "../assets/netops/netops-clarity-flows.png";
 import netopsClarityAppsImg from "../assets/netops/netops-clarity-applications.png";
+import netopsLearningsImg from "../assets/netops/netops-learnings.png";
 
 export function VcfNetworkPage() {
   const ref = useRef(null);
@@ -677,34 +678,48 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Learnings & Reflections
                 </h2>
-                <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <ul className="list-disc pl-6 space-y-4">
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">
-                        Break down large projects into manageable steps
-                      </span>
-                      : It's common to feel overwhelmed by the scope while working
-                      on a complex project. By dividing the overall objective into
-                      small, digestible tasks.
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">
-                        Ambiguity is opportunity, not barrier
-                      </span>
-                      : As a designer, while dealing with user scenarios with no
-                      clarity or prior experience, I view it as a time for
-                      innovation rather than a roadblock, and find aspects to
-                      explore and break through with creativity.
-                    </li>
-                    <li>
-                      <span className="text-gray-900 dark:text-gray-100">
-                        Strategic thinking is embedded in design decisions
-                      </span>
-                      : A product designer should not only create beautiful
-                      interfaces, but also think holistically and strategically
-                      about every design decision before implementing.
-                    </li>
-                  </ul>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <ul className="list-disc pl-6 space-y-4">
+                      <li>
+                        <span className="font-bold text-gray-900 dark:text-gray-100">
+                          Break down large projects into manageable steps:
+                        </span>{" "}
+                        It's common to feel overwhelmed by the scope while working
+                        on a complex project. By dividing the overall objective
+                        into small, digestible tasks.
+                      </li>
+                      <li>
+                        <span className="font-bold text-gray-900 dark:text-gray-100">
+                          Ambiguity is opportunity, not barrier:
+                        </span>{" "}
+                        As a designer, while dealing with user scenarios with no
+                        clarity or prior experience, I view it as a time for
+                        innovation rather than a roadblock, and find aspects to
+                        explore and break through with creativity.
+                      </li>
+                      <li>
+                        <span className="font-bold text-gray-900 dark:text-gray-100">
+                          Strategic thinking is embedded in design decisions:
+                        </span>{" "}
+                        A product designer should not only create beautiful
+                        interfaces, but also think holistically and strategically
+                        about every design decision before implementing.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Conceptual illustration rather than a screen capture, so no
+                      1% trim and no click-to-expand: there is no detail in it to
+                      go and read. */}
+                  <figure>
+                    <img
+                      src={netopsLearningsImg}
+                      alt="Illustration of five people fitting four large jigsaw pieces together."
+                      className="w-full h-auto block"
+                      style={{ borderRadius: '10px' }}
+                    />
+                  </figure>
                 </div>
               </div>
             </motion.div>
