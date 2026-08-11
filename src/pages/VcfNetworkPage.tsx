@@ -13,6 +13,8 @@ import netopsProcessImg from "../assets/netops/netops-process.png";
 import netopsIaImg from "../assets/netops/netops-ia.png";
 import netopsFirstVersionImg from "../assets/netops/netops-first-version.png";
 import netopsFinalImg from "../assets/netops/netops-final.png";
+import netopsClarityFlowsImg from "../assets/netops/netops-clarity-flows.png";
+import netopsClarityAppsImg from "../assets/netops/netops-clarity-applications.png";
 
 export function VcfNetworkPage() {
   const ref = useRef(null);
@@ -441,22 +443,6 @@ export function VcfNetworkPage() {
                   Network Operations 1st Version
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <div className="space-y-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                    <p>
-                      For the first vRNI integration proposal, Network Operations
-                      only includes and shows vRNI data:
-                    </p>
-                    <ul className="list-disc pl-6 space-y-3">
-                      <li>All vRNI features are available on VCF Ops;</li>
-                      <li>Most of the vRNI features are quick links;</li>
-                      <li>
-                        Those features are not embedded with VCF Ops navigation,
-                        and one of the reasons is because the search technologies
-                        between vRNI and Ops are different, which will not happen
-                        for 9.0.
-                      </li>
-                    </ul>
-                  </div>
                   {/* 1% trimmed off every edge. The wrapper clips and the image
                       is scaled by 100/98, so the visible frame still fills the
                       column rather than sitting inside a transparent margin. */}
@@ -478,6 +464,23 @@ export function VcfNetworkPage() {
                       style={{ transform: 'scale(1.0204)' }}
                     />
                   </figure>
+
+                  <div className="space-y-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <p>
+                      For the first vRNI integration proposal, Network Operations
+                      only includes and shows vRNI data:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
+                      <li>All vRNI features are available on VCF Ops;</li>
+                      <li>Most of the vRNI features are quick links;</li>
+                      <li>
+                        Those features are not embedded with VCF Ops navigation,
+                        and one of the reasons is because the search technologies
+                        between vRNI and Ops are different, which will not happen
+                        for 9.0.
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
@@ -501,10 +504,6 @@ export function VcfNetworkPage() {
                           Instead of bringing all features to Ops without mapping
                           them to Ops navigation properly, only focus on the top
                           2–3 features;
-                        </li>
-                        <li>
-                          There is no quick link, and all the features are
-                          integrated with Ops.
                         </li>
                       </ul>
                     </div>
@@ -600,6 +599,44 @@ export function VcfNetworkPage() {
                         list views.
                       </li>
                     </ul>
+                  </div>
+
+                  {/* Converted patterns in place. Cropped 1% like the other
+                      screen captures on this page, and clickable to open full
+                      size — at half a column the interface type is small. */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {[
+                      {
+                        src: netopsClarityFlowsImg,
+                        alt: "Analyze, Flows tab in VCF Operations: a network performance view of flows by TCP round trip time, with deviation sliders and a Sankey diagram splitting traffic into abnormal and normal.",
+                        expandedAlt: "Analyze — Flows, rebuilt on Clarity patterns",
+                      },
+                      {
+                        src: netopsClarityAppsImg,
+                        alt: "Business Applications in VCF Operations: flow-based discovery showing a hexagonal application topology beside a table of discovered applications with confidence, tiers and save actions.",
+                        expandedAlt: "Business Applications — flow based discovery, rebuilt on Clarity patterns",
+                      },
+                    ].map((shot) => (
+                      <figure
+                        key={shot.src}
+                        className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                        style={{ borderRadius: '10px' }}
+                        onClick={() =>
+                          setExpandedImage({
+                            src: shot.src,
+                            alt: shot.expandedAlt,
+                            cropped: true,
+                          })
+                        }
+                      >
+                        <img
+                          src={shot.src}
+                          alt={shot.alt}
+                          className="w-full h-auto block"
+                          style={{ transform: 'scale(1.0204)' }}
+                        />
+                      </figure>
+                    ))}
                   </div>
                 </div>
               </div>
