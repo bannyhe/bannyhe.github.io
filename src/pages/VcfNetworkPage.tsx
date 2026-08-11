@@ -68,6 +68,7 @@ export function VcfNetworkPage() {
         "approach-strategy",
         // "final-implementation",  // FINAL IMPLEMENTATION: re-enable with the section
         // "impact",  // IMPACT: re-enable together with the section markup
+        "continuous-collaboration",
         "learnings-reflections"
       ];
 
@@ -111,6 +112,7 @@ export function VcfNetworkPage() {
     { id: "approach-strategy", label: "Convert Customized Patterns to Design Library" },
     // { id: "final-implementation", label: "Final Implementation" },  // FINAL IMPLEMENTATION
     // { id: "impact", label: "Impact" },  // IMPACT: re-enable with the section
+    { id: "continuous-collaboration", label: "Continuous Collaboration across Components" },
     { id: "learnings-reflections", label: "Learnings & Reflections" }
   ];
 
@@ -334,25 +336,25 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Process
                 </h2>
-                {/* Full width, stacked: the timeline is a wide graphic with five
-                    labelled stops, and it only becomes properly legible at the
-                    full column width. */}
-                <figure className="mb-10">
-                  <img
-                    src={netopsProcessImg}
-                    alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
-                    className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
-                    style={{ borderRadius: '10px' }}
-                    onClick={() =>
-                      setExpandedImage({
-                        src: netopsProcessImg,
-                        alt: "Project timeline across five milestones, June to December 2024",
-                      })
-                    }
-                  />
-                </figure>
+                {/* Half and half, graphic first. The timeline is wide, so at this
+                    width its labels are small — click to open it full size. */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  <figure>
+                    <img
+                      src={netopsProcessImg}
+                      alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
+                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsProcessImg,
+                          alt: "Project timeline across five milestones, June to December 2024",
+                        })
+                      }
+                    />
+                  </figure>
 
-                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                   <p>
                     The project ran from June to December 2024. It moved from
                     structure, to a first proposal, through a change of direction
@@ -391,6 +393,7 @@ export function VcfNetworkPage() {
                       Continuous Collaboration across Components
                     </li>
                   </ul>
+                  </div>
                 </div>
               </div>
 
@@ -673,45 +676,39 @@ export function VcfNetworkPage() {
                   3. Uncomment the Impact entry in `tableOfContents`.
               */}
 
-              {/* Learnings & Reflections */}
-              <div className="mb-16" id="learnings-reflections">
+              {/* Continuous Collaboration across Components — milestone 5 on the
+                  Process timeline. Takes the illustration that briefly sat in
+                  Learnings; it suits collaboration better than reflection. */}
+              <div className="mb-16" id="continuous-collaboration">
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Learnings & Reflections
+                  Continuous Collaboration across Components
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                    <ul className="list-disc pl-6 space-y-4">
+                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <p>
+                      Complete Network Operations for VCF Ops 9.0 is never the end
+                      of the journey:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-3">
                       <li>
-                        <span className="font-bold text-gray-900 dark:text-gray-100">
-                          Break down large projects into manageable steps:
-                        </span>{" "}
-                        It's common to feel overwhelmed by the scope while working
-                        on a complex project. By dividing the overall objective
-                        into small, digestible tasks.
+                        Continue to engage UX and Clarity teams to ensure the
+                        consistency;
                       </li>
                       <li>
-                        <span className="font-bold text-gray-900 dark:text-gray-100">
-                          Ambiguity is opportunity, not barrier:
-                        </span>{" "}
-                        As a designer, while dealing with user scenarios with no
-                        clarity or prior experience, I view it as a time for
-                        innovation rather than a roadblock, and find aspects to
-                        explore and break through with creativity.
+                        Connect the dots for any vRNI related work streams like
+                        security planning, migration, adoption, vRNI console etc
+                        to increase the visibility of outstanding tasks;
                       </li>
                       <li>
-                        <span className="font-bold text-gray-900 dark:text-gray-100">
-                          Strategic thinking is embedded in design decisions:
-                        </span>{" "}
-                        A product designer should not only create beautiful
-                        interfaces, but also think holistically and strategically
-                        about every design decision before implementing.
+                        Collaborate with stakeholders not only from vRNI, but also
+                        from NSX and Ops teams to overview any features scale to
+                        grow the products.
                       </li>
                     </ul>
                   </div>
 
-                  {/* Conceptual illustration rather than a screen capture, so no
-                      1% trim and no click-to-expand: there is no detail in it to
-                      go and read. */}
+                  {/* Conceptual illustration, not a screen capture: no 1% trim
+                      and no click-to-expand, since there is no detail to read. */}
                   <figure>
                     <img
                       src={netopsLearningsImg}
@@ -720,6 +717,42 @@ export function VcfNetworkPage() {
                       style={{ borderRadius: '10px' }}
                     />
                   </figure>
+                </div>
+              </div>
+
+              {/* Learnings & Reflections */}
+              <div className="mb-16" id="learnings-reflections">
+                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  Learnings & Reflections
+                </h2>
+                <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <ul className="list-disc pl-6 space-y-4">
+                    <li>
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
+                        Break down large projects into manageable steps:
+                      </span>{" "}
+                      It's common to feel overwhelmed by the scope while working
+                      on a complex project. By dividing the overall objective
+                      into small, digestible tasks.
+                    </li>
+                    <li>
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
+                        Ambiguity is opportunity, not barrier:
+                      </span>{" "}
+                      As a designer, while dealing with user scenarios with no
+                      clarity or prior experience, I view it as a time for
+                      innovation rather than a roadblock, and find aspects to
+                      explore and break through with creativity.
+                    </li>
+                    <li>
+                      <span className="font-bold text-gray-900 dark:text-gray-100">
+                        Strategic thinking is embedded in design decisions:
+                      </span>{" "}
+                      A product designer should not only create beautiful
+                      interfaces, but also think holistically and strategically
+                      about every design decision before implementing.
+                    </li>
+                  </ul>
                 </div>
               </div>
             </motion.div>
