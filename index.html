@@ -26,7 +26,13 @@
       <meta name="twitter:description" content="Portfolio of Mu He, a product designer specializing in B2B SaaS networking & security experiences." />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&display=swap" rel="stylesheet" />
+      <!-- Google Sans, the site's typeface. Weights 400, 500, 600 and 700 —
+           everything the app actually uses. It previously requested only 400 and
+           500, so every font-bold and font-semibold rule was being faked by the
+           browser rather than drawn with a real cut.
+           globals.css also @imported this same font; that duplicate is removed,
+           and a <link> here loads earlier than an @import inside a stylesheet. -->
+      <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     </head>
 
     <body>
