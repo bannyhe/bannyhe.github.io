@@ -432,7 +432,7 @@ export function VcfNetworkPage() {
                   <figure>
                     <img
                       src={netopsAffinityImg}
-                      alt="Affinity diagram with four clusters, each labeled with the section of work that answers it. Where does this live, discoverability, answered in Integration of Information Architecture. Two consoles one task, context switching, answered in the 1st Version then Scope Change. Too much too flat, feature overload, answered in Scope Change. Don't make me relearn it, pattern consistency, answered in Convert Patterns to Design Library."
+                      alt="Affinity diagram with four clusters of admin observations. Where does this live, discoverability: capability cannot be reached from Operations. Two consoles one task, context switching: reaching it means leaving. Too much too flat, feature overload: everything offered at the same weight. Don't make me relearn it, pattern consistency: the two halves behave differently."
                       className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
                       style={{ borderRadius: '10px' }}
                       onClick={() =>
