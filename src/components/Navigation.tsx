@@ -19,7 +19,7 @@ function ThemeToggle() {
   // NOTE: this project ships a pre-built Tailwind stylesheet (src/index.css)
   // rather than running Tailwind at build time, so arbitrary-value utilities
   // (w-[60px], translate-x-[28px], dark:bg-[#…]/10) do not exist and silently
-  // do nothing. All geometry and colour therefore live in inline styles.
+  // do nothing. All geometry and color therefore live in inline styles.
   const track = isDark
     ? {
         background: isHovered ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.10)",

@@ -332,7 +332,7 @@ export function StoryweaverPage() {
                   StoryWeaver by far had the <strong>most languages represented</strong> (109 languages).
                 </li>
                 <li>
-                  <strong>Highlighted</strong> features: similar stories, content labelled by target age range.
+                  <strong>Highlighted</strong> features: similar stories, content labeled by target age range.
                 </li>
                 <li>
                   <strong>Lack</strong> of a form of reward system.

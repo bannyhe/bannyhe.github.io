@@ -398,7 +398,7 @@ export function ContextualInquiryPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed order-1">
                 <p>
-                  Our recommendation to create standardized written procedures for all departments involved in the financial management process is a solution that is low cost, can be easily implemented, and can produce high impact for the organization. These solutions accompanied by scheduled weekly meetings among all involved departments can allow for a more streamlined, transparent process. Looking towards the future in the context of the continued quick growth for AI, a technological solution may potentially be needed to be adopted, but by scaling to improve workflow and communication procedures among departments, the AI Office can create a high impact on the current financial management process within a short period of time.
+                  Our recommendation to create standardized written procedures for all departments involved in the financial management process is a solution that is low cost, can be easily implemented, and can produce high impact for the organization. These solutions accompanied by scheduled weekly meetings among all involved departments can allow for a more streamlined, transparent process. Looking toward the future in the context of the continued quick growth for AI, a technological solution may potentially be needed to be adopted, but by scaling to improve workflow and communication procedures among departments, the AI Office can create a high impact on the current financial management process within a short period of time.
                 </p>
                 
                 <div className="space-y-4">
@@ -465,7 +465,7 @@ export function ContextualInquiryPage() {
                   Our client wanted us to help them figure out whether or not a certain system is right for them. However, it turns out what they really need is a more scientific way to trial the system. Don’t follow client’s instruction 100%. Instead, do observe and investigate, and trust the facts.
                 </p>
                 <p>
-                  These solutions accompanied by scheduled weekly meetings among all involved departments can allow for a more streamlined, transparent process. Looking towards the future in the context of the continued quick growth for AI, a technological solution may potentially be needed to be adopted, but by scaling to improve workflow and communication procedures among departments, the AI Office can create a high impact on the current financial management process in a short period of time.
+                  These solutions accompanied by scheduled weekly meetings among all involved departments can allow for a more streamlined, transparent process. Looking toward the future in the context of the continued quick growth for AI, a technological solution may potentially be needed to be adopted, but by scaling to improve workflow and communication procedures among departments, the AI Office can create a high impact on the current financial management process in a short period of time.
                 </p>
               </div>
               <div className="order-1 md:order-2">

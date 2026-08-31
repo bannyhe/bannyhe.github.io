@@ -29,7 +29,7 @@ const num = (v: unknown): number | null =>
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
-/** Blend two hex colours. t=0 -> a, t=1 -> b. */
+/** Blend two hex colors. t=0 -> a, t=1 -> b. */
 function mix(a: string, b: string, t: number): string {
   const p = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
   const [ar, ag, ab] = p(a);
@@ -109,7 +109,7 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
 
   const toScreen = (x: number, y: number) => ({ x: tx + scale * x, y: ty + scale * y });
 
-  // ── Colours ──────────────────────────────────────────────────────────────
+  // ── Colors ──────────────────────────────────────────────────────────────
   const idleLand = dark ? "#334155" : "#e2e8f0";
   const borders = dark ? "#475569" : "#cbd5e1";
   const activeLo = dark ? "#4c1d95" : "#ede9fe";   // few visitors
@@ -242,7 +242,7 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
                 </span>
               </div>
               {activePoint.approx && (
-                <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>Approximate — country centre</div>
+                <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>Approximate — country center</div>
               )}
               <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>
                 {activePoint.country_code && zoomTo !== activePoint.country_code.toUpperCase()
@@ -284,7 +284,7 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
         ) : (
           <>
             {`${points.length} ${points.length === 1 ? "location" : "locations"} · ${byCountry.size} ${byCountry.size === 1 ? "country" : "countries"} · ${plottedVisitors} plotted`}
-            {approxCount > 0 && ` · ${approxCount} at country centre`}
+            {approxCount > 0 && ` · ${approxCount} at country center`}
             {unmapped > 0 && ` · ${unmapped} without coordinates`}
           </>
         )}

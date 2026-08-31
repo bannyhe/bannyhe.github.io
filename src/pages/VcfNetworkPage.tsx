@@ -299,7 +299,7 @@ export function VcfNetworkPage() {
                   Problem
                 </h2>
                 {/* items-start, not items-center: the copy is now taller than the
-                    diagram, and centring left the image floating mid-column. */}
+                    diagram, and centering left the image floating mid-column. */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                   <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <p>
@@ -432,7 +432,7 @@ export function VcfNetworkPage() {
                   <figure>
                     <img
                       src={netopsAffinityImg}
-                      alt="Affinity diagram with four clusters, each labelled with the section of work that answers it. Where does this live, discoverability, answered in Integration of Information Architecture. Two consoles one task, context switching, answered in the 1st Version then Scope Change. Too much too flat, feature overload, answered in Scope Change. Don't make me relearn it, pattern consistency, answered in Convert Patterns to Design Library."
+                      alt="Affinity diagram with four clusters, each labeled with the section of work that answers it. Where does this live, discoverability, answered in Integration of Information Architecture. Two consoles one task, context switching, answered in the 1st Version then Scope Change. Too much too flat, feature overload, answered in Scope Change. Don't make me relearn it, pattern consistency, answered in Convert Patterns to Design Library."
                       className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
                       style={{ borderRadius: '10px' }}
                       onClick={() =>
@@ -466,7 +466,7 @@ export function VcfNetworkPage() {
                       shipped was offered at the same weight. The{" "}
                       <span className="text-gray-900 dark:text-gray-100 font-bold">Scope Change</span> is where that got resolved —
                       mapping a smaller set properly instead of carrying the whole
-                      catalogue across.
+                      catalog across.
                     </li>
                     <li>
                       <span className="text-gray-900 dark:text-gray-100 font-bold">Don&rsquo;t make me relearn it.</span> The two
@@ -755,7 +755,7 @@ export function VcfNetworkPage() {
                 IMPACT — not rendered yet, on purpose.
 
                 The metrics and visuals are coming separately. Rendering the
-                template's "[Impact Item 1] - [Description]" bullets and grey
+                template's "[Impact Item 1] - [Description]" bullets and gray
                 "Placeholder Image" boxes would put visible filler on a live
                 page, so the whole section is omitted until there is something
                 real to show.
@@ -803,7 +803,7 @@ export function VcfNetworkPage() {
                   {/* Conceptual illustration, not a screen capture: no 1% trim
                       and no click-to-expand, since there is no detail to read.
 
-                      Held below the column width and centred in its cell. At full
+                      Held below the column width and centered in its cell. At full
                       width it stood taller than the copy beside it, and the
                       artwork's own generous margins made it read larger still. */}
                   <figure
