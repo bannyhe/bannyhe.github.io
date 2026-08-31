@@ -62,9 +62,9 @@ export function VcfNetworkPage() {
       const sections = [
         "brief",
         "problem",
-        "research-synthesis",
         "my-role",
         "process",
+        "research-synthesis",
         "solution-overview",
         "design-challenge",
         "scope-change",
@@ -108,9 +108,9 @@ export function VcfNetworkPage() {
   const tableOfContents = [
     { id: "brief", label: "Brief" },
     { id: "problem", label: "Problem" },
-    { id: "research-synthesis", label: "Research Synthesis" },
     { id: "my-role", label: "My Role" },
     { id: "process", label: "Process" },
+    { id: "research-synthesis", label: "Research Synthesis" },
     { id: "solution-overview", label: "Integration of Information Architecture" },
     { id: "design-challenge", label: "Network Operations 1st Version" },
     { id: "scope-change", label: "Scope Change" },
@@ -336,53 +336,6 @@ export function VcfNetworkPage() {
                 </div>
               </div>
 
-              {/* Research Synthesis. The clusters set the order the rest of the
-                  case study follows, so this sits ahead of My Role. */}
-              <div className="mb-16" id="research-synthesis">
-                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Research Synthesis
-                </h2>
-                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <p>
-                    Before proposing where anything should go, I gathered what
-                    admins actually said about working across the two consoles and
-                    clustered it until the groupings stopped moving. Four themes
-                    held.
-                  </p>
-                  <figure>
-                    <img
-                      src={netopsAffinityImg}
-                      alt="Affinity diagram with four clusters. Where does this live: discoverability. Two consoles, one task: context switching. Too much, too flat: feature overload. Don't make me relearn it: pattern consistency. Each cluster holds four observations from admin conversations."
-                      className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
-                      style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsAffinityImg,
-                          alt: "Affinity diagram clustering admin observations into four themes",
-                        })
-                      }
-                    />
-                  </figure>
-                  <p>
-                    Read together the clusters give an order rather than a list.{" "}
-                    <span className="text-gray-900 dark:text-gray-100 font-bold">Discoverability</span> comes first, because nothing
-                    else matters if the capability can't be found from Operations.{" "}
-                    <span className="text-gray-900 dark:text-gray-100 font-bold">Context switching</span> follows, since finding a
-                    link that throws you into another console solves very little.
-                    Only then is it worth asking which features are{" "}
-                    <span className="text-gray-900 dark:text-gray-100 font-bold">load-bearing</span>, and finally whether the whole
-                    thing{" "}
-                    <span className="text-gray-900 dark:text-gray-100 font-bold">feels like one product</span>.
-                  </p>
-                  <p>
-                    That sequence is the spine of everything below: the information
-                    architecture work answers the first theme, the revision after the
-                    scope change answers the second, and the move onto Clarity
-                    answers the fourth.
-                  </p>
-                </div>
-              </div>
-
               {/* My Role. Facts here are all already on the page: role, team and
                   dates from the metadata block, and each responsibility is
                   evidenced by a section below. */}
@@ -463,6 +416,76 @@ export function VcfNetworkPage() {
               {/* Integration of Information Architecture.
                   The id stays "solution-overview" so any link already shared
                   against this anchor keeps working; only the label changed. */}
+              {/* Research Synthesis. Sits after Process because each cluster
+                  names the section of the work that answers it. */}
+              <div className="mb-16" id="research-synthesis">
+                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  Research Synthesis
+                </h2>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p>
+                    Across those milestones the same complaints kept surfacing. I
+                    clustered what admins said about working across the two consoles
+                    until the groupings stopped moving. Four themes held, and each
+                    one set up a decision further down this page.
+                  </p>
+                  <figure>
+                    <img
+                      src={netopsAffinityImg}
+                      alt="Affinity diagram with four clusters, each labelled with the section of work that answers it. Where does this live, discoverability, answered in Integration of Information Architecture. Two consoles one task, context switching, answered in the 1st Version then Scope Change. Too much too flat, feature overload, answered in Scope Change. Don't make me relearn it, pattern consistency, answered in Convert Patterns to Design Library."
+                      className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsAffinityImg,
+                          alt: "Affinity diagram clustering admin observations into four themes, each tied to the decision it forced",
+                        })
+                      }
+                    />
+                  </figure>
+                  <ul className="list-disc pl-6 space-y-3">
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Where does this live?</span> Admins could not
+                      reach vRNI capability from Operations at all. That is the
+                      question <span className="text-gray-900 dark:text-gray-100 font-bold">Integration of Information
+                      Architecture</span> answers below — regrouping features by
+                      what they are for, then placing them in navigation Operations
+                      already had rather than giving Network its own branch.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Two consoles, one task.</span> Even when a
+                      feature could be reached, getting to it meant leaving.{" "}
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Network Operations 1st Version</span> tested
+                      whether surfacing everything in one place was enough. It was
+                      not: most of it arrived as links that sent people straight
+                      back out, which is exactly what the{" "}
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Scope Change</span> responded to.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Too much, too flat.</span> Everything vRNI
+                      shipped was offered at the same weight. The{" "}
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Scope Change</span> is where that got resolved —
+                      mapping a smaller set properly instead of carrying the whole
+                      catalogue across.
+                    </li>
+                    <li>
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Don&rsquo;t make me relearn it.</span> The two
+                      halves did not behave like one product.{" "}
+                      <span className="text-gray-900 dark:text-gray-100 font-bold">Convert Customized Patterns to Design
+                      Library</span> is the answer, moving vRNI&rsquo;s custom
+                      patterns onto Clarity so the same idea uses the same control
+                      on both sides.
+                    </li>
+                  </ul>
+                  <p>
+                    Read in that order the clusters give a sequence rather than a
+                    list: find it, stop the round trips, cut what isn&rsquo;t
+                    load-bearing, then make it feel like one product. That is the
+                    order the rest of this page follows.
+                  </p>
+                </div>
+              </div>
+
               <div className="mb-16" id="solution-overview">
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Integration of Information Architecture
