@@ -16,6 +16,7 @@ import netopsFinalImg from "../assets/netops/netops-final.png";
 import netopsClarityFlowsImg from "../assets/netops/netops-clarity-flows.png";
 import netopsClarityAppsImg from "../assets/netops/netops-clarity-applications.png";
 import netopsLearningsImg from "../assets/netops/netops-learnings.png";
+import netopsAffinityImg from "../assets/netops/netops-affinity.svg";
 
 export function VcfNetworkPage() {
   const ref = useRef(null);
@@ -61,6 +62,7 @@ export function VcfNetworkPage() {
       const sections = [
         "brief",
         "problem",
+        "research-synthesis",
         "my-role",
         "process",
         "solution-overview",
@@ -106,6 +108,7 @@ export function VcfNetworkPage() {
   const tableOfContents = [
     { id: "brief", label: "Brief" },
     { id: "problem", label: "Problem" },
+    { id: "research-synthesis", label: "Research Synthesis" },
     { id: "my-role", label: "My Role" },
     { id: "process", label: "Process" },
     { id: "solution-overview", label: "Integration of Information Architecture" },
@@ -330,6 +333,53 @@ export function VcfNetworkPage() {
                       }
                     />
                   </div>
+                </div>
+              </div>
+
+              {/* Research Synthesis. The clusters set the order the rest of the
+                  case study follows, so this sits ahead of My Role. */}
+              <div className="mb-16" id="research-synthesis">
+                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  Research Synthesis
+                </h2>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p>
+                    Before proposing where anything should go, I gathered what
+                    admins actually said about working across the two consoles and
+                    clustered it until the groupings stopped moving. Four themes
+                    held.
+                  </p>
+                  <figure>
+                    <img
+                      src={netopsAffinityImg}
+                      alt="Affinity diagram with four clusters. Where does this live: discoverability. Two consoles, one task: context switching. Too much, too flat: feature overload. Don't make me relearn it: pattern consistency. Each cluster holds four observations from admin conversations."
+                      className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                      style={{ borderRadius: '10px' }}
+                      onClick={() =>
+                        setExpandedImage({
+                          src: netopsAffinityImg,
+                          alt: "Affinity diagram clustering admin observations into four themes",
+                        })
+                      }
+                    />
+                  </figure>
+                  <p>
+                    Read together the clusters give an order rather than a list.{" "}
+                    <span className="text-gray-900 dark:text-gray-100 font-bold">Discoverability</span> comes first, because nothing
+                    else matters if the capability can't be found from Operations.{" "}
+                    <span className="text-gray-900 dark:text-gray-100 font-bold">Context switching</span> follows, since finding a
+                    link that throws you into another console solves very little.
+                    Only then is it worth asking which features are{" "}
+                    <span className="text-gray-900 dark:text-gray-100 font-bold">load-bearing</span>, and finally whether the whole
+                    thing{" "}
+                    <span className="text-gray-900 dark:text-gray-100 font-bold">feels like one product</span>.
+                  </p>
+                  <p>
+                    That sequence is the spine of everything below: the information
+                    architecture work answers the first theme, the revision after the
+                    scope change answers the second, and the move onto Clarity
+                    answers the fourth.
+                  </p>
                 </div>
               </div>
 
