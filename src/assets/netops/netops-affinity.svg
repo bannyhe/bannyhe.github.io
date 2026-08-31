@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="690" viewBox="0 0 1640 690" font-family="Inter, Helvetica Neue, Arial, sans-serif">
-<rect width="1640" height="690" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="642" viewBox="0 0 1640 642" font-family="Inter, Helvetica Neue, Arial, sans-serif">
+<rect width="1640" height="642" fill="#FFFFFF"/>
 <text x="56" y="72" font-size="38" font-weight="700" fill="#102F56">Research synthesis</text>
-<text x="56" y="110" font-size="19" fill="#5B6B7F">Observations from admin conversations and support themes, clustered until the groupings held.</text>
-<line x1="56" y1="140" x2="1584" y2="140" stroke="#D8DEE7" stroke-width="1"/>
+<text x="56" y="110" font-size="19" fill="#5B6B7F">What admins told us, clustered &#8212; and the decision each cluster forced.</text>
+<line x1="56" y1="140" x2="1584" y2="140" stroke="#D8DEE7"/>
 <rect x="56" y="176" width="362" height="62" rx="8" fill="#FFF3D6" stroke="#E8CE8E" stroke-width="1.2"/>
 <text x="72" y="203" font-size="17" font-weight="700" fill="#102F56">Where does this live?</text>
 <text x="72" y="228" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">DISCOVERABILITY</text>
@@ -16,9 +16,10 @@
 <rect x="56" y="440" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
 <text x="70" y="466" font-size="14.5" fill="#2E3D4F">I search the Ops nav and</text>
 <text x="70" y="486" font-size="14.5" fill="#2E3D4F">still end up back in vRNI.</text>
-<rect x="56" y="520" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
-<text x="70" y="546" font-size="14.5" fill="#2E3D4F">Nothing tells me which</text>
-<text x="70" y="566" font-size="14.5" fill="#2E3D4F">console owns what.</text>
+<line x1="56" y1="544" x2="418" y2="544" stroke="#E8CE8E" stroke-width="1.5"/>
+<text x="56" y="566" font-size="11.5" font-weight="700" fill="#5B6B7F" letter-spacing="0.6">ANSWERED IN</text>
+<text x="56" y="588" font-size="14.5" font-weight="600" fill="#8A6410">Integration of Information</text>
+<text x="56" y="607" font-size="14.5" font-weight="600" fill="#8A6410">Architecture</text>
 <rect x="444" y="176" width="362" height="62" rx="8" fill="#DCEEF9" stroke="#94C4E2" stroke-width="1.2"/>
 <text x="460" y="203" font-size="17" font-weight="700" fill="#102F56">Two consoles, one task</text>
 <text x="460" y="228" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">CONTEXT SWITCHING</text>
@@ -32,9 +33,9 @@
 <text x="458" y="446" font-size="14.5" fill="#2E3D4F">I lose the filters and</text>
 <text x="458" y="466" font-size="14.5" fill="#2E3D4F">time range I'd already</text>
 <text x="458" y="486" font-size="14.5" fill="#2E3D4F">set.</text>
-<rect x="444" y="520" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
-<text x="458" y="546" font-size="14.5" fill="#2E3D4F">Handing off means sending</text>
-<text x="458" y="566" font-size="14.5" fill="#2E3D4F">someone two URLs.</text>
+<line x1="444" y1="544" x2="806" y2="544" stroke="#94C4E2" stroke-width="1.5"/>
+<text x="444" y="566" font-size="11.5" font-weight="700" fill="#5B6B7F" letter-spacing="0.6">ANSWERED IN</text>
+<text x="444" y="588" font-size="14.5" font-weight="600" fill="#1A5F86">1st Version, then Scope Change</text>
 <rect x="832" y="176" width="362" height="62" rx="8" fill="#E3F3E4" stroke="#9CCBA0" stroke-width="1.2"/>
 <text x="848" y="203" font-size="17" font-weight="700" fill="#102F56">Too much, too flat</text>
 <text x="848" y="228" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">FEATURE OVERLOAD</text>
@@ -44,13 +45,12 @@
 <rect x="832" y="340" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
 <text x="846" y="366" font-size="14.5" fill="#2E3D4F">I use a handful of these</text>
 <text x="846" y="386" font-size="14.5" fill="#2E3D4F">day to day.</text>
-<rect x="832" y="420" width="362" height="86" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
-<text x="846" y="446" font-size="14.5" fill="#2E3D4F">Nothing signals what</text>
-<text x="846" y="466" font-size="14.5" fill="#2E3D4F">matters during an</text>
-<text x="846" y="486" font-size="14.5" fill="#2E3D4F">incident.</text>
-<rect x="832" y="520" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
-<text x="846" y="546" font-size="14.5" fill="#2E3D4F">Grouped by where it was</text>
-<text x="846" y="566" font-size="14.5" fill="#2E3D4F">built, not what it's for.</text>
+<rect x="832" y="420" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
+<text x="846" y="446" font-size="14.5" fill="#2E3D4F">Grouped by where it was</text>
+<text x="846" y="466" font-size="14.5" fill="#2E3D4F">built, not what it's for.</text>
+<line x1="832" y1="544" x2="1194" y2="544" stroke="#9CCBA0" stroke-width="1.5"/>
+<text x="832" y="566" font-size="11.5" font-weight="700" fill="#5B6B7F" letter-spacing="0.6">ANSWERED IN</text>
+<text x="832" y="588" font-size="14.5" font-weight="600" fill="#2F6B39">Scope Change</text>
 <rect x="1220" y="176" width="362" height="62" rx="8" fill="#F6E3EE" stroke="#DCA8C6" stroke-width="1.2"/>
 <text x="1236" y="203" font-size="17" font-weight="700" fill="#102F56">Don't make me relearn it</text>
 <text x="1236" y="228" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">PATTERN CONSISTENCY</text>
@@ -65,8 +65,8 @@
 <text x="1234" y="466" font-size="14.5" fill="#2E3D4F">Muscle memory from</text>
 <text x="1234" y="486" font-size="14.5" fill="#2E3D4F">Operations doesn't</text>
 <text x="1234" y="506" font-size="14.5" fill="#2E3D4F">transfer.</text>
-<rect x="1220" y="540" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
-<text x="1234" y="566" font-size="14.5" fill="#2E3D4F">Same idea, two different</text>
-<text x="1234" y="586" font-size="14.5" fill="#2E3D4F">controls.</text>
-<text x="56" y="656" font-size="14" fill="#5B6B7F">Four clusters set the order of the work: find it first, then stop the round trips, then cut what isn&#8217;t load-bearing, then make it feel like one product.</text>
+<line x1="1220" y1="544" x2="1582" y2="544" stroke="#DCA8C6" stroke-width="1.5"/>
+<text x="1220" y="566" font-size="11.5" font-weight="700" fill="#5B6B7F" letter-spacing="0.6">ANSWERED IN</text>
+<text x="1220" y="588" font-size="14.5" font-weight="600" fill="#8C3B67">Convert Patterns to Design</text>
+<text x="1220" y="607" font-size="14.5" font-weight="600" fill="#8C3B67">Library</text>
 </svg>

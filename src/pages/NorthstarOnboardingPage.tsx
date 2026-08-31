@@ -56,12 +56,12 @@ export function NorthstarOnboardingPage() {
         "problem",
         "solution-overview",
         "design-challenge",
-        "placement-study",
         "redefine-onboarding",
         "approach-strategy",
         "success-metrics",
         "optimizing-workflow",
         "transitional-pages",
+        "placement-study",
         "impact",
         "learnings-reflections"
       ];
@@ -101,12 +101,12 @@ export function NorthstarOnboardingPage() {
     { id: "problem", label: "The Challenge" },
     { id: "solution-overview", label: "Solution Highlight" },
     { id: "design-challenge", label: "Target User & Pain Point" },
-    { id: "placement-study", label: "Where Should the Guide Live?" },
     { id: "redefine-onboarding", label: "Redefine Onboarding" },
     { id: "approach-strategy", label: "Design Principles" },
     { id: "success-metrics", label: "Success Metrics" },
     { id: "optimizing-workflow", label: "Optimizing Workflow" },
     { id: "transitional-pages", label: "Transitional Pages" },
+    { id: "placement-study", label: "Where Should the Guide Live?" },
     { id: "impact", label: "Impact" },
     { id: "learnings-reflections", label: "Learnings & Reflections" }
   ];
@@ -328,47 +328,6 @@ export function NorthstarOnboardingPage() {
           </div>
 
           {/* Redefine Onboarding */}
-          {/* Placement study. The three options and the reason the third won
-              are the ones already recorded against this project. */}
-          <div className="mb-16" id="placement-study">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Where Should the Guide Live?
-            </h2>
-            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-              <p>
-                Deciding what the guide said was the easy half. The harder question
-                was where it sat, and I sketched three placements against a single
-                test: <span className="text-gray-900 dark:text-gray-100 font-bold">can a user leave it and come back?</span>
-              </p>
-              <img
-                src={northstarPlacementImg}
-                alt="Three sketched placements for the onboarding tutorial: a full-screen modal, a docked side panel, and a minimized non-modal dialog that tracks progress."
-                className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
-                style={{ borderRadius: '10px' }}
-                onClick={() =>
-                  setExpandedImage({
-                    src: northstarPlacementImg,
-                    alt: "Three sketched placements for the onboarding tutorial",
-                  })
-                }
-              />
-              <p>
-                The modal failed that test outright — engineering flagged that users
-                would lose access to the tutorial the moment they closed it, which
-                made an unmissable dialog an unacceptable one. The docked panel
-                passed, but charged for it permanently by narrowing the deployment
-                view that users had come to look at.
-              </p>
-              <p>
-                The <span className="text-gray-900 dark:text-gray-100 font-bold">minimized non-modal dialog</span> was the only option
-                that let the guide be dismissed without being lost. It keeps progress
-                visible, stays out of the way of the console, and can be reopened at
-                any point — which is what turned a one-shot tutorial into something
-                users could actually return to mid-deployment.
-              </p>
-            </div>
-          </div>
-
           <div className="mb-16" id="redefine-onboarding">
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Redefine Onboarding Experience
@@ -551,6 +510,47 @@ export function NorthstarOnboardingPage() {
           </div>
 
           {/* Impact */}
+          {/* Placement study. The three options and the reason the third won
+              are the ones already recorded against this project. */}
+          <div className="mb-16" id="placement-study">
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+              Where Should the Guide Live?
+            </h2>
+            <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+              <p>
+                Deciding what the guide said was the easy half. The harder question
+                was where it sat, and I sketched three placements against a single
+                test: <span className="text-gray-900 dark:text-gray-100 font-bold">can a user leave it and come back?</span>
+              </p>
+              <img
+                src={northstarPlacementImg}
+                alt="Three sketched placements for the onboarding tutorial: a full-screen modal, a docked side panel, and a minimized non-modal dialog that tracks progress."
+                className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                style={{ borderRadius: '10px' }}
+                onClick={() =>
+                  setExpandedImage({
+                    src: northstarPlacementImg,
+                    alt: "Three sketched placements for the onboarding tutorial",
+                  })
+                }
+              />
+              <p>
+                The modal failed that test outright — engineering flagged that users
+                would lose access to the tutorial the moment they closed it, which
+                made an unmissable dialog an unacceptable one. The docked panel
+                passed, but charged for it permanently by narrowing the deployment
+                view that users had come to look at.
+              </p>
+              <p>
+                The <span className="text-gray-900 dark:text-gray-100 font-bold">minimized non-modal dialog</span> was the only option
+                that let the guide be dismissed without being lost. It keeps progress
+                visible, stays out of the way of the console, and can be reopened at
+                any point — which is what turned a one-shot tutorial into something
+                users could actually return to mid-deployment.
+              </p>
+            </div>
+          </div>
+
           <div className="mb-16" id="impact">
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Impact
