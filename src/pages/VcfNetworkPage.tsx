@@ -61,6 +61,7 @@ export function VcfNetworkPage() {
       const sections = [
         "brief",
         "problem",
+        "my-role",
         "process",
         "solution-overview",
         "design-challenge",
@@ -105,6 +106,7 @@ export function VcfNetworkPage() {
   const tableOfContents = [
     { id: "brief", label: "Brief" },
     { id: "problem", label: "Problem" },
+    { id: "my-role", label: "My Role" },
     { id: "process", label: "Process" },
     { id: "solution-overview", label: "Integration of Information Architecture" },
     { id: "design-challenge", label: "Network Operations 1st Version" },
@@ -331,6 +333,49 @@ export function VcfNetworkPage() {
                 </div>
               </div>
 
+              {/* My Role. Facts here are all already on the page: role, team and
+                  dates from the metadata block, and each responsibility is
+                  evidenced by a section below. */}
+              <div className="mb-16" id="my-role">
+                <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  My Role
+                </h2>
+                <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p>
+                    I led the design for this integration from June to December
+                    2024, working with one product manager, an information
+                    experience writer, an accessibility specialist, and a team of
+                    more than ten engineers across the vRNI, NSX and Operations
+                    groups.
+                  </p>
+                  <p>What I owned:</p>
+                  <ul className="list-disc pl-6 space-y-3">
+                    <li>
+                      Taking inventory of everything vRNI shipped, and regrouping
+                      it by what each feature is for rather than where it had
+                      historically lived.
+                    </li>
+                    <li>
+                      Deciding where each group belonged in navigation VCF
+                      Operations already had, instead of giving Network a branch
+                      of its own.
+                    </li>
+                    <li>
+                      The first integration proposal, and the rework when the
+                      direction changed halfway through.
+                    </li>
+                    <li>
+                      Moving vRNI's custom patterns onto the Clarity design
+                      system, sequenced so the work could ship in stages.
+                    </li>
+                    <li>
+                      Holding the design consistent across four groups that had
+                      not previously shared a surface.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
               {/* Process */}
               <div className="mb-16" id="process">
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
@@ -466,6 +511,12 @@ export function VcfNetworkPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                   <div className="space-y-8 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                     <div className="space-y-4">
+                      <p>
+                        The first version answered whether everything could be
+                        surfaced in one place. It could — but mostly as links
+                        that sent people back out to vRNI, which is not the same
+                        as being integrated. That result shaped what came next.
+                      </p>
                       <p>
                         The direction of vRNI integration changed, so the scope
                         and requirements changed accordingly:
