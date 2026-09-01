@@ -538,8 +538,8 @@ export function NorthstarOnboardingPage() {
                 The modal failed that test outright — engineering flagged that users
                 would lose access to the tutorial the moment they closed it, which
                 made an unmissable dialog an unacceptable one. The docked panel
-                passed, but charged for it permanently by narrowing the deployment
-                view that users had come to look at.
+                passed, but charged for it by narrowing the deployment view that
+                users had come to look at.
               </p>
               <p>
                 The <span className="text-gray-900 dark:text-gray-100 font-bold">minimized non-modal dialog</span> was the only option
