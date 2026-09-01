@@ -1,52 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="574" viewBox="0 0 1500 574" font-family="Inter, Helvetica Neue, Arial, sans-serif">
-<rect width="1500" height="574" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="538" viewBox="0 0 1500 538" font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+<rect width="1500" height="538" fill="#FFFFFF"/>
 <text x="56" y="42" font-size="18" fill="#5B6B7F">Three placements for the onboarding tutorial, sketched against one test: can a user leave it and come back?</text>
 <line x1="56" y1="66" x2="1444" y2="66" stroke="#D8DEE7"/>
 <rect x="56" y="92" width="436" height="300" rx="10" fill="#FCFCFD" stroke="#CBD3DD" stroke-width="1"/>
 <rect x="74" y="110" width="400" height="16" rx="3" fill="#E4E9EF" stroke="#C3CCD8" stroke-width="1"/>
 <rect x="74" y="134" width="90" height="9" rx="2" fill="#EDF1F5" stroke="#D3DAE3" stroke-width="1"/>
-<rect x="74" y="154" width="400" height="218" rx="4" fill="#F4F6F9" stroke="#9AA7B6" stroke-width="1.2"/>
+<rect x="74" y="154" width="400" height="218" rx="4" fill="#F4F6F9"/>
 <rect x="108" y="180" width="332" height="158" rx="6" fill="#FFFFFF" stroke="#8C99A8" stroke-width="1.6"/>
-<text x="122" y="210" font-size="13" font-weight="600" fill="#102F56">Tutorial</text>
-<rect x="122" y="224" width="304" height="9" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<rect x="122" y="244" width="304" height="9" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<rect x="122" y="264" width="304" height="9" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<text x="418" y="194" font-size="13" fill="#B23A48">&#10005;</text>
-<text x="56" y="422" font-size="16" font-weight="700" fill="#102F56">A &#183; Full-screen modal</text>
-<text x="56" y="446" font-size="13" fill="#41505F">Keeps:  Impossible to miss</text>
-<text x="56" y="468" font-size="13" fill="#41505F">Breaks:  Blocks the console, and closing</text>
-<text x="56" y="486" font-size="13" fill="#41505F">loses the tutorial</text>
+<text x="122" y="206" font-size="13" font-weight="700" fill="#102F56">Tutorial</text>
+<rect x="122" y="226" width="304" height="9" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<rect x="122" y="246" width="304" height="9" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<rect x="122" y="266" width="304" height="9" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<text x="414" y="196" font-size="13" font-weight="500" fill="#B23A48">✕</text>
+<text x="56" y="422" font-size="16" font-weight="700" fill="#102F56">A · Full-screen modal</text>
+<text x="56" y="446" font-size="13" font-weight="400" fill="#41505F">Pros:  Impossible to miss</text>
+<text x="56" y="468" font-size="13" font-weight="400" fill="#41505F">Cons:  Blocks the console, and closing loses the tutorial</text>
 <rect x="532" y="92" width="436" height="300" rx="10" fill="#FCFCFD" stroke="#CBD3DD" stroke-width="1"/>
 <rect x="550" y="110" width="400" height="16" rx="3" fill="#E4E9EF" stroke="#C3CCD8" stroke-width="1"/>
 <rect x="550" y="134" width="90" height="9" rx="2" fill="#EDF1F5" stroke="#D3DAE3" stroke-width="1"/>
-<rect x="550" y="154" width="286" height="218" rx="4" fill="#F4F6F9" stroke="#9AA7B6" stroke-width="1.2"/>
+<rect x="550" y="154" width="286" height="218" rx="4" fill="#F4F6F9"/>
 <rect x="842" y="154" width="108" height="218" rx="6" fill="#FFFFFF" stroke="#8C99A8" stroke-width="1.6"/>
-<text x="854" y="178" font-size="12" font-weight="600" fill="#102F56">Tutorial</text>
-<rect x="854" y="190" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<rect x="854" y="208" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<rect x="854" y="226" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<rect x="854" y="244" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<text x="532" y="422" font-size="16" font-weight="700" fill="#102F56">B &#183; Docked side panel</text>
-<text x="532" y="446" font-size="13" fill="#41505F">Keeps:  Always retrievable</text>
-<text x="532" y="468" font-size="13" fill="#41505F">Breaks:  Permanently narrows the</text>
-<text x="532" y="486" font-size="13" fill="#41505F">deployment view</text>
+<text x="854" y="178" font-size="12" font-weight="700" fill="#102F56">Tutorial</text>
+<rect x="854" y="192" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<rect x="854" y="210" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<rect x="854" y="228" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<rect x="854" y="246" width="84" height="8" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<text x="532" y="422" font-size="16" font-weight="700" fill="#102F56">B · Docked side panel</text>
+<text x="532" y="446" font-size="13" font-weight="400" fill="#41505F">Pros:  Always retrievable</text>
+<text x="532" y="468" font-size="13" font-weight="400" fill="#41505F">Cons:  Narrows the deployment view</text>
 <rect x="1008" y="92" width="436" height="300" rx="10" fill="#FCFCFD" stroke="#0079B8" stroke-width="2"/>
 <rect x="1026" y="110" width="400" height="16" rx="3" fill="#E4E9EF" stroke="#C3CCD8" stroke-width="1"/>
 <rect x="1026" y="134" width="90" height="9" rx="2" fill="#EDF1F5" stroke="#D3DAE3" stroke-width="1"/>
-<rect x="1026" y="154" width="400" height="218" rx="4" fill="#F4F6F9" stroke="#9AA7B6" stroke-width="1.2"/>
+<rect x="1026" y="154" width="400" height="218" rx="4" fill="#F4F6F9"/>
 <rect x="1040" y="176" width="212" height="12" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
 <rect x="1040" y="202" width="212" height="12" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
-<rect x="1040" y="228" width="212" height="12" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
+<rect x="1040" y="228" width="372" height="12" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
 <rect x="1040" y="254" width="372" height="12" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
 <rect x="1040" y="280" width="372" height="12" rx="2" fill="#E8ECF2" stroke="#D6DDE5" stroke-width="1"/>
 <rect x="1268" y="170" width="150" height="54" rx="6" fill="#FFFFFF" stroke="#0079B8" stroke-width="1.6"/>
-<text x="1280" y="191" font-size="12" font-weight="600" fill="#102F56">Onboarding guide</text>
+<text x="1280" y="192" font-size="12" font-weight="700" fill="#102F56">Onboarding guide</text>
 <rect x="1280" y="200" width="94" height="8" rx="4" fill="#DCEBF6" stroke="#0079B8" stroke-width="1"/>
-<text x="1384" y="208" font-size="10" fill="#5B6B7F">3/5</text>
-<text x="1008" y="422" font-size="16" font-weight="700" fill="#102F56">C &#183; Minimized non-modal dialog</text>
-<text x="1008" y="446" font-size="13" fill="#41505F">Keeps:  Tracks progress, reopens on</text>
-<text x="1008" y="464" font-size="13" fill="#41505F">demand</text>
-<text x="1008" y="486" font-size="13" fill="#41505F">Breaks:  Easier to overlook once</text>
-<text x="1008" y="504" font-size="13" fill="#41505F">minimized</text>
-<text x="1008" y="532" font-size="13" font-weight="700" fill="#0079B8">Shipped</text>
+<text x="1384" y="208" font-size="10" font-weight="500" fill="#5B6B7F">3/5</text>
+<text x="1008" y="422" font-size="16" font-weight="700" fill="#102F56">C · Minimized non-modal dialog</text>
+<text x="1008" y="446" font-size="13" font-weight="400" fill="#41505F">Pros:  Tracks progress, reopens on demand</text>
+<text x="1008" y="468" font-size="13" font-weight="400" fill="#41505F">Cons:  Easier to overlook once minimized</text>
+<text x="1008" y="496" font-size="13" font-weight="700" fill="#0079B8">Shipped</text>
 </svg>
