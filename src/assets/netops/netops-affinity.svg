@@ -1,52 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="500" viewBox="0 0 1640 500" font-family="Inter, Helvetica Neue, Arial, sans-serif">
-<rect width="1640" height="500" fill="#FFFFFF"/>
-<text x="56" y="70" font-size="38" font-weight="700" fill="#102F56">Research Synthesis</text>
-<line x1="56" y1="102" x2="1584" y2="102" stroke="#D8DEE7"/>
-<rect x="56" y="146" width="362" height="62" rx="8" fill="#FFF3D6" stroke="#E8CE8E" stroke-width="1.2"/>
-<text x="72" y="173" font-size="17.5" font-weight="700" fill="#102F56">Where does this live?</text>
-<text x="72" y="196" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">DISCOVERABILITY</text>
-<rect x="56" y="228" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
-<text x="72" y="255" font-size="15" fill="#2E3D4F">I know the flow data exists, I just can't</text>
-<text x="72" y="276" font-size="15" fill="#2E3D4F">find it from Operations.</text>
-<rect x="56" y="308" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
-<text x="72" y="335" font-size="15" fill="#2E3D4F">Network settings are split across two</text>
-<text x="72" y="356" font-size="15" fill="#2E3D4F">products.</text>
-<rect x="56" y="388" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
-<text x="72" y="415" font-size="15" fill="#2E3D4F">I search the Ops nav and still end up back</text>
-<text x="72" y="436" font-size="15" fill="#2E3D4F">in vRNI.</text>
-<rect x="444" y="146" width="362" height="62" rx="8" fill="#DCEEF9" stroke="#94C4E2" stroke-width="1.2"/>
-<text x="460" y="173" font-size="17.5" font-weight="700" fill="#102F56">Two consoles, one task</text>
-<text x="460" y="196" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">CONTEXT SWITCHING</text>
-<rect x="444" y="228" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
-<text x="460" y="255" font-size="15" fill="#2E3D4F">Every network check means opening a second</text>
-<text x="460" y="276" font-size="15" fill="#2E3D4F">tool.</text>
-<rect x="444" y="308" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
-<text x="460" y="335" font-size="15" fill="#2E3D4F">The links drop me out of the workflow I</text>
-<text x="460" y="356" font-size="15" fill="#2E3D4F">was in.</text>
-<rect x="444" y="388" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
-<text x="460" y="415" font-size="15" fill="#2E3D4F">I lose the filters and time range I'd</text>
-<text x="460" y="436" font-size="15" fill="#2E3D4F">already set.</text>
-<rect x="832" y="146" width="362" height="62" rx="8" fill="#E3F3E4" stroke="#9CCBA0" stroke-width="1.2"/>
-<text x="848" y="173" font-size="17.5" font-weight="700" fill="#102F56">Too much, too flat</text>
-<text x="848" y="196" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">FEATURE OVERLOAD</text>
-<rect x="832" y="228" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
-<text x="848" y="255" font-size="15" fill="#2E3D4F">Everything vRNI ships is listed at the</text>
-<text x="848" y="276" font-size="15" fill="#2E3D4F">same level.</text>
-<rect x="832" y="308" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
-<text x="848" y="346" font-size="15" fill="#2E3D4F">I only use a handful of these day to day.</text>
-<rect x="832" y="388" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
-<text x="848" y="415" font-size="15" fill="#2E3D4F">Grouped by where it was built, not what</text>
-<text x="848" y="436" font-size="15" fill="#2E3D4F">it's for.</text>
-<rect x="1220" y="146" width="362" height="62" rx="8" fill="#F6E3EE" stroke="#DCA8C6" stroke-width="1.2"/>
-<text x="1236" y="173" font-size="17.5" font-weight="700" fill="#102F56">Don't make me relearn it</text>
-<text x="1236" y="196" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">PATTERN CONSISTENCY</text>
-<rect x="1220" y="228" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
-<text x="1236" y="255" font-size="15" fill="#2E3D4F">The two halves don't look like the same</text>
-<text x="1236" y="276" font-size="15" fill="#2E3D4F">product.</text>
-<rect x="1220" y="308" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
-<text x="1236" y="335" font-size="15" fill="#2E3D4F">Custom widgets behave differently from</text>
-<text x="1236" y="356" font-size="15" fill="#2E3D4F">Clarity ones.</text>
-<rect x="1220" y="388" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
-<text x="1236" y="415" font-size="15" fill="#2E3D4F">Muscle memory from Operations doesn't</text>
-<text x="1236" y="436" font-size="15" fill="#2E3D4F">transfer.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="372" viewBox="0 0 1640 372" font-family="Inter, Helvetica Neue, Arial, sans-serif">
+<rect width="1640" height="372" fill="#FFFFFF"/>
+<rect x="56" y="32" width="362" height="62" rx="8" fill="#FFF3D6" stroke="#E8CE8E" stroke-width="1.2"/>
+<text x="72" y="59" font-size="17.5" font-weight="700" fill="#102F56">Where does this live?</text>
+<text x="72" y="82" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">DISCOVERABILITY</text>
+<rect x="56" y="114" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
+<text x="72" y="141" font-size="15" fill="#2E3D4F">I know the flow data exists, I just can't</text>
+<text x="72" y="162" font-size="15" fill="#2E3D4F">find it from Operations.</text>
+<rect x="56" y="194" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
+<text x="72" y="221" font-size="15" fill="#2E3D4F">Network settings are split across two</text>
+<text x="72" y="242" font-size="15" fill="#2E3D4F">products.</text>
+<rect x="56" y="274" width="362" height="66" rx="6" fill="#FFF3D6" fill-opacity="0.55" stroke="#E8CE8E" stroke-width="1"/>
+<text x="72" y="301" font-size="15" fill="#2E3D4F">I search the Ops nav and still end up back</text>
+<text x="72" y="322" font-size="15" fill="#2E3D4F">in vRNI.</text>
+<rect x="444" y="32" width="362" height="62" rx="8" fill="#DCEEF9" stroke="#94C4E2" stroke-width="1.2"/>
+<text x="460" y="59" font-size="17.5" font-weight="700" fill="#102F56">Two consoles, one task</text>
+<text x="460" y="82" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">CONTEXT SWITCHING</text>
+<rect x="444" y="114" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
+<text x="460" y="141" font-size="15" fill="#2E3D4F">Every network check means opening a second</text>
+<text x="460" y="162" font-size="15" fill="#2E3D4F">tool.</text>
+<rect x="444" y="194" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
+<text x="460" y="221" font-size="15" fill="#2E3D4F">The links drop me out of the workflow I</text>
+<text x="460" y="242" font-size="15" fill="#2E3D4F">was in.</text>
+<rect x="444" y="274" width="362" height="66" rx="6" fill="#DCEEF9" fill-opacity="0.55" stroke="#94C4E2" stroke-width="1"/>
+<text x="460" y="301" font-size="15" fill="#2E3D4F">I lose the filters and time range I'd</text>
+<text x="460" y="322" font-size="15" fill="#2E3D4F">already set.</text>
+<rect x="832" y="32" width="362" height="62" rx="8" fill="#E3F3E4" stroke="#9CCBA0" stroke-width="1.2"/>
+<text x="848" y="59" font-size="17.5" font-weight="700" fill="#102F56">Too much, too flat</text>
+<text x="848" y="82" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">FEATURE OVERLOAD</text>
+<rect x="832" y="114" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
+<text x="848" y="141" font-size="15" fill="#2E3D4F">Everything vRNI ships is listed at the</text>
+<text x="848" y="162" font-size="15" fill="#2E3D4F">same level.</text>
+<rect x="832" y="194" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
+<text x="848" y="232" font-size="15" fill="#2E3D4F">I only use a handful of these day to day.</text>
+<rect x="832" y="274" width="362" height="66" rx="6" fill="#E3F3E4" fill-opacity="0.55" stroke="#9CCBA0" stroke-width="1"/>
+<text x="848" y="301" font-size="15" fill="#2E3D4F">Grouped by where it was built, not what</text>
+<text x="848" y="322" font-size="15" fill="#2E3D4F">it's for.</text>
+<rect x="1220" y="32" width="362" height="62" rx="8" fill="#F6E3EE" stroke="#DCA8C6" stroke-width="1.2"/>
+<text x="1236" y="59" font-size="17.5" font-weight="700" fill="#102F56">Don't make me relearn it</text>
+<text x="1236" y="82" font-size="12.5" font-weight="600" fill="#5B6B7F" letter-spacing="0.6">PATTERN CONSISTENCY</text>
+<rect x="1220" y="114" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
+<text x="1236" y="141" font-size="15" fill="#2E3D4F">The two halves don't look like the same</text>
+<text x="1236" y="162" font-size="15" fill="#2E3D4F">product.</text>
+<rect x="1220" y="194" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
+<text x="1236" y="221" font-size="15" fill="#2E3D4F">Custom widgets behave differently from</text>
+<text x="1236" y="242" font-size="15" fill="#2E3D4F">Clarity ones.</text>
+<rect x="1220" y="274" width="362" height="66" rx="6" fill="#F6E3EE" fill-opacity="0.55" stroke="#DCA8C6" stroke-width="1"/>
+<text x="1236" y="301" font-size="15" fill="#2E3D4F">Muscle memory from Operations doesn't</text>
+<text x="1236" y="322" font-size="15" fill="#2E3D4F">transfer.</text>
 </svg>
