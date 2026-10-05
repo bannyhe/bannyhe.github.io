@@ -14,7 +14,7 @@ interface IconPhysics {
 }
 
 export function Hero() {
-  const primaryText = "Mu is a Product Designer with 6+ years of B2B experience";
+  const primaryText = "Mu is a Product Designer with 7+ years of B2B experience";
   const bulletPoints = [
     "Skilled in SaaS & data visualization",
     "Solve complex problems in highly specialized domains",

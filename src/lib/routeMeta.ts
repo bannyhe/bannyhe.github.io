@@ -32,7 +32,7 @@ export const BROWSER_TITLE = "MU HE";
 /** Shown for any path with no entry below (mistyped URLs, removed pages). */
 export const DEFAULT_TITLE = "Mu He — Product Designer";
 export const DEFAULT_DESCRIPTION =
-  "Portfolio of Mu He, a product designer with 6+ years of B2B SaaS experience in networking & security — UX/UI design and research.";
+  "Portfolio of Mu He, a product designer with 7+ years of B2B SaaS experience in networking & security — UX/UI design and research.";
 
 export interface RouteMeta {
   path: string;
@@ -52,7 +52,7 @@ export const ROUTE_META: RouteMeta[] = [
     path: "/about",
     title: "About — Mu He",
     description:
-      "Mu He is a product designer with 6+ years of experience shaping B2B SaaS networking & security products at VMware by Broadcom, and a Gold Prize winner at the Cybersecurity Excellence Awards.",
+      "Mu He is a product designer with 7+ years of experience shaping B2B SaaS networking & security products at VMware by Broadcom, and a Gold Prize winner at the Cybersecurity Excellence Awards.",
   },
   {
     path: "/resume",
