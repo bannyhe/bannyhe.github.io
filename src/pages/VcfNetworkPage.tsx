@@ -323,14 +323,8 @@ export function VcfNetworkPage() {
                     <img
                       src={netopsContextImg}
                       alt="Anita, a VI Admin, looking at VCF Operations. Compute, Storage and Network are listed as capabilities, with Network highlighted and mapped to Network Insights (vRNI) Operations for Network."
-                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      className="w-full h-auto"
                       style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsContextImg,
-                          alt: "Anita, a VI Admin, and the VCF Operations capability map",
-                        })
-                      }
                     />
                   </div>
                 </div>
@@ -345,8 +339,8 @@ export function VcfNetworkPage() {
                 </h2>
                 <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                   <p>
-                    I led the design for this integration from June to December
-                    2024, working with one product manager, an information
+                    I led the design for this 6-month integration project,
+                    working with one product manager, an information
                     experience writer, an accessibility specialist, and a team of
                     more than ten engineers across the vRNI, NSX and Operations
                     groups.
@@ -384,10 +378,12 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Process
                 </h2>
-                {/* Half and half, graphic first. The timeline is wide, so at this
-                    width its labels are small — click to open it full size. */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <figure>
+                {/* 4:3 image-to-text, graphic first. The timeline is wide, so at
+                    this width its labels are small — click to open it full size.
+                    items-center keeps the short summary level with the graphic
+                    rather than hanging off its top edge. */}
+                <div className="grid grid-cols-1 md:grid-cols-7 gap-8 items-center">
+                  <figure className="md:col-span-4">
                     <img
                       src={netopsProcessImg}
                       alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
@@ -402,14 +398,14 @@ export function VcfNetworkPage() {
                     />
                   </figure>
 
-                  <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                  <p>
-                    The project ran from June to December 2024. It moved from
-                    structure, to a first proposal, through a change of direction
-                    halfway in, and finished on system-level alignment, which is a
-                    paradigm for real-world product integration.
-                  </p>
-                                    </div>
+                  <div className="md:col-span-3 space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+                    <p>
+                      The project ran from June to December 2024. It moved from
+                      structure, to a first proposal, through a change of direction
+                      halfway in, and finished on system-level alignment, which is a
+                      paradigm for real-world product integration.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -433,14 +429,8 @@ export function VcfNetworkPage() {
                     <img
                       src={netopsAffinityImg}
                       alt="Affinity diagram with four clusters of admin observations. Where does this live, discoverability: capability cannot be reached from Operations. Two consoles one task, context switching: reaching it means leaving. Too much too flat, feature overload: everything offered at the same weight. Don't make me relearn it, pattern consistency: the two halves behave differently."
-                      className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                      className="w-full h-auto mt-2 bg-white"
                       style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsAffinityImg,
-                          alt: "Affinity diagram clustering admin observations into four themes, each tied to the decision it forced",
-                        })
-                      }
                     />
                   </figure>
                   <ul className="list-disc pl-6 space-y-3">
@@ -505,21 +495,14 @@ export function VcfNetworkPage() {
                     </p>
                   </div>
 
-                  {/* The diagram carries a lot of small type, so it is clickable
-                      to open full size — at half a column the feature names are
-                      legible but tight. */}
+                  {/* The diagram carries a lot of small type; at half a column
+                      the feature names are legible but tight. */}
                   <figure>
                     <img
                       src={netopsIaImg}
                       alt="Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration."
-                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                      className="w-full h-auto"
                       style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsIaImg,
-                          alt: "Information architecture: grouping vRNI features and mapping them into Ops navigation",
-                        })
-                      }
                     />
                   </figure>
                 </div>
@@ -537,15 +520,8 @@ export function VcfNetworkPage() {
                       is scaled by 100/98, so the visible frame still fills the
                       column rather than sitting inside a transparent margin. */}
                   <figure
-                    className="md:sticky md:top-28 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                    className="md:sticky md:top-28 overflow-hidden"
                     style={{ borderRadius: '10px' }}
-                    onClick={() =>
-                      setExpandedImage({
-                        src: netopsFirstVersionImg,
-                        alt: "First version of the Network Operations page",
-                        cropped: true,
-                      })
-                    }
                   >
                     <img
                       src={netopsFirstVersionImg}
@@ -606,16 +582,6 @@ export function VcfNetworkPage() {
 
                     <div className="space-y-4">
                       <h3 className="text-xl text-gray-900 dark:text-gray-100">
-                        Key Constraints
-                      </h3>
-                      <ul className="list-disc pl-6 space-y-3">
-                        <li>The timeline for UX and engineering is restricted;</li>
-                        <li>It was unclear what data would be shown on NetOps.</li>
-                      </ul>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h3 className="text-xl text-gray-900 dark:text-gray-100">
                         Research Insights
                       </h3>
                       <ul className="list-disc pl-6 space-y-3">
@@ -633,20 +599,13 @@ export function VcfNetworkPage() {
                   {/* The revised design, moved up from Final Implementation: it
                       is the outcome of this scope change, so it belongs beside
                       the copy describing it. Sticky so it stays in view while
-                      reading the constraints and research notes. */}
+                      reading the research notes. */}
                   {/* 1% trimmed off every edge, matching the 1st Version
                       screenshot: the figure clips and the image is scaled by
                       100/98, so the trimmed frame still fills the column. */}
                   <figure
-                    className="md:sticky md:top-28 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                    className="md:sticky md:top-28 overflow-hidden"
                     style={{ borderRadius: '10px' }}
-                    onClick={() =>
-                      setExpandedImage({
-                        src: netopsFinalImg,
-                        alt: "The revised Network Operations page after the scope change",
-                        cropped: true,
-                      })
-                    }
                   >
                     <img
                       src={netopsFinalImg}
@@ -716,16 +675,7 @@ export function VcfNetworkPage() {
                         expandedAlt: "Business Applications — flow based discovery, rebuilt on Clarity patterns",
                       },
                     ].map((shot) => (
-                      <figure
-                        key={shot.src}
-                        className="cursor-pointer hover:opacity-90 transition-opacity"
-                        onClick={() =>
-                          setExpandedImage({
-                            src: shot.src,
-                            alt: shot.expandedAlt,
-                          })
-                        }
-                      >
+                      <figure key={shot.src}>
                         <img
                           src={shot.src}
                           alt={shot.alt}
