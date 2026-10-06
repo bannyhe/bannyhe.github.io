@@ -378,23 +378,16 @@ export function VcfNetworkPage() {
                 <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
                   Process
                 </h2>
-                {/* 4:3 image-to-text, graphic first. The timeline is wide, so at
-                    this width its labels are small — click to open it full size.
-                    items-center keeps the short summary level with the graphic
-                    rather than hanging off its top edge. */}
+                {/* 4:3 image-to-text, graphic first. items-center keeps the
+                    short summary level with the graphic rather than hanging off
+                    its top edge. */}
                 <div className="grid grid-cols-1 md:grid-cols-7 gap-8 items-center">
                   <figure className="md:col-span-4">
                     <img
                       src={netopsProcessImg}
                       alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
-                      className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity bg-white"
+                      className="w-full h-auto bg-white"
                       style={{ borderRadius: '10px' }}
-                      onClick={() =>
-                        setExpandedImage({
-                          src: netopsProcessImg,
-                          alt: "Project timeline across five milestones, June to December 2024",
-                        })
-                      }
                     />
                   </figure>
 
