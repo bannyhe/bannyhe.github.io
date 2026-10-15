@@ -32,7 +32,7 @@ function InvestigationMap() {
     <ArrowRight className="ai-map-arrow" aria-hidden="true" />
     <div className="ai-map-investigation"><span className="ai-small-label">One investigation</span><strong>What happened to this host?</strong><span className="ai-object-chip"><Network size={17} aria-hidden="true" /> esxi-07</span><p>Object + evidence + explanation</p></div>
     <ArrowRight className="ai-map-arrow" aria-hidden="true" />
-    <div className="ai-map-decision"><ShieldCheck aria-hidden="true" /><strong>A reviewed next step</strong><p>Choose the scope.<br />Keep control.</p></div>
+    <div className="ai-map-decision"><ShieldCheck aria-hidden="true" /><strong>A reviewed next step</strong><p>Choose the scope. Keep control.</p></div>
     <figcaption>Design goal: carry the same context from the first question to the next decision.</figcaption>
   </figure>;
 }

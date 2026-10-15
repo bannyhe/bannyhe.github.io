@@ -1,4 +1,3 @@
-import { useId, useRef, useState, type KeyboardEvent } from "react";
 import { ArrowRight, Check, ChevronDown, ChevronRight, Search, Server } from "lucide-react";
 import "../../styles/ai-explorations.css";
 
@@ -95,51 +94,19 @@ function Wireframe({ id, proposed }: { id: ExplorationId; proposed: boolean }) {
 }
 
 export function DesignExplorations() {
-  const instanceId = useId();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    let nextIndex: number;
-    switch (event.key) {
-      case "ArrowRight": nextIndex = (index + 1) % explorations.length; break;
-      case "ArrowLeft": nextIndex = (index - 1 + explorations.length) % explorations.length; break;
-      case "Home": nextIndex = 0; break;
-      case "End": nextIndex = explorations.length - 1; break;
-      default: return;
-    }
-    event.preventDefault();
-    setActiveIndex(nextIndex);
-    tabRefs.current[nextIndex]?.focus();
-  }
-
   return <div className="ai-explore">
     <div className="ai-explore-intro">
       <p>Illustrative comparisons show the tradeoffs behind the proposed direction.</p>
     </div>
-    <div className="ai-explore-tabs" role="tablist" aria-label="Explore design tradeoffs">
-      {explorations.map((exploration, index) => <button
-        key={exploration.id}
-        ref={element => { tabRefs.current[index] = element; }}
-        type="button"
-        role="tab"
-        id={`${instanceId}-tab-${exploration.id}`}
-        aria-controls={`${instanceId}-panel-${exploration.id}`}
-        aria-selected={activeIndex === index}
-        tabIndex={activeIndex === index ? 0 : -1}
-        onClick={() => setActiveIndex(index)}
-        onKeyDown={event => handleTabKeyDown(event, index)}
-      >{exploration.label}</button>)}
-    </div>
-    {explorations.map((exploration, index) => <div
+    {explorations.map((exploration, index) => <article
       key={exploration.id}
-      id={`${instanceId}-panel-${exploration.id}`}
-      role="tabpanel"
-      aria-labelledby={`${instanceId}-tab-${exploration.id}`}
-      tabIndex={0}
-      hidden={activeIndex !== index}
+      aria-labelledby={`exploration-${exploration.id}-heading`}
       className="ai-explore-panel"
     >
+      <div className="ai-explore-heading">
+        <span>0{index + 1}</span>
+        <h3 id={`exploration-${exploration.id}-heading`}>{exploration.label}</h3>
+      </div>
       <div className="ai-explore-comparison">
         <figure className="ai-explore-card">
           <div className="ai-explore-card-header"><span>Alternative</span><h4>{exploration.alternative}</h4></div>
@@ -153,6 +120,6 @@ export function DesignExplorations() {
         </figure>
       </div>
       <p className="ai-explore-tradeoff"><span>Tradeoff</span>{exploration.tradeoff}</p>
-    </div>)}
+    </article>)}
   </div>;
 }
