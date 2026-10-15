@@ -151,7 +151,7 @@ export function AiAssistantPage() {
           <header className="ai-hero">
             <div className="ai-hero-copy">
               <h1><Sparkles aria-hidden="true" />VCF AI Assistant</h1>
-              <p className="ai-hero-description">From network symptoms to informed decisions.</p>
+              <p className="ai-hero-description">Simplifying Network Operations with conversational AI, clear issue summaries, and actionable guidance.</p>
               <p className="ai-hero-tags"><span>/ UX Strategy</span><span>/ UX Design</span></p>
             </div>
             <img src="/media/ai-assistant/network-findings.png" alt="VCF AI Assistant concept showing a network investigation with expandable findings." width={1360} height={850} fetchPriority="high" />
