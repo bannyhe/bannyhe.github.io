@@ -83,6 +83,11 @@ const XenithWebsitePage = lazy(() =>
     default: m.XenithWebsitePage,
   })),
 );
+const AiAssistantPage = lazy(() =>
+  import("./pages/AiAssistantPage").then((m) => ({
+    default: m.AiAssistantPage,
+  })),
+);
 const AdminPage = lazy(() =>
   import("./pages/AdminPage").then((m) => ({ default: m.AdminPage })),
 );
@@ -153,6 +158,10 @@ function AppContent() {
               element={<XenithWebsitePage />}
             />
             <Route path="/admin" element={<AdminPage />} />
+            <Route
+              path="/project/ai-assistant"
+              element={<AiAssistantPage />}
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

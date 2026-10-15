@@ -90,6 +90,12 @@ export const ROUTE_META: RouteMeta[] = [
     description: DEFAULT_DESCRIPTION,
     noIndex: true,
   },
+  {
+    path: "/project/ai-assistant",
+    title: "AI Assistant — Mu He",
+    description:
+      "AI Assistant: a product design case study in progress. This project is password protected.",
+  },
 ];
 
 /**

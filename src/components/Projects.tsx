@@ -68,6 +68,17 @@ const projects = [
     githubUrl: "#",
     hasDetailPage: true,
   },
+  {
+    id: "ai-assistant",
+    title: "AI Assistant",
+    description: "An AI assistant experience. Case study in progress.",
+    imageUrl: "/images/ai-assistant-placeholder.svg",
+    tags: ["AI", "Product Design"],
+    liveUrl: "#",
+    githubUrl: "#",
+    hasDetailPage: true,
+    isPasswordProtected: true,
+  },
 ];
 
 export function Projects() {
@@ -94,7 +105,7 @@ export function Projects() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {projects.slice(0, 4).map((project, index) => (
+            {projects.map((project, index) => (
               <motion.div
                 key={project.title}
                 initial={{ opacity: 0, y: 30 }}
