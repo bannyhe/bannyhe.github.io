@@ -1,8 +1,32 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { motion } from "motion/react";
-import { ArrowLeft, Lock } from "lucide-react";
+import { ArrowLeft, ChevronUp, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import aiAssistantOverview from "../assets/ai-assistant/ai-assistant-overview.svg";
+
+const sections = [
+  { id: "brief", label: "Brief" },
+  { id: "problem", label: "Problem" },
+  { id: "my-role", label: "My Role" },
+  { id: "process", label: "Process" },
+  { id: "target-users", label: "Target Users" },
+  { id: "research-synthesis", label: "Research & Synthesis" },
+  { id: "solution-overview", label: "Solution Overview" },
+  { id: "design-challenges", label: "Design Challenges" },
+  { id: "approach-strategy", label: "Approach & Strategy" },
+  { id: "early-explorations", label: "Early Explorations" },
+  { id: "final-implementation", label: "Final Implementation" },
+  { id: "validation", label: "Validation" },
+  { id: "impact", label: "Impact" },
+  { id: "learnings-reflections", label: "Learnings & Reflections" },
+];
+
+const designChallenges = [
+  "Session Management",
+  "Object Search",
+  "Building Trust in AI-Generated Remediation Plans",
+];
 
 // Matches the existing case-study courtesy gate. The build supplies the code;
 // this client-side check is not a substitute for server-side authentication.
@@ -12,7 +36,39 @@ export function AiAssistantPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [error, setError] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [contentsOpen, setContentsOpen] = useState(false);
   const isAccessConfigured = PROJECT_PASSWORD.length > 0;
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    function handleScroll() {
+      setShowBackToTop(window.scrollY > 300);
+      let current = "";
+      for (const section of sections) {
+        const element = document.getElementById(section.id);
+        if (element && element.getBoundingClientRect().top <= 160) {
+          current = section.id;
+        }
+      }
+      setActiveSection(current);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isAuthenticated]);
+
+  function scrollToSection(id: string) {
+    const element = document.getElementById(id);
+    if (!element) return;
+    window.scrollTo({
+      top: element.getBoundingClientRect().top + window.scrollY - 120,
+      behavior: "smooth",
+    });
+  }
 
   function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -105,27 +161,113 @@ export function AiAssistantPage() {
   }
 
   return (
-    <main className="pt-20 pb-24">
+    <main className="pt-20 pb-24 vcf-body">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto py-12">
-          <Link to="/" className="inline-flex items-center gap-2 mb-8 text-gray-700 dark:text-gray-200">
-            <ArrowLeft className="w-4 h-4" aria-hidden="true" /> Back to projects
-          </Link>
-          <h1 className="text-4xl md:text-5xl mb-4 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent" style={{ lineHeight: "1.4" }}>
-            AI Assistant
-          </h1>
-          <p className="text-xl text-gray-700 dark:text-gray-200 mb-8">
-            Case study in progress. More details coming soon.
-          </p>
+        <div className="max-w-6xl mx-auto py-12">
           <img
-            src="/images/ai-assistant-placeholder.svg"
-            alt="AI Assistant concept with a conversation interface on a blue background"
-            className="w-full h-auto rounded-2xl"
-            width={800}
-            height={600}
+            src={aiAssistantOverview}
+            alt="VCF AI Assistant concept in the VCF Operations console, illustrating object search, conversational issue summaries, and reviewable remediation recommendations."
+            className="w-full h-auto"
+            style={{ borderRadius: "10px" }}
+            width={1867}
+            height={905}
           />
         </div>
       </div>
+
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-6xl mx-auto"
+        >
+          <div className="mb-16">
+            <h1 className="sr-only">AI Assistant</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {["Project Type", "My Role", "Team", "Timeline"].map((label) => (
+                <div key={label}>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {sections.map((section) => (
+            <section key={section.id} id={section.id} aria-labelledby={`${section.id}-heading`} className="mb-16">
+              <h2 id={`${section.id}-heading`} className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
+                {section.label}
+              </h2>
+              {section.id === "design-challenges" && designChallenges.map((challenge) => (
+                <h3 key={challenge} className="text-xl text-gray-900 dark:text-gray-100 mb-8">
+                  {challenge}
+                </h3>
+              ))}
+            </section>
+          ))}
+        </motion.div>
+      </div>
+
+      <nav
+        aria-label="Project contents"
+        className="hidden xl:block fixed top-32 right-8 w-64 z-40"
+        onMouseEnter={() => setContentsOpen(true)}
+        onMouseLeave={() => setContentsOpen(false)}
+        onFocus={() => setContentsOpen(true)}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setContentsOpen(false);
+        }}
+      >
+        <button
+          type="button"
+          aria-expanded={contentsOpen}
+          aria-controls="ai-assistant-contents"
+          onClick={() => setContentsOpen(true)}
+          className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg text-sm text-gray-500 dark:text-gray-400"
+          style={{ display: "block", marginLeft: "auto" }}
+        >
+          Contents →
+        </button>
+        <div
+          id="ai-assistant-contents"
+          hidden={!contentsOpen}
+          className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg"
+          style={{ maxHeight: "calc(100vh - 220px)", overflowY: "auto" }}
+        >
+          <p className="text-xs mb-4 text-gray-400 dark:text-gray-500 tracking-wide uppercase">On this page</p>
+          <ul className="space-y-2">
+            {sections.map((section) => (
+              <li key={section.id} className="relative pl-3">
+                {activeSection === section.id && (
+                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
+                )}
+                <button
+                  type="button"
+                  aria-current={activeSection === section.id ? "location" : undefined}
+                  className={`text-left text-sm transition-colors ${activeSection === section.id ? "text-gray-700 dark:text-gray-100" : "text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-200"}`}
+                  onClick={() => scrollToSection(section.id)}
+                >
+                  {section.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      {showBackToTop && (
+        <motion.button
+          type="button"
+          aria-label="Back to top"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="fixed bottom-8 right-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 p-4 shadow-xl hover:shadow-2xl transition-all z-50 cursor-pointer"
+          style={{ borderRadius: "10px" }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <ChevronUp className="w-6 h-6" aria-hidden="true" />
+        </motion.button>
+      )}
     </main>
   );
 }
