@@ -1,9 +1,8 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ChevronUp, Lock } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, Lock, Sparkles, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import aiAssistantOverview from "../assets/ai-assistant/ai-assistant-overview.svg";
 import { AiAssistantCaseStudyContent, aiAssistantSections as sections } from "../components/ai-assistant/AiAssistantCaseStudyContent";
 
 // Matches the existing case-study courtesy gate. The build supplies the code;
@@ -18,6 +17,7 @@ export function AiAssistantPage() {
   const [activeSection, setActiveSection] = useState("");
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [contentsOpen, setContentsOpen] = useState(false);
+  const contentsToggle = useRef<HTMLButtonElement>(null);
   const isAccessConfigured = PROJECT_PASSWORD.length > 0;
 
   useEffect(() => {
@@ -43,9 +43,14 @@ export function AiAssistantPage() {
   function scrollToSection(id: string) {
     const element = document.getElementById(id);
     if (!element) return;
-    window.scrollTo({
-      top: element.getBoundingClientRect().top + window.scrollY - 120,
-      behavior: reduceMotion ? "auto" : "smooth",
+    setContentsOpen(false);
+    // On small screens the menu occupies document space. Measure after it closes.
+    requestAnimationFrame(() => {
+      element.focus({ preventScroll: true });
+      window.scrollTo({
+        top: element.getBoundingClientRect().top + window.scrollY - 120,
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
     });
   }
 
@@ -65,7 +70,7 @@ export function AiAssistantPage() {
       <main className="pt-20 pb-24">
         <div className="fixed inset-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg z-50 flex items-center justify-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-md w-full mx-4"
@@ -143,16 +148,65 @@ export function AiAssistantPage() {
     <main className="pt-20 pb-24 vcf-body ai-case-study">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto py-12">
-          <img
-            src={aiAssistantOverview}
-            alt="VCF AI Assistant concept for Network Operations, showing a captured prototype investigation of vMotion network failures and its findings."
-            className="w-full h-auto"
-            style={{ borderRadius: "10px" }}
-            width={1867}
-            height={905}
-          />
+          <header className="ai-hero">
+            <div className="ai-hero-copy">
+              <h1><Sparkles aria-hidden="true" />VCF AI Assistant</h1>
+              <p className="ai-hero-description">From network symptoms to informed decisions.</p>
+              <p className="ai-hero-tags"><span>/ UX Strategy</span><span>/ UX Design</span></p>
+            </div>
+            <img src="/media/ai-assistant/network-findings.png" alt="VCF AI Assistant concept showing a network investigation with expandable findings." width={1360} height={850} fetchPriority="high" />
+          </header>
         </div>
       </div>
+
+      <nav
+        aria-label="Project contents"
+        className="ai-contents"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setContentsOpen(false);
+            contentsToggle.current?.focus();
+          }
+        }}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setContentsOpen(false);
+        }}
+      >
+        <button
+          type="button"
+          ref={contentsToggle}
+          aria-expanded={contentsOpen}
+          aria-controls="ai-assistant-contents"
+          onClick={() => setContentsOpen(!contentsOpen)}
+          className="ai-contents-toggle backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg text-sm text-gray-700 dark:text-gray-200"
+        >
+          Contents <ChevronDown size={16} aria-hidden="true" style={{ display: "inline", marginLeft: 6 }} />
+        </button>
+        <div
+          id="ai-assistant-contents"
+          hidden={!contentsOpen}
+          className="ai-contents-panel backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg"
+        >
+          <div className="ai-contents-close"><span>On this page</span><button type="button" aria-label="Close contents" onClick={() => { setContentsOpen(false); contentsToggle.current?.focus(); }}><X size={20} aria-hidden="true" /></button></div>
+          <ul className="space-y-2">
+            {sections.map((section) => (
+              <li key={section.id} className="relative pl-3">
+                {activeSection === section.id && (
+                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
+                )}
+                <button
+                  type="button"
+                  aria-current={activeSection === section.id ? "location" : undefined}
+                  className={`text-left text-sm transition-colors ${activeSection === section.id ? "text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200"}`}
+                  onClick={() => scrollToSection(section.id)}
+                >
+                  {section.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
 
       <div className="container mx-auto px-4">
         <motion.div
@@ -164,55 +218,6 @@ export function AiAssistantPage() {
           <AiAssistantCaseStudyContent />
         </motion.div>
       </div>
-
-      <nav
-        aria-label="Project contents"
-        className="hidden xl:block fixed top-32 right-8 w-64 z-40"
-        onMouseEnter={() => setContentsOpen(true)}
-        onMouseLeave={(event) => {
-          if (!event.currentTarget.contains(document.activeElement)) setContentsOpen(false);
-        }}
-        onFocus={() => setContentsOpen(true)}
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) setContentsOpen(false);
-        }}
-      >
-        <button
-          type="button"
-          aria-expanded={contentsOpen}
-          aria-controls="ai-assistant-contents"
-          onClick={() => setContentsOpen(true)}
-          className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg text-sm text-gray-500 dark:text-gray-400"
-          style={{ display: "block", marginLeft: "auto" }}
-        >
-          Contents →
-        </button>
-        <div
-          id="ai-assistant-contents"
-          hidden={!contentsOpen}
-          className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg"
-          style={{ maxHeight: "calc(100vh - 220px)", overflowY: "auto" }}
-        >
-          <p className="text-xs mb-4 text-gray-400 dark:text-gray-500 tracking-wide uppercase">On this page</p>
-          <ul className="space-y-2">
-            {sections.map((section) => (
-              <li key={section.id} className="relative pl-3">
-                {activeSection === section.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
-                )}
-                <button
-                  type="button"
-                  aria-current={activeSection === section.id ? "location" : undefined}
-                  className={`text-left text-sm transition-colors ${activeSection === section.id ? "text-gray-700 dark:text-gray-100" : "text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-200"}`}
-                  onClick={() => scrollToSection(section.id)}
-                >
-                  {section.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
 
       {showBackToTop && (
         <motion.button

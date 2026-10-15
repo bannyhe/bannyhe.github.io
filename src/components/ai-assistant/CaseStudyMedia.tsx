@@ -35,19 +35,23 @@ export function CaseStudyClip({ name, poster, title, caption, steps }: {
 }) {
   const [width, height] = name === "object-context-walkthrough" ? [1340, 330] : name === "session-continuity-walkthrough" ? [850, 470] : [1360, 850];
   return (
-    <figure className={`ai-figure ai-clip${width === 850 ? " ai-clip-compact" : ""}`}>
+    <figure className={`ai-figure ai-clip${width === 850 ? " ai-clip-compact" : ""}${height === 330 ? " ai-clip-wide" : ""}`}>
+      <div className="ai-media-stage">
       <video controls playsInline preload="none" poster={`${MEDIA_ROOT}${poster}.png`} width={width} height={height} aria-label={title}>
         <source src={`${MEDIA_ROOT}${name}.mp4`} type="video/mp4" />
         Your browser does not support this video. The walkthrough steps below describe the interaction.
       </video>
+      </div>
       <figcaption>{caption}</figcaption>
+      <div className="ai-media-tools">
       <a className="ai-still-link" href={`${MEDIA_ROOT}${poster}.png`} target="_blank" rel="noopener noreferrer" aria-label={`Open the full-size still frame for ${title} in a new tab`}>
-        View full-size still <span aria-hidden="true">↗</span>
+        Open image to zoom <span aria-hidden="true">↗</span>
       </a>
       <details className="ai-transcript">
         <summary>Read the walkthrough steps</summary>
         <ol>{steps.map((step) => <li key={step}>{step}</li>)}</ol>
       </details>
+      </div>
     </figure>
   );
 }
