@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowRight, Database, FileText, Network, ShieldCheck } from "lucide-react";
+import { ArrowRight, Compass, Database, FileText, Layers, Lightbulb, Monitor, Network, Search, Server, Settings2, ShieldCheck, Unplug, type LucideIcon } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
 import "../../styles/ai-assistant.css";
@@ -14,6 +14,17 @@ export const aiAssistantSections = [
   { id: "validation", label: "Validation" },
   { id: "impact", label: "Outcome & Reflection" },
 ];
+
+const sectionIcons: Record<string, LucideIcon> = {
+  brief: FileText,
+  problem: Network,
+  "research-synthesis": Search,
+  "approach-strategy": Compass,
+  "early-explorations": Layers,
+  "final-implementation": Monitor,
+  validation: ShieldCheck,
+  impact: Lightbulb,
+};
 
 function Copy({ children }: { children: ReactNode }) {
   return <div className="ai-prose">{children}</div>;
@@ -34,6 +45,25 @@ function InvestigationMap() {
     <ArrowRight className="ai-map-arrow" aria-hidden="true" />
     <div className="ai-map-decision"><ShieldCheck aria-hidden="true" /><strong>A reviewed next step</strong><p>Choose the scope. Keep control.</p></div>
     <figcaption>Design goal: carry the same context from the first question to the next decision.</figcaption>
+  </figure>;
+}
+
+function DistinctFindingsMap() {
+  return <figure className="ai-outcome-map" aria-labelledby="outcome-map-heading">
+    <div className="ai-outcome-scope"><Server size={22} aria-hidden="true" /><span id="outcome-map-heading">One object. Two distinct findings.</span></div>
+    <div className="ai-outcome-findings">
+      <div className="ai-outcome-finding">
+        <h3>vCenter service outage</h3>
+        <div className="ai-outcome-service"><Server size={28} aria-hidden="true" /><span>Appliance + services</span></div>
+        <p>Inspect appliance availability and service health.</p>
+      </div>
+      <div className="ai-outcome-finding">
+        <h3>Ops network path</h3>
+        <div className="ai-outcome-path"><span><Monitor size={24} aria-hidden="true" />Ops</span><Unplug size={22} aria-hidden="true" /><span><Server size={24} aria-hidden="true" />vCenter</span></div>
+        <p>Review ping history, firewall rules, and DNS.</p>
+      </div>
+    </div>
+    <figcaption>Adapted from the recording’s 14:00–15:20 diagnostic example.</figcaption>
   </figure>;
 }
 
@@ -107,18 +137,18 @@ const content: Record<string, ReactNode> = {
     </Feature>
     <Feature number="04" title="Return with context intact">
       <Copy><p>The prototype carries forward top tabs for active work and searchable history for earlier sessions. Naming an investigation gives the operator a recognizable route back after an interruption.</p></Copy>
-      <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
+      <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" version="full-frame" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
         "Start a separate session for another investigation.",
         "Name it Network incident review.",
         "Use history to find and resume an earlier thread.",
       ]} />
     </Feature>
-    <details className="ai-disclosure" id="setup">
-      <summary>Supporting the first-use experience</summary>
+    <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
+      <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
       <Copy><p>Before operators can investigate, administrators need a clear setup path. The entry screen identifies prerequisites; Agentic Control Center separates provider configuration from daily troubleshooting.</p></Copy>
       <CaseStudyFigure name="setup-prerequisites" alt="Assistant entry screen listing activation and model setup prerequisites" caption="Explain readiness before inviting the operator to ask a question." />
       <CaseStudyFigure name="setup-provider" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
-    </details>
+    </article>
   </>,
 
   validation: <>
@@ -138,8 +168,10 @@ const content: Record<string, ReactNode> = {
   </>,
 
   impact: <>
-    <Copy><p>The outcome is a UX vision for bringing AI assistance into Network Operations: a scoped conversation, inspectable findings, deliberate approval, and recoverable context. Operator validation and production impact remain next steps.</p></Copy>
-    <div className="ai-takeaway"><span className="ai-small-label">Key reflection</span><p>Trust grows when operators can explain the recommendation—and what it leaves unresolved.</p></div>
+    <Copy><p>The outcome is a UX vision for Network Operations that connects object context, evidence, and a reviewed next step. The recording’s final diagnostic example makes one principle concrete: keep distinct findings visible.</p></Copy>
+    <DistinctFindingsMap />
+    <div className="ai-takeaway"><span className="ai-small-label">Key reflection</span><p>Restoring a service can leave the Ops network path unresolved. Each finding needs its own evidence and next step.</p></div>
+    <Copy><p>Next, validate whether operators can distinguish the two issues, interpret the ping history, and explain what remains before choosing an action.</p></Copy>
   </>,
 };
 
@@ -153,9 +185,12 @@ export function AiAssistantCaseStudyContent() {
         ["Timeline", "May–July 2026"],
       ].map(([label, value]) => <div key={label}><p className="ai-meta-label">{label}</p><p className="ai-meta-value">{value}</p></div>)}
     </div>
-    {aiAssistantSections.map((section) => <section key={section.id} id={section.id} tabIndex={-1} aria-labelledby={`${section.id}-heading`} className="ai-section">
-      <h2 id={`${section.id}-heading`} className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{section.label}</h2>
-      {content[section.id]}
-    </section>)}
+    {aiAssistantSections.map((section) => {
+      const SectionIcon = sectionIcons[section.id];
+      return <section key={section.id} id={section.id} tabIndex={-1} aria-labelledby={`${section.id}-heading`} className="ai-section">
+        <h2 id={`${section.id}-heading`} className="ai-section-heading text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent"><SectionIcon className="ai-section-icon" size={24} aria-hidden="true" />{section.label}</h2>
+        {content[section.id]}
+      </section>;
+    })}
   </>;
 }

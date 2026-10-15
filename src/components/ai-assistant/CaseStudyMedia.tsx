@@ -26,32 +26,34 @@ export function CaseStudyFigure({ name, alt, caption }: { name: string; alt: str
   );
 }
 
-export function CaseStudyClip({ name, poster, title, caption, steps }: {
+export function CaseStudyClip({ name, poster, title, caption, steps, version }: {
   name: string;
   poster: string;
   title: string;
   caption: string;
   steps: string[];
+  version?: string;
 }) {
-  const [width, height] = name === "object-context-walkthrough" ? [1340, 330] : name === "session-continuity-walkthrough" ? [850, 470] : [1360, 850];
+  const [width, height] = name === "object-context-walkthrough" ? [1340, 330] : name === "session-continuity-walkthrough" ? [1600, 1000] : [1360, 850];
+  const revision = version ? `?v=${encodeURIComponent(version)}` : "";
+  const posterSrc = `${MEDIA_ROOT}${poster}.png${revision}`;
   return (
-    <figure className={`ai-figure ai-clip${width === 850 ? " ai-clip-compact" : ""}${height === 330 ? " ai-clip-wide" : ""}`}>
+    <figure className={`ai-figure ai-clip${height === 330 ? " ai-clip-wide" : ""}`}>
       <div className="ai-media-stage">
-      <video controls playsInline preload="none" poster={`${MEDIA_ROOT}${poster}.png`} width={width} height={height} aria-label={title}>
-        <source src={`${MEDIA_ROOT}${name}.mp4`} type="video/mp4" />
-        Your browser does not support this video. The walkthrough steps below describe the interaction.
-      </video>
+        <video controls playsInline preload="none" poster={posterSrc} width={width} height={height} aria-label={title}>
+          <source src={`${MEDIA_ROOT}${name}.mp4${revision}`} type="video/mp4" />
+          Your browser does not support this video. The walkthrough steps below describe the interaction.
+        </video>
       </div>
       <figcaption>{caption}</figcaption>
       <div className="ai-media-tools">
-      <a className="ai-still-link" href={`${MEDIA_ROOT}${poster}.png`} target="_blank" rel="noopener noreferrer" aria-label={`Open the full-size still frame for ${title} in a new tab`}>
-        Open image to zoom <span aria-hidden="true">↗</span>
-      </a>
-      <details className="ai-transcript">
-        <summary>Read the walkthrough steps</summary>
-        <ol>{steps.map((step) => <li key={step}>{step}</li>)}</ol>
-      </details>
+        <a className="ai-still-link" href={posterSrc} target="_blank" rel="noopener noreferrer" aria-label={`Open the full-size still frame for ${title} in a new tab`}>
+          Open image to zoom <span aria-hidden="true">↗</span>
+        </a>
       </div>
+      <ol className="ai-walkthrough-steps" aria-label="Walkthrough steps">
+        {steps.map((step) => <li key={step}>{step}</li>)}
+      </ol>
     </figure>
   );
 }
