@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { ArrowRight, Compass, Database, FileText, Layers, Lightbulb, Monitor, Network, Search, Server, Settings2, ShieldCheck, Unplug, type LucideIcon } from "lucide-react";
+import { ArrowRight, Eye, FlaskConical, Monitor, Scale, Server, Settings2, Unplug } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
+import { InvestigationMap, ResearchSynthesisMap, StrategyFlow } from "./InvestigationDiagrams";
 import "../../styles/ai-assistant.css";
 
 export const aiAssistantSections = [
@@ -15,17 +16,6 @@ export const aiAssistantSections = [
   { id: "impact", label: "Outcome & Reflection" },
 ];
 
-const sectionIcons: Record<string, LucideIcon> = {
-  brief: FileText,
-  problem: Network,
-  "research-synthesis": Search,
-  "approach-strategy": Compass,
-  "early-explorations": Layers,
-  "final-implementation": Monitor,
-  validation: ShieldCheck,
-  impact: Lightbulb,
-};
-
 function Copy({ children }: { children: ReactNode }) {
   return <div className="ai-prose">{children}</div>;
 }
@@ -34,31 +24,17 @@ function Feature({ number, title, children }: { number: string; title: string; c
   return <article className="ai-feature"><div className="ai-feature-heading"><span>{number}</span><h3>{title}</h3></div>{children}</article>;
 }
 
-function InvestigationMap() {
-  return <figure className="ai-investigation-map" aria-label="Design direction: connect scattered operational signals to a scoped investigation and a reviewed action">
-    <div className="ai-map-sources">
-      <span className="ai-small-label">Operational signals</span>
-      <div><span><Database aria-hidden="true" /> Inventory</span><span><Network aria-hidden="true" /> Alerts & metrics</span><span><FileText aria-hidden="true" /> Logs & events</span></div>
-    </div>
-    <ArrowRight className="ai-map-arrow" aria-hidden="true" />
-    <div className="ai-map-investigation"><span className="ai-small-label">One investigation</span><strong>What happened to this host?</strong><span className="ai-object-chip"><Network size={17} aria-hidden="true" /> esxi-07</span><p>Object + evidence + explanation</p></div>
-    <ArrowRight className="ai-map-arrow" aria-hidden="true" />
-    <div className="ai-map-decision"><ShieldCheck aria-hidden="true" /><strong>A reviewed next step</strong><p>Choose the scope. Keep control.</p></div>
-    <figcaption>Design goal: carry the same context from the first question to the next decision.</figcaption>
-  </figure>;
-}
-
 function DistinctFindingsMap() {
   return <figure className="ai-outcome-map" aria-labelledby="outcome-map-heading">
     <div className="ai-outcome-scope"><Server size={22} aria-hidden="true" /><span id="outcome-map-heading">One object. Two distinct findings.</span></div>
     <div className="ai-outcome-findings">
       <div className="ai-outcome-finding">
-        <h3>vCenter service outage</h3>
+        <h4>vCenter service outage</h4>
         <div className="ai-outcome-service"><Server size={28} aria-hidden="true" /><span>Appliance + services</span></div>
         <p>Inspect appliance availability and service health.</p>
       </div>
       <div className="ai-outcome-finding">
-        <h3>Ops network path</h3>
+        <h4>Ops network path</h4>
         <div className="ai-outcome-path"><span><Monitor size={24} aria-hidden="true" />Ops</span><Unplug size={22} aria-hidden="true" /><span><Server size={24} aria-hidden="true" />vCenter</span></div>
         <p>Review ping history, firewall rules, and DNS.</p>
       </div>
@@ -79,31 +55,13 @@ const content: Record<string, ReactNode> = {
   </>,
 
   "research-synthesis": <>
-    <Copy><p>Reviewing the shared VCF design walkthrough alongside the interactive prototype surfaced three questions for the Network Operations experience.</p></Copy>
-    <div className="ai-evidence-list">
-      {[
-        ["01", "Session continuity", "The review compares top tabs with history against a persistent session sidebar.", "Keep active incidents accessible without crowding diagnostic content."],
-        ["02", "Object context", "Inventory search and @ references offer two ways to identify an object.", "Support discovery and direct entry, then make the selected scope visible."],
-        ["03", "Diagnostic trust", "The explanation evolves from checks alone to rationale alongside the checks.", "Connect the purpose of a check to its evidence and recommended action."],
-      ].map(([number, title, observation, implication]) => <article className="ai-evidence-row" key={number}>
-        <div className="ai-evidence-title"><span className="ai-small-label">{number}</span><h3>{title}</h3></div>
-        <div><span className="ai-small-label">Seen in the design review</span><p>{observation}</p></div>
-        <div><span className="ai-small-label">Design implication</span><p>{implication}</p></div>
-      </article>)}
-    </div>
-    <p className="ai-note">Sources: the shared VCF design review and prototype walkthrough. The comparisons document design decisions; operator research and measured outcomes remain to be validated.</p>
+    <Copy><p>The shared design review and prototype explored how operators return to work, identify an object, and understand a diagnosis. Together, these patterns point to a common need: preserve context across the investigation.</p></Copy>
+    <ResearchSynthesisMap />
   </>,
 
   "approach-strategy": <>
     <Copy><p>I framed the Network Operations experience around one investigation: preserve its context, make the diagnostic path understandable, and keep approval deliberate.</p></Copy>
-    <ol className="ai-process">
-      {[
-        ["Map the investigation", "Trace a network symptom through object selection, diagnosis, review, and return."],
-        ["Compare the patterns", "Examine navigation space, object discovery, and the placement of diagnostic explanations."],
-        ["Connect the workflow", "Carry object references and evidence into a scoped action, then preserve the conversation for later."],
-      ].map(([title, description], index) => <li key={title}><span className="ai-small-label">0{index + 1}</span><h3>{title}</h3><p>{description}</p></li>)}
-    </ol>
-    <Copy><p>The primary user is the network operator investigating an incident. Platform administrators own readiness and model setup; that handoff belongs before the troubleshooting conversation.</p></Copy>
+    <StrategyFlow />
   </>,
 
   "early-explorations": <DesignExplorations />,
@@ -168,10 +126,21 @@ const content: Record<string, ReactNode> = {
   </>,
 
   impact: <>
-    <Copy><p>The outcome is a UX vision for Network Operations that connects object context, evidence, and a reviewed next step. The recording’s final diagnostic example makes one principle concrete: keep distinct findings visible.</p></Copy>
-    <DistinctFindingsMap />
-    <div className="ai-takeaway"><span className="ai-small-label">Key reflection</span><p>Restoring a service can leave the Ops network path unresolved. Each finding needs its own evidence and next step.</p></div>
-    <Copy><p>Next, validate whether operators can distinguish the two issues, interpret the ping history, and explain what remains before choosing an action.</p></Copy>
+    <Copy><p>This work gave the Network Operations vision a coherent path from choosing an object to returning to unfinished work. It is still a prototype: I can point to the design decisions and interactions, but I cannot yet claim faster resolution or stronger operator trust.</p></Copy>
+    <div className="ai-reflection-aspect">
+      <h3 className="ai-node-heading"><Eye size={24} aria-hidden="true" /><span>Make uncertainty inspectable</span></h3>
+      <Copy><p>The vCenter example is the clearest lesson for me. A service outage and an Ops connectivity problem can look like one incident, yet require different checks. A concise answer is useful only if it preserves that distinction and makes unfinished work visible.</p></Copy>
+      <DistinctFindingsMap />
+    </div>
+    <div className="ai-reflection-aspect">
+      <h3 className="ai-node-heading"><Scale size={24} aria-hidden="true" /><span>Keep the tradeoffs visible</span></h3>
+      <Copy><p>Tabs protect the space needed for diagnostic detail, but a growing set of investigations may be harder to navigate. Short explanations help scanning, but can hide useful evidence. I would keep summaries concise while preserving a direct path to the supporting checks.</p></Copy>
+    </div>
+    <div className="ai-reflection-aspect">
+      <h3 className="ai-node-heading"><FlaskConical size={24} aria-hidden="true" /><span>Evaluate decisions under pressure</span></h3>
+      <Copy><p>I would test interrupted investigations, similar object names, and partial fixes with network operators. I would ask them to explain the affected scope, justify a next action, and identify what remains unresolved. Those decisions would tell me more than whether the interface feels easy to use.</p></Copy>
+    </div>
+    <div className="ai-takeaway"><span className="ai-small-label">What I would carry forward</span><p>A clear recommendation should also make it clear when to pause.</p></div>
   </>,
 };
 
@@ -186,9 +155,8 @@ export function AiAssistantCaseStudyContent() {
       ].map(([label, value]) => <div key={label}><p className="ai-meta-label">{label}</p><p className="ai-meta-value">{value}</p></div>)}
     </div>
     {aiAssistantSections.map((section) => {
-      const SectionIcon = sectionIcons[section.id];
       return <section key={section.id} id={section.id} tabIndex={-1} aria-labelledby={`${section.id}-heading`} className="ai-section">
-        <h2 id={`${section.id}-heading`} className="ai-section-heading text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent"><SectionIcon className="ai-section-icon" size={24} aria-hidden="true" />{section.label}</h2>
+        <h2 id={`${section.id}-heading`} className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{section.label}</h2>
         {content[section.id]}
       </section>;
     })}
