@@ -44,33 +44,33 @@ const content: Record<string, ReactNode> = {
   </>,
 
   problem: <>
-    <Copy><p>The hard part is connecting a symptom to a trustworthy next step. A helpful answer needs to establish <strong>which object</strong> it concerns, <strong>what supports the diagnosis</strong>, and <strong>what a proposed action will change</strong>.</p></Copy>
+    <Copy><p>The broader VCF exploration moved from scanning health dashboards to prioritizing active issues. The next challenge was helping an operator investigate those issues without repeatedly moving between inventory, alerts, and diagnostic detail.</p><p>For Network Operations, a useful answer needs to establish <strong>which object</strong> it concerns, <strong>what supports the diagnosis</strong>, and <strong>what the next action will change</strong>.</p></Copy>
     <InvestigationMap />
   </>,
 
   "research-synthesis": <>
-    <Copy><p>A scenario-based review of the VCF prototype covered object search, diagnosis, remediation, and session recovery. Three observations shaped the Network Operations direction.</p></Copy>
+    <Copy><p>Reviewing the shared VCF design walkthrough alongside the interactive prototype surfaced three questions for the Network Operations experience.</p></Copy>
     <div className="ai-evidence-list">
       {[
-        ["01", "Object context", "The composer accepts inventory objects alongside natural language.", "Keep the host identity visible before and after the question."],
-        ["02", "Diagnostic detail", "One investigation produces multiple checks, issues, and recommendations.", "Summarize first; reveal evidence at the point of review."],
-        ["03", "Action scope", "Remediation can address only part of a problem.", "Explain the limits of each choice and retain unresolved issues."],
+        ["01", "Session continuity", "The review compares top tabs with history against a persistent session sidebar.", "Keep active incidents accessible without crowding diagnostic content."],
+        ["02", "Object context", "Inventory search and @ references offer two ways to identify an object.", "Support discovery and direct entry, then make the selected scope visible."],
+        ["03", "Diagnostic trust", "The explanation evolves from checks alone to rationale alongside the checks.", "Connect the purpose of a check to its evidence and recommended action."],
       ].map(([number, title, observation, implication]) => <article className="ai-evidence-row" key={number}>
         <div className="ai-evidence-title"><span className="ai-small-label">{number}</span><h3>{title}</h3></div>
-        <div><span className="ai-small-label">Observed in the prototype</span><p>{observation}</p></div>
+        <div><span className="ai-small-label">Seen in the design review</span><p>{observation}</p></div>
         <div><span className="ai-small-label">Design implication</span><p>{implication}</p></div>
       </article>)}
     </div>
-    <p className="ai-note">Method: prototype and workflow analysis. These directions remain hypotheses for validation with network operators.</p>
+    <p className="ai-note">Sources: the shared VCF design review and prototype walkthrough. The comparisons document design decisions; operator research and measured outcomes remain to be validated.</p>
   </>,
 
   "approach-strategy": <>
-    <Copy><p>I framed the experience around an investigation, with three design priorities: make context explicit, make evidence readable, and make action deliberate.</p></Copy>
+    <Copy><p>I framed the Network Operations experience around one investigation: preserve its context, make the diagnostic path understandable, and keep approval deliberate.</p></Copy>
     <ol className="ai-process">
       {[
-        ["Map the task", "Follow the operator from a network symptom to a decision. Identify where context can be lost."],
-        ["Examine the decisions", "Review object selection, diagnostic detail, approval choices, and interruption states."],
-        ["Shape the experience", "Connect those moments through object references, structured findings, and resumable sessions."],
+        ["Map the investigation", "Trace a network symptom through object selection, diagnosis, review, and return."],
+        ["Compare the patterns", "Examine navigation space, object discovery, and the placement of diagnostic explanations."],
+        ["Connect the workflow", "Carry object references and evidence into a scoped action, then preserve the conversation for later."],
       ].map(([title, description], index) => <li key={title}><span className="ai-small-label">0{index + 1}</span><h3>{title}</h3><p>{description}</p></li>)}
     </ol>
     <Copy><p>The primary user is the network operator investigating an incident. Platform administrators own readiness and model setup; that handoff belongs before the troubleshooting conversation.</p></Copy>
@@ -82,7 +82,7 @@ const content: Record<string, ReactNode> = {
     <Copy><p>Four moments connect the investigation: scope, evidence, action, and continuity.</p></Copy>
     <p className="ai-note">Adapted prototype views use illustrative network data and simulated actions.</p>
     <Feature number="01" title="Start with the affected object">
-      <Copy><p>Search inventory and attach the host before asking about a vMotion failure. The visible object reference makes the investigation’s scope clear.</p></Copy>
+      <Copy><p>The walkthrough uses inventory search as a visible starting point. Attach the host before asking about a vMotion failure; the object chip keeps the selected scope in the question.</p></Copy>
       <CaseStudyClip name="object-context-walkthrough" poster="object-context" title="Select a host and compose a network troubleshooting question" caption="The selected host stays attached to the question." steps={[
         "Open inventory search beside the composer.",
         "Select esxi-07 and confirm the host chip.",
@@ -90,7 +90,7 @@ const content: Record<string, ReactNode> = {
       ]} />
     </Feature>
     <Feature number="02" title="Move from symptoms to evidence">
-      <Copy><p>Follow the diagnostic checks, then expand a finding to inspect the explanation and recommended next steps. A structured answer makes a complex investigation easier to scan.</p></Copy>
+      <Copy><p>Explain the purpose of diagnostic checks as the investigation progresses, then group the findings by issue. The operator can inspect the evidence and recommendation together before deciding what to do.</p></Copy>
       <CaseStudyClip name="network-triage-walkthrough" poster="network-findings" title="Investigate a vMotion network failure and inspect its findings" caption="Expand a network finding to connect the symptom with supporting evidence." steps={[
         "Submit the object-scoped vMotion question.",
         "Follow the investigation as checks appear.",
@@ -106,7 +106,7 @@ const content: Record<string, ReactNode> = {
       ]} />
     </Feature>
     <Feature number="04" title="Return with context intact">
-      <Copy><p>Operational work gets interrupted. Named sessions and history let an operator move between incidents and resume the earlier investigation.</p></Copy>
+      <Copy><p>The prototype carries forward top tabs for active work and searchable history for earlier sessions. Naming an investigation gives the operator a recognizable route back after an interruption.</p></Copy>
       <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
         "Start a separate session for another investigation.",
         "Name it Network incident review.",
@@ -122,7 +122,7 @@ const content: Record<string, ReactNode> = {
   </>,
 
   validation: <>
-    <Copy><p>The walkthrough review examined normal flows, unsupported requests, and partial completion. The next round should test decision quality with network operators.</p></Copy>
+    <Copy><p>The prototype walkthrough checked normal flows, unsupported requests, and partial completion. The next round should compare the design alternatives with network operators and test whether the explanations support sound decisions.</p></Copy>
     <div className="ai-validation-grid">
       <div><h3>What the review surfaced</h3><ul>
         <li><strong>Capability boundaries:</strong> unsupported requests need a clear route to available skills.</li>
@@ -130,9 +130,9 @@ const content: Record<string, ReactNode> = {
         <li><strong>Recovery copy:</strong> the restricted-access state references another feature; guidance should name the assistant and the required permission.</li>
       </ul></div>
       <div><h3>What to test next</h3><ul>
-        <li><strong>Scope:</strong> can operators select the right host and notice an incorrect reference?</li>
-        <li><strong>Understanding:</strong> can they explain the evidence and consequences before approving an action?</li>
-        <li><strong>Continuity:</strong> can they resume the right incident after an interruption?</li>
+        <li><strong>Session navigation:</strong> compare tabs and a sidebar as the number of active incidents grows.</li>
+        <li><strong>Object selection:</strong> check discovery of search and @ references, including similarly named hosts.</li>
+        <li><strong>Diagnostic understanding:</strong> compare checks alone with explained checks; ask operators to justify the scope and consequences before approval.</li>
       </ul></div>
     </div>
   </>,

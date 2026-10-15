@@ -1,125 +1,127 @@
-import { ArrowRight, Check, ChevronDown, ChevronRight, Search, Server } from "lucide-react";
+import type { ReactNode } from "react";
+import { ArrowUp, Check, ChevronDown, Clock3, Search, Server, Sparkles } from "lucide-react";
 import "../../styles/ai-explorations.css";
 
-const explorations = [
-  {
-    id: "context",
-    label: "Object context",
-    alternative: "Infer the object from text",
-    direction: "Make the object explicit",
-    alternativeCaption: "A typed name has no confirmed inventory match.",
-    directionCaption: "The selected host, esxi-07, stays attached to the question.",
-    tradeoff: "Inventory selection adds a step; it confirms the object behind the typed name.",
-  },
-  {
-    id: "evidence",
-    label: "Evidence",
-    alternative: "Explain everything at once",
-    direction: "Reveal detail by issue",
-    alternativeCaption: "The finding and its supporting checks compete for attention.",
-    directionCaption: "A vMotion finding expands to show related events and throughput.",
-    tradeoff: "Progressive disclosure keeps the summary readable; supporting evidence remains one step away.",
-  },
-  {
-    id: "remediation",
-    label: "Remediation",
-    alternative: "Offer a single approval",
-    direction: "Make the scope a choice",
-    alternativeCaption: "One approval applies the complete proposed plan.",
-    directionCaption: "Connectivity-only remediation leaves the unresolved root cause visible.",
-    tradeoff: "Choosing a narrower scope adds a decision and requires a clear account of what remains unresolved.",
-  },
-] as const;
-
-type ExplorationId = typeof explorations[number]["id"];
-
-function ObjectContext({ proposed }: { proposed: boolean }) {
-  return <>
-    <div className="ai-explore-window-label"><span className="ai-explore-status-dot" />Network Operations</div>
-    {proposed ? <>
-      <div className="ai-explore-inventory"><Search size={13} /><span>Find an inventory object</span></div>
-      <div className="ai-explore-composer">
-        <span className="ai-explore-object"><Server size={13} />esxi-07<Check size={12} /></span>
-        <p>Why did the latest vMotion fail?</p>
-        <span className="ai-explore-send"><ArrowRight size={14} /></span>
-      </div>
-    </> : <>
-      <div className="ai-explore-blank-lines"><span /><span /></div>
-      <div className="ai-explore-composer">
-        <p>Why did vMotion fail on esxi-07?</p>
-        <span className="ai-explore-annotation">Object identity unconfirmed</span>
-        <span className="ai-explore-send"><ArrowRight size={14} /></span>
-      </div>
-    </>}
-  </>;
+function MockWindowHeader({ children }: { children: ReactNode }) {
+  return <div className="ai-explore-window-label"><Sparkles size={14} aria-hidden="true" /><span>{children}</span></div>;
 }
 
-function Evidence({ proposed }: { proposed: boolean }) {
-  return <>
-    <div className="ai-explore-window-label"><span className="ai-explore-status-dot" />Investigation · esxi-07</div>
-    {proposed ? <div className="ai-explore-issue-stack">
-      <div className="ai-explore-issue">
-        <div className="ai-explore-issue-heading"><span className="ai-explore-severity" />vMotion connectivity<ChevronDown size={14} /></div>
-        <div className="ai-explore-evidence"><span>Uplink change preceded the failure</span><div className="ai-explore-sparkline"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div><small>Inspect events and throughput</small></div>
-      </div>
-      <div className="ai-explore-issue ai-explore-issue-heading"><span className="ai-explore-neutral-dot" />Related host conditions<ChevronRight size={14} /></div>
-    </div> : <div className="ai-explore-answer">
-      <p>The migration failed. Review the host’s uplink changes, VMkernel throughput, and related events to understand the network conditions.</p>
-      <div className="ai-explore-text-lines"><span /><span /><span /><span /></div>
-    </div>}
-  </>;
+function MockComposer({ children = "Ask a network question…" }: { children?: ReactNode }) {
+  return <div className="ai-explore-composer"><span>{children}</span><ArrowUp size={14} aria-hidden="true" /></div>;
 }
 
-function Remediation({ proposed }: { proposed: boolean }) {
-  return <>
-    <div className="ai-explore-window-label"><span className="ai-explore-status-dot" />Review the next step</div>
-    {proposed ? <>
-      <div className="ai-explore-choice"><span className="ai-explore-radio" /><span>Full remediation</span></div>
-      <div className="ai-explore-choice ai-explore-choice-selected"><span className="ai-explore-radio"><i /></span><span>Connectivity issues only</span><Check size={13} /></div>
-      <div className="ai-explore-scope-note">Root cause remains unresolved</div>
-      <span className="ai-explore-action">Approve selected scope<ArrowRight size={13} /></span>
-    </> : <>
-      <div className="ai-explore-answer ai-explore-answer-short"><p>Apply the recommended remediation plan.</p><div className="ai-explore-text-lines"><span /><span /><span /></div></div>
-      <span className="ai-explore-action">Approve &amp; run<ArrowRight size={13} /></span>
-    </>}
-  </>;
-}
-
-function Wireframe({ id, proposed }: { id: ExplorationId; proposed: boolean }) {
-  return <div className={`ai-explore-wireframe${proposed ? " ai-explore-wireframe-proposed" : ""}`} aria-hidden="true">
-    {id === "context" && <ObjectContext proposed={proposed} />}
-    {id === "evidence" && <Evidence proposed={proposed} />}
-    {id === "remediation" && <Remediation proposed={proposed} />}
+function SessionTabsDiagram() {
+  return <div className="ai-explore-wireframe" role="img" aria-label="Session tabs keep vMotion triage and Management connectivity at the top. A separate history menu lists previous investigations.">
+    <MockWindowHeader>VCF AI Assistant</MockWindowHeader>
+    <div className="ai-explore-session-tabs"><span className="ai-explore-tab-active">vMotion triage</span><span>Management connectivity</span><Clock3 size={14} aria-hidden="true" /></div>
+    <div className="ai-explore-tabs-body">
+      <div className="ai-explore-chat-preview"><span className="ai-explore-object"><Server size={13} aria-hidden="true" />esxi-07</span><p>Investigate the latest vMotion failure.</p><div className="ai-explore-text-lines" aria-hidden="true"><span /><span /></div></div>
+      <div className="ai-explore-history"><span className="ai-explore-mini-heading">Session history</span><span className="ai-explore-history-active">vMotion triage</span><span>Management connectivity</span><span>Host network review</span></div>
+    </div>
+    <MockComposer />
   </div>;
+}
+
+function SessionSidebarDiagram() {
+  return <div className="ai-explore-wireframe" role="img" aria-label="A persistent sidebar lists vMotion triage, Management connectivity, and Host network review beside a narrower conversation.">
+    <MockWindowHeader>VCF AI Assistant</MockWindowHeader>
+    <div className="ai-explore-sidebar-layout">
+      <div className="ai-explore-sidebar"><div className="ai-explore-search"><Search size={13} aria-hidden="true" /><span>Search</span></div><span>New session</span><span className="ai-explore-history-active">vMotion triage</span><span>Management connectivity</span><span>Host network review</span></div>
+      <div className="ai-explore-sidebar-conversation"><div className="ai-explore-chat-preview"><span className="ai-explore-object"><Server size={13} aria-hidden="true" />esxi-07</span><p>Investigate the latest vMotion failure.</p><div className="ai-explore-text-lines" aria-hidden="true"><span /><span /></div></div><MockComposer /></div>
+    </div>
+  </div>;
+}
+
+function InventorySearchDiagram() {
+  return <div className="ai-explore-wireframe" role="img" aria-label="Inventory search displays a search field, a Hosts group with esxi-07 and esxi-09, and a Clusters group. The selected host appears as a reference in the composer.">
+    <MockWindowHeader>Find an object</MockWindowHeader>
+    <div className="ai-explore-object-menu">
+      <div className="ai-explore-search"><Search size={13} aria-hidden="true" /><span>Search inventory…</span></div>
+      <span className="ai-explore-mini-heading">Hosts</span>
+      <div className="ai-explore-object-row ai-explore-object-row-selected"><Server size={13} aria-hidden="true" /><span>esxi-07</span><Check size={13} aria-hidden="true" /></div>
+      <div className="ai-explore-object-row"><Server size={13} aria-hidden="true" /><span>esxi-09</span></div>
+      <span className="ai-explore-mini-heading">Clusters</span>
+      <div className="ai-explore-object-row"><span>Network cluster</span></div>
+    </div>
+    <MockComposer><span className="ai-explore-object"><Server size={13} aria-hidden="true" />esxi-07</span></MockComposer>
+  </div>;
+}
+
+function ObjectMentionDiagram() {
+  return <div className="ai-explore-wireframe" role="img" aria-label="Typing @host in a troubleshooting question opens matching host suggestions, including esxi-07 and esxi-09, directly above the composer.">
+    <MockWindowHeader>Reference while typing</MockWindowHeader>
+    <p className="ai-explore-mention-hint">Type @host to reference a host.</p>
+    <div className="ai-explore-object-menu ai-explore-mention-menu">
+      <span className="ai-explore-mini-heading">Hosts</span>
+      <div className="ai-explore-object-row ai-explore-object-row-selected"><Server size={13} aria-hidden="true" /><span>esxi-07</span><span className="ai-explore-object-type">Host</span></div>
+      <div className="ai-explore-object-row"><Server size={13} aria-hidden="true" /><span>esxi-09</span><span className="ai-explore-object-type">Host</span></div>
+    </div>
+    <MockComposer>Troubleshoot <span className="ai-explore-mention-token">@host</span></MockComposer>
+  </div>;
+}
+
+const diagnosticChecks = [
+  { title: "Connect to the environment", detail: "Read the current network state", explanation: "Live data avoids relying on a stale snapshot." },
+  { title: "Build object context", detail: "Match events to esxi-07", explanation: "Relate each event to a known inventory object." },
+  { title: "Correlate network signals", detail: "Review events and alarms together", explanation: "Related signals may span more than one object." },
+];
+
+function DiagnosticChecksDiagram({ stage }: { stage: "checks" | "boxed" | "inline" }) {
+  const description = stage === "checks"
+    ? "Three diagnostic checks show status and activity, with no explanation of their purpose."
+    : stage === "boxed"
+      ? "Each diagnostic check includes an explanatory paragraph in its own shaded box."
+      : "Short explanations sit between diagnostic checks, forming one continuous investigation trail.";
+  return <div className={`ai-explore-wireframe ai-explore-diagnostics ai-explore-diagnostics-${stage}`} role="img" aria-label={description}>
+    <MockWindowHeader>Analysis process<ChevronDown size={13} aria-hidden="true" /></MockWindowHeader>
+    <div className="ai-explore-check-list">{diagnosticChecks.map(item => <div className="ai-explore-check-step" key={item.title}>
+      <div className="ai-explore-check-row"><span className="ai-explore-check-icon"><Check size={11} aria-hidden="true" /></span><div><span className="ai-explore-check-title">{item.title}</span><span className="ai-explore-check-detail">{item.detail}</span></div></div>
+      {stage !== "checks" && <div className="ai-explore-explanation"><Sparkles size={12} aria-hidden="true" /><p>{item.explanation}</p></div>}
+    </div>)}</div>
+  </div>;
+}
+
+function ExplorationCard({ label, title, children, caption }: { label: string; title: string; children: ReactNode; caption: string }) {
+  return <figure className="ai-explore-card"><div className="ai-explore-card-header"><span>{label}</span><h4>{title}</h4></div>{children}<figcaption>{caption}</figcaption></figure>;
+}
+
+function ExplorationPanel({ number, id, title, problem, children, takeaway, takeawayLabel = "Tradeoff" }: { number: string; id: string; title: string; problem: string; children: ReactNode; takeaway: string; takeawayLabel?: string }) {
+  return <article className="ai-explore-panel" aria-labelledby={`exploration-${id}-heading`}>
+    <div className="ai-explore-heading"><span>{number}</span><h3 id={`exploration-${id}-heading`}>{title}</h3></div>
+    <p className="ai-explore-problem">{problem}</p>
+    {children}
+    <p className="ai-explore-tradeoff"><span>{takeawayLabel}</span>{takeaway}</p>
+  </article>;
 }
 
 export function DesignExplorations() {
   return <div className="ai-explore">
-    <div className="ai-explore-intro">
-      <p>Illustrative comparisons show the tradeoffs behind the proposed direction.</p>
-    </div>
-    {explorations.map((exploration, index) => <article
-      key={exploration.id}
-      aria-labelledby={`exploration-${exploration.id}-heading`}
-      className="ai-explore-panel"
-    >
-      <div className="ai-explore-heading">
-        <span>0{index + 1}</span>
-        <h3 id={`exploration-${exploration.id}-heading`}>{exploration.label}</h3>
-      </div>
+    <div className="ai-explore-intro"><p>The shared VCF review compared navigation and object entry, then iterated on diagnostic explanations. These simplified views apply those patterns to Network Operations.</p></div>
+    <ExplorationPanel number="01" id="sessions" title="Keep investigations within reach"
+      problem="Operators may revisit one investigation while starting another. The review compared two places for session navigation."
+      takeaway="Tabs preserve conversation width and keep a few investigations close. A persistent list makes past sessions visible while giving the conversation less space.">
       <div className="ai-explore-comparison">
-        <figure className="ai-explore-card">
-          <div className="ai-explore-card-header"><span>Alternative</span><h4>{exploration.alternative}</h4></div>
-          <Wireframe id={exploration.id} proposed={false} />
-          <figcaption>{exploration.alternativeCaption}</figcaption>
-        </figure>
-        <figure className="ai-explore-card ai-explore-card-proposed">
-          <div className="ai-explore-card-header"><span>Proposed direction</span><h4>{exploration.direction}</h4></div>
-          <Wireframe id={exploration.id} proposed />
-          <figcaption>{exploration.directionCaption}</figcaption>
-        </figure>
+        <ExplorationCard label="Option 1" title="Top tabs + history" caption="Active investigations sit above the conversation; earlier sessions are available through history."><SessionTabsDiagram /></ExplorationCard>
+        <ExplorationCard label="Option 2" title="Persistent sidebar" caption="Past investigations stay visible beside the conversation."><SessionSidebarDiagram /></ExplorationCard>
       </div>
-      <p className="ai-explore-tradeoff"><span>Tradeoff</span>{exploration.tradeoff}</p>
-    </article>)}
+    </ExplorationPanel>
+    <ExplorationPanel number="02" id="references" title="Bring the right object into the question"
+      problem="A troubleshooting question needs a specific inventory reference. The review explored a visible search entry and a shortcut inside the composer."
+      takeaway="Search makes object types discoverable; @ mentions keep a known reference in the flow of typing. Both can lead to an explicit object chip.">
+      <div className="ai-explore-comparison">
+        <ExplorationCard label="Option 1" title="Search the inventory" caption="Browse object groups and select the host before continuing the question."><InventorySearchDiagram /></ExplorationCard>
+        <ExplorationCard label="Option 2" title="Use an @ mention" caption="Type a reference in the question and choose from matching objects."><ObjectMentionDiagram /></ExplorationCard>
+      </div>
+    </ExplorationPanel>
+    <ExplorationPanel number="03" id="diagnostics" title="Explain the purpose behind each check"
+      problem="Completed checks show progress, but do not explain why a check matters. Three versions explored where to place that explanation."
+      takeawayLabel="Design progression"
+      takeaway="The final review stage separates explanations from the check containers. The aim is a readable investigation trail, with context where the operator needs it.">
+      <div className="ai-explore-comparison ai-explore-comparison-three">
+        <ExplorationCard label="Original" title="Checks only" caption="Status communicates what is happening; the purpose of each check is implicit."><DiagnosticChecksDiagram stage="checks" /></ExplorationCard>
+        <ExplorationCard label="V1" title="Boxed explanations" caption="Explanatory text adds context inside a separate visual container for each check."><DiagnosticChecksDiagram stage="boxed" /></ExplorationCard>
+        <ExplorationCard label="Current in the review" title="Inline explanations" caption="Brief explanations follow the checks as part of a continuous reading sequence."><DiagnosticChecksDiagram stage="inline" /></ExplorationCard>
+      </div>
+    </ExplorationPanel>
   </div>;
 }
