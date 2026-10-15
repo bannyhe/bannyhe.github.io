@@ -71,8 +71,8 @@ const projects = [
   {
     id: "ai-assistant",
     title: "AI Assistant",
-    description: "An AI assistant experience. Case study in progress.",
-    imageUrl: "/images/ai-assistant-placeholder.svg",
+    description: "UX vision for conversational troubleshooting in Network Operations.",
+    imageUrl: "/images/ai-assistant-network.svg",
     tags: ["AI", "Product Design"],
     liveUrl: "#",
     githubUrl: "#",

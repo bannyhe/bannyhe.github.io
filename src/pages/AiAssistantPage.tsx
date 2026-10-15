@@ -1,38 +1,17 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ChevronUp, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import aiAssistantOverview from "../assets/ai-assistant/ai-assistant-overview.svg";
-
-const sections = [
-  { id: "brief", label: "Brief" },
-  { id: "problem", label: "Problem" },
-  { id: "my-role", label: "My Role" },
-  { id: "process", label: "Process" },
-  { id: "target-users", label: "Target Users" },
-  { id: "research-synthesis", label: "Research & Synthesis" },
-  { id: "solution-overview", label: "Solution Overview" },
-  { id: "design-challenges", label: "Design Challenges" },
-  { id: "approach-strategy", label: "Approach & Strategy" },
-  { id: "early-explorations", label: "Early Explorations" },
-  { id: "final-implementation", label: "Final Implementation" },
-  { id: "validation", label: "Validation" },
-  { id: "impact", label: "Impact" },
-  { id: "learnings-reflections", label: "Learnings & Reflections" },
-];
-
-const designChallenges = [
-  "Session Management",
-  "Object Search",
-  "Building Trust in AI-Generated Remediation Plans",
-];
+import { AiAssistantCaseStudyContent, aiAssistantSections as sections } from "../components/ai-assistant/AiAssistantCaseStudyContent";
 
 // Matches the existing case-study courtesy gate. The build supplies the code;
 // this client-side check is not a substitute for server-side authentication.
 const PROJECT_PASSWORD = import.meta.env.VITE_AI_ASSISTANT_PASSWORD ?? "";
 
 export function AiAssistantPage() {
+  const reduceMotion = useReducedMotion();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [error, setError] = useState(false);
@@ -66,7 +45,7 @@ export function AiAssistantPage() {
     if (!element) return;
     window.scrollTo({
       top: element.getBoundingClientRect().top + window.scrollY - 120,
-      behavior: "smooth",
+      behavior: reduceMotion ? "auto" : "smooth",
     });
   }
 
@@ -161,12 +140,12 @@ export function AiAssistantPage() {
   }
 
   return (
-    <main className="pt-20 pb-24 vcf-body">
+    <main className="pt-20 pb-24 vcf-body ai-case-study">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto py-12">
           <img
             src={aiAssistantOverview}
-            alt="VCF AI Assistant concept in the VCF Operations console, illustrating object search, conversational issue summaries, and reviewable remediation recommendations."
+            alt="VCF AI Assistant concept for Network Operations, showing a captured prototype investigation of vMotion network failures and its findings."
             className="w-full h-auto"
             style={{ borderRadius: "10px" }}
             width={1867}
@@ -177,34 +156,12 @@ export function AiAssistantPage() {
 
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: reduceMotion ? 0 : 0.8 }}
           className="max-w-6xl mx-auto"
         >
-          <div className="mb-16">
-            <h1 className="sr-only">AI Assistant</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {["Project Type", "My Role", "Team", "Timeline"].map((label) => (
-                <div key={label}>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {sections.map((section) => (
-            <section key={section.id} id={section.id} aria-labelledby={`${section.id}-heading`} className="mb-16">
-              <h2 id={`${section.id}-heading`} className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                {section.label}
-              </h2>
-              {section.id === "design-challenges" && designChallenges.map((challenge) => (
-                <h3 key={challenge} className="text-xl text-gray-900 dark:text-gray-100 mb-8">
-                  {challenge}
-                </h3>
-              ))}
-            </section>
-          ))}
+          <AiAssistantCaseStudyContent />
         </motion.div>
       </div>
 
@@ -212,7 +169,9 @@ export function AiAssistantPage() {
         aria-label="Project contents"
         className="hidden xl:block fixed top-32 right-8 w-64 z-40"
         onMouseEnter={() => setContentsOpen(true)}
-        onMouseLeave={() => setContentsOpen(false)}
+        onMouseLeave={(event) => {
+          if (!event.currentTarget.contains(document.activeElement)) setContentsOpen(false);
+        }}
         onFocus={() => setContentsOpen(true)}
         onBlur={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) setContentsOpen(false);
@@ -263,7 +222,7 @@ export function AiAssistantPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="fixed bottom-8 right-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 p-4 shadow-xl hover:shadow-2xl transition-all z-50 cursor-pointer"
           style={{ borderRadius: "10px" }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })}
         >
           <ChevronUp className="w-6 h-6" aria-hidden="true" />
         </motion.button>
