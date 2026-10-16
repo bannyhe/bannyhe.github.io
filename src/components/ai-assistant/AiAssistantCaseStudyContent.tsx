@@ -67,7 +67,7 @@ const content: Record<string, ReactNode> = {
   "early-explorations": <DesignExplorations />,
 
   "final-implementation": <>
-    <Copy><p>Four moments connect the investigation: scope, evidence, action, and continuity.</p></Copy>
+    <Copy><p>The workspace connects object scope, evidence, action, continuity, and model choice.</p></Copy>
     <p className="ai-note">Adapted prototype views use illustrative network data and simulated actions.</p>
     <Feature number="01" title="Start with the affected object">
       <Copy><p>The walkthrough uses inventory search as a visible starting point. Attach the host before asking about a vMotion failure; the object chip keeps the selected scope in the question.</p></Copy>
@@ -100,6 +100,11 @@ const content: Record<string, ReactNode> = {
         "Name it Network incident review.",
         "Use history to find and resume an earlier thread.",
       ]} />
+    </Feature>
+    <Feature number="05" title="Choose a model for the investigation">
+      <Copy><p>Keep model choice beside the prompt so operators can see their options without leaving an investigation. The prototype groups provider models separately from Private AI Services for corporate environments.</p></Copy>
+      <CaseStudyFigure name="model-selector-providers" alt="Network AI Assistant with the model selector open, showing Anthropic, Google Gemini, and OpenAI models" caption="Open Gemini 2.5 Pro in the composer to browse models from Anthropic, Google Gemini, and OpenAI." />
+      <CaseStudyFigure name="model-selector-private-ai" alt="Model selector scrolled to Private AI Services, showing Gemini 2.5 Pro selected, gemini-flash-latest, and openai/gpt-oss-120b" caption="Scroll within the menu to reveal Private AI Services: Gemini 2.5 Pro, gemini-flash-latest, and openai/gpt-oss-120b." />
     </Feature>
     <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
       <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
