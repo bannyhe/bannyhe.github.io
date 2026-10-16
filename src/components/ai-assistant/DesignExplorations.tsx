@@ -12,7 +12,7 @@ function MockComposer({ children = "Ask a network question…" }: { children?: R
 
 function SessionTabsDiagram() {
   return <div className="ai-explore-wireframe" role="img" aria-label="Session tabs keep vMotion triage and Management connectivity at the top. A separate history menu lists previous investigations.">
-    <MockWindowHeader>VCF AI Assistant</MockWindowHeader>
+    <MockWindowHeader>Network AI Assistant</MockWindowHeader>
     <div className="ai-explore-session-tabs"><span className="ai-explore-tab-active">vMotion triage</span><span>Management connectivity</span><Clock3 size={14} aria-hidden="true" /></div>
     <div className="ai-explore-tabs-body">
       <div className="ai-explore-chat-preview"><span className="ai-explore-object"><Server size={13} aria-hidden="true" />esxi-07</span><p>Investigate the latest vMotion failure.</p><div className="ai-explore-text-lines" aria-hidden="true"><span /><span /></div></div>
@@ -24,7 +24,7 @@ function SessionTabsDiagram() {
 
 function SessionSidebarDiagram() {
   return <div className="ai-explore-wireframe" role="img" aria-label="A persistent sidebar lists vMotion triage, Management connectivity, and Host network review beside a narrower conversation.">
-    <MockWindowHeader>VCF AI Assistant</MockWindowHeader>
+    <MockWindowHeader>Network AI Assistant</MockWindowHeader>
     <div className="ai-explore-sidebar-layout">
       <div className="ai-explore-sidebar"><div className="ai-explore-search"><Search size={13} aria-hidden="true" /><span>Search</span></div><span>New session</span><span className="ai-explore-history-active">vMotion triage</span><span>Management connectivity</span><span>Host network review</span></div>
       <div className="ai-explore-sidebar-conversation"><div className="ai-explore-chat-preview"><span className="ai-explore-object"><Server size={13} aria-hidden="true" />esxi-07</span><p>Investigate the latest vMotion failure.</p><div className="ai-explore-text-lines" aria-hidden="true"><span /><span /></div></div><MockComposer /></div>

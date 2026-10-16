@@ -3,9 +3,9 @@ import { Expand, X } from "lucide-react";
 
 const MEDIA_ROOT = "/media/ai-assistant/";
 
-export function CaseStudyFigure({ name, alt, caption }: { name: string; alt: string; caption: string }) {
+export function CaseStudyFigure({ name, alt, caption, version }: { name: string; alt: string; caption: string; version?: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
-  const src = `${MEDIA_ROOT}${name}.png`;
+  const src = `${MEDIA_ROOT}${name}.png${version ? `?v=${encodeURIComponent(version)}` : ""}`;
 
   return (
     <figure className="ai-figure">

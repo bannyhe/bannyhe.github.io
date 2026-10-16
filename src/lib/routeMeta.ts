@@ -94,7 +94,7 @@ export const ROUTE_META: RouteMeta[] = [
     path: "/project/ai-assistant",
     title: "AI Assistant — Mu He",
     description:
-      "Envisioning VCF AI Assistant for Network Operations. UX Design Lead, May–July 2026. A password-protected concept walkthrough covering object context, diagnostics, remediation review, and session continuity.",
+      "Envisioning Network AI Assistant within VCF Operations. UX Design Lead, May–July 2026. A password-protected concept walkthrough covering object context, diagnostics, remediation review, and session continuity.",
   },
 ];
 

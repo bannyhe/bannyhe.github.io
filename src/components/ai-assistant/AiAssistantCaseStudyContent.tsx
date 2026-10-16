@@ -45,7 +45,7 @@ function DistinctFindingsMap() {
 
 const content: Record<string, ReactNode> = {
   brief: <>
-    <Copy><p>A failed migration can send a network operator across inventory, alerts, and logs. I envisioned how VCF AI Assistant could bring that investigation into one conversational workspace—keeping the affected object, supporting evidence, and next decision visible.</p><p>As UX Design Lead, I focused on the Network Operations experience: how an operator starts an investigation, evaluates a recommendation, and returns to interrupted work.</p></Copy>
+    <Copy><p>A failed migration can send a network operator across inventory, alerts, and logs. I envisioned how Network AI Assistant within VCF Operations could bring that investigation into one conversational workspace—keeping the affected object, supporting evidence, and next decision visible.</p><p>As UX Design Lead, I focused on the Network Operations experience: how an operator starts an investigation, evaluates a recommendation, and returns to interrupted work.</p></Copy>
     <a className="ai-text-link" href="#final-implementation">Explore the final solution <ArrowRight size={19} aria-hidden="true" /></a>
   </>,
 
@@ -95,7 +95,7 @@ const content: Record<string, ReactNode> = {
     </Feature>
     <Feature number="04" title="Return with context intact">
       <Copy><p>The prototype carries forward top tabs for active work and searchable history for earlier sessions. Naming an investigation gives the operator a recognizable route back after an interruption.</p></Copy>
-      <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" version="full-frame" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
+      <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" version="network-name" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
         "Start a separate session for another investigation.",
         "Name it Network incident review.",
         "Use history to find and resume an earlier thread.",
@@ -104,8 +104,8 @@ const content: Record<string, ReactNode> = {
     <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
       <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
       <Copy><p>Before operators can investigate, administrators need a clear setup path. The entry screen identifies prerequisites; Agentic Control Center separates provider configuration from daily troubleshooting.</p></Copy>
-      <CaseStudyFigure name="setup-prerequisites" alt="Assistant entry screen listing activation and model setup prerequisites" caption="Explain readiness before inviting the operator to ask a question." />
-      <CaseStudyFigure name="setup-provider" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
+      <CaseStudyFigure name="setup-prerequisites" version="network-name" alt="Assistant entry screen listing activation and model setup prerequisites" caption="Explain readiness before inviting the operator to ask a question." />
+      <CaseStudyFigure name="setup-provider" version="network-name" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
     </article>
   </>,
 
