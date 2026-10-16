@@ -1,3 +1,0 @@
-.ai-project-thumbnail { background: #fcfcfc; }
-.ai-project-thumbnail::before { content: ""; position: absolute; inset: 14%; border-radius: 10px; background: linear-gradient(#007ac5, #003865); box-shadow: 0 12px 20px rgba(0, 0, 0, .25); }
-.ai-project-thumbnail > img { position: absolute; top: 20%; left: 22%; width: 56%; height: 60%; object-fit: contain; filter: drop-shadow(0 8px 10px rgba(0, 20, 40, .2)); }

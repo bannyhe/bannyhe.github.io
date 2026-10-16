@@ -4,7 +4,7 @@ import { ArrowLeft, ChevronDown, ChevronUp, Lock, Sparkles, X } from "lucide-rea
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { AiAssistantCaseStudyContent, aiAssistantSections as sections } from "../components/ai-assistant/AiAssistantCaseStudyContent";
-import assistantConsoleImg from "../assets/ai-assistant/assistant-console.svg";
+import assistantMainScreenImg from "../assets/ai-assistant/assistant-main-screen.png";
 
 // Matches the existing case-study courtesy gate. The build supplies the code;
 // this client-side check is not a substitute for server-side authentication.
@@ -155,7 +155,7 @@ export function AiAssistantPage() {
               <p className="ai-hero-description">Simplifying Network Operations with conversational AI, clear issue summaries, and actionable guidance.</p>
               <p className="ai-hero-tags"><span>/ UX Strategy</span><span>/ UX Design</span></p>
             </div>
-            <img src={assistantConsoleImg} alt="Network AI Assistant concept showing conversation history, object search, an issue summary, and recommended next steps." width={740} height={625} fetchPriority="high" />
+            <img src={assistantMainScreenImg} alt="Network AI Assistant main console showing a vMotion network investigation, diagnostic charts, and remediation guidance." width={1600} height={1000} fetchPriority="high" />
           </header>
         </div>
       </div>
