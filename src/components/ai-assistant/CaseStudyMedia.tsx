@@ -40,7 +40,7 @@ export function CaseStudyClip({ name, poster, title, caption, steps, version }: 
   return (
     <figure className="ai-figure ai-clip">
       <div className="ai-media-stage">
-        <video controls playsInline preload="none" poster={posterSrc} width={width} height={height} aria-label={title}>
+        <video controls playsInline preload="metadata" poster={posterSrc} width={width} height={height} aria-label={title}>
           <source src={`${MEDIA_ROOT}${name}.mp4${revision}`} type="video/mp4" />
           Your browser does not support this video. The walkthrough steps below describe the interaction.
         </video>
