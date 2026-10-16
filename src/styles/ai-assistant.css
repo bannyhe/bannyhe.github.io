@@ -75,7 +75,8 @@
 .ai-case-study .ai-feature-heading h3 { color: var(--ai-ink); font-weight: 500; font-size: 1.5rem; line-height: 1.4; margin: 0; }
 .ai-case-study .ai-supporting-icon { flex: 0 0 24px; color: var(--ai-ink); align-self: center; }
 .ai-case-study .ai-setup { scroll-margin-top: 120px; }
-.ai-case-study .ai-setup .ai-figure:last-child { margin-bottom: 0; }
+.ai-case-study .ai-setup-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+.ai-case-study .ai-setup-grid > .ai-figure { min-width: 0; margin: 0; }
 .ai-case-study .ai-figure { margin: 1.5rem 0 2rem; }
 .ai-case-study .ai-media-stage { display: flex; justify-content: center; align-items: center; padding: clamp(.75rem, 2vw, 1.75rem); border: 1px solid var(--ai-line); border-radius: 10px; background: var(--ai-tint); }
 .ai-case-study .ai-media-button { display: block; position: relative; width: 100%; padding: 0; background: var(--ai-media-surface); border: 1px solid var(--ai-media-line); border-radius: 10px; overflow: hidden; cursor: zoom-in; }
@@ -136,7 +137,7 @@
   .ai-case-study .ai-hero h1 { font-size: 1.5rem; gap: .5rem; }
   .ai-case-study .ai-hero-description { font-size: 1.125rem; }
   .ai-case-study .ai-hero-tags { font-size: .75rem; gap: 1rem; margin-top: 1rem; }
-  .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-outcome-findings { grid-template-columns: 1fr; }
+  .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-outcome-findings, .ai-case-study .ai-setup-grid { grid-template-columns: 1fr; }
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
   .ai-case-study .ai-feature-heading h3 { font-size: 1.25rem; }
   .ai-case-study .ai-media-stage { padding: .5rem; }

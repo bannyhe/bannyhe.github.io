@@ -69,6 +69,14 @@ const content: Record<string, ReactNode> = {
   "final-implementation": <>
     <Copy><p>The workspace connects object scope, evidence, action, continuity, and model choice.</p></Copy>
     <p className="ai-note">Adapted prototype views use illustrative network data and simulated actions.</p>
+    <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
+      <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
+      <Copy><p>Before operators can investigate, administrators need a clear setup path. The entry screen identifies prerequisites; Agentic Control Center separates provider configuration from daily troubleshooting.</p></Copy>
+      <div className="ai-setup-grid">
+        <CaseStudyFigure name="setup-prerequisites" version="network-name" alt="Assistant entry screen listing activation and model setup prerequisites" caption="Explain readiness before inviting the operator to ask a question." />
+        <CaseStudyFigure name="setup-provider" version="network-name" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
+      </div>
+    </article>
     <Feature number="01" title="Start with the affected object">
       <Copy><p>The walkthrough uses inventory search as a visible starting point. Attach the host before asking about a vMotion failure; the object chip keeps the selected scope in the question.</p></Copy>
       <CaseStudyClip name="object-context-walkthrough" poster="object-context" version="smooth-30fps" title="Select a host and compose a network troubleshooting question" caption="Search from the main assistant workspace, then keep the selected host attached to the question." steps={[
@@ -109,12 +117,6 @@ const content: Record<string, ReactNode> = {
         "Scroll to Private AI Services: Gemini 2.5 Pro, gemini-flash-latest, and openai/gpt-oss-120b.",
       ]} />
     </Feature>
-    <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
-      <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
-      <Copy><p>Before operators can investigate, administrators need a clear setup path. The entry screen identifies prerequisites; Agentic Control Center separates provider configuration from daily troubleshooting.</p></Copy>
-      <CaseStudyFigure name="setup-prerequisites" version="network-name" alt="Assistant entry screen listing activation and model setup prerequisites" caption="Explain readiness before inviting the operator to ask a question." />
-      <CaseStudyFigure name="setup-provider" version="network-name" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
-    </article>
   </>,
 
   validation: <>
