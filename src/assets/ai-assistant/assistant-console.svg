@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="625" viewBox="1015 150 740 625" fill="none">
+  <title>Network AI Assistant concept console</title>
+  <desc>The original assistant concept showing conversation history, object search, an issue summary, and recommended next steps.</desc>
+  <defs><clipPath id="console"><rect x="1015" y="150" width="740" height="625" rx="6"/></clipPath></defs>
+  <rect x="1015" y="150" width="740" height="625" rx="6" fill="white"/>
+  <g clip-path="url(#console)" font-family="Arial, Helvetica, sans-serif">
+    <rect x="1015" y="150" width="740" height="35" fill="#101D28"/>
+    <text x="1030" y="173" font-size="12" fill="white">VCF Operations</text>
+    <circle cx="1199" cy="167" r="5" stroke="#A9BAC6"/>
+    <path d="M1203 171L1207 175" stroke="#A9BAC6"/>
+    <text x="1217" y="171" font-size="10" fill="#A9BAC6">Search for an object, metric, or capability</text>
+    <path d="M1659 160V175M1697 160V175" stroke="#42515C"/>
+    <circle cx="1721" cy="167" r="5" stroke="#A9BAC6"/>
+    <rect x="1015" y="185" width="120" height="590" fill="#EFF3F6"/>
+    <g fill="#516572" font-size="10">
+      <text x="1030" y="216">Home</text>
+      <text x="1030" y="245">Inventory</text>
+      <text x="1030" y="274">Infrastructure</text>
+      <text x="1030" y="303">Diagnostics</text>
+      <text x="1030" y="332">Security</text>
+    </g>
+    <rect x="1023" y="348" width="104" height="30" rx="3" fill="#DDECF5"/>
+    <path d="M1036 357L1038 362L1043 364L1038 366L1036 371L1034 366L1029 364L1034 362Z" fill="#087CAD"/>
+    <text x="1050" y="361" font-size="9" fill="#06698F">Network AI</text>
+    <text x="1050" y="372" font-size="9" fill="#06698F">Assistant</text>
+
+    <text x="1155" y="215" fill="#233E50" font-size="18">Network AI Assistant</text>
+    <text x="1155" y="233" fill="#6D818E" font-size="10">Understand issues. Explore recommendations.</text>
+    <path d="M1135 248H1755" stroke="#DCE5EB"/>
+
+    <rect x="1135" y="249" width="133" height="526" fill="#F8FAFB"/>
+    <rect x="1147" y="264" width="109" height="29" rx="4" fill="white" stroke="#CFDCE5"/>
+    <path d="M1157 279H1165M1161 275V283" stroke="#117DA9" stroke-width="1.5"/>
+    <text x="1173" y="282" fill="#326078" font-size="9">New conversation</text>
+    <text x="1147" y="319" fill="#7A8C98" font-size="8" letter-spacing=".7">RECENT CONVERSATIONS</text>
+    <rect x="1143" y="330" width="117" height="29" rx="4" fill="#E3EFF7"/>
+    <text x="1151" y="348" fill="#26516C" font-size="9">Network investigation</text>
+    <text x="1151" y="381" fill="#708490" font-size="9">Connectivity review</text>
+    <text x="1151" y="412" fill="#708490" font-size="9">vMotion diagnostics</text>
+    <path d="M1268 248V775" stroke="#DFE7ED"/>
+
+    <rect x="1287" y="263" width="448" height="33" rx="4" fill="white" stroke="#CADAE5"/>
+    <circle cx="1303" cy="278" r="4" stroke="#7B929F"/>
+    <path d="M1306 282L1310 286" stroke="#7B929F"/>
+    <text x="1320" y="284" fill="#758B9A" font-size="10">Search objects to add context</text>
+    <path d="M1680 264V295" stroke="#DFE7ED"/>
+    <text x="1691" y="283" fill="#4F6F83" font-size="8">All objects</text>
+
+    <rect x="1360" y="318" width="375" height="49" rx="6" fill="#EAF3FA"/>
+    <text x="1374" y="339" fill="#38566C" font-size="10">Help me troubleshoot this network issue.</text>
+    <text x="1374" y="354" fill="#4F7A96" font-size="8">Object context attached</text>
+
+    <rect x="1288" y="389" width="24" height="24" rx="6" fill="#E1F1FB"/>
+    <path d="M1300 393L1303 399L1309 401L1303 403L1300 409L1297 403L1291 401L1297 399Z" fill="#0B91BF"/>
+    <text x="1322" y="405" fill="#213F53" font-size="11" font-weight="bold">Issue summary</text>
+    <text x="1322" y="429" fill="#5F7788" font-size="10">Review the issue and relevant context in one place.</text>
+    <g stroke="#DCE6ED" stroke-width="4" stroke-linecap="round">
+      <path d="M1324 446H1710"/><path d="M1324 460H1675"/>
+    </g>
+
+    <rect x="1322" y="480" width="413" height="139" rx="5" fill="#FAFCFD" stroke="#D6E3EC"/>
+    <text x="1336" y="502" fill="#213F53" font-size="11" font-weight="bold">Recommended next steps</text>
+    <g fill="#147DA6" font-size="9"><text x="1338" y="527">1</text><text x="1338" y="552">2</text><text x="1338" y="577">3</text></g>
+    <g fill="#4A687C" font-size="10">
+      <text x="1356" y="527">Inspect the affected object and related signals</text>
+      <text x="1356" y="552">Review the proposed remediation plan</text>
+      <text x="1356" y="577">Verify the outcome after taking action</text>
+    </g>
+    <text x="1336" y="605" fill="#6E8492" font-size="8">Review recommendations before making changes.</text>
+    <text x="1322" y="645" fill="#1B7EAB" font-size="9">Explore related objects</text>
+    <text x="1469" y="645" fill="#1B7EAB" font-size="9">Ask a follow-up</text>
+
+    <rect x="1287" y="681" width="448" height="47" rx="5" fill="white" stroke="#BFCFDA"/>
+    <text x="1302" y="709" fill="#8496A2" font-size="10">Ask about your network...</text>
+    <rect x="1700" y="693" width="24" height="24" rx="4" fill="#087EAC"/>
+    <path d="M1712 710V700M1708 704L1712 700L1716 704" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1511" y="750" text-anchor="middle" fill="#8B9BA5" font-size="8">AI-generated guidance. Review before applying.</text>
+  </g>
+</svg>

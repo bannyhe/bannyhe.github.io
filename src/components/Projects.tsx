@@ -7,6 +7,8 @@ import { Button } from "./ui/button";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Link } from "react-router-dom";
 import { useAnalytics } from "../hooks/useAnalytics";
+import assistantConsoleImg from "../assets/ai-assistant/assistant-console.svg";
+import "../styles/project-thumbnails.css";
 
 // External project thumbnail links
 const malwarePreventionImg = "https://drive.google.com/thumbnail?id=11_e-o8v6AtoYnNBsgNKOsh_QT7IPt6ue&sz=w800";
@@ -48,6 +50,17 @@ const projects = [
     hasDetailPage: true,
   },
   {
+    id: "ai-assistant",
+    title: "Network AI Assistant",
+    description: "UX vision for conversational troubleshooting in Network Operations.",
+    imageUrl: assistantConsoleImg,
+    tags: ["AI", "Product Design"],
+    liveUrl: "#",
+    githubUrl: "#",
+    hasDetailPage: true,
+    isPasswordProtected: true,
+  },
+  {
     id: "vcf-network",
     title: "VCF Network Operations",
     description: "A full-featured online shopping platform with payment integration and admin dashboard.",
@@ -67,17 +80,6 @@ const projects = [
     liveUrl: "#",
     githubUrl: "#",
     hasDetailPage: true,
-  },
-  {
-    id: "ai-assistant",
-    title: "AI Assistant",
-    description: "UX vision for conversational troubleshooting in Network Operations.",
-    imageUrl: "/images/ai-assistant-network.svg",
-    tags: ["AI", "Product Design"],
-    liveUrl: "#",
-    githubUrl: "#",
-    hasDetailPage: true,
-    isPasswordProtected: true,
   },
 ];
 
@@ -118,7 +120,7 @@ export function Projects() {
                     <motion.div
                       className="cursor-pointer transition-all duration-300"
                     >
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
+                      <div className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 ${project.id === "ai-assistant" ? "ai-project-thumbnail" : ""}`}>
                         {project.isPasswordProtected && (
                           <div className="absolute top-4 right-4 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 flex items-center gap-2 shadow-lg" style={{ borderRadius: '8px' }}>
                             <Lock className="w-4 h-4 text-gray-700 dark:text-gray-300" />
