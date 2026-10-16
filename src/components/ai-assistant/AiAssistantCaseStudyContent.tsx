@@ -103,8 +103,11 @@ const content: Record<string, ReactNode> = {
     </Feature>
     <Feature number="05" title="Choose a model for the investigation">
       <Copy><p>Keep model choice beside the prompt so operators can see their options without leaving an investigation. The prototype groups provider models separately from Private AI Services for corporate environments.</p></Copy>
-      <CaseStudyFigure name="model-selector-providers" alt="Network AI Assistant with the model selector open, showing Anthropic, Google Gemini, and OpenAI models" caption="Open Gemini 2.5 Pro in the composer to browse models from Anthropic, Google Gemini, and OpenAI." />
-      <CaseStudyFigure name="model-selector-private-ai" alt="Model selector scrolled to Private AI Services, showing Gemini 2.5 Pro selected, gemini-flash-latest, and openai/gpt-oss-120b" caption="Scroll within the menu to reveal Private AI Services: Gemini 2.5 Pro, gemini-flash-latest, and openai/gpt-oss-120b." />
+      <CaseStudyClip name="model-selection-walkthrough" poster="model-selector-private-ai" version="smooth-30fps" title="Browse the model selector and reveal Private AI Services" caption="Browse provider models, then scroll within the same menu to reveal Private AI Services." steps={[
+        "Open Gemini 2.5 Pro beside the composer.",
+        "Browse the Anthropic, Google Gemini, and OpenAI groups.",
+        "Scroll to Private AI Services: Gemini 2.5 Pro, gemini-flash-latest, and openai/gpt-oss-120b.",
+      ]} />
     </Feature>
     <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
       <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
