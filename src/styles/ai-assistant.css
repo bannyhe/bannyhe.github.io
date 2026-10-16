@@ -63,7 +63,7 @@
 .ai-case-study .ai-strategy-return > svg { flex: 0 0 24px; color: var(--ai-ink); margin-top: .15rem; }
 .ai-case-study .ai-strategy-return strong { color: var(--ai-ink); }
 .ai-case-study .ai-reflection-aspect { margin-top: 2rem; }
-.ai-case-study .ai-reflection-aspect > .ai-node-heading { font-size: 1.25rem; }
+.ai-case-study .ai-reflection-aspect > h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .875rem; }
 .ai-case-study .ai-validation-grid h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .75rem; }
 .ai-case-study .ai-feature { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--ai-line); }
 .ai-case-study .ai-feature-heading { display: flex; align-items: baseline; gap: .75rem; margin-bottom: 1rem; }
@@ -87,7 +87,9 @@
 .ai-case-study .ai-validation-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-top: 2rem; }
 .ai-case-study .ai-validation-grid > div { border-top: 2px solid var(--ai-line); padding-top: 1.25rem; }
 .ai-case-study .ai-validation-grid ul { list-style: none; margin: 0; padding: 0; color: var(--ai-copy); font-size: 1rem; line-height: 1.625; }
-.ai-case-study .ai-validation-grid li { margin: 0 0 1rem; }
+.ai-case-study .ai-validation-grid li { display: flex; align-items: flex-start; gap: .75rem; margin: 0 0 1rem; }
+.ai-case-study .ai-validation-grid li > svg { flex: 0 0 24px; margin-top: .1rem; color: var(--ai-ink); }
+.ai-case-study .ai-validation-grid li > span { min-width: 0; }
 .ai-case-study .ai-outcome-map { padding: 1.5rem; margin: 2rem 0; border: 1px solid var(--ai-line); border-radius: 10px; background: var(--ai-surface); }
 .ai-case-study .ai-outcome-scope { display: flex; align-items: center; gap: .65rem; color: var(--ai-ink); font-size: 1rem; font-weight: 500; line-height: 1.5; margin-bottom: 1.25rem; }
 .ai-case-study .ai-outcome-scope > svg { flex-shrink: 0; }
@@ -99,8 +101,6 @@
 .ai-case-study .ai-outcome-path > span { display: grid; justify-items: center; gap: .4rem; }
 .ai-case-study .ai-outcome-finding p { color: var(--ai-copy); font-size: 1rem; line-height: 1.625; margin: 1rem 0 0; }
 .ai-case-study .ai-outcome-map figcaption { color: var(--ai-muted); font-size: .875rem; line-height: 1.625; margin-top: 1.25rem; }
-.ai-case-study .ai-takeaway { border-left: 3px solid var(--ai-ink); padding: .5rem 0 .5rem 1.5rem; margin: 2rem 0 1.5rem; }
-.ai-case-study .ai-takeaway p { font-size: 1.5rem; line-height: 1.5; color: var(--ai-ink); margin: 0; }
 .ai-case-study .ai-lightbox { max-width: 96vw; max-height: 92vh; padding: 0; border: none; border-radius: 10px; background: #fff; overflow: auto; }
 .ai-case-study .ai-lightbox::backdrop { background: rgba(3, 13, 27, .86); }
 .ai-case-study .ai-lightbox > img { display: block; max-width: 94vw; max-height: 88vh; width: auto; height: auto; }
@@ -140,7 +140,6 @@
   .ai-case-study .ai-clip-wide video { min-height: 180px; object-fit: contain; background: #fff; }
   .ai-case-study .ai-outcome-map, .ai-case-study .ai-outcome-finding { padding: 1rem; }
   .ai-case-study .ai-outcome-service, .ai-case-study .ai-outcome-path { gap: 1rem; }
-  .ai-case-study .ai-takeaway p { font-size: 1.25rem; }
   .ai-case-study > button[aria-label="Back to top"] { width: 44px; height: 44px; padding: 0; display: grid; place-items: center; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); }
 }
 @media (max-width: 359px) {

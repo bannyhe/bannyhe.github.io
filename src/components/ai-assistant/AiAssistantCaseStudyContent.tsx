@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowRight, Eye, FlaskConical, Monitor, Scale, Server, Settings2, Unplug } from "lucide-react";
+import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, Monitor, PanelsTopLeft, Search, Server, Settings2, Unplug } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
 import { InvestigationMap, ResearchSynthesisMap, StrategyFlow } from "./InvestigationDiagrams";
@@ -112,15 +112,15 @@ const content: Record<string, ReactNode> = {
   validation: <>
     <Copy><p>The prototype walkthrough checked normal flows, unsupported requests, and partial completion. The next round should compare the design alternatives with network operators and test whether the explanations support sound decisions.</p></Copy>
     <div className="ai-validation-grid">
-      <div><h3>What the review surfaced</h3><ul>
-        <li><strong>Capability boundaries:</strong> unsupported requests need a clear route to available skills.</li>
-        <li><strong>Partial success:</strong> the result must distinguish what changed from what remains unresolved.</li>
-        <li><strong>Recovery copy:</strong> the restricted-access state references another feature; guidance should name the assistant and the required permission.</li>
+      <div><h3>What the review surfaced</h3><ul role="list">
+        <li><Compass size={24} aria-hidden="true" /><span><strong>Capability boundaries:</strong> unsupported requests need a clear route to available skills.</span></li>
+        <li><ListChecks size={24} aria-hidden="true" /><span><strong>Partial success:</strong> the result must distinguish what changed from what remains unresolved.</span></li>
+        <li><KeyRound size={24} aria-hidden="true" /><span><strong>Recovery copy:</strong> the restricted-access state references another feature; guidance should name the assistant and the required permission.</span></li>
       </ul></div>
-      <div><h3>What to test next</h3><ul>
-        <li><strong>Session navigation:</strong> compare tabs and a sidebar as the number of active incidents grows.</li>
-        <li><strong>Object selection:</strong> check discovery of search and @ references, including similarly named hosts.</li>
-        <li><strong>Diagnostic understanding:</strong> compare checks alone with explained checks; ask operators to justify the scope and consequences before approval.</li>
+      <div><h3>What to test next</h3><ul role="list">
+        <li><PanelsTopLeft size={24} aria-hidden="true" /><span><strong>Session navigation:</strong> compare tabs and a sidebar as the number of active incidents grows.</span></li>
+        <li><Search size={24} aria-hidden="true" /><span><strong>Object selection:</strong> check discovery of search and @ references, including similarly named hosts.</span></li>
+        <li><ClipboardCheck size={24} aria-hidden="true" /><span><strong>Diagnostic understanding:</strong> compare checks alone with explained checks; ask operators to justify the scope and consequences before approval.</span></li>
       </ul></div>
     </div>
   </>,
@@ -128,19 +128,18 @@ const content: Record<string, ReactNode> = {
   impact: <>
     <Copy><p>This work gave the Network Operations vision a coherent path from choosing an object to returning to unfinished work. It is still a prototype: I can point to the design decisions and interactions, but I cannot yet claim faster resolution or stronger operator trust.</p></Copy>
     <div className="ai-reflection-aspect">
-      <h3 className="ai-node-heading"><Eye size={24} aria-hidden="true" /><span>Make uncertainty inspectable</span></h3>
+      <h3>Make uncertainty inspectable</h3>
       <Copy><p>The vCenter example is the clearest lesson for me. A service outage and an Ops connectivity problem can look like one incident, yet require different checks. A concise answer is useful only if it preserves that distinction and makes unfinished work visible.</p></Copy>
       <DistinctFindingsMap />
     </div>
     <div className="ai-reflection-aspect">
-      <h3 className="ai-node-heading"><Scale size={24} aria-hidden="true" /><span>Keep the tradeoffs visible</span></h3>
+      <h3>Keep the tradeoffs visible</h3>
       <Copy><p>Tabs protect the space needed for diagnostic detail, but a growing set of investigations may be harder to navigate. Short explanations help scanning, but can hide useful evidence. I would keep summaries concise while preserving a direct path to the supporting checks.</p></Copy>
     </div>
     <div className="ai-reflection-aspect">
-      <h3 className="ai-node-heading"><FlaskConical size={24} aria-hidden="true" /><span>Evaluate decisions under pressure</span></h3>
+      <h3>Evaluate decisions under pressure</h3>
       <Copy><p>I would test interrupted investigations, similar object names, and partial fixes with network operators. I would ask them to explain the affected scope, justify a next action, and identify what remains unresolved. Those decisions would tell me more than whether the interface feels easy to use.</p></Copy>
     </div>
-    <div className="ai-takeaway"><span className="ai-small-label">What I would carry forward</span><p>A clear recommendation should also make it clear when to pause.</p></div>
   </>,
 };
 
