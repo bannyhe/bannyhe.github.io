@@ -34,11 +34,11 @@ export function CaseStudyClip({ name, poster, title, caption, steps, version }: 
   steps: string[];
   version?: string;
 }) {
-  const [width, height] = name === "object-context-walkthrough" ? [1340, 330] : name === "session-continuity-walkthrough" ? [1600, 1000] : [1360, 850];
+  const [width, height] = [1600, 1000];
   const revision = version ? `?v=${encodeURIComponent(version)}` : "";
   const posterSrc = `${MEDIA_ROOT}${poster}.png${revision}`;
   return (
-    <figure className={`ai-figure ai-clip${height === 330 ? " ai-clip-wide" : ""}`}>
+    <figure className="ai-figure ai-clip">
       <div className="ai-media-stage">
         <video controls playsInline preload="none" poster={posterSrc} width={width} height={height} aria-label={title}>
           <source src={`${MEDIA_ROOT}${name}.mp4${revision}`} type="video/mp4" />

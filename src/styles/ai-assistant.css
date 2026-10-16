@@ -136,8 +136,6 @@
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
   .ai-case-study .ai-feature-heading h3 { font-size: 1.25rem; }
   .ai-case-study .ai-media-stage { padding: .5rem; }
-  .ai-case-study .ai-clip-wide .ai-media-stage { padding: .5rem; }
-  .ai-case-study .ai-clip-wide video { min-height: 180px; object-fit: contain; background: #fff; }
   .ai-case-study .ai-outcome-map, .ai-case-study .ai-outcome-finding { padding: 1rem; }
   .ai-case-study .ai-outcome-service, .ai-case-study .ai-outcome-path { gap: 1rem; }
   .ai-case-study > button[aria-label="Back to top"] { width: 44px; height: 44px; padding: 0; display: grid; place-items: center; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); }
