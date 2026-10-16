@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, Monitor, PanelsTopLeft, Search, Server, Unplug } from "lucide-react";
+import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, PanelsTopLeft, Search } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
 import { InvestigationMap, ResearchSynthesisMap, StrategyFlow } from "./InvestigationDiagrams";
@@ -22,25 +22,6 @@ function Copy({ children }: { children: ReactNode }) {
 
 function Feature({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return <article className="ai-feature"><div className="ai-feature-heading"><span>{number}</span><h3>{title}</h3></div>{children}</article>;
-}
-
-function DistinctFindingsMap() {
-  return <figure className="ai-outcome-map" aria-labelledby="outcome-map-heading">
-    <div className="ai-outcome-scope"><Server size={22} aria-hidden="true" /><span id="outcome-map-heading">One object. Two distinct findings.</span></div>
-    <div className="ai-outcome-findings">
-      <div className="ai-outcome-finding">
-        <h4>vCenter service outage</h4>
-        <div className="ai-outcome-service"><Server size={28} aria-hidden="true" /><span>Appliance + services</span></div>
-        <p>Inspect appliance availability and service health.</p>
-      </div>
-      <div className="ai-outcome-finding">
-        <h4>Ops network path</h4>
-        <div className="ai-outcome-path"><span><Monitor size={24} aria-hidden="true" />Ops</span><Unplug size={22} aria-hidden="true" /><span><Server size={24} aria-hidden="true" />vCenter</span></div>
-        <p>Review ping history, firewall rules, and DNS.</p>
-      </div>
-    </div>
-    <figcaption>Adapted from the recording’s 14:00–15:20 diagnostic example.</figcaption>
-  </figure>;
 }
 
 const content: Record<string, ReactNode> = {
@@ -137,11 +118,6 @@ const content: Record<string, ReactNode> = {
 
   impact: <>
     <Copy><p>This work gave the Network Operations vision a coherent path from choosing an object to returning to unfinished work. It is still a prototype: I can point to the design decisions and interactions, but I cannot yet claim faster resolution or stronger operator trust.</p></Copy>
-    <div className="ai-reflection-aspect">
-      <h3>Make uncertainty inspectable</h3>
-      <Copy><p>The vCenter example is the clearest lesson for me. A service outage and an Ops connectivity problem can look like one incident, yet require different checks. A concise answer is useful only if it preserves that distinction and makes unfinished work visible.</p></Copy>
-      <DistinctFindingsMap />
-    </div>
     <div className="ai-reflection-aspect">
       <h3>Keep the tradeoffs visible</h3>
       <Copy><p>Tabs protect the space needed for diagnostic detail, but a growing set of investigations may be harder to navigate. Short explanations help scanning, but can hide useful evidence. I would keep summaries concise while preserving a direct path to the supporting checks.</p></Copy>

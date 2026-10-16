@@ -1,7 +1,20 @@
-import { useRef } from "react";
-import { X } from "lucide-react";
+import { useRef, type RefObject } from "react";
+import { Expand, X } from "lucide-react";
 
 const MEDIA_ROOT = "/media/ai-assistant/";
+
+function ImageLightbox({ dialogRef, src, alt }: { dialogRef: RefObject<HTMLDialogElement>; src: string; alt: string }) {
+  return (
+    <dialog ref={dialogRef} className="ai-lightbox" aria-label={alt} onClick={(event) => {
+      if (event.target === event.currentTarget) dialogRef.current?.close();
+    }}>
+      <button type="button" className="ai-lightbox-close" aria-label="Close enlarged image" onClick={() => dialogRef.current?.close()} autoFocus>
+        <X size={32} aria-hidden="true" />
+      </button>
+      <img src={src} alt={alt} loading="lazy" />
+    </dialog>
+  );
+}
 
 export function CaseStudyFigure({ name, alt, caption, version }: { name: string; alt: string; caption: string; version?: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -9,18 +22,11 @@ export function CaseStudyFigure({ name, alt, caption, version }: { name: string;
 
   return (
     <figure className="ai-figure">
-      <button type="button" className="ai-media-button" onClick={() => dialog.current?.showModal()} aria-label={`Enlarge: ${alt}`}>
+      <button type="button" className="ai-media-button" onClick={() => dialog.current?.showModal()} aria-haspopup="dialog" aria-label={`Enlarge: ${alt}`}>
         <img src={src} alt={alt} width={1600} height={1000} loading="lazy" decoding="async" />
       </button>
       <figcaption>{caption}</figcaption>
-      <dialog ref={dialog} className="ai-lightbox" aria-label={alt} onClick={(event) => {
-        if (event.target === event.currentTarget) dialog.current?.close();
-      }}>
-        <button type="button" className="ai-lightbox-close" aria-label="Close enlarged image" onClick={() => dialog.current?.close()} autoFocus>
-          <X size={32} aria-hidden="true" />
-        </button>
-        <img src={src} alt={alt} loading="lazy" />
-      </dialog>
+      <ImageLightbox dialogRef={dialog} src={src} alt={alt} />
     </figure>
   );
 }
@@ -33,6 +39,7 @@ export function CaseStudyClip({ name, poster, title, caption, steps, version }: 
   steps: string[];
   version?: string;
 }) {
+  const dialog = useRef<HTMLDialogElement>(null);
   const [width, height] = [1600, 1000];
   const revision = version ? `?v=${encodeURIComponent(version)}` : "";
   const posterSrc = `${MEDIA_ROOT}${poster}.png${revision}`;
@@ -46,13 +53,14 @@ export function CaseStudyClip({ name, poster, title, caption, steps, version }: 
       </div>
       <figcaption>{caption}</figcaption>
       <div className="ai-media-tools">
-        <a className="ai-still-link" href={posterSrc} target="_blank" rel="noopener noreferrer" aria-label={`Open the full-size still frame for ${title} in a new tab`}>
-          Open image to zoom <span aria-hidden="true">↗</span>
-        </a>
+        <button type="button" className="ai-still-link" onClick={() => dialog.current?.showModal()} aria-haspopup="dialog" aria-label={`Open the full-size still frame for ${title}`}>
+          Open image to zoom <Expand size={16} aria-hidden="true" />
+        </button>
       </div>
       <ol className="ai-walkthrough-steps" aria-label="Walkthrough steps">
         {steps.map((step) => <li key={step}>{step}</li>)}
       </ol>
+      <ImageLightbox dialogRef={dialog} src={posterSrc} alt={`Still frame: ${title}`} />
     </figure>
   );
 }
