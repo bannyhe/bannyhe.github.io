@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Expand, X } from "lucide-react";
+import { X } from "lucide-react";
 
 const MEDIA_ROOT = "/media/ai-assistant/";
 
@@ -11,14 +11,13 @@ export function CaseStudyFigure({ name, alt, caption, version }: { name: string;
     <figure className="ai-figure">
       <button type="button" className="ai-media-button" onClick={() => dialog.current?.showModal()} aria-label={`Enlarge: ${alt}`}>
         <img src={src} alt={alt} width={1600} height={1000} loading="lazy" decoding="async" />
-        <span className="ai-enlarge"><Expand size={15} aria-hidden="true" /> Enlarge</span>
       </button>
       <figcaption>{caption}</figcaption>
       <dialog ref={dialog} className="ai-lightbox" aria-label={alt} onClick={(event) => {
         if (event.target === event.currentTarget) dialog.current?.close();
       }}>
         <button type="button" className="ai-lightbox-close" aria-label="Close enlarged image" onClick={() => dialog.current?.close()} autoFocus>
-          <X size={24} aria-hidden="true" />
+          <X size={32} aria-hidden="true" />
         </button>
         <img src={src} alt={alt} loading="lazy" />
       </dialog>

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, Monitor, PanelsTopLeft, Search, Server, Settings2, Unplug } from "lucide-react";
+import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, Monitor, PanelsTopLeft, Search, Server, Unplug } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
 import { InvestigationMap, ResearchSynthesisMap, StrategyFlow } from "./InvestigationDiagrams";
@@ -70,14 +70,14 @@ const content: Record<string, ReactNode> = {
     <Copy><p>The workspace connects object scope, evidence, action, continuity, and model choice.</p></Copy>
     <p className="ai-note">Adapted prototype views use illustrative network data and simulated actions.</p>
     <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
-      <div className="ai-feature-heading"><Settings2 className="ai-supporting-icon" size={24} aria-hidden="true" /><h3 id="setup-heading">Supporting the first-use experience</h3></div>
+      <div className="ai-feature-heading"><span>01</span><h3 id="setup-heading">Supporting the first-use experience</h3></div>
       <Copy><p>Before operators can investigate, administrators need a clear setup path. The entry screen identifies prerequisites; Agentic Control Center separates provider configuration from daily troubleshooting.</p></Copy>
       <div className="ai-setup-grid">
         <CaseStudyFigure name="setup-prerequisites" version="network-name" alt="Assistant entry screen listing activation and model setup prerequisites" caption="Explain readiness before inviting the operator to ask a question." />
         <CaseStudyFigure name="setup-provider" version="network-name" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
       </div>
     </article>
-    <Feature number="01" title="Start with the affected object">
+    <Feature number="02" title="Start with the affected object">
       <Copy><p>The walkthrough uses inventory search as a visible starting point. Attach the host before asking about a vMotion failure; the object chip keeps the selected scope in the question.</p></Copy>
       <CaseStudyClip name="object-context-walkthrough" poster="object-context" version="smooth-30fps" title="Select a host and compose a network troubleshooting question" caption="Search from the main assistant workspace, then keep the selected host attached to the question." steps={[
         "Open inventory search beside the composer.",
@@ -85,7 +85,7 @@ const content: Record<string, ReactNode> = {
         "Ask about the most recent vMotion network failures.",
       ]} />
     </Feature>
-    <Feature number="02" title="Move from symptoms to evidence">
+    <Feature number="03" title="Move from symptoms to evidence">
       <Copy><p>Explain the purpose of diagnostic checks as the investigation progresses, then group the findings by issue. The operator can inspect the evidence and recommendation together before deciding what to do.</p></Copy>
       <CaseStudyClip name="network-triage-walkthrough" poster="network-findings" version="smooth-30fps" title="Investigate a vMotion network failure and inspect its findings" caption="Expand a network finding to connect the symptom with supporting evidence." steps={[
         "Submit the object-scoped vMotion question.",
@@ -93,7 +93,7 @@ const content: Record<string, ReactNode> = {
         "Expand the network finding and review its recommended checks.",
       ]} />
     </Feature>
-    <Feature number="03" title="Make the next action a decision">
+    <Feature number="04" title="Make the next action a decision">
       <Copy><p>A second scenario explores restoring management connectivity. Compare remediation scopes before approval; after a partial fix, the remaining issue stays visible.</p></Copy>
       <CaseStudyClip name="remediation-review-walkthrough" poster="remediation-review" version="smooth-30fps" title="Compare remediation scope and review unresolved issues after a partial fix" caption="Connectivity-only remediation resolves one issue while preserving the remaining root cause." steps={[
         "Review the proposed remediation and scope choices.",
@@ -101,7 +101,7 @@ const content: Record<string, ReactNode> = {
         "Approve the simulated action, then inspect what remains unresolved.",
       ]} />
     </Feature>
-    <Feature number="04" title="Return with context intact">
+    <Feature number="05" title="Return with context intact">
       <Copy><p>The prototype carries forward top tabs for active work and searchable history for earlier sessions. Naming an investigation gives the operator a recognizable route back after an interruption.</p></Copy>
       <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" version="smooth-30fps" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
         "Start a separate session for another investigation.",
@@ -109,7 +109,7 @@ const content: Record<string, ReactNode> = {
         "Use history to find and resume an earlier thread.",
       ]} />
     </Feature>
-    <Feature number="05" title="Choose a model for the investigation">
+    <Feature number="06" title="Choose a model for the investigation">
       <Copy><p>Keep model choice beside the prompt so operators can see their options without leaving an investigation. The prototype groups provider models separately from Private AI Services for corporate environments.</p></Copy>
       <CaseStudyClip name="model-selection-walkthrough" poster="model-selector-private-ai" version="smooth-30fps" title="Browse the model selector and reveal Private AI Services" caption="Browse provider models, then scroll within the same menu to reveal Private AI Services." steps={[
         "Open Gemini 2.5 Pro beside the composer.",
