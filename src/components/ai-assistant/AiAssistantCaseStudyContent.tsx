@@ -54,7 +54,7 @@ const content: Record<string, ReactNode> = {
       <div className="ai-feature-heading"><span>01</span><h3 id="setup-heading">Supporting the first-use experience</h3></div>
       <Copy><p>Before operators can investigate, administrators need a clear setup path. The entry screen identifies prerequisites; Agentic Control Center separates provider configuration from daily troubleshooting.</p></Copy>
       <div className="ai-setup-grid">
-        <CaseStudyFigure name="setup-prerequisites" version="spacious-first-use" alt="Network AI Assistant welcome screen with a networking illustration and two setup cards for activation and model configuration" caption="Explain readiness before inviting the operator to ask a question." />
+              <CaseStudyFigure name="setup-prerequisites" version="neutral-first-use" alt="Network AI Assistant welcome screen with a networking illustration and two setup cards for activation and model configuration" caption="Explain readiness before inviting the operator to ask a question." />
         <CaseStudyFigure name="setup-provider" version="network-name" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
       </div>
     </article>
