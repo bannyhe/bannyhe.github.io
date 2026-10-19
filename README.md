@@ -87,7 +87,7 @@ Navigate to `/admin` on the live site or locally. Enter your `DASHBOARD_API_KEY`
 - **Audience** — locations, optional map, device/browser/OS breakdowns, paginated visits, and individual histories with source/campaign details. A selected location filters only the visit list.
 - **Journeys** — ranked page-to-page transitions and CSV export. This preserves cycles present in the API response.
 
-Choose a 24-hour, 7-day, 30-day, or 90-day period. Report times use UTC. Visits are browser sessions, not identified people; clicks do not establish completed downloads or contacts. Reports disclose API row limits and missing measurements. Historical counts may include duplicate page views from the previous tracking implementation; only future tracking is corrected.
+Choose a 1-hour, 24-hour, 7-day, or 30-day period. The one-hour chart uses 15-minute intervals. Displayed timestamps and CSV exports use PST (fixed UTC−08:00 year-round); chart labels show each API interval’s start time in PST. Visits are browser sessions, not identified people; clicks do not establish completed downloads or contacts. Reports disclose API row limits and missing measurements. Historical counts may include duplicate page views from the previous tracking implementation; only future tracking is corrected.
 
 Panels load independently, retry failures without signing out, and reuse responses for 60 seconds. Refresh on demand, or enable updates every minute while the tab is visible. Chart and page/path CSV exports contain aggregate data. The map downloads only when requested.
 

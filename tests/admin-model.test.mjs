@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { formatDuration, formatPercent, bucketDate, rangeStart, endpoint, pageName, mergeReferrers, rankTransitions, toCsv } from '../src/components/admin/adminModel.ts';
+import { TIME_RANGES, formatDate, formatTime, formatExportDate, formatBucketLabel, formatDuration, formatPercent, bucketDate, rangeStart, endpoint, pageName, mergeReferrers, rankTransitions, toCsv } from '../src/components/admin/adminModel.ts';
 
 test('missing measurements stay distinct from zero and duration rounds across minutes', () => {
   assert.equal(formatDuration(null), '—'); assert.equal(formatDuration(0), '0s');
@@ -31,4 +31,19 @@ test('navigation paths preserve cycles and ignore invalid node references', () =
 });
 test('CSV preserves quoted multiline values and neutralizes spreadsheet formulas', () => {
   assert.equal(toCsv([['a,"b"', 'line1\nline2', '=1+1', ' +SUM(A1)', -3, null]]), '\"a,\"\"b\"\"\",\"line1\nline2\",\"\'=1+1\",\"\' +SUM(A1)\",\"-3\",\"\"');
+});
+
+test('one-hour range replaces 90 days and requests quarter-hour intervals', () => {
+  assert.deepEqual(TIME_RANGES.map(range => range.value), ['1h', '24h', '7d', '30d']);
+  assert.equal(TIME_RANGES[0].granularity, '15min');
+  assert.equal(rangeStart('1h', Date.parse('2026-10-19T00:15:01Z')), '2026-10-18T23:15:00.000Z');
+});
+test('PST timestamps use UTC minus eight in both winter and summer', () => {
+  assert.equal(formatDate('2026-01-01T04:15:00Z'), 'Dec 31, 8:15 PM');
+  assert.equal(formatTime('2026-07-01T04:15:00Z'), '8:15 PM');
+  assert.equal(formatExportDate('2026-07-01T04:15:00Z'), '2026-06-30T20:15:00.000-08:00');
+  assert.equal(new Date(formatExportDate('2026-07-01T04:15:00Z')).toISOString(), '2026-07-01T04:15:00.000Z');
+  assert.equal(formatBucketLabel('2026-10-19T00:15'), 'Oct 18, 4:15 PM');
+  assert.equal(formatBucketLabel('2026-10-19T00:15', true), '4:15 PM');
+  assert.equal(formatBucketLabel('2026-10-19'), 'Oct 18, 4:00 PM');
 });

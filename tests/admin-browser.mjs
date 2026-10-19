@@ -101,7 +101,7 @@ try {
       const empty = state.empty;
       const pages = [{path:'/',views:12,avg_duration_ms:4000,avg_scroll_depth:.6},{path:'/project/ai-assistant',views:8,avg_duration_ms:65000,avg_scroll_depth:.85},{path:'/resume',views:4,avg_duration_ms:null,avg_scroll_depth:null}];
       if (name === 'overview') data = {allTime:{totalSessions:empty?0:8,totalPageViews:empty?0:24,totalInteractions:empty?0:6}};
-      else if (name === 'timeline') data = empty ? [] : Array.from({length:7},(_,i)=>({date:`2026-10-${13+i}`,sessions:i,pageViews:i*3}));
+      else if (name === 'timeline') data = empty ? [] : url.searchParams.get('granularity')==='15min' ? ['08:15','08:30','08:45','09:00','09:15'].map((time,i)=>({date:'2026-10-19T'+time,sessions:i,pageViews:i*3})) : Array.from({length:7},(_,i)=>({date:`2026-10-${13+i}`,sessions:i,pageViews:i*3}));
       else if (name === 'pages') data = empty ? [] : pages;
       else if (name === 'referrers') data = empty ? [] : [{referrer:'https://example.test/one',visitors:4},{referrer:'https://www.example.test/two',visitors:2}];
       else if (name === 'interactions') data = empty ? [] : [{type:'project_view',target:'ai-assistant',count:3},{type:'contact_click',target:'mailto:hello@example.test',count:2},{type:'resume_download',target:'pdf',count:1}];
@@ -127,6 +127,30 @@ try {
   const theme = async dark => { if(await evaluate(`document.documentElement.classList.contains('dark')!==${dark}`)) await click('button[role="switch"]'); };
   const key = async name => { await tab('Input.dispatchKeyEvent',{type:'keyDown',key:name,code:name,windowsVirtualKeyCode:{Escape:27,Home:36,ArrowLeft:37}[name]});await tab('Input.dispatchKeyEvent',{type:'keyUp',key:name,code:name});await delay(100); };
   const view = async name => { await click('.admin-view-nav button',name);await waitFor(`!document.querySelector('.admin-view-content [aria-busy="true"]')`); };
+  if (process.argv.includes('--time-check')) {
+    await tab('Emulation.setTimezoneOverride',{timezoneId:'Asia/Tokyo'});
+    await viewport(1440);await navigate('/admin');await waitFor(`!!document.querySelector('#api-key')`);
+    await evaluate(`window.__mock.slow='';Date.now=()=>Date.parse('2026-10-19T09:15:00Z')`);
+    await input('#api-key','test-key');await evaluate(`document.querySelector('#api-key').form.requestSubmit()`);await waitFor(`!!document.querySelector('.admin-traffic-chart')`);
+    assert.deepEqual(await evaluate(`Array.from(document.querySelectorAll('.admin-range option')).map(e=>e.textContent)`),['Last 1 hour','Last 24 hours','Last 7 days','Last 30 days']);
+    assert.equal(await evaluate(`document.querySelector('.admin-toolbar-status [role="status"]').textContent`),'Updated 1:15 AM PST');
+    await evaluate(`document.querySelector('.admin-traffic-chart').focus()`);await key('Home');
+    assert.ok((await evaluate(`document.querySelector('.admin-chart-readout').textContent`)).includes('Oct 12, 4:00 PM PST'));
+    await click('.admin-chart-data summary');assert.equal(await evaluate(`document.querySelector('.admin-chart-data tbody th').textContent`),'Oct 12, 4:00 PM');
+    await evaluate(`window.originalCreateURL=URL.createObjectURL;URL.createObjectURL=blob=>{window.exportedCsv=blob.text();return window.originalCreateURL(blob)};document.addEventListener('click',e=>{if(e.target instanceof HTMLAnchorElement&&e.target.download)e.preventDefault()},{capture:true})`);
+    await click('.admin-panel-heading button','Export');let csv=await evaluate(`window.exportedCsv`);assert.ok(csv.includes('Period starting (PST)')&&csv.includes('2026-10-12T16:00:00.000-08:00'));
+    await evaluate(`(()=>{const e=document.querySelector('.admin-range select');e.value='1h';e.dispatchEvent(new Event('change',{bubbles:true}))})()`);await waitFor(`document.querySelectorAll('.admin-chart-data tbody tr').length===5`);
+    const timelineQuery=await evaluate(`window.__mock.log.filter(r=>r.path.endsWith('/timeline')).at(-1).query`);const params=new URLSearchParams(timelineQuery);
+    assert.equal(params.get('granularity'),'15min');assert.equal(params.get('since'),'2026-10-19T08:15:00.000Z');
+    await evaluate(`document.querySelector('.admin-traffic-chart').focus()`);await key('Home');assert.ok((await evaluate(`document.querySelector('.admin-chart-readout').textContent`)).includes('Oct 19, 12:15 AM PST'));
+    await click('.admin-panel-heading button','Export');csv=await evaluate(`window.exportedCsv`);assert.ok(csv.includes('2026-10-19T00:15:00.000-08:00')&&!csv.includes('UTC'));
+    for(const dark of [true,false]) {await theme(dark);for(const width of [1440,390,320]) {await viewport(width);assert.equal(await evaluate(`document.documentElement.scrollWidth>innerWidth`),false);if(width===390){await evaluate(`document.querySelector('.admin-panel').scrollIntoView({block:'start',behavior:'instant'})`);await screenshot(`pst-one-hour-${dark?'dark':'light'}`);}}}
+    await viewport(1440);await view('Content');await click('.admin-panel-heading button','Export CSV');csv=await evaluate(`window.exportedCsv`);assert.ok(csv.includes('Since (PST)')&&csv.includes('2026-10-19T00:15:00.000-08:00')&&!csv.includes('UTC'));
+    await view('Audience');assert.ok((await evaluate(`document.querySelector('.admin-visits-table tbody tr').textContent`)).includes('Oct 19, 1:15 AM'));
+    await click('.admin-visit-link');await waitFor(`!!document.querySelector('.admin-journey-timeline')`);assert.ok((await evaluate(`document.querySelector('.admin-visit-dialog').textContent`)).includes('Started (PST)'));assert.ok((await evaluate(`document.querySelector('.admin-journey-timeline time').textContent`)).includes('1:15 AM'));assert.ok((await evaluate(`document.querySelector('.admin-detail-actions').textContent`)).includes('1:15 AM'));await key('Escape');
+    for(const name of ['Overview','Content','Audience','Journeys']){await view(name);assert.equal(await evaluate(`document.querySelector('.admin-page').innerText.includes('UTC')`),false);}
+    assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks:'One-hour filter and 15-minute API buckets; fixed PST labels, charts, histories and CSV exports from a Tokyo browser; dark/light responsive layouts',artifacts},null,2));
+  } else {
   await viewport(1440);await navigate('/admin');await waitFor(`!!document.querySelector('#api-key')`);await theme(true);
   await screenshot('login-dark');
   assert.ok(!requests.some(url=>url.includes('/AdminDashboard-')||url.includes('/VisitorMap-')),'Dashboard/map loaded before sign-in');
@@ -209,6 +233,7 @@ try {
   // A new document on admin must never initialize a tracking session.
   await navigate('/admin');await waitFor(`!!document.querySelector('#api-key')`);await delay(100);assert.equal(await evaluate(`window.__mock.log.filter(r=>r.path.startsWith('/api/analytics')).length`),0);
   assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks:'Login, progressive loading, caching, server/auth failures, cancellation, all views, filters, sorting, map lazy load, pagination, visit dialog keyboard/focus, chart keyboard, empty data, 32 responsive layouts, tracking uniqueness/path/DNT',artifacts},null,2));
+  }
   await call('Browser.close');
 } finally {
   ws?.close();chrome.kill();

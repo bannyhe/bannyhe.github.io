@@ -1,8 +1,10 @@
+// PST is a fixed UTC-08:00 offset, including during daylight-saving months.
+export const REPORT_TIME_ZONE = "Etc/GMT+8";
 export const TIME_RANGES = [
+  { value: "1h", label: "Last 1 hour", ms: 3600000, days: 1, granularity: "15min" },
   { value: "24h", label: "Last 24 hours", ms: 86400000, days: 1, granularity: "hour" },
   { value: "7d", label: "Last 7 days", ms: 7 * 86400000, days: 7, granularity: "day" },
   { value: "30d", label: "Last 30 days", ms: 30 * 86400000, days: 30, granularity: "day" },
-  { value: "90d", label: "Last 90 days", ms: 90 * 86400000, days: 90, granularity: "day" },
 ] as const;
 export type TimeRange = typeof TIME_RANGES[number]["value"];
 export type View = "overview" | "content" | "audience" | "journeys";
@@ -30,7 +32,21 @@ export function formatPercent(fraction: number | null | undefined) { return frac
 export function formatDate(iso: string, short = false) {
   const date = new Date(iso);
   if (!Number.isFinite(date.getTime())) return "—";
-  return date.toLocaleString("en-US", { timeZone: "UTC", month: "short", day: "numeric", ...(short ? {} : { hour: "numeric", minute: "2-digit" }) });
+  return date.toLocaleString("en-US", { timeZone: REPORT_TIME_ZONE, month: "short", day: "numeric", ...(short ? {} : { hour: "numeric", minute: "2-digit" }) });
+}
+export function formatTime(value: string | number | Date) {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) ? date.toLocaleTimeString("en-US", { timeZone: REPORT_TIME_ZONE, hour: "numeric", minute: "2-digit" }) : "—";
+}
+export function formatExportDate(value: string | number | Date) {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "";
+  return new Date(date.getTime() - 8 * 3600000).toISOString().replace("Z", "-08:00");
+}
+// The API's bucket identifiers are UTC instants; convert the start time for display.
+export function formatBucketLabel(value: string, compact = false) {
+  const date = bucketDate(value);
+  return compact && value.length > 10 ? formatTime(date) : formatDate(date.toISOString(), compact);
 }
 export function bucketDate(value: string) { return new Date(value.length === 10 ? `${value}T00:00:00Z` : value.length === 13 ? `${value}:00:00Z` : `${value}:00Z`); }
 export function locationName(visit: Pick<VisitorRow, "city" | "region" | "country" | "country_code">) {

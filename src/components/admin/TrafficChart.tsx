@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { bucketDate, formatNumber, type TimelineRow } from "./adminModel";
+import { formatBucketLabel, formatNumber, type TimelineRow } from "./adminModel";
 /** Small SVG chart: no charting library needs to load before the dashboard. */
 export function TrafficChart({ rows }: { rows: TimelineRow[] }) {
   const host = useRef<HTMLDivElement>(null);
@@ -17,7 +17,7 @@ export function TrafficChart({ rows }: { rows: TimelineRow[] }) {
   const x = (index: number) => left + index / Math.max(1, rows.length - 1) * (width - left - right);
   const y = (value: number) => height - bottom - value / maximum * (height - top - bottom);
   const line = rows.map((row, i) => `${i ? "L" : "M"}${x(i)},${y(Number(row[metric]))}`).join(" ");
-  const dateLabel = (date: string) => bucketDate(date).toLocaleString("en-US", { timeZone: "UTC", ...(date.length > 10 ? { hour: "numeric", minute: "2-digit" } : { month: "short", day: "numeric" }) });
+  const dateLabel = (date: string) => formatBucketLabel(date, true);
   const selected = active == null ? undefined : rows[active];
   return <div ref={host} className="admin-traffic">
     <div className="admin-segmented" aria-label="Traffic metric">{(["sessions", "pageViews"] as const).map(key => <button key={key} type="button" aria-pressed={metric === key} onClick={() => setMetric(key)}>{key === "sessions" ? "Visits" : "Page views"}</button>)}</div>
@@ -31,7 +31,7 @@ export function TrafficChart({ rows }: { rows: TimelineRow[] }) {
       {[...new Set([0, Math.floor((rows.length - 1) / 2), rows.length - 1])].filter(i => rows[i]).map(i => <text key={i} x={x(i)} y={height - 5} textAnchor={i === 0 ? "start" : i === rows.length - 1 ? "end" : "middle"}>{dateLabel(rows[i].date)}</text>)}
       {selected && active != null && <g><line x1={x(active)} x2={x(active)} y1={top} y2={height - bottom} stroke="var(--admin-muted)" strokeDasharray="3 4" /><circle cx={x(active)} cy={y(Number(selected[metric]))} r="5" fill="var(--admin-accent)" stroke="var(--admin-surface)" strokeWidth="2" /></g>}
     </svg>
-    <p className="admin-chart-readout" aria-live="polite">{selected ? <><strong>{dateLabel(selected.date)} UTC</strong><span>{formatNumber(selected.sessions)} visits · {formatNumber(selected.pageViews)} page views</span></> : "Point at the chart or use arrow keys to inspect traffic."}</p>
-    <details className="admin-chart-data"><summary>View traffic data</summary><div className="admin-table-scroll"><table><thead><tr><th scope="col">Date / time (UTC)</th><th scope="col">Visits</th><th scope="col">Page views</th></tr></thead><tbody>{rows.map(row => <tr key={row.date}><th scope="row">{row.date.replace("T", " ")}</th><td>{formatNumber(row.sessions)}</td><td>{formatNumber(row.pageViews)}</td></tr>)}</tbody></table></div></details>
+    <p className="admin-chart-readout" aria-live="polite">{selected ? <><strong>{formatBucketLabel(selected.date)} PST</strong><span>{formatNumber(selected.sessions)} visits · {formatNumber(selected.pageViews)} page views</span></> : "Point at the chart or use arrow keys to inspect traffic."}</p>
+    <details className="admin-chart-data"><summary>View traffic data</summary><div className="admin-table-scroll"><table><thead><tr><th scope="col">Period starting (PST)</th><th scope="col">Visits</th><th scope="col">Page views</th></tr></thead><tbody>{rows.map(row => <tr key={row.date}><th scope="row">{formatBucketLabel(row.date)}</th><td>{formatNumber(row.sessions)}</td><td>{formatNumber(row.pageViews)}</td></tr>)}</tbody></table></div></details>
   </div>;
 }
