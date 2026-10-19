@@ -1,191 +1,90 @@
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
-import { useRef, type CSSProperties } from "react";
-import { Badge } from "./ui/badge";
-import { ExternalLink, Github, ArrowRight, Lock } from "lucide-react";
-import { Button } from "./ui/button";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { Link } from "react-router-dom";
-import { useAnalytics } from "../hooks/useAnalytics";
-import assistantThumbnailImg from "../assets/ai-assistant/assistant-main-thumbnail.svg";
-
-// External project thumbnail links
-const malwarePreventionImg = "https://drive.google.com/thumbnail?id=11_e-o8v6AtoYnNBsgNKOsh_QT7IPt6ue&sz=w800";
-const northstarOnboardingImg = "https://drive.google.com/thumbnail?id=1pYkECFpqcSB91QCI0lB-GYK4NH833NTz&sz=w800";
-const vcfNetworkImg = "https://drive.google.com/thumbnail?id=1X309fVV7tuhg3LfdaHdF2-XoheDNVb72&sz=w800";
-const xenithImg = "https://drive.google.com/thumbnail?id=1pWmehNi_6kY5uX85BdoIt5trK0QKcU3L&sz=w800";
-
-// Trims 1% off a thumbnail's top edge: the image sits 1% higher and 1% taller,
-// so the bottom stays flush and the frame's overflow-hidden clips the top.
-// Avoids `transform`, which would share transform-origin with the hover zoom.
-const CROP_TOP_1: CSSProperties = {
-  position: "absolute",
-  top: "-1%",
-  left: 0,
-  right: 0,
-  height: "101%",
-};
+import { useRef, type CSSProperties } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import { ArrowUpRight, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ImageWithFallback } from './figma/ImageWithFallback';
+import { useAnalytics } from '../hooks/useAnalytics';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import assistantThumbnailImg from '../assets/ai-assistant/assistant-main-thumbnail.svg';
 
 const projects = [
   {
-    id: "malware-prevention",
-    title: "Malware Prevention Dashboard",
-    description: "Real-time malware detection and prevention system with file inspection and threat analysis.",
-    imageUrl: malwarePreventionImg,
-    imageStyle: CROP_TOP_1,
-    tags: ["React", "Security", "Analytics", "Real-time"],
-    liveUrl: "#",
-    githubUrl: "#",
-    hasDetailPage: true,
+    id: 'malware-prevention', title: 'Malware Prevention Dashboard', category: 'Security · Data visualization',
+    description: 'Making complex threat signals easier to understand and act on.',
+    image: '/media/home/malware-prevention.png', crop: true, protected: false,
+    accent: '#89a9c6',
   },
   {
-    id: "ai-assistant",
-    title: "Network AI Assistant",
-    description: "UX vision for conversational troubleshooting in Network Operations.",
-    imageUrl: assistantThumbnailImg,
-    tags: ["AI", "Product Design"],
-    liveUrl: "#",
-    githubUrl: "#",
-    hasDetailPage: true,
-    isPasswordProtected: true,
+    id: 'ai-assistant', title: 'Network AI Assistant', category: 'Conversational AI · Product vision',
+    description: 'Bringing context, evidence, and next steps into one conversation.',
+    image: assistantThumbnailImg, crop: false, protected: true, accent: '#9a9fc7',
   },
   {
-    id: "northstar-onboarding",
-    title: "Northstar Onboarding",
-    description: "North Star onboarding experience with step-by-step prerequisites and VMware Cloud Gateway configuration.",
-    imageUrl: northstarOnboardingImg,
-    tags: ["React", "Onboarding", "VMware", "Cloud"],
-    liveUrl: "#",
-    githubUrl: "#",
-    hasDetailPage: true,
+    id: 'northstar-onboarding', title: 'Northstar Onboarding', category: 'Cloud · First-use experience',
+    description: 'Turning a complex setup into a clear path forward.',
+    image: '/media/home/northstar-onboarding.png', crop: false, protected: false,
+    accent: '#87b5b4',
   },
   {
-    id: "vcf-network",
-    title: "VCF Network Operations",
-    description: "A full-featured online shopping platform with payment integration and admin dashboard.",
-    imageUrl: vcfNetworkImg,
-    tags: ["React", "Node.js", "MongoDB", "Stripe"],
-    liveUrl: "#",
-    githubUrl: "#",
-    hasDetailPage: true,
-    isPasswordProtected: true,
+    id: 'vcf-network', title: 'VCF Network Operations', category: 'Infrastructure · Systems thinking',
+    description: 'Helping operators see connections across their network.',
+    image: '/media/home/vcf-network.png', crop: false, protected: true,
+    accent: '#8bafcd',
   },
   {
-    id: "xenith-website",
-    title: "Xenith Website Redesign",
-    description: "Collaborative task management tool with real-time updates and team features.",
-    imageUrl: xenithImg,
-    tags: ["React", "Firebase", "Tailwind CSS"],
-    liveUrl: "#",
-    githubUrl: "#",
-    hasDetailPage: true,
+    id: 'xenith-website', title: 'Xenith Website Redesign', category: 'Commerce · Digital experience',
+    description: 'A clearer way to discover, compare, and choose the right equipment.',
+    image: '/media/home/xenith-website.jpg', crop: false, protected: false,
+    accent: '#c2a18b',
   },
 ];
 
-export function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
+function ProjectCard({ project, index, paused }: { project: typeof projects[number]; index: number; paused: boolean }) {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = usePrefersReducedMotion();
   const { trackEvent } = useAnalytics();
-
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] });
+  const tilt = useTransform(scrollYProgress, [0, 1], [7, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [.94, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [35, 0]);
   return (
-    <section id="projects" className="py-24 relative">
-      <div className="container mx-auto px-4">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl mb-4 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent" style={{ lineHeight: "1.4" }}>
-              Featured Projects
-            </h2>
-            <p className="text-xl text-gray-700 dark:text-gray-200 max-w-2xl mx-auto">
-              Explore my latest work in product design and user experience
-            </p>
-          </div>
+    <motion.article ref={ref} className="home-project" style={!reduced && !paused ? { rotateX: tilt, scale, y } : undefined}>
+      <Link to={`/project/${project.id}`} className="home-project-link" onClick={() => trackEvent('project_view', project.id)} aria-labelledby={`project-title-${project.id}`} style={{ '--project-accent': project.accent } as CSSProperties}>
+        <div className="home-project-image">
+          <ImageWithFallback
+            src={project.image} alt={`${project.title} project preview`} loading="lazy" decoding="async" width={800} height={600}
+            className={project.crop ? 'home-project-thumbnail home-project-thumbnail-crop' : 'home-project-thumbnail'}
+          />
+          {project.protected && <span className="home-project-lock"><Lock size={12} aria-hidden="true" />Protected</span>}
+          <span className="home-project-open" aria-hidden="true"><ArrowUpRight size={22} /></span>
+        </div>
+        <div className="home-project-details">
+          <div className="home-project-topline"><span>{project.category}</span><span className="home-project-number">0{index + 1}</span></div>
+          <h3 id={`project-title-${project.id}`}>{project.title}</h3>
+          <p>{project.description}</p>
+          <span className="home-project-read">Explore case study <ArrowUpRight size={14} aria-hidden="true" /></span>
+        </div>
+      </Link>
+    </motion.article>
+  );
+}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group"
-              >
-                {project.hasDetailPage ? (
-                  <Link to={`/project/${project.id}`} className="block" onClick={() => trackEvent('project_view', project.id)}>
-                    <motion.div
-                      className="cursor-pointer transition-all duration-300"
-                    >
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
-                        {project.isPasswordProtected && (
-                          <div className="absolute top-4 right-4 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 flex items-center gap-2 shadow-lg" style={{ borderRadius: '8px' }}>
-                            <Lock className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-                            <span className="text-sm text-gray-700 dark:text-gray-300">Protected</span>
-                          </div>
-                        )}
-                        {project.imageUrl ? (
-                          <ImageWithFallback
-                            src={project.imageUrl}
-                            alt={project.title}
-                            style={project.imageStyle}
-                            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${project.imageClassName || ""}`}
-                          />
-                        ) : typeof project.image === 'string' ? (
-                          <ImageWithFallback
-                            src={`https://source.unsplash.com/800x600/?${project.image}`}
-                            alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        ) : (
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        )}
-                      </div>
-                      <h3 className="text-xl mt-4 text-center text-gray-700 dark:text-gray-200">
-                        {project.title}
-                      </h3>
-                    </motion.div>
-                  </Link>
-                ) : (
-                  <motion.div
-                    className="transition-all duration-300"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
-                      {project.imageUrl ? (
-                        <img
-                          src={project.imageUrl}
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : typeof project.image === 'string' ? (
-                        <ImageWithFallback
-                          src={`https://source.unsplash.com/800x600/?${project.image}`}
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      )}
-                    </div>
-                    <h3 className="text-xl mt-4 text-center text-gray-700 dark:text-gray-200">
-                      {project.title}
-                    </h3>
-                  </motion.div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+export function Projects({ paused }: { paused: boolean }) {
+  return (
+    <section id="projects" className="home-projects" tabIndex={-1} aria-labelledby="selected-work-heading">
+      <div className="home-work-heading">
+        <div><p className="home-eyebrow">SELECTED WORK / 01—05</p><h2 id="selected-work-heading">Different challenges.<br /><span>The same care.</span></h2></div>
+        <p>A closer look at how I bring clarity to complex products, from the first question to the final interaction.</p>
+      </div>
+      <div className="home-project-grid">
+        {projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} paused={paused} />)}
+        <aside className="home-contact-card" aria-labelledby="home-contact-heading">
+          <span className="home-contact-orb" aria-hidden="true" />
+          <p className="home-eyebrow">THE NEXT CHAPTER</p>
+          <h3 id="home-contact-heading">Have something<br />in mind?</h3>
+          <p>Let’s make it feel simple.</p>
+          <a className="home-secondary-action" href="mailto:bannyhe@umich.edu">Start a conversation <ArrowUpRight size={17} aria-hidden="true" /></a>
+        </aside>
       </div>
     </section>
   );
