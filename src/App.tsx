@@ -50,7 +50,7 @@ function DocumentTitle() {
   return null;
 }
 import { Navigation } from "./components/Navigation";
-import { useAnalytics } from "./hooks/useAnalytics";
+import { useAnalytics, usePageAnalytics } from "./hooks/useAnalytics";
 
 // The home page is what almost every visit starts on, so it stays in the main
 // bundle. Everything else is split out: the four case studies carry most of the
@@ -125,6 +125,7 @@ function RouteFallback() {
 
 // Inner component — rendered inside <Router> so useLocation() works.
 function AppContent() {
+  usePageAnalytics();
   const { trackEvent } = useAnalytics();
   const isHome = useLocation().pathname === "/";
 

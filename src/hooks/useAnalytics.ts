@@ -1,102 +1,68 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  getOrCreateSessionId,
-  initSession,
-  trackPageView,
-  finalizePageView,
-  trackInteraction,
-} from "../lib/analytics";
+import { readySession, trackingAllowed, trackPageView, finalizePageView, trackInteraction } from "../lib/analytics";
 
-// Tracks session init, page views (with duration + scroll depth), and exposes
-// a trackEvent helper for components to call directly.
+// Mount once in AppContent. Components that only record actions use useAnalytics.
+export function usePageAnalytics() {
+  const { pathname } = useLocation();
+  const previousPath = useRef("");
+  useEffect(() => {
+    if (!trackingAllowed(pathname)) return;
+    let disposed = false;
+    let pageId: string | null = null;
+    let elapsed = 0;
+    let visibleSince: number | null = document.visibilityState === "visible" ? performance.now() : null;
+    let maxDepth = 0;
+    const duration = () => Math.round(elapsed + (visibleSince == null ? 0 : performance.now() - visibleSince));
+    const measure = () => {
+      if (document.visibilityState !== "visible") return;
+      const height = document.documentElement.scrollHeight;
+      maxDepth = Math.max(maxDepth, Math.min(1, height > 0 ? (window.scrollY + window.innerHeight) / height : 0));
+    };
+    const flush = () => { if (pageId) void finalizePageView(pageId, duration(), maxDepth); };
+    const pause = () => {
+      if (visibleSince != null) { elapsed += performance.now() - visibleSince; visibleSince = null; }
+      flush();
+    };
+    const visibility = () => {
+      if (document.visibilityState === "hidden") pause();
+      else { if (visibleSince == null) visibleSince = performance.now(); measure(); }
+    };
+    const resume = () => { if (document.visibilityState === "visible" && visibleSince == null) visibleSince = performance.now(); };
+    // Defer one tick so React Strict Mode's effect rehearsal never records a view.
+    const timer = window.setTimeout(async () => {
+      const referrer = previousPath.current;
+      previousPath.current = pathname;
+      const session = await readySession();
+      if (!session) return;
+      if (!disposed) measure();
+      pageId = await trackPageView(session, pathname, referrer || undefined);
+      // Finalize the correct visit even if its response arrives after navigation.
+      if (disposed || document.visibilityState === "hidden") flush();
+    }, 0);
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+    window.addEventListener("pagehide", pause);
+    window.addEventListener("pageshow", resume);
+    document.addEventListener("visibilitychange", visibility);
+    return () => {
+      disposed = true;
+      window.clearTimeout(timer);
+      pause();
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("pagehide", pause);
+      window.removeEventListener("pageshow", resume);
+      document.removeEventListener("visibilitychange", visibility);
+    };
+  }, [pathname]);
+}
+
 export function useAnalytics() {
-  const location = useLocation();
-  const sessionId = useRef<string>("");
-  const sessionInitialized = useRef(false);
-  const pageViewId = useRef<string | null>(null);
-  const pageEnteredAt = useRef<number>(Date.now());
-  const maxScrollDepth = useRef(0);
-
-  // ── Session init (once per app load) ────────────────────────────────────────
-  useEffect(() => {
-    if (sessionInitialized.current) return;
-    sessionInitialized.current = true;
-
-    const sid = getOrCreateSessionId();
-    sessionId.current = sid;
-    initSession(sid);
+  const trackEvent = useCallback((type: string, target?: string, metadata?: Record<string, unknown>) => {
+    const path = window.location.pathname;
+    if (!trackingAllowed(path)) return;
+    void readySession().then(session => { if (session) void trackInteraction(session, type, target, metadata, path); });
   }, []);
-
-  // ── Scroll depth tracker ─────────────────────────────────────────────────────
-  useEffect(() => {
-    const onScroll = () => {
-      const scrolled = window.scrollY + window.innerHeight;
-      const total = document.documentElement.scrollHeight;
-      const depth = total > 0 ? scrolled / total : 0;
-      if (depth > maxScrollDepth.current) {
-        maxScrollDepth.current = depth;
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // ── Page view tracking on route change ──────────────────────────────────────
-  const prevPath = useRef<string>("");
-  useEffect(() => {
-    const currentPath = location.pathname;
-
-    // Don't track admin visits
-    if (currentPath === '/admin') return;
-
-    // Finalize the previous page view before starting a new one
-    const finalize = () => {
-      if (pageViewId.current) {
-        const duration = Date.now() - pageEnteredAt.current;
-        finalizePageView(pageViewId.current, duration, maxScrollDepth.current);
-      }
-    };
-
-    finalize();
-
-    // Reset for new page
-    pageViewId.current = null;
-    pageEnteredAt.current = Date.now();
-    maxScrollDepth.current = 0;
-
-    const sid = sessionId.current;
-    if (!sid) return;
-
-    trackPageView(sid, currentPath, prevPath.current || undefined).then((id) => {
-      pageViewId.current = id;
-    });
-
-    prevPath.current = currentPath;
-  }, [location.pathname]);
-
-  // ── Finalize on tab close / navigation away ──────────────────────────────────
-  useEffect(() => {
-    const onVisibilityChange = () => {
-      if (document.visibilityState === "hidden" && pageViewId.current) {
-        const duration = Date.now() - pageEnteredAt.current;
-        finalizePageView(pageViewId.current, duration, maxScrollDepth.current);
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
-  }, []);
-
-  // ── Public helper for components ─────────────────────────────────────────────
-  const trackEvent = useCallback(
-    (type: string, target?: string, metadata?: Record<string, unknown>) => {
-      const sid = sessionId.current;
-      if (sid) trackInteraction(sid, type, target, metadata);
-    },
-    []
-  );
-
   return { trackEvent };
 }

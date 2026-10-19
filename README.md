@@ -80,19 +80,20 @@ The server starts at `http://localhost:3001`. The SQLite database file (`analyti
 
 ## Admin Dashboard
 
-Navigate to `/#/admin` on the live site or locally. Enter your `DASHBOARD_API_KEY` to log in.
+Navigate to `/admin` on the live site or locally. Enter your `DASHBOARD_API_KEY` to sign in.
 
-The dashboard shows:
+- **Overview** — browser sessions, page views, tracked actions, views per visit, traffic trends, referral sources, and action destinations.
+- **Content** — searchable page/project performance, sorting by views/time/scroll, and CSV export of the filtered rows.
+- **Audience** — locations, optional map, device/browser/OS breakdowns, paginated visits, and individual histories with source/campaign details. A selected location filters only the visit list.
+- **Journeys** — ranked page-to-page transitions and CSV export. This preserves cycles present in the API response.
 
-- **Traffic overview** — total visitors, page views, interactions, 30-day sessions
-- **Timeline chart** — daily visitor and page view trend (last 30 days)
-- **Top pages** — view counts, average time on page, average scroll depth
-- **Visitors by location** — city/state for US visitors, city/country for international
-- **Device & browser breakdown** — desktop/mobile/tablet split with browser bar chart
-- **Navigation flow** — Sankey chart of actual page-to-page transitions
-- **Recent visitors** — device, browser, location (or masked IP if unavailable)
+Choose a 24-hour, 7-day, 30-day, or 90-day period. Report times use UTC. Visits are browser sessions, not identified people; clicks do not establish completed downloads or contacts. Reports disclose API row limits and missing measurements. Historical counts may include duplicate page views from the previous tracking implementation; only future tracking is corrected.
 
-The API key is stored in `localStorage` after first login — you won't be prompted again until you click Logout.
+Panels load independently, retry failures without signing out, and reuse responses for 60 seconds. Refresh on demand, or enable updates every minute while the tab is visible. Chart and page/path CSV exports contain aggregate data. The map downloads only when requested.
+
+The API key stays in the current tab's session storage by default. Select **Stay signed in on this device** to use local storage; **Sign out** clears both. An idle hosting service can still delay authentication: the login page starts one health request, offers cancellation, and explains a slow wake-up.
+
+Development checks (Node.js 24+): `node --test tests/admin-model.test.mjs`. For browser regression checks, run a production preview, then `node tests/admin-browser.mjs http://127.0.0.1:3000`. The browser test uses synthetic API responses and never writes analytics to the live server. Set `CHROME_PATH` if Chrome is installed outside the default macOS location.
 
 ---
 

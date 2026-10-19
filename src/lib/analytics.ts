@@ -6,6 +6,8 @@ const SESSION_KEY = "portfolio_session_id";
 const SESSION_EXPIRY_KEY = "portfolio_session_expiry";
 // Session lasts 30 minutes of inactivity
 const SESSION_TTL_MS = 30 * 60 * 1000;
+let memorySession: { id: string; expiry: number } | undefined;
+const pendingSessions = new Map<string, Promise<boolean>>();
 
 // ─── Session ID ────────────────────────────────────────────────────────────────
 
@@ -30,7 +32,8 @@ export function getOrCreateSessionId(): string {
     // localStorage unavailable (private browsing, etc.)
   }
 
-  const id = generateId();
+  const id = memorySession && Date.now() < memorySession.expiry ? memorySession.id : generateId();
+  memorySession = { id, expiry: Date.now() + SESSION_TTL_MS };
   try {
     localStorage.setItem(SESSION_KEY, id);
     localStorage.setItem(SESSION_EXPIRY_KEY, String(Date.now() + SESSION_TTL_MS));
@@ -74,9 +77,9 @@ async function patch(path: string, body: unknown): Promise<void> {
 
 // ─── Public API ────────────────────────────────────────────────────────────────
 
-export async function initSession(sessionId: string): Promise<void> {
+async function initSession(sessionId: string): Promise<boolean> {
   const params = new URLSearchParams(window.location.search);
-  await post("/api/analytics/session", {
+  const response = await post("/api/analytics/session", {
     sessionId,
     referrer: document.referrer || null,
     language: navigator.language,
@@ -84,6 +87,26 @@ export async function initSession(sessionId: string): Promise<void> {
     utmMedium: params.get("utm_medium"),
     utmCampaign: params.get("utm_campaign"),
   });
+  return !!response?.ok;
+}
+
+export function trackingAllowed(path = window.location.pathname) {
+  return navigator.doNotTrack !== "1" && !/^\/admin(?:\/|$)/.test(path);
+}
+
+// Share initialization across page tracking and action handlers. The server must
+// have accepted the session before any dependent records are sent.
+export async function readySession(): Promise<string | null> {
+  if (!trackingAllowed()) return null;
+  const id = getOrCreateSessionId();
+  let pending = pendingSessions.get(id);
+  if (!pending) {
+    pending = initSession(id);
+    pendingSessions.set(id, pending);
+  }
+  if (await pending) return id;
+  pendingSessions.delete(id); // Retry on the next activity after a network failure.
+  return null;
 }
 
 export async function trackPageView(sessionId: string, path: string, referrer?: string): Promise<string | null> {
@@ -110,13 +133,15 @@ export async function trackInteraction(
   sessionId: string,
   type: string,
   target?: string,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
+  path = window.location.pathname
 ): Promise<void> {
+  if (!trackingAllowed(path)) return;
   await post("/api/analytics/interaction", {
     sessionId,
     type,
     target: target ?? null,
-    path: window.location.hash.replace("#", "") || "/",
+    path,
     metadata: metadata ?? null,
   });
 }

@@ -6,7 +6,7 @@ export interface MapRow {
   location: string;
   country_code: string | null;
   visitors: number;
-  /** Average of the visitors' geolocated coordinates. Absent on older API builds. */
+  /** Average of the visits' geolocated coordinates. Absent on older API builds. */
   lat?: number | null;
   lon?: number | null;
 }
@@ -112,10 +112,10 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
   // ── Colors ──────────────────────────────────────────────────────────────
   const idleLand = dark ? "#334155" : "#e2e8f0";
   const borders = dark ? "#475569" : "#cbd5e1";
-  const activeLo = dark ? "#4c1d95" : "#ede9fe";   // few visitors
-  const activeHi = dark ? "#7c3aed" : "#8b5cf6";   // most visitors
-  const activeHover = dark ? "#c4b5fd" : "#5b21b6";
-  const pin = dark ? "#c4b5fd" : "#7c3aed";
+  const activeLo = dark ? "#26496f" : "#e5f0fb";   // few visits
+  const activeHi = dark ? "#28619a" : "#448ac6";   // most visits
+  const activeHover = dark ? "#91c5ff" : "#174f83";
+  const pin = dark ? "#91c5ff" : "#28619a";
 
   const activePoint = points.find(p => p.location === (hoverPoint ?? selectedLocation)) ?? null;
   const hoveredCountry = hoverCountry ? byCountry.get(hoverCountry) : undefined;
@@ -186,7 +186,7 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
                   cy={p.y}
                   r={p.r / scale}
                   fill={pin}
-                  stroke={dark ? "#1e1b4b" : "#ffffff"}
+                  stroke={dark ? "#18283b" : "#ffffff"}
                   strokeWidth={1.2 / scale}
                   style={{
                     cursor: "pointer",
@@ -214,8 +214,8 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
           return (
             <Tooltip dark={dark} x={s.x} y={s.y}>
               <div style={{ fontWeight: 600 }}>{countryFlag(hoverCountry)} {shape.n}</div>
-              <div style={{ color: dark ? "#c4b5fd" : "#7c3aed", fontWeight: 600 }}>
-                {hoveredCountry.visitors} {hoveredCountry.visitors === 1 ? "visitor" : "visitors"}
+              <div style={{ color: dark ? "#91c5ff" : "#28619a", fontWeight: 600 }}>
+                {hoveredCountry.visitors} {hoveredCountry.visitors === 1 ? "visit" : "visits"}
                 <span style={{ color: dark ? "#94a3b8" : "#64748b", fontWeight: 400 }}>
                   {" "}· {hoveredCountry.places} {hoveredCountry.places === 1 ? "location" : "locations"}
                 </span>
@@ -235,8 +235,8 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
               <div style={{ fontWeight: 600 }}>
                 {countryFlag(activePoint.country_code)} {activePoint.location}
               </div>
-              <div style={{ color: dark ? "#c4b5fd" : "#7c3aed", fontWeight: 600 }}>
-                {activePoint.visitors} {activePoint.visitors === 1 ? "visitor" : "visitors"}
+              <div style={{ color: dark ? "#91c5ff" : "#28619a", fontWeight: 600 }}>
+                {activePoint.visitors} {activePoint.visitors === 1 ? "visit" : "visits"}
                 <span style={{ color: dark ? "#94a3b8" : "#64748b", fontWeight: 400 }}>
                   {" "}· {Math.round((activePoint.visitors / plottedVisitors) * 100)}% of plotted
                 </span>
@@ -265,9 +265,9 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
               padding: "4px 10px",
               borderRadius: 9999,
               cursor: "pointer",
-              color: dark ? "#e9d5ff" : "#5b21b6",
-              background: dark ? "rgba(76,29,149,0.85)" : "rgba(255,255,255,0.92)",
-              border: `1px solid ${dark ? "rgba(196,181,253,0.4)" : "rgba(139,92,246,0.35)"}`,
+              color: dark ? "#c3deff" : "#174f83",
+              background: dark ? "rgba(27,55,86,0.95)" : "rgba(255,255,255,0.92)",
+              border: `1px solid ${dark ? "rgba(145,197,255,0.4)" : "rgba(23,79,131,0.35)"}`,
               boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
           >
@@ -276,11 +276,11 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
         )}
       </div>
 
-      <p className="text-xs text-gray-600 dark:text-gray-300 mt-3">
+      <p className="admin-footnote">
         {zoomShape ? (
           // Zoomed in: describe this country only. The approximate/unmapped
           // tallies below are world-wide, so they would mislead here.
-          `${countryFlag(zoomTo)} ${zoomShape.n} · ${byCountry.get(zoomTo!)?.visitors ?? 0} visitors · ${byCountry.get(zoomTo!)?.places ?? 0} ${byCountry.get(zoomTo!)?.places === 1 ? "location" : "locations"}`
+          `${countryFlag(zoomTo)} ${zoomShape.n} · ${byCountry.get(zoomTo!)?.visitors ?? 0} visits · ${byCountry.get(zoomTo!)?.places ?? 0} ${byCountry.get(zoomTo!)?.places === 1 ? "location" : "locations"}`
         ) : (
           <>
             {`${points.length} ${points.length === 1 ? "location" : "locations"} · ${byCountry.size} ${byCountry.size === 1 ? "country" : "countries"} · ${plottedVisitors} plotted`}
