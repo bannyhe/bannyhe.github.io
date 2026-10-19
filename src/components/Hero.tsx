@@ -7,9 +7,9 @@ import { GalaxyScene } from './home/GalaxyScene';
 
 const chapters = [
   { label: 'Overview', at: 0 },
-  { label: 'AI', at: .30, eyebrow: '01 / ARTIFICIAL INTELLIGENCE', title: <>AI that works<br/>with you.</>, description: 'Turning complex investigations into clear, contextual conversations.', project: 'ai-assistant', link: 'Explore Network AI Assistant' },
-  { label: 'Networks', at: .64, eyebrow: '02 / CONNECTED SYSTEMS', title: <>See the whole<br/>network.</>, description: 'Making connections visible, so operators can find the signal and act with confidence.', project: 'vcf-network', link: 'Explore Network Operations' },
-  { label: 'Security', at: 1, eyebrow: '03 / SECURITY & TRUST', title: <>Clarity when<br/>it matters.</>, description: 'Helping people understand threats, prioritize risk, and protect what matters.', project: 'malware-prevention', link: 'Explore Malware Prevention' },
+  { label: 'AI', at: .30, eyebrow: '01 / Artificial intelligence', title: <>AI that works<br/>with you.</>, description: 'Turning complex investigations into clear, contextual conversations.', project: 'ai-assistant', link: 'Explore Network AI Assistant' },
+  { label: 'Networks', at: .64, eyebrow: '02 / Connected systems', title: <>See the whole<br/>network.</>, description: 'Making connections visible, so operators can find the signal and act with confidence.', project: 'vcf-network', link: 'Explore Network Operations' },
+  { label: 'Security', at: 1, eyebrow: '03 / Security & trust', title: <>Clarity when<br/>it matters.</>, description: 'Helping people understand threats, prioritize risk, and protect what matters.', project: 'malware-prevention', link: 'Explore Malware Prevention' },
 ];
 export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMotion: () => void }) {
   const section=useRef<HTMLElement>(null);
@@ -38,7 +38,7 @@ export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMoti
       <div className="galaxy-editorial">
         <div className="galaxy-copy-stack">
           <div className="galaxy-copy galaxy-introduction" data-active={active===0} {...(active!==0?{inert: ''}:{})} aria-hidden={active!==0}>
-            <p className="home-eyebrow"><span className="home-status-dot"/>MU HE · PRODUCT DESIGNER</p>
+            <p className="home-eyebrow"><span className="home-status-dot"/>Mu He · Product designer</p>
             <h1 id="home-heading">Complexity,<br/>made clear.</h1>
             <p className="home-intro">I design intuitive experiences for the people behind complex systems.</p>
             <p className="home-experience">7+ years in B2B · AI, cloud & enterprise</p>
@@ -51,7 +51,7 @@ export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMoti
           </div>)}
         </div>
       </div>
-      <p className="galaxy-coordinate" aria-hidden="true">THREE DOMAINS.<br/><span>ONE CONNECTED PRACTICE.</span></p>
+      <p className="galaxy-coordinate" aria-hidden="true">Three domains.<br/><span>One connected practice.</span></p>
       <div className="galaxy-footer">
         <div className="galaxy-journey-controls">
           <p className="galaxy-scroll-hint"><ArrowDown size={13} aria-hidden="true"/>{reduced?'Explore the case studies below':'Scroll to follow the connections'}</p>

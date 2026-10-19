@@ -202,7 +202,7 @@ function AppContent() {
               ))}
             </div>
             <p className="text-gray-500 dark:text-gray-400">
-              © 2026 Designed by MU HE. All rights
+              © 2026 Designed by Mu He. All rights
               reserved.
             </p>
           </div>

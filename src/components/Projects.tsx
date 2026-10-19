@@ -73,14 +73,14 @@ export function Projects({ paused }: { paused: boolean }) {
   return (
     <section id="projects" className="home-projects" tabIndex={-1} aria-labelledby="selected-work-heading">
       <div className="home-work-heading">
-        <div><p className="home-eyebrow">SELECTED WORK / 01—05</p><h2 id="selected-work-heading">Different challenges.<br /><span>The same care.</span></h2></div>
+        <div><p className="home-eyebrow">Selected work / 01—05</p><h2 id="selected-work-heading">Different challenges.<br /><span>The same care.</span></h2></div>
         <p>A closer look at how I bring clarity to complex products, from the first question to the final interaction.</p>
       </div>
       <div className="home-project-grid">
         {projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} paused={paused} />)}
         <aside className="home-contact-card" aria-labelledby="home-contact-heading">
           <span className="home-contact-orb" aria-hidden="true" />
-          <p className="home-eyebrow">THE NEXT CHAPTER</p>
+          <p className="home-eyebrow">The next chapter</p>
           <h3 id="home-contact-heading">Have something<br />in mind?</h3>
           <p>Let’s make it feel simple.</p>
           <a className="home-secondary-action" href="mailto:bannyhe@umich.edu">Start a conversation <ArrowUpRight size={17} aria-hidden="true" /></a>
