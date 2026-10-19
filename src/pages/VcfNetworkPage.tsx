@@ -1,7 +1,10 @@
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
-import { useRef, useEffect, useState } from "react";
-import { ExternalLink, ChevronUp, X, Lock } from "lucide-react";
+import { ProjectImageLightbox, activateImageOnKey } from "../components/case-study/ProjectImageLightbox";
+import { ProjectHero } from "../components/case-study/ProjectHero";
+import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
+import { Network } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
+import { ExternalLink, Lock } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 // Case study assets, exported from the NetOps deck.
@@ -19,15 +22,12 @@ import netopsLearningsImg from "../assets/netops/netops-learnings.png";
 import netopsAffinityImg from "../assets/netops/netops-affinity.svg";
 
 export function VcfNetworkPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const reduceMotion = useReducedMotion();
   // `cropped` mirrors the 1% trim the two product screenshots get in the page,
   // so the expanded view shows the same framing rather than the raw capture.
   const [expandedImage, setExpandedImage] = useState<
     { src: string; alt: string; cropped?: boolean } | null
   >(null);
-  const [activeSection, setActiveSection] = useState<string>("");
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [error, setError] = useState(false);
@@ -46,64 +46,6 @@ export function VcfNetworkPage() {
   // sitting in the DOM behind the overlay.
   const PROJECT_PASSWORD = import.meta.env.VITE_VCF_PROJECT_PASSWORD ?? "";
   const isAccessConfigured = PROJECT_PASSWORD.length > 0;
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Track active section and show/hide back to top button
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show back to top button when scrolled down
-      setShowBackToTop(window.scrollY > 300);
-
-      // Track active section
-      const sections = [
-        "brief",
-        "problem",
-        "my-role",
-        "process",
-        "research-synthesis",
-        "solution-overview",
-        "design-challenge",
-        "scope-change",
-        "approach-strategy",
-        // "final-implementation",  // FINAL IMPLEMENTATION: re-enable with the section
-        // "impact",  // IMPACT: re-enable together with the section markup
-        "continuous-collaboration",
-        "learnings-reflections"
-      ];
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
-  };
 
   const tableOfContents = [
     { id: "brief", label: "Brief" },
@@ -132,14 +74,14 @@ export function VcfNetworkPage() {
   };
 
   return (
-    <main className="pt-20 pb-24 vcf-body">
+    <main className="case-study pt-20 pb-24 vcf-body">
       {/* Password Protection Overlay */}
       {!isAuthenticated && (
         <div className="fixed inset-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg z-50 flex items-center justify-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: reduceMotion ? 0 : 0.6 }}
             className="max-w-md w-full mx-4"
           >
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200 dark:border-gray-700 shadow-2xl p-8 sm:p-12" style={{ borderRadius: '20px' }}>
@@ -218,37 +160,23 @@ export function VcfNetworkPage() {
       {/* Original Content - Only visible when authenticated */}
       {isAuthenticated && (
         <>
-          {/* Full-width hero image */}
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto py-12">
-              <img
-                src={netopsOverviewImg}
-                alt="VCF Network Operations title card, showing the Network Operations dashboard with network inventory, alert trends and traffic summary widgets."
-                className="w-full h-auto"
-                style={{ borderRadius: '10px' }}
-              />
-            </div>
-          </div>
+          <ProjectHero
+            title="VCF Network Operations"
+            description="Integrating advanced network capabilities into cloud-infra monitoring, addressing uncertainties in real business environment."
+            icon={Network}
+            image={{ src: netopsOverviewImg, alt: "Network Operations dashboard with network inventory, alert trends, and traffic summary widgets.", width: 1867, height: 905, crop: { x: 1031, y: 154, width: 722, height: 622 } }}
+          />
+          <ProjectNavigation sections={tableOfContents} />
 
           <div className="container mx-auto px-4">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: reduceMotion ? 0 : 0.6 }}
               className="max-w-6xl mx-auto"
             >
               {/* Header */}
               <div className="mb-16">
-                {/* The title card at the top of the page already carries the
-                    project name and the tagline, so both were repeating on
-                    screen immediately underneath it and have been dropped.
-
-                    The h1 stays, visually hidden. A title card is an image, so
-                    without this the page would have no heading at all: nothing
-                    for a screen reader to announce as the page title, nothing
-                    for the document outline, and nothing for search results.
-                    `sr-only` keeps it available to those without drawing it. */}
-                <h1 className="sr-only">VCF Network Operations</h1>
 
                 {/* Project Metadata in 2x2 Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -321,9 +249,11 @@ export function VcfNetworkPage() {
                   </div>
                   <div>
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsContextImg, alt: "Anita, a VI Admin, looking at VCF Operations. Compute, Storage and Network are listed as capabilities, with Network highlighted and mapped to Network Insights (vRNI) Operations for Network." })}
                       src={netopsContextImg}
                       alt="Anita, a VI Admin, looking at VCF Operations. Compute, Storage and Network are listed as capabilities, with Network highlighted and mapped to Network Insights (vRNI) Operations for Network."
-                      className="w-full h-auto"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto"
                       style={{ borderRadius: '10px' }}
                     />
                   </div>
@@ -384,9 +314,11 @@ export function VcfNetworkPage() {
                 <div className="grid grid-cols-1 md:grid-cols-7 gap-8 items-center">
                   <figure className="md:col-span-4">
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsProcessImg, alt: "Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components." })}
                       src={netopsProcessImg}
                       alt="Project timeline across five milestones. 01, June to July 2024: Integration of Information Architecture. 02, July to August 2024: Network Operations 1st Version. 03, August to October 2024: Scope Change for Network Operations. 04, September 2024: Convert Customized Patterns to Clarity. 05, October to December 2024: Continuous Collaboration across Components."
-                      className="w-full h-auto bg-white"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto bg-white"
                       style={{ borderRadius: '10px' }}
                     />
                   </figure>
@@ -420,9 +352,11 @@ export function VcfNetworkPage() {
                   </p>
                   <figure>
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsAffinityImg, alt: "Affinity diagram with four clusters of admin observations. Where does this live, discoverability: capability cannot be reached from Operations. Two consoles one task, context switching: reaching it means leaving. Too much too flat, feature overload: everything offered at the same weight. Don't make me relearn it, pattern consistency: the two halves behave differently." })}
                       src={netopsAffinityImg}
                       alt="Affinity diagram with four clusters of admin observations. Where does this live, discoverability: capability cannot be reached from Operations. Two consoles one task, context switching: reaching it means leaving. Too much too flat, feature overload: everything offered at the same weight. Don't make me relearn it, pattern consistency: the two halves behave differently."
-                      className="w-full h-auto mt-2 bg-white"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto mt-2 bg-white"
                       style={{ borderRadius: '10px' }}
                     />
                   </figure>
@@ -492,9 +426,11 @@ export function VcfNetworkPage() {
                       the feature names are legible but tight. */}
                   <figure>
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsIaImg, alt: "Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration." })}
                       src={netopsIaImg}
                       alt="Information architecture diagram. Stage 1 groups vRNI features such as Flow Analysis, Network Path, Network Map, Applications and Security Planning. Stage 2 maps each group into VCF Ops navigation under Infrastructure Operations, Security and Administration."
-                      className="w-full h-auto"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto"
                       style={{ borderRadius: '10px' }}
                     />
                   </figure>
@@ -517,9 +453,11 @@ export function VcfNetworkPage() {
                     style={{ borderRadius: '10px' }}
                   >
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsFirstVersionImg, alt: "The first Network Operations proposal inside VCF Ops: an Overview tab alongside three custom boards, with Network Alerts, Top Network Insights, NSX Enabled, Traffic Summary and Top Anomalies widgets.", cropped: true })}
                       src={netopsFirstVersionImg}
                       alt="The first Network Operations proposal inside VCF Ops: an Overview tab alongside three custom boards, with Network Alerts, Top Network Insights, NSX Enabled, Traffic Summary and Top Anomalies widgets."
-                      className="w-full h-auto block"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto block"
                       style={{ transform: 'scale(1.0204)' }}
                     />
                   </figure>
@@ -601,9 +539,11 @@ export function VcfNetworkPage() {
                     style={{ borderRadius: '10px' }}
                   >
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsFinalImg, alt: "The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows.", cropped: true })}
                       src={netopsFinalImg}
                       alt="The revised Network Operations page: a single Network Inventory summary across NSX instances, transport nodes, edge clusters, logical routers and switches, above Network Alerts Trend, VPC Enabled NSX Managers, Diagnostics Findings, NSX Health, Traffic Summary and Business Applications with Flows."
-                      className="w-full h-auto block"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto block"
                       style={{ transform: 'scale(1.0204)' }}
                     />
                   </figure>
@@ -670,9 +610,11 @@ export function VcfNetworkPage() {
                     ].map((shot) => (
                       <figure key={shot.src}>
                         <img
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                          onClick={() => setExpandedImage({ src: shot.src, alt: shot.alt })}
                           src={shot.src}
                           alt={shot.alt}
-                          className="w-full h-auto block"
+                          className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto block"
                           style={{ borderRadius: '10px' }}
                         />
                       </figure>
@@ -757,9 +699,11 @@ export function VcfNetworkPage() {
                     }}
                   >
                     <img
+                      role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey}
+                      onClick={() => setExpandedImage({ src: netopsLearningsImg, alt: "Illustration of five people fitting four large jigsaw pieces together." })}
                       src={netopsLearningsImg}
                       alt="Illustration of five people fitting four large jigsaw pieces together."
-                      className="w-full h-auto block"
+                      className="cursor-pointer hover:opacity-90 transition-opacity w-full h-auto block"
                       style={{ borderRadius: '10px' }}
                     />
                   </figure>
@@ -804,87 +748,8 @@ export function VcfNetworkPage() {
             </motion.div>
           </div>
 
-          {/* Image Expanded View Modal */}
-          {expandedImage && (
-            <div
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              onClick={() => setExpandedImage(null)}
-            >
-              <button
-                className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
-                onClick={() => setExpandedImage(null)}
-              >
-                <X className="w-8 h-8" />
-              </button>
-              <div
-                className="max-w-7xl max-h-[90vh] relative"
-                style={
-                  expandedImage.cropped
-                    ? { overflow: 'hidden', borderRadius: '10px' }
-                    : undefined
-                }
-              >
-                <img
-                  src={expandedImage.src}
-                  alt={expandedImage.alt}
-                  className="max-w-full max-h-[90vh] object-contain block"
-                  style={{
-                    borderRadius: '10px',
-                    ...(expandedImage.cropped
-                      ? { transform: 'scale(1.0204)' }
-                      : {}),
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-            </div>
-          )}
+          <ProjectImageLightbox image={expandedImage} onClose={() => setExpandedImage(null)} />
 
-          {/* Table of Contents - Subtle */}
-          <div className="hidden xl:block fixed top-32 right-8 w-64 p-6 z-40 group">
-            {/* Collapsed state - shows icon/text */}
-            <div className="absolute top-0 right-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none">
-              <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Contents →</p>
-              </div>
-            </div>
-            
-            {/* Expanded state - shows full catalog */}
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-              <h3 className="text-xs mb-4 text-gray-400 dark:text-gray-500 tracking-wide uppercase">On this page</h3>
-              <ul className="space-y-2">
-                {tableOfContents.map((item) => (
-                  <li key={item.id} className="relative pl-3">
-                    {activeSection === item.id && (
-                      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
-                    )}
-                    <button
-                      className={`text-left text-sm transition-colors ${
-                        activeSection === item.id ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
-                      }`}
-                      onClick={() => scrollToSection(item.id)}
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Back to Top Button */}
-          {showBackToTop && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="fixed bottom-8 right-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 p-4 shadow-xl hover:shadow-2xl transition-all z-50 cursor-pointer"
-              style={{ borderRadius: '10px' }}
-              onClick={scrollToTop}
-            >
-              <ChevronUp className="w-6 h-6" />
-            </motion.button>
-          )}
         </>
       )}
     </main>

@@ -21,13 +21,6 @@
   --ai-media-surface: #111c2c;
   --ai-media-line: #334155;
 }
-.ai-case-study .ai-hero { container-type: inline-size; aspect-ratio: 1867 / 905; display: grid; grid-template-columns: 1.16fr 1fr; align-items: center; gap: 4.3%; padding: 6%; border-radius: 10px; background: #003865; color: #fff; }
-.ai-case-study .ai-hero-copy { min-width: 0; }
-.ai-case-study .ai-hero h1 { display: flex; align-items: center; gap: .6rem; margin: 0 0 4.8cqw; color: #fff; font-size: clamp(1.25rem, 3.41cqw, 3rem); line-height: 1.25; font-weight: 500; }
-.ai-case-study .ai-hero h1 svg { width: 1.2em; height: 1.2em; flex: 0 0 auto; color: #00a8da; }
-.ai-case-study .ai-hero-description { font-size: clamp(.875rem, 2.435cqw, 2.15rem); font-weight: 400; line-height: 1.75; margin: 0; }
-.ai-case-study .ai-hero-tags { display: flex; flex-wrap: wrap; gap: .6rem 1.75rem; margin: 7.2cqw 0 0; font-size: clamp(.75rem, 2.191cqw, 1.95rem); font-weight: 400; line-height: 1.5; }
-.ai-case-study .ai-hero img { display: block; width: 100%; height: auto; border-radius: 5px; box-shadow: 0 16px 32px rgba(0, 20, 40, .25); }
 .ai-case-study .ai-project-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
 .ai-case-study .ai-meta-label { color: var(--ai-muted); font-size: .875rem; line-height: 1.5; margin: 0 0 .25rem; }
 .ai-case-study .ai-meta-value { color: var(--ai-strong); font-size: 1.125rem; line-height: 1.5; margin: 0; }
@@ -94,28 +87,11 @@
 .ai-case-study .ai-validation-grid li { display: flex; align-items: flex-start; gap: .75rem; margin: 0 0 1rem; }
 .ai-case-study .ai-validation-grid li > svg { flex: 0 0 24px; margin-top: .1rem; color: var(--ai-ink); }
 .ai-case-study .ai-validation-grid li > span { min-width: 0; }
-.ai-case-study .ai-lightbox { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1rem; border: none; background: transparent; }
-.ai-case-study .ai-lightbox[open] { display: grid; place-items: center; }
-.ai-case-study .ai-lightbox::backdrop { background: rgba(0, 0, 0, .8); backdrop-filter: blur(4px); }
-.ai-case-study .ai-lightbox > img { display: block; max-width: min(80rem, 100%); max-height: 90vh; width: auto; height: auto; object-fit: contain; border-radius: 10px; }
-.ai-case-study .ai-lightbox-close { position: fixed; top: 1rem; right: 1rem; z-index: 1; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: none; background: transparent; color: #fff; cursor: pointer; transition: color .15s; }
-.ai-case-study .ai-lightbox-close:hover { color: var(--color-gray-300); }
-.ai-case-study .ai-contents { position: fixed; top: 8rem; right: 2rem; z-index: 40; width: 16rem; }
-.ai-case-study .ai-contents-toggle { display: block; margin-left: auto; min-height: 44px; cursor: pointer; }
-.ai-case-study .ai-contents-panel { max-height: calc(100dvh - 220px); overflow-y: auto; }
-.ai-case-study .ai-contents-close { display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--ai-muted); font-size: .875rem; margin-bottom: .75rem; }
-.ai-case-study .ai-contents-close button { display: grid; place-items: center; width: 44px; height: 44px; color: var(--ai-ink); cursor: pointer; }
 .ai-case-study button:focus-visible, .ai-case-study a:focus-visible, .ai-case-study summary:focus-visible, .ai-case-study video:focus-visible { outline: 3px solid #2687d5; outline-offset: 4px; }
 @media (max-width: 1279px) {
   .ai-case-study .ai-problem-flow .ai-node-heading, .ai-case-study .ai-synthesis-branch .ai-node-heading { min-height: 3.375rem; }
-  .ai-case-study .ai-contents { position: static; width: auto; max-width: 72rem; margin: -1rem auto 2rem; padding: 0 1rem; }
-  .ai-case-study .ai-contents-toggle { margin-left: 0; }
-  .ai-case-study .ai-contents-panel { margin-top: .5rem; }
 }
 @media (max-width: 1023px) {
-  .ai-case-study .ai-hero { gap: 1.5rem; }
-  .ai-case-study .ai-hero h1 { margin-bottom: 1rem; }
-  .ai-case-study .ai-hero-tags { margin-top: 1.5rem; }
   .ai-case-study .ai-strategy-flow, .ai-case-study .ai-problem-flow, .ai-case-study .ai-synthesis-branches { grid-template-columns: 1fr; }
   .ai-case-study .ai-strategy-flow { gap: .75rem; }
   .ai-case-study .ai-strategy-flow > .ai-flow-arrow, .ai-case-study .ai-problem-flow > .ai-flow-arrow { transform: rotate(90deg); }
@@ -123,17 +99,8 @@
   .ai-case-study .ai-problem-flow .ai-node-heading, .ai-case-study .ai-synthesis-branch .ai-node-heading { min-height: 0; }
 }
 @media (max-width: 767px) {
-  .ai-case-study .ai-hero { aspect-ratio: auto; grid-template-columns: 1fr; padding: 1.5rem; gap: 1.5rem; }
-  .ai-case-study .ai-hero h1 { font-size: 1.5rem; gap: .5rem; }
-  .ai-case-study .ai-hero-description { font-size: 1.125rem; }
-  .ai-case-study .ai-hero-tags { font-size: .75rem; gap: 1rem; margin-top: 1rem; }
   .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-setup-grid { grid-template-columns: 1fr; }
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
   .ai-case-study .ai-feature-heading h3 { font-size: 1.25rem; }
   .ai-case-study .ai-media-stage { padding: .5rem; }
-  .ai-case-study > button[aria-label="Back to top"] { width: 44px; height: 44px; padding: 0; display: grid; place-items: center; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); }
-}
-@media (max-width: 359px) {
-  .ai-case-study .ai-hero { padding: 1.25rem; }
-  .ai-case-study .ai-hero h1 { font-size: 1.25rem; }
 }

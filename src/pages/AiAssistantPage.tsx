@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { ProjectHero } from "../components/case-study/ProjectHero";
+import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
+import { useState, type FormEvent } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ChevronDown, ChevronUp, Lock, Sparkles, X } from "lucide-react";
+import { ArrowLeft, Lock, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { AiAssistantCaseStudyContent, aiAssistantSections as sections } from "../components/ai-assistant/AiAssistantCaseStudyContent";
@@ -15,45 +17,7 @@ export function AiAssistantPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [error, setError] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  const [contentsOpen, setContentsOpen] = useState(false);
-  const contentsToggle = useRef<HTMLButtonElement>(null);
   const isAccessConfigured = PROJECT_PASSWORD.length > 0;
-
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    function handleScroll() {
-      setShowBackToTop(window.scrollY > 300);
-      let current = "";
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element && element.getBoundingClientRect().top <= 160) {
-          current = section.id;
-        }
-      }
-      setActiveSection(current);
-    }
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isAuthenticated]);
-
-  function scrollToSection(id: string) {
-    const element = document.getElementById(id);
-    if (!element) return;
-    setContentsOpen(false);
-    // On small screens the menu occupies document space. Measure after it closes.
-    requestAnimationFrame(() => {
-      element.focus({ preventScroll: true });
-      window.scrollTo({
-        top: element.getBoundingClientRect().top + window.scrollY - 120,
-        behavior: reduceMotion ? "auto" : "smooth",
-      });
-    });
-  }
 
   function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -146,93 +110,27 @@ export function AiAssistantPage() {
   }
 
   return (
-    <main className="pt-20 pb-24 vcf-body ai-case-study">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto py-12">
-          <header className="ai-hero">
-            <div className="ai-hero-copy">
-              <h1><Sparkles aria-hidden="true" />Network AI Assistant</h1>
-              <p className="ai-hero-description">Simplifying Network Operations with conversational AI, clear issue summaries, and actionable guidance.</p>
-              <p className="ai-hero-tags"><span>/ UX Strategy</span><span>/ UX Design</span></p>
-            </div>
-            <img src={assistantMainScreenImg} alt="Network AI Assistant main console showing a vMotion network investigation, diagnostic charts, and remediation guidance." width={1600} height={1000} fetchPriority="high" />
-          </header>
-        </div>
-      </div>
-
-      <nav
-        aria-label="Project contents"
-        className="ai-contents"
-        onKeyDown={(event) => {
-          if (event.key === "Escape") {
-            setContentsOpen(false);
-            contentsToggle.current?.focus();
-          }
-        }}
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) setContentsOpen(false);
-        }}
-      >
-        <button
-          type="button"
-          ref={contentsToggle}
-          aria-expanded={contentsOpen}
-          aria-controls="ai-assistant-contents"
-          onClick={() => setContentsOpen(!contentsOpen)}
-          className="ai-contents-toggle backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg text-sm text-gray-700 dark:text-gray-200"
-        >
-          Contents <ChevronDown size={16} aria-hidden="true" style={{ display: "inline", marginLeft: 6 }} />
-        </button>
-        <div
-          id="ai-assistant-contents"
-          hidden={!contentsOpen}
-          className="ai-contents-panel backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg"
-        >
-          <div className="ai-contents-close"><span>On this page</span><button type="button" aria-label="Close contents" onClick={() => { setContentsOpen(false); contentsToggle.current?.focus(); }}><X size={20} aria-hidden="true" /></button></div>
-          <ul className="space-y-2">
-            {sections.map((section) => (
-              <li key={section.id} className="relative pl-3">
-                {activeSection === section.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
-                )}
-                <button
-                  type="button"
-                  aria-current={activeSection === section.id ? "location" : undefined}
-                  className={`text-left text-sm transition-colors ${activeSection === section.id ? "text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200"}`}
-                  onClick={() => scrollToSection(section.id)}
-                >
-                  {section.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
+    <main className="case-study pt-20 pb-24 vcf-body ai-case-study">
+      <ProjectHero
+        title="Network AI Assistant"
+        description="Simplifying Network Operations with conversational AI, clear issue summaries, and actionable guidance."
+        icon={Sparkles}
+        tags={["UX Strategy", "UX Design"]}
+        image={{ src: assistantMainScreenImg, alt: "Network AI Assistant main console showing a vMotion network investigation, diagnostic charts, and remediation guidance.", width: 1600, height: 1000 }}
+      />
+      <ProjectNavigation sections={sections} />
 
       <div className="container mx-auto px-4">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.8 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
           className="max-w-6xl mx-auto"
         >
           <AiAssistantCaseStudyContent />
         </motion.div>
       </div>
 
-      {showBackToTop && (
-        <motion.button
-          type="button"
-          aria-label="Back to top"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 p-4 shadow-xl hover:shadow-2xl transition-all z-50 cursor-pointer"
-          style={{ borderRadius: "10px" }}
-          onClick={() => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })}
-        >
-          <ChevronUp className="w-6 h-6" aria-hidden="true" />
-        </motion.button>
-      )}
     </main>
   );
 }

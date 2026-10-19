@@ -1,10 +1,12 @@
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
-import { useRef, useEffect, useState } from "react";
-import { ExternalLink, ChevronUp, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ProjectImageLightbox, activateImageOnKey } from "../components/case-study/ProjectImageLightbox";
+import { ProjectHero } from "../components/case-study/ProjectHero";
+import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
+import { Cloud } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-const northstarOnboardingImg = "https://drive.google.com/thumbnail?id=1HqhvHG_GfB_Uwr1V3lqtvbIfcpf18_lJ&sz=w1920";
 const traditionalDataCenterImg = "https://drive.google.com/thumbnail?id=1teQvlYsa8TiX7flMZPTPS0ua-x99LHSh&sz=w1920";
 const challengeImg = "https://drive.google.com/thumbnail?id=1yUjPT_pIef4nT_4WrXhObMpX9A8AtcTZ&sz=w1920";
 const systemDashboardImg = "https://drive.google.com/thumbnail?id=1dxRjdLi29Fnsb2KctjMUUzlnVKOXGd6R&sz=w1920";
@@ -24,11 +26,8 @@ const proposedOnboardingGuideImg = "https://drive.google.com/thumbnail?id=1FrPS9
 import northstarPlacementImg from "../assets/northstar/northstar-placement.svg";
 
 export function NorthstarOnboardingPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const reduceMotion = useReducedMotion();
   const [expandedImage, setExpandedImage] = useState<{ src: string; alt: string; clipPath?: string } | null>(null);
-  const [activeSection, setActiveSection] = useState<string>("");
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const carouselSlides = [
@@ -38,63 +37,6 @@ export function NorthstarOnboardingPage() {
     { src: transitionalPageImg, label: "Transitional Page During Deployment", aspect: 902 / 702 },
     { src: globalHomepageImg, label: "Global Homepage", aspect: 902 / 696 }
   ];
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Track active section and show/hide back to top button
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show back to top button when scrolled down
-      setShowBackToTop(window.scrollY > 300);
-
-      // Track active section
-      const sections = [
-        "brief",
-        "problem",
-        "solution-overview",
-        "design-challenge",
-        "redefine-onboarding",
-        "approach-strategy",
-        "success-metrics",
-        "optimizing-workflow",
-        "transitional-pages",
-        "placement-study",
-        "impact",
-        "learnings-reflections"
-      ];
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
-  };
 
   const tableOfContents = [
     { id: "brief", label: "What is NSX+?" },
@@ -112,35 +54,24 @@ export function NorthstarOnboardingPage() {
   ];
 
   return (
-    <main className="pt-20 pb-24 northstar-body">
-      {/* Full-width hero image */}
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto py-12">
-          <img
-            src={northstarOnboardingImg}
-            alt="Northstar Onboarding"
-            className="w-full h-auto"
-            style={{ borderRadius: '10px' }}
-          />
-        </div>
-      </div>
+    <main className="case-study pt-20 pb-24 northstar-body">
+      <ProjectHero
+        title="Northstar Onboarding"
+        description="Streamlines B2B SaaS multi-cloud networking through centralized automation and enhanced visibility."
+        icon={Cloud}
+        image={{ src: "/media/project-covers/northstar.png", alt: "Northstar Onboarding welcome screen with setup prerequisites and cloud gateway guidance.", width: 1815, height: 906, crop: { x: 1002, y: 178, width: 702, height: 550 } }}
+      />
+      <ProjectNavigation sections={tableOfContents} />
 
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
           className="max-w-6xl mx-auto"
         >
           {/* Header */}
           <div className="mb-16">
-            {/* The title card above already carries the project name, so showing it
-            again here repeated it on screen. The h1 stays, visually hidden:
-            a title card is an image, so without this the page would have no
-            heading at all — nothing for a screen reader to announce as the
-            page title, nothing in the document outline, nothing for a search
-            result to show. */}
-            <h1 className="sr-only">Northstar Onboarding</h1>
 
             {/* Project Metadata in 2x2 Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -184,7 +115,7 @@ export function NorthstarOnboardingPage() {
                     alt="Traditional Data Center"
                     className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.05)', transformOrigin: 'center center' }}
-                    onClick={() => setExpandedImage({ src: traditionalDataCenterImg, alt: "Traditional Data Center" })}
+                    role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: traditionalDataCenterImg, alt: "Traditional Data Center" })}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Traditional Data Center</p>
@@ -205,7 +136,7 @@ export function NorthstarOnboardingPage() {
                     alt="Private Cloud to Public Cloud Transition"
                     className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.1)', transformOrigin: 'center center' }}
-                    onClick={() => setExpandedImage({ src: challengeImg, alt: "Private Cloud to Public Cloud Transition" })}
+                    role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: challengeImg, alt: "Private Cloud to Public Cloud Transition" })}
                   />
                 </div>
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">SaaS Transformation</p>
@@ -234,7 +165,7 @@ export function NorthstarOnboardingPage() {
                 The Northstar project aims to simplify the free trial and onboarding process for users, optimizing workflow in complex environments. By integrating and adopting cloud technologies, businesses can enhance agility and security when managing their data centers.
               </p>
             </div>
-            
+
             {/* Carousel */}
             <div className="relative">
               <motion.div
@@ -266,7 +197,7 @@ export function NorthstarOnboardingPage() {
                   ))}
                 </motion.div>
               </motion.div>
-              
+
               {/* Navigation Buttons */}
               <button
                 onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : carouselSlides.length - 1))}
@@ -284,7 +215,7 @@ export function NorthstarOnboardingPage() {
               >
                 <ChevronRight className="w-6 h-6 text-gray-800" />
               </button>
-              
+
               {/* Dots Indicator */}
               <div className="flex justify-center gap-2 mt-6">
                 {carouselSlides.map((_, index) => (
@@ -320,7 +251,7 @@ export function NorthstarOnboardingPage() {
                   alt="IT Administrator Target User"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Persona</p>
               </div>
@@ -347,7 +278,7 @@ export function NorthstarOnboardingPage() {
                   alt="Redefine Onboarding Experience - Sales Led to Product Led"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: redefineOnboardingImg, alt: "Redefine Onboarding Experience - Sales Led to Product Led" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: redefineOnboardingImg, alt: "Redefine Onboarding Experience - Sales Led to Product Led" })}
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">End-to-End Experience</p>
               </div>
@@ -370,7 +301,7 @@ export function NorthstarOnboardingPage() {
                     alt="Design Principles - Efficient, Intuitive, Trustworthy"
                     className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.25)', transformOrigin: 'center center' }}
-                    onClick={() => setExpandedImage({ src: designPrinciplesImg, alt: "Design Principles - Efficient, Intuitive, Trustworthy" })}
+                    role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: designPrinciplesImg, alt: "Design Principles - Efficient, Intuitive, Trustworthy" })}
                   />
                 </div>
               </div>
@@ -406,7 +337,7 @@ export function NorthstarOnboardingPage() {
                   src={successMetricsImg}
                   alt="Success Metrics - Adoption, Revenue, Satisfaction"
                   className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" style={{ objectPosition: '50% 43%' }}
-                  onClick={() => setExpandedImage({ src: successMetricsImg, alt: "Success Metrics - Adoption, Revenue, Satisfaction" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: successMetricsImg, alt: "Success Metrics - Adoption, Revenue, Satisfaction" })}
                 />
               </div>
             </div>
@@ -429,7 +360,7 @@ export function NorthstarOnboardingPage() {
                   alt="Optimizing Workflow - Major Steps Overview"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: optimizingWorkflowImg, alt: "Optimizing Workflow - Major Steps Overview" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: optimizingWorkflowImg, alt: "Optimizing Workflow - Major Steps Overview" })}
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Before</p>
               </div>
@@ -439,7 +370,7 @@ export function NorthstarOnboardingPage() {
                   alt="Optimized Workflow Diagram - Cloud and On-Premises Environment"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: workflowDiagramImg, alt: "Optimized Workflow Diagram - Cloud and On-Premises Environment" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: workflowDiagramImg, alt: "Optimized Workflow Diagram - Cloud and On-Premises Environment" })}
                 />
                 <p className="text-center text-gray-700 dark:text-gray-200 mt-4">After</p>
               </div>
@@ -480,7 +411,7 @@ export function NorthstarOnboardingPage() {
                 <div
                   className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern", clipPath: "inset(1% 0 0 1%)" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: oldTransitionalPatternImg, alt: "Old Transitional Pattern", clipPath: "inset(1% 0 0 1%)" })}
                 >
                   <img
                     src={oldTransitionalPatternImg}
@@ -495,7 +426,7 @@ export function NorthstarOnboardingPage() {
                 <div
                   className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide", clipPath: "inset(1% 0 0 1%)" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: proposedOnboardingGuideImg, alt: "Proposed Onboarding Guide", clipPath: "inset(1% 0 0 1%)" })}
                 >
                   <img
                     src={proposedOnboardingGuideImg}
@@ -592,75 +523,8 @@ export function NorthstarOnboardingPage() {
         </motion.div>
       </div>
 
-      {/* Image Expanded View Modal */}
-      {expandedImage && (
-        <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setExpandedImage(null)}
-        >
-          <button
-            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
-            onClick={() => setExpandedImage(null)}
-          >
-            <X className="w-8 h-8" />
-          </button>
-          <div className="max-w-7xl max-h-[90vh] relative">
-            <img
-              src={expandedImage.src}
-              alt={expandedImage.alt}
-              className="max-w-full max-h-[90vh] object-contain"
-              style={{ borderRadius: '10px', clipPath: expandedImage.clipPath }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
+      <ProjectImageLightbox image={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      {/* Table of Contents - Subtle */}
-      <div className="hidden xl:block fixed top-32 right-8 w-64 p-6 z-40 group">
-        {/* Collapsed state - shows icon/text */}
-        <div className="absolute top-0 right-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none">
-          <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Contents →</p>
-          </div>
-        </div>
-        
-        {/* Expanded state - shows full catalog */}
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-          <h3 className="text-xs mb-4 text-gray-400 dark:text-gray-500 tracking-wide uppercase">On this page</h3>
-          <ul className="space-y-2">
-            {tableOfContents.map((item) => (
-              <li key={item.id} className="relative pl-3">
-                {activeSection === item.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
-                )}
-                <button
-                  className={`text-left text-sm transition-colors ${
-                    activeSection === item.id ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
-                  }`}
-                  onClick={() => scrollToSection(item.id)}
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Back to Top Button */}
-      {showBackToTop && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 p-4 shadow-xl hover:shadow-2xl transition-all z-50 cursor-pointer"
-          style={{ borderRadius: '10px' }}
-          onClick={scrollToTop}
-        >
-          <ChevronUp className="w-6 h-6" />
-        </motion.button>
-      )}
     </main>
   );
 }

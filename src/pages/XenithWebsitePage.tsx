@@ -1,10 +1,12 @@
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
-import { useRef, useEffect, useState } from "react";
-import { ExternalLink, ChevronUp, X } from "lucide-react";
+import { ProjectImageLightbox, activateImageOnKey } from "../components/case-study/ProjectImageLightbox";
+import { ProjectHero } from "../components/case-study/ProjectHero";
+import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
+import { ShoppingBag } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-const xenithImg = "https://drive.google.com/thumbnail?id=17OW0TFFAJR1_je3X1l6pfMhUoon7zJ0y&sz=w1920";
 const heatmapImg1 = "https://drive.google.com/thumbnail?id=1jV6VGafZXFfdXrkcMYWhRkcFsEVSb2Tu&sz=w1920";
 const heatmapImg2 = "https://drive.google.com/thumbnail?id=1CCyumgW9obd6zoTBmGeQSWTHGqwX89Iu&sz=w1920";
 const teamPhoto = "https://drive.google.com/thumbnail?id=1moJecNEo8ecvFF6IYnTqhJNAZ8eBmq6Y&sz=w1920";
@@ -51,67 +53,8 @@ import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import Slider from "react-slick";
 
 export function XenithWebsitePage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const reduceMotion = useReducedMotion();
   const [expandedImage, setExpandedImage] = useState<{ src: string; alt: string } | null>(null);
-  const [activeSection, setActiveSection] = useState<string>("");
-  const [showBackToTop, setShowBackToTop] = useState(false);
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Track active section and show/hide back to top button
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show back to top button when scrolled down
-      setShowBackToTop(window.scrollY > 300);
-
-      // Track active section
-      const sections = [
-        "brief",
-        "problem",
-        "challenge",
-        "solution-overview",
-        "design-challenge",
-        "approach-strategy",
-        "mobile-app-mockups",
-        "product-entry-system",
-        "final-implementation",
-        "impact",
-        "learnings-reflections"
-      ];
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
-  };
 
   const tableOfContents = [
     { id: "brief", label: "Introduction" },
@@ -128,35 +71,24 @@ export function XenithWebsitePage() {
   ];
 
   return (
-    <main className="pt-20 pb-24">
-      {/* Full-width hero image */}
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto py-12">
-          <ImageWithFallback
-            src={xenithImg}
-            alt="Xenith Website Redesign"
-            className="w-full h-auto"
-            style={{ borderRadius: '10px' }}
-          />
-        </div>
-      </div>
+    <main className="case-study pt-20 pb-24">
+      <ProjectHero
+        title="Xenith Website Redesign"
+        description="Redesigning online e-commerce website to optimize user’s purchase path and branding communication."
+        icon={ShoppingBag} tone="xenith"
+        image={{ src: "/media/project-covers/xenith.jpg", alt: "Xenith storefront featuring the Shadow helmet and the helmet lineup.", width: 1849, height: 924, crop: { x: 1022, y: 178, width: 714, height: 572 } }}
+      />
+      <ProjectNavigation sections={tableOfContents} />
 
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: reduceMotion ? 0 : 0.6 }}
           className="max-w-6xl mx-auto"
         >
           {/* Header */}
           <div className="mb-16">
-            {/* The title card above already carries the project name, so showing it
-            again here repeated it on screen. The h1 stays, visually hidden:
-            a title card is an image, so without this the page would have no
-            heading at all — nothing for a screen reader to announce as the
-            page title, nothing in the document outline, nothing for a search
-            result to show. */}
-            <h1 className="sr-only">Xenith Website Redesign</h1>
 
             {/* Project Metadata in 2x2 Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -242,7 +174,7 @@ export function XenithWebsitePage() {
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
               Before getting started with research and design, I decided to break the challenge down into sub-tasks and solve them one by one. Here are the major steps of how I accomplished it:
             </p>
-            
+
             {/* Subsection: Visualize User Behaviors on Heatmap */}
             <div className="mb-8">
               <h3 className="text-2xl leading-normal mb-6 text-[#102F56] dark:text-gray-100">
@@ -251,7 +183,7 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 Tracking user behavior is an effective way to learn which content on a site is popular, so I recommended recording user clicks on Xenith's website and generating a heatmap in Hotjar, which helped uncover their potential needs. Combining the heatmap results (left) with usability testing, I carried out the redesign of Xenith's website (right).
               </p>
-              
+
               {/* Two images side by side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="flex flex-col">
@@ -275,7 +207,7 @@ export function XenithWebsitePage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Subsection: Information Architecture */}
             <div className="mb-8">
               <h3 className="text-2xl leading-normal mb-6 text-[#102F56] dark:text-gray-100">
@@ -284,7 +216,7 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 Since I didn't have prior experience with the user flow or a clear understanding of the information architecture, I decided to construct an interaction map: a static representation of both the lateral and hierarchical relations between webpages, visualizing all the possible interactions. This made it more efficient for me to discover what kind of value the website could provide for users.
               </p>
-              
+
               {/* Interaction Map Image */}
               <div>
                 <div className="bg-white dark:bg-white p-6 md:p-8" style={{ borderRadius: '10px' }}>
@@ -298,7 +230,7 @@ export function XenithWebsitePage() {
                 <p className="text-left text-gray-600 dark:text-white mt-4 text-sm">Interaction Map of Xenith.com</p>
               </div>
             </div>
-            
+
             {/* Subsection: Prioritize key features by using Inverted Pyramid model */}
             <div className="mb-8">
               <h3 className="text-2xl leading-normal mb-6 text-[#102F56] dark:text-gray-100">
@@ -307,7 +239,7 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 Getting to know the site's information structure, I had a short conversation with both the product manager and the marketing strategist, and ranked the importance of our target users. Based on that, I introduced an inverted pyramid model. As it is displayed in the chart below, the top represents the most substantial, interesting, and important information, whereas both the importance and the quantity of information decrease moving downward. In this way, I was able to prioritize the main features by new product & key value, team sales & innovation, and product customization.
               </p>
-              
+
               {/* Two images side by side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
@@ -344,7 +276,7 @@ export function XenithWebsitePage() {
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
               Over the first 4 weeks of my internship, I worked closely with my team to conduct extensive user research. My primary task was synthesizing the research data and collecting the key insights.
             </p>
-            
+
             {/* Subsection: Understanding Users */}
             <div className="mb-8">
               <h3 className="text-2xl mb-6 text-[#102F56] dark:text-gray-100">
@@ -353,13 +285,13 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 Based on the information my team provided and user demographics in Google Analytics, the primary buyers of Xenith's products include players, parents, and coaches. To illustrate our users and their goals, I created three primary personas and identified their needs, which helped me find out what was important to them and how to build brand communication that would convince them to buy our products.
               </p>
-              
+
               {/* Image Carousel/Slideshow Placeholder */}
-              <div className="w-full relative block">
+              <div className="project-carousel w-full relative block">
                 <Slider
                   dots={true}
                   infinite={true}
-                  speed={500}
+                  speed={reduceMotion ? 0 : 500}
                   slidesToShow={1}
                   slidesToScroll={1}
                 >
@@ -393,7 +325,7 @@ export function XenithWebsitePage() {
                 </Slider>
               </div>
             </div>
-            
+
             {/* Subsection: Heuristic Evaluation */}
             <div className="mb-8">
               <h3 className="text-2xl mb-6 text-[#102F56] dark:text-gray-100">
@@ -402,13 +334,13 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 I conducted a heuristic evaluation based on Nielsen's ten key usability heuristics, modifying some of the checklists to make the evaluation applicable to Xenith. I invited four colleagues who had previous experience with user research. The main findings include:
               </p>
-              
+
               <ul className="list-disc space-y-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-6 mb-8">
                 <li>The website didn't provide an effective comparison between similar products.</li>
                 <li>Product categories were not consistent between the header and footer on some pages.</li>
                 <li>The homepage didn't provide adequate feedback for user interactions.</li>
               </ul>
-              
+
               {/* Heuristic Evaluation Image */}
               <div>
                 <ImageWithFallback
@@ -427,7 +359,7 @@ export function XenithWebsitePage() {
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               1. New Homepage
             </h2>
-            
+
             {/* Subsection: Key Features */}
             <div className="mb-8">
               <h3 className="text-2xl mb-6 text-[#102F56] dark:text-gray-100">
@@ -436,7 +368,7 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 Based on personas, heuristic evaluations, and usability tests I conducted, my team and I identified the key features that are important to the new webpage.
               </p>
-              
+
               {/* Key Features Image */}
               <div>
                 <div className="bg-white dark:bg-white p-6 md:p-8" style={{ borderRadius: '10px' }}>
@@ -449,25 +381,25 @@ export function XenithWebsitePage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Subsection: Design Iteration */}
             <div className="mb-8">
               <h3 className="text-2xl mb-6 text-[#102F56] dark:text-gray-100">
                 / Design Iteration
               </h3>
-              
+
               {/* Desktop */}
               <div className="mb-6">
                 <h4 className="text-xl mb-4 text-[#102F56] dark:text-gray-100">
                   // Desktop
                 </h4>
-                
+
                 {/* Footer */}
                 <div className="mb-4">
                   <h5 className="text-lg mb-3 text-[#102F56] dark:text-gray-100">
                     /// Footer
                   </h5>
-                  
+
                   {/* Three iterations side by side */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                     {/* Round 1 */}
@@ -477,7 +409,7 @@ export function XenithWebsitePage() {
                           src={footer1}
                           alt="Footer - Round 1"
                           className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: footer1, alt: "Footer - Round 1" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: footer1, alt: "Footer - Round 1" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -486,7 +418,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Bad UX structure on any screen size.</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 2 */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[3/1]" style={{ borderRadius: '10px', overflow: 'hidden' }}>
@@ -494,7 +426,7 @@ export function XenithWebsitePage() {
                           src={footer2}
                           alt="Footer - Round 2"
                           className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: footer2, alt: "Footer - Round 2" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: footer2, alt: "Footer - Round 2" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -503,7 +435,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Better size alignment.</p>
                       </div>
                     </div>
-                    
+
                     {/* Final Design */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[3/1]" style={{ borderRadius: '10px', overflow: 'hidden' }}>
@@ -511,7 +443,7 @@ export function XenithWebsitePage() {
                           src={footer3}
                           alt="Footer - Final Design"
                           className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: footer3, alt: "Footer - Final Design" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: footer3, alt: "Footer - Final Design" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -522,13 +454,13 @@ export function XenithWebsitePage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Helmet Lineup */}
                 <div className="mb-4">
                   <h5 className="text-lg mb-3 text-[#102F56] dark:text-gray-100">
                     /// Helmet Lineup
                   </h5>
-                  
+
                   {/* Three iterations side by side */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                     {/* Round 1 */}
@@ -538,7 +470,7 @@ export function XenithWebsitePage() {
                           src={helmetLineup1}
                           alt="Helmet Lineup - Round 1"
                           className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: helmetLineup1, alt: "Helmet Lineup - Round 1" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: helmetLineup1, alt: "Helmet Lineup - Round 1" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -546,7 +478,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Too big on tablet screens</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 2 */}
                     <div className="flex flex-col">
                       <div className="w-full h-[160px] overflow-hidden" style={{ borderRadius: '10px' }}>
@@ -554,7 +486,7 @@ export function XenithWebsitePage() {
                           src={helmetLineup2}
                           alt="Helmet Lineup - Round 2"
                           className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: helmetLineup2, alt: "Helmet Lineup - Round 2" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: helmetLineup2, alt: "Helmet Lineup - Round 2" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -562,7 +494,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">More appropriate size on tablet screens</p>
                       </div>
                     </div>
-                    
+
                     {/* Final Design */}
                     <div className="flex flex-col">
                       <div className="w-full h-[160px] overflow-hidden" style={{ borderRadius: '10px' }}>
@@ -570,7 +502,7 @@ export function XenithWebsitePage() {
                           src={helmetLineup3}
                           alt="Helmet Lineup - Final Design"
                           className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: helmetLineup3, alt: "Helmet Lineup - Final Design" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: helmetLineup3, alt: "Helmet Lineup - Final Design" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -581,13 +513,13 @@ export function XenithWebsitePage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Main Menu */}
                 <div className="mb-4">
                   <h5 className="text-lg mb-3 text-[#102F56] dark:text-gray-100">
                     /// Main Menu
                   </h5>
-                  
+
                   {/* Three iterations side by side */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Round 1 */}
@@ -597,7 +529,7 @@ export function XenithWebsitePage() {
                           src={mainMenu1}
                           alt="Main Menu - Round 1"
                           className="w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: mainMenu1, alt: "Main Menu - Round 1" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mainMenu1, alt: "Main Menu - Round 1" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -605,7 +537,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">No hover status on menu items</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 2 */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[4/3] overflow-hidden" style={{ borderRadius: '10px' }}>
@@ -613,7 +545,7 @@ export function XenithWebsitePage() {
                           src={mainMenu2}
                           alt="Main Menu - Round 2"
                           className="w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: mainMenu2, alt: "Main Menu - Round 2" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mainMenu2, alt: "Main Menu - Round 2" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -621,7 +553,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Hover status and arrow indicator</p>
                       </div>
                     </div>
-                    
+
                     {/* Final Design */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[4/3] overflow-hidden" style={{ borderRadius: '10px' }}>
@@ -629,7 +561,7 @@ export function XenithWebsitePage() {
                           src={mainMenu3}
                           alt="Main Menu - Final Design"
                           className="w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: mainMenu3, alt: "Main Menu - Final Design" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mainMenu3, alt: "Main Menu - Final Design" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -641,19 +573,19 @@ export function XenithWebsitePage() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Mobile */}
               <div className="mb-6">
                 <h4 className="text-xl mb-4 text-[#102F56] dark:text-gray-100">
                   // Mobile
                 </h4>
-                
+
                 {/* Hero Image UI */}
                 <div className="mb-4">
                   <h5 className="text-lg mb-3 text-[#102F56] dark:text-gray-100">
                     /// Hero Image UI
                   </h5>
-                  
+
                   {/* Three iterations side by side */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                     {/* Round 1 */}
@@ -663,7 +595,7 @@ export function XenithWebsitePage() {
                           src={heroMobile1}
                           alt="Hero Image UI - Round 1"
                           className="w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: heroMobile1, alt: "Hero Image UI - Round 1" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: heroMobile1, alt: "Hero Image UI - Round 1" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -671,7 +603,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Carousel moves all around in responsive</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 2 */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[9/16]" style={{ borderRadius: '10px', overflow: 'hidden' }}>
@@ -679,7 +611,7 @@ export function XenithWebsitePage() {
                           src={heroMobile2}
                           alt="Hero Image UI - Round 2"
                           className="w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: heroMobile2, alt: "Hero Image UI - Round 2" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: heroMobile2, alt: "Hero Image UI - Round 2" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -687,7 +619,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Fixed carousel spot above the button</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 3 */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[9/16]" style={{ borderRadius: '10px', overflow: 'hidden' }}>
@@ -695,7 +627,7 @@ export function XenithWebsitePage() {
                           src={heroMobile3}
                           alt="Hero Image UI - Round 3"
                           className="w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: heroMobile3, alt: "Hero Image UI - Round 3" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: heroMobile3, alt: "Hero Image UI - Round 3" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -705,13 +637,13 @@ export function XenithWebsitePage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Compare Helmets Chart */}
                 <div className="mb-4">
                   <h5 className="text-lg mb-3 text-[#102F56] dark:text-gray-100">
                     /// Compare Helmets Chart
                   </h5>
-                  
+
                   {/* Three iterations side by side */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Round 1 */}
@@ -721,7 +653,7 @@ export function XenithWebsitePage() {
                           src={compareHelmet1}
                           alt="Compare Helmets Chart - Round 1"
                           className="absolute inset-0 w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: compareHelmet1, alt: "Compare Helmets Chart - Round 1" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: compareHelmet1, alt: "Compare Helmets Chart - Round 1" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -729,7 +661,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Non-responsive interface</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 2 */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[9/16] relative" style={{ borderRadius: '10px', overflow: 'hidden' }}>
@@ -737,7 +669,7 @@ export function XenithWebsitePage() {
                           src={compareHelmet2}
                           alt="Compare Helmets Chart - Round 2"
                           className="absolute inset-0 w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: compareHelmet2, alt: "Compare Helmets Chart - Round 2" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: compareHelmet2, alt: "Compare Helmets Chart - Round 2" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -745,7 +677,7 @@ export function XenithWebsitePage() {
                         <p className="text-gray-700 dark:text-gray-200">Small font and requires scroll around too much</p>
                       </div>
                     </div>
-                    
+
                     {/* Round 3 */}
                     <div className="flex flex-col">
                       <div className="w-full aspect-[9/16] relative" style={{ borderRadius: '10px', overflow: 'hidden' }}>
@@ -753,7 +685,7 @@ export function XenithWebsitePage() {
                           src={compareHelmet3}
                           alt="Compare Helmets Chart - Round 3"
                           className="absolute inset-0 w-full h-full object-cover object-top cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setExpandedImage({ src: compareHelmet3, alt: "Compare Helmets Chart - Round 3" })}
+                          role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: compareHelmet3, alt: "Compare Helmets Chart - Round 3" })}
                         />
                       </div>
                       <div className="mt-2">
@@ -775,7 +707,7 @@ export function XenithWebsitePage() {
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
               Before my internship came to an end, I realized that if Xenith were to become a giant brand like Nike, an app would be helpful as more product lines launched. So I started this self-initiated project to create basic mockup screens for future reference for a Xenith mobile app. Below are some samples of the screens I created; the full interactive prototype can be accessed here.
             </p>
-            
+
             {/* 3x3 Grid of images */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
@@ -784,7 +716,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 1"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp1, alt: "Mobile App Mockup 1" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp1, alt: "Mobile App Mockup 1" })}
                 />
               </div>
               <div>
@@ -793,7 +725,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 2"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp2, alt: "Mobile App Mockup 2" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp2, alt: "Mobile App Mockup 2" })}
                 />
               </div>
               <div>
@@ -802,7 +734,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 3"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp3, alt: "Mobile App Mockup 3" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp3, alt: "Mobile App Mockup 3" })}
                 />
               </div>
               <div>
@@ -811,7 +743,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 4"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp4, alt: "Mobile App Mockup 4" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp4, alt: "Mobile App Mockup 4" })}
                 />
               </div>
               <div>
@@ -820,7 +752,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 5"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp5, alt: "Mobile App Mockup 5" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp5, alt: "Mobile App Mockup 5" })}
                 />
               </div>
               <div>
@@ -829,7 +761,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 6"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp6, alt: "Mobile App Mockup 6" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp6, alt: "Mobile App Mockup 6" })}
                 />
               </div>
               <div>
@@ -838,7 +770,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 7"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp7, alt: "Mobile App Mockup 7" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp7, alt: "Mobile App Mockup 7" })}
                 />
               </div>
               <div>
@@ -847,7 +779,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 8"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp8, alt: "Mobile App Mockup 8" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp8, alt: "Mobile App Mockup 8" })}
                 />
               </div>
               <div>
@@ -856,7 +788,7 @@ export function XenithWebsitePage() {
                   alt="Mobile App Mockup 9"
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
-                  onClick={() => setExpandedImage({ src: mobileApp9, alt: "Mobile App Mockup 9" })}
+                  role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: mobileApp9, alt: "Mobile App Mockup 9" })}
                 />
               </div>
             </div>
@@ -870,7 +802,7 @@ export function XenithWebsitePage() {
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
               Besides redesigning Xenith's website, I also participated in creating the user interface for the Product Entry System of Xenith's Production Facility Lab, where thousands of orders need to be processed every day. After conducting a short onsite interview with workers in the lab, I sorted out their requirements and generated a user flow for a typical order processing procedure.
             </p>
-            
+
             {/* Serial User Flow Chart Image */}
             <div>
               <ImageWithFallback
@@ -881,11 +813,11 @@ export function XenithWebsitePage() {
               />
               <p className="text-left text-gray-700 dark:text-white mt-4">Serial User Flow Chart</p>
             </div>
-            
+
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed my-8">
               Then, I created wireframes of the two main screens in low fidelity, with annotated notes on the side illustrating key functions of each section on the pages.
             </p>
-            
+
             {/* Wireframe of Product Entry System */}
             <div>
               <ImageWithFallback
@@ -896,11 +828,11 @@ export function XenithWebsitePage() {
               />
               <p className="text-left text-gray-600 dark:text-white mt-4 text-sm">Wireframe of Product Entry System</p>
             </div>
-            
+
             <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed my-8">
               After a few review iterations with my team, I designed and coded the user interface in HTML/CSS/JavaScript, where users can move easily between pages (only two pages are shown, due to confidentiality) by either clicking the 'New Order' button or scanning a barcode.
             </p>
-            
+
             {/* Two images side by side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="flex flex-col">
@@ -929,7 +861,7 @@ export function XenithWebsitePage() {
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Reflections
             </h2>
-            
+
             {/* Subsection: Understand B2C correlation via push & pull model */}
             <div className="mb-8">
               <h3 className="text-2xl mb-6 text-[#102F56] dark:text-gray-100">
@@ -938,7 +870,7 @@ export function XenithWebsitePage() {
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 The goal was to build a website for EVERYONE, where every type of user could still find the things they want. Based on my prior experience working as a PM, I introduced this model as the overarching guideline throughout my design process, in order to figure out the correlations between:
               </p>
-              
+
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-8">
                 <p>
                   <span style={{ fontWeight: 'bold' }}>Visitor:</span> Who are our new buyers? What makes people visit the site? What do they want to find?
@@ -950,7 +882,7 @@ export function XenithWebsitePage() {
                   <span style={{ fontWeight: 'bold' }}>Brand communication:</span> What are we trying to let buyers know? What are we doing wrong, or not communicating well?
                 </p>
               </div>
-              
+
               {/* Push & Pull Model Image */}
               <div>
                 <ImageWithFallback
@@ -969,7 +901,7 @@ export function XenithWebsitePage() {
             <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
               Feedback
             </h2>
-            
+
             {/* Testimonial 1 */}
             <div className="mb-10">
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-4" style={{ fontStyle: 'italic' }}>
@@ -979,7 +911,7 @@ export function XenithWebsitePage() {
                 — <span style={{ fontWeight: 'bold' }}>Matt Rea</span>, Head of Digital Strategy Team
               </p>
             </div>
-            
+
             {/* Testimonial 2 */}
             <div className="mb-10">
               <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-4" style={{ fontStyle: 'italic' }}>
@@ -1012,7 +944,7 @@ export function XenithWebsitePage() {
                 </li>
               </ul>
             </div>
-            
+
             {/* Two images side by side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -1038,75 +970,8 @@ export function XenithWebsitePage() {
         </motion.div>
       </div>
 
-      {/* Image Expanded View Modal */}
-      {expandedImage && (
-        <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setExpandedImage(null)}
-        >
-          <button
-            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
-            onClick={() => setExpandedImage(null)}
-          >
-            <X className="w-8 h-8" />
-          </button>
-          <div className="max-w-7xl max-h-[90vh] relative">
-            <ImageWithFallback
-              src={expandedImage.src}
-              alt={expandedImage.alt}
-              className="max-w-full max-h-[90vh] object-contain"
-              style={{ borderRadius: '10px' }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
+      <ProjectImageLightbox image={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      {/* Table of Contents - Subtle */}
-      <div className="hidden xl:block fixed top-32 right-8 w-64 p-6 z-40 group">
-        {/* Collapsed state - shows icon/text */}
-        <div className="absolute top-0 right-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none">
-          <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl px-4 py-3 shadow-lg">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Contents →</p>
-          </div>
-        </div>
-        
-        {/* Expanded state - shows full catalog */}
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/30 dark:border-gray-600/30 rounded-2xl p-6 shadow-lg">
-          <h3 className="text-xs mb-4 text-gray-400 dark:text-gray-500 tracking-wide uppercase">On this page</h3>
-          <ul className="space-y-2">
-            {tableOfContents.map((item) => (
-              <li key={item.id} className="relative pl-3">
-                {activeSection === item.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-400 dark:bg-gray-600" />
-                )}
-                <button
-                  className={`text-left text-sm transition-colors ${
-                    activeSection === item.id ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
-                  }`}
-                  onClick={() => scrollToSection(item.id)}
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Back to Top Button */}
-      {showBackToTop && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-[#6DB2FF] dark:to-[#5a9ae6] text-white dark:text-gray-900 p-4 shadow-xl hover:shadow-2xl transition-all z-50 cursor-pointer"
-          style={{ borderRadius: '10px' }}
-          onClick={scrollToTop}
-        >
-          <ChevronUp className="w-6 h-6" />
-        </motion.button>
-      )}
     </main>
   );
 }
