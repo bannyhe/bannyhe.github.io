@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
-import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, PanelsTopLeft, Search } from "lucide-react";
+import { ArrowRight, ClipboardCheck, Clock3, Compass, KeyRound, ListChecks, PanelsTopLeft, Search } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
-import { SuccessMetrics, TargetUsersAndPainPoints } from "./ProjectFramework";
+import { MetricConnection, SolutionImpact, SuccessMetrics, TargetUsersAndPainPoints } from "./ProjectFramework";
+import type { MetricKind } from "./MetricIllustration";
 import { InvestigationMap, ResearchSynthesisMap, StrategyFlow } from "./InvestigationDiagrams";
 import "../../styles/ai-assistant.css";
 
@@ -16,16 +17,17 @@ export const aiAssistantSections = [
   { id: "approach-strategy", label: "Design Strategy" },
   { id: "early-explorations", label: "Design Explorations" },
   { id: "final-implementation", label: "Final Solution" },
+  { id: "impact", label: "Impact" },
   { id: "validation", label: "Validation" },
-  { id: "impact", label: "Outcome & Reflection" },
+  { id: "reflection", label: "Outcome & Reflection" },
 ];
 
 function Copy({ children }: { children: ReactNode }) {
   return <div className="ai-prose">{children}</div>;
 }
 
-function Feature({ number, title, children }: { number: string; title: string; children: ReactNode }) {
-  return <article className="ai-feature"><div className="ai-feature-heading"><span>{number}</span><h3>{title}</h3></div>{children}</article>;
+function Feature({ id, number, title, metric, children }: { id: string; number: string; title: string; metric?: MetricKind; children: ReactNode }) {
+  return <article id={id} tabIndex={-1} aria-labelledby={`${id}-heading`} className="ai-feature"><div className="ai-feature-heading"><span>{number}</span><h3 id={`${id}-heading`}>{title}</h3></div>{metric && <MetricConnection kind={metric} />}{children}</article>;
 }
 
 const content: Record<string, ReactNode> = {
@@ -60,7 +62,7 @@ const content: Record<string, ReactNode> = {
   "early-explorations": <DesignExplorations />,
 
   "final-implementation": <>
-    <Copy><p>The workspace connects object scope, evidence, action, continuity, and model choice.</p></Copy>
+    <Copy><p>The walkthrough follows the same goals as the success metrics: choose the right object, understand the evidence, review a fix, and return to unfinished work. Setup and model choice prepare the workspace; the four investigation features show how those goals take shape.</p></Copy>
     <p className="ai-note">Adapted prototype views use illustrative network data and simulated actions.</p>
     <article className="ai-feature ai-setup" id="setup" aria-labelledby="setup-heading">
       <div className="ai-feature-heading"><span>01</span><h3 id="setup-heading">Supporting the first-use experience</h3></div>
@@ -70,7 +72,7 @@ const content: Record<string, ReactNode> = {
         <CaseStudyFigure name="setup-provider" version="network-name" alt="Model provider configuration with separate, empty API key and endpoint fields" caption="Give administrators a dedicated place to configure the model connection." />
       </div>
     </article>
-    <Feature number="02" title="Choose a model for the investigation">
+    <Feature id="model-choice" number="02" title="Choose a model for the investigation">
       <Copy><p>Keep model choice beside the prompt so operators can see their options without leaving an investigation. The prototype groups provider models separately from Private AI Services for corporate environments.</p></Copy>
       <CaseStudyClip name="model-selection-walkthrough" poster="model-selector-private-ai" version="smooth-30fps" title="Browse the model selector and reveal Private AI Services" caption="Browse provider models, then scroll within the same menu to reveal Private AI Services." steps={[
         "Open Gemini 2.5 Pro beside the composer.",
@@ -78,32 +80,32 @@ const content: Record<string, ReactNode> = {
         "Scroll to Private AI Services: Gemini 2.5 Pro, gemini-flash-latest, and openai/gpt-oss-120b.",
       ]} />
     </Feature>
-    <Feature number="03" title="Start with the affected object">
-      <Copy><p>The walkthrough uses inventory search as a visible starting point. Attach the host before asking about a vMotion failure; the object chip keeps the selected scope in the question.</p></Copy>
+    <Feature id="object-scope" metric="selection" number="03" title="Start with the affected object">
+      <Copy><p>Operators can search inventory and attach a host before asking about a vMotion failure. The visible host chip gives them a chance to check that the question concerns the right object before sending it.</p></Copy>
       <CaseStudyClip name="object-context-walkthrough" poster="object-context" version="smooth-30fps" title="Select a host and compose a network troubleshooting question" caption="Search from the main assistant workspace, then keep the selected host attached to the question." steps={[
         "Open inventory search beside the composer.",
         "Select esxi-07 and confirm the host chip.",
         "Ask about the most recent vMotion network failures.",
       ]} />
     </Feature>
-    <Feature number="04" title="Move from symptoms to evidence">
-      <Copy><p>Explain the purpose of diagnostic checks as the investigation progresses, then group the findings by issue. The operator can inspect the evidence and recommendation together before deciding what to do.</p></Copy>
+    <Feature id="diagnostic-evidence" metric="diagnosis" number="04" title="Move from symptoms to evidence">
+      <Copy><p>Brief explanations show why each diagnostic check matters, and findings are grouped by issue. Keeping evidence beside the recommendation is intended to help operators reach a supported diagnosis with less searching across screens.</p></Copy>
       <CaseStudyClip name="network-triage-walkthrough" poster="network-findings" version="smooth-30fps" title="Investigate a vMotion network failure and inspect its findings" caption="Expand a network finding to connect the symptom with supporting evidence." steps={[
         "Submit the object-scoped vMotion question.",
         "Follow the investigation as checks appear.",
         "Expand the network finding and review its recommended checks.",
       ]} />
     </Feature>
-    <Feature number="05" title="Make the next action a decision">
-      <Copy><p>A second scenario explores restoring management connectivity. Compare remediation scopes before approval; after a partial fix, the remaining issue stays visible.</p></Copy>
+    <Feature id="remediation-decision" metric="decision" number="05" title="Make the next action a decision">
+      <Copy><p>In the management-connectivity scenario, operators compare remediation scopes before approving a change. The explanation makes the limits of a connectivity-only fix clear; afterward, the unresolved issue stays visible so a partial fix is not mistaken for a complete resolution.</p></Copy>
       <CaseStudyClip name="remediation-review-walkthrough" poster="remediation-review" version="smooth-30fps" title="Compare remediation scope and review unresolved issues after a partial fix" caption="Connectivity-only remediation resolves one issue while preserving the remaining root cause." steps={[
         "Review the proposed remediation and scope choices.",
         "Choose Connectivity issues only and read its limitation.",
         "Approve the simulated action, then inspect what remains unresolved.",
       ]} />
     </Feature>
-    <Feature number="06" title="Return with context intact">
-      <Copy><p>The prototype carries forward top tabs for active work and searchable history for earlier sessions. Naming an investigation gives the operator a recognizable route back after an interruption.</p></Copy>
+    <Feature id="session-continuity" metric="continuity" number="06" title="Return with context intact">
+      <Copy><p>Named investigations make earlier work recognizable in tabs and searchable history. Operators can reopen the conversation, review its findings, and work out what to do next without reconstructing the investigation from memory.</p></Copy>
       <CaseStudyClip name="session-continuity-walkthrough" poster="session-history" version="smooth-30fps" title="Name an investigation and resume a previous conversation from history" caption="A named session provides a recognizable route back to the incident." steps={[
         "Start a separate session for another investigation.",
         "Name it Network incident review.",
@@ -112,8 +114,10 @@ const content: Record<string, ReactNode> = {
     </Feature>
   </>,
 
+  impact: <SolutionImpact />,
+
   validation: <>
-    <Copy><p>The prototype walkthrough checked normal flows, unsupported requests, and partial completion. The next round should compare the design alternatives with network operators and test whether the explanations support sound decisions.</p></Copy>
+    <Copy><p>The prototype walkthrough checked normal flows, unsupported requests, and partial completion. Next, I would compare matched incident tasks in the assistant and the current console, using the success metrics to check time, correctness, and understanding.</p></Copy>
     <div className="ai-validation-grid">
       <div><h3>What the review surfaced</h3><ul role="list">
         <li><Compass size={24} aria-hidden="true" /><span><strong>Capability boundaries:</strong> unsupported requests need a clear route to available skills.</span></li>
@@ -121,15 +125,16 @@ const content: Record<string, ReactNode> = {
         <li><KeyRound size={24} aria-hidden="true" /><span><strong>Recovery copy:</strong> the restricted-access state references another feature; guidance should name the assistant and the required permission.</span></li>
       </ul></div>
       <div><h3>What to test next</h3><ul role="list">
-        <li><PanelsTopLeft size={24} aria-hidden="true" /><span><strong>Session navigation:</strong> compare tabs and a sidebar as the number of active incidents grows.</span></li>
-        <li><Search size={24} aria-hidden="true" /><span><strong>Object selection:</strong> check discovery of search and @ references, including similarly named hosts.</span></li>
-        <li><ClipboardCheck size={24} aria-hidden="true" /><span><strong>Diagnostic understanding:</strong> compare checks alone with explained checks; ask operators to justify the scope and consequences before approval.</span></li>
+        <li><PanelsTopLeft size={24} aria-hidden="true" /><span><strong>Session continuity:</strong> interrupt an investigation, then time how quickly operators find the right session and identify the next unresolved step.</span></li>
+        <li><Search size={24} aria-hidden="true" /><span><strong>Object selection:</strong> check first-attempt accuracy without help, including discovery of search and @ references with similarly named hosts.</span></li>
+        <li><Clock3 size={24} aria-hidden="true" /><span><strong>Supported diagnosis:</strong> compare time to a diagnosis with the current workflow, checking the evidence and accuracy of each answer.</span></li>
+        <li><ClipboardCheck size={24} aria-hidden="true" /><span><strong>Remediation decisions:</strong> ask operators to explain the scope, expected change, and remaining issues before approving an action.</span></li>
       </ul></div>
     </div>
   </>,
 
-  impact: <>
-    <Copy><p>This work gave the Network Operations vision a coherent path from choosing an object to returning to unfinished work. It is still a prototype: I can point to the design decisions and interactions, but I cannot yet claim faster resolution or stronger operator trust.</p></Copy>
+  reflection: <>
+    <Copy><p>The key design challenge was deciding how much context to keep visible. Operators need a short path to the next step, with enough evidence to judge whether that step makes sense.</p></Copy>
     <div className="ai-reflection-aspect">
       <h3>Keep the tradeoffs visible</h3>
       <Copy><p>Tabs protect the space needed for diagnostic detail, but a growing set of investigations may be harder to navigate. Short explanations help scanning, but can hide useful evidence. I would keep summaries concise while preserving a direct path to the supporting checks.</p></Copy>

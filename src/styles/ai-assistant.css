@@ -85,10 +85,22 @@
 .ai-case-study .ai-metric-heading .ai-node-heading { min-width: 0; margin: 0; }
 .ai-case-study .ai-metric-illustration { display: block; flex: 0 0 96px; width: 96px; height: auto; color: var(--ai-ink); }
 .ai-case-study .ai-metric .ai-metric-measure { border-top: 1px solid var(--ai-line); padding-top: 1rem; margin-top: 1rem; }
+.ai-case-study .ai-metric { scroll-margin-top: 120px; }
+.ai-case-study .ai-feature-metric { margin: 0 0 1rem; color: var(--ai-ink); font-size: .875rem; line-height: 1.625; }
+.ai-case-study .ai-feature-metric a { text-decoration: underline; text-underline-offset: 4px; }
+.ai-case-study .ai-impact-map { margin: 2rem 0 0; }
+.ai-case-study .ai-impact-map > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem; padding: 1.5rem 0; border-top: 1px solid var(--ai-line); }
+.ai-case-study .ai-impact-map dt { display: flex; align-items: flex-start; gap: .875rem; color: var(--ai-ink); font-size: 1.125rem; font-weight: 500; line-height: 1.5; }
+.ai-case-study .ai-impact-map .ai-metric-illustration { flex-basis: 64px; width: 64px; }
+.ai-case-study .ai-impact-map dt > span { min-width: 0; padding-top: .25rem; }
+.ai-case-study .ai-impact-map dd { min-width: 0; margin: 0; }
+.ai-case-study .ai-impact-map p { margin: 0 0 .75rem; color: var(--ai-copy); font-size: 1rem; line-height: 1.625; }
+.ai-case-study .ai-impact-map .ai-text-link { font-size: .875rem; }
+.ai-case-study .ai-impact-map .ai-text-link svg { flex-shrink: 0; }
 .ai-case-study .ai-reflection-aspect { margin-top: 2rem; }
 .ai-case-study .ai-reflection-aspect > h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .875rem; }
 .ai-case-study .ai-validation-grid h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .75rem; }
-.ai-case-study .ai-feature { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--ai-line); }
+.ai-case-study .ai-feature { scroll-margin-top: 120px; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--ai-line); }
 .ai-case-study .ai-feature-heading { display: flex; align-items: baseline; gap: .75rem; margin-bottom: 1rem; }
 .ai-case-study .ai-feature-heading > span { flex: 0 0 auto; color: var(--ai-muted); font-size: .875rem; }
 .ai-case-study .ai-feature-heading h3 { color: var(--ai-ink); font-weight: 500; font-size: 1.5rem; line-height: 1.4; margin: 0; }
@@ -128,6 +140,7 @@
   .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-setup-grid, .ai-case-study .ai-framework-grid, .ai-case-study .ai-pain-points > div { grid-template-columns: 1fr; }
   .ai-case-study .ai-pain-points > div { gap: .875rem; }
   .ai-case-study .ai-persona-avatar { flex-basis: 64px; width: 64px; height: 64px; }
+  .ai-case-study .ai-impact-map > div { grid-template-columns: 1fr; gap: 1rem; }
   .ai-case-study .ai-metric { padding: 1rem; }
   .ai-case-study .ai-metric-illustration { flex-basis: 72px; width: 72px; }
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
