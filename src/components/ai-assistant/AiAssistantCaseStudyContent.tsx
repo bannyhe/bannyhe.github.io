@@ -35,12 +35,12 @@ const content: Record<string, ReactNode> = {
   </>,
 
   problem: <>
-    <Copy><p>The broader VCF exploration moved from scanning health dashboards to prioritizing active issues. The next challenge was helping an operator investigate those issues without repeatedly moving between inventory, alerts, and diagnostic detail.</p><p>For Network Operations, a useful answer needs to establish <strong>which object</strong> it concerns, <strong>what supports the diagnosis</strong>, and <strong>what the next action will change</strong>.</p></Copy>
+    <Copy><p>When a network issue interrupts a workload, finding the cause can mean piecing together clues from several screens. An operator checks the affected host, follows an alert, then digs through logs—all while keeping track of what’s already been ruled out.</p><p>An AI answer is only useful if the operator can make sense of it. They need to understand <strong>what supports the diagnosis</strong>, <strong>what a suggested fix will change</strong>, and <strong>what still needs attention</strong>.</p></Copy>
     <InvestigationMap />
   </>,
 
   goal: <>
-    <Copy><p>Help network operators move from an infrastructure symptom to a justified next action in one workspace. The experience should reduce time spent reconstructing context while keeping the affected object, diagnostic evidence, and remediation scope visible.</p><p>For VCF Operations, the opportunity is to turn monitoring insights into guided investigation. Operators should be able to understand a recommendation, decide whether to approve it, and resume unfinished work without starting over.</p></Copy>
+    <Copy><p>I wanted troubleshooting to feel like one continuous conversation. An operator could start with the affected host, ask what went wrong, and see the relevant findings together, without having to rebuild the story across dashboards.</p><p>From there, they could review a suggested fix, understand its impact, and choose what to do next. If another incident interrupted them, they could return to the same investigation and pick up where they left off.</p></Copy>
   </>,
 
   "target-users": <TargetUsersAndPainPoints />,

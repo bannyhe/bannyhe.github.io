@@ -8,18 +8,18 @@ export function InvestigationMap() {
   return <figure className="ai-visual-panel" aria-label="From operational signals to one investigation and a reviewed next step">
     <div className="ai-problem-flow">
       <div className="ai-concept-node">
-        <NodeHeading icon={Database}>Operational signals</NodeHeading>
+        <NodeHeading icon={Database}>Gather the clues</NodeHeading>
         <p>Bring inventory, alerts, logs, and events together.</p>
       </div>
       <ArrowRight className="ai-flow-arrow" aria-hidden="true" />
       <div className="ai-concept-node">
-        <NodeHeading icon={Search}>One investigation</NodeHeading>
-        <p>Connect the affected object to evidence and an explanation.</p>
+        <NodeHeading icon={Search}>Understand the issue</NodeHeading>
+        <p>Connect the affected object with evidence and a clear explanation.</p>
       </div>
       <ArrowRight className="ai-flow-arrow" aria-hidden="true" />
       <div className="ai-concept-node">
-        <NodeHeading icon={ShieldCheck}>A reviewed next step</NodeHeading>
-        <p>Inspect the recommendation and choose its scope.</p>
+        <NodeHeading icon={ShieldCheck}>Choose the next step</NodeHeading>
+        <p>Review the recommendation and decide what to change.</p>
       </div>
     </div>
     <figcaption>Carry the same context from the first question to the next decision.</figcaption>

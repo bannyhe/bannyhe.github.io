@@ -9,6 +9,8 @@
   --ai-tint: rgba(226, 238, 251, .55);
   --ai-media-surface: #fff;
   --ai-media-line: #d1d9e2;
+  --ai-avatar-bg: #dceafb;
+  --ai-avatar-accent: #6e9ac4;
 }
 .dark .ai-case-study {
   --ai-ink: var(--color-blue-300);
@@ -20,6 +22,8 @@
   --ai-tint: rgba(30, 58, 90, .4);
   --ai-media-surface: #111c2c;
   --ai-media-line: #334155;
+  --ai-avatar-bg: #284562;
+  --ai-avatar-accent: #a4c5e8;
 }
 .ai-case-study .ai-project-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
 .ai-case-study .ai-meta-label { color: var(--ai-muted); font-size: .875rem; line-height: 1.5; margin: 0 0 .25rem; }
@@ -61,7 +65,11 @@
 .ai-case-study .ai-strategy-return strong { color: var(--ai-ink); }
 .ai-case-study .ai-framework-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-top: 2rem; }
 .ai-case-study .ai-user-profiles p + p { margin-top: .875rem; }
-.ai-case-study .ai-user-profiles .ai-framework-label { color: var(--ai-muted); font-size: .875rem; margin: 0 0 .75rem; }
+.ai-case-study .ai-user-profiles .ai-framework-label { color: var(--ai-muted); font-size: .875rem; margin: 0 0 .25rem; }
+.ai-case-study .ai-persona-heading { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.ai-case-study .ai-persona-heading > div { min-width: 0; }
+.ai-case-study .ai-persona-heading .ai-node-heading { margin: 0; }
+.ai-case-study .ai-persona-avatar { display: block; flex: 0 0 80px; width: 80px; height: 80px; }
 .ai-case-study .ai-framework-subheading { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 2.5rem 0 0; }
 .ai-case-study .ai-framework-subheading + .ai-note { margin-top: .5rem; }
 .ai-case-study .ai-pain-points { margin: 1.5rem 0 0; }
@@ -116,6 +124,7 @@
 @media (max-width: 767px) {
   .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-setup-grid, .ai-case-study .ai-framework-grid, .ai-case-study .ai-pain-points > div { grid-template-columns: 1fr; }
   .ai-case-study .ai-pain-points > div { gap: .875rem; }
+  .ai-case-study .ai-persona-avatar { flex-basis: 64px; width: 64px; height: 64px; }
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
   .ai-case-study .ai-feature-heading h3 { font-size: 1.25rem; }
   .ai-case-study .ai-media-stage { padding: .5rem; }

@@ -1,4 +1,5 @@
-import { Clock3, Focus, History, Network, PanelsTopLeft, Settings2, ShieldCheck } from "lucide-react";
+import { Clock3, Focus, History, PanelsTopLeft, ShieldCheck } from "lucide-react";
+import { PersonaAvatar } from "./PersonaAvatar";
 
 const painPoints = [
   {
@@ -53,14 +54,18 @@ export function TargetUsersAndPainPoints() {
     <div className="ai-prose"><p>The primary user is a network operator responsible for monitoring connectivity and troubleshooting infrastructure issues. A platform administrator supports the experience by preparing access and model configuration.</p></div>
     <div className="ai-framework-grid ai-user-profiles">
       <article className="ai-concept-node">
-        <p className="ai-framework-label">Primary user</p>
-        <h3 className="ai-node-heading"><Network size={24} aria-hidden="true" /><span>Network operator</span></h3>
+        <div className="ai-persona-heading">
+          <PersonaAvatar role="operator" />
+          <div><p className="ai-framework-label">Primary user</p><h3 className="ai-node-heading">Network operator</h3></div>
+        </div>
         <p>Investigates connectivity and vMotion failures, correlates health signals, and decides which checks or actions to take.</p>
         <p><strong>Needs:</strong> fast object discovery, understandable evidence, and a reliable way to return to an active incident.</p>
       </article>
       <article className="ai-concept-node">
-        <p className="ai-framework-label">Supporting user</p>
-        <h3 className="ai-node-heading"><Settings2 size={24} aria-hidden="true" /><span>Platform administrator</span></h3>
+        <div className="ai-persona-heading">
+          <PersonaAvatar role="administrator" />
+          <div><p className="ai-framework-label">Supporting user</p><h3 className="ai-node-heading">Platform administrator</h3></div>
+        </div>
         <p>Prepares assistant access, connects model providers, and configures model availability for the environment.</p>
         <p><strong>Needs:</strong> clear prerequisites, permission guidance, and a distinct setup path for provider models or Private AI Services.</p>
       </article>
