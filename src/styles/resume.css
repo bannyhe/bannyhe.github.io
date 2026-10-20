@@ -1,0 +1,57 @@
+/* Scoped additions to the existing resume cards and site typography. */
+.resume-summary {
+  max-width: 800px;
+  margin-inline: auto;
+  font-size: 18px;
+  line-height: 1.7;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.resume-page .resume-section {
+  min-width: 0;
+  padding: clamp(20px, 4vw, 48px);
+}
+
+.resume-section-heading > div {
+  flex-shrink: 0;
+}
+
+.resume-page .resume-entry {
+  padding: clamp(16px, 2.5vw, 28px);
+}
+
+.resume-entry-heading {
+  gap: 12px 24px;
+}
+
+.resume-entry-heading > div {
+  min-width: 0;
+}
+
+.resume-entry-heading > div:last-child {
+  flex-shrink: 0;
+}
+
+.resume-achievements {
+  line-height: 1.65;
+}
+
+.resume-accent {
+  color: #102f56;
+}
+
+.dark .resume-accent {
+  color: #6db2ff;
+}
+
+.resume-download {
+  min-height: 44px;
+}
+
+@media (max-width: 767px) {
+  .resume-page .resume-section-heading h2 {
+    font-size: 26px;
+    line-height: 1.25;
+  }
+}

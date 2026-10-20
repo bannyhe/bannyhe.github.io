@@ -58,7 +58,7 @@ export const ROUTE_META: RouteMeta[] = [
     path: "/resume",
     title: "Resume — Mu He",
     description:
-      "Resume of Mu He — product designer specializing in B2B SaaS networking, security, and data visualization.",
+      "Resume of Mu He — Senior Product Designer with 7 years in enterprise SaaS, cloud infrastructure, and cybersecurity, leading Network Operations UX and conversational AI concept design.",
   },
   {
     path: "/project/malware-prevention",
