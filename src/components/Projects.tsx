@@ -1,10 +1,8 @@
-import { useRef, type CSSProperties } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import type { CSSProperties } from 'react';
 import { ArrowUpRight, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useAnalytics } from '../hooks/useAnalytics';
-import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import assistantThumbnailImg from '../assets/ai-assistant/assistant-main-thumbnail.svg';
 
 const projects = [
@@ -39,16 +37,10 @@ const projects = [
   },
 ];
 
-function ProjectCard({ project, index, paused }: { project: typeof projects[number]; index: number; paused: boolean }) {
-  const ref = useRef<HTMLElement>(null);
-  const reduced = usePrefersReducedMotion();
+function ProjectCard({ project, index }: { project: typeof projects[number]; index: number }) {
   const { trackEvent } = useAnalytics();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] });
-  const tilt = useTransform(scrollYProgress, [0, 1], [7, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [.94, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [35, 0]);
   return (
-    <motion.article ref={ref} className="home-project" style={!reduced && !paused ? { rotateX: tilt, scale, y } : undefined}>
+    <article className="home-project">
       <Link to={`/project/${project.id}`} className="home-project-link" onClick={() => trackEvent('project_view', project.id)} aria-labelledby={`project-title-${project.id}`} style={{ '--project-accent': project.accent } as CSSProperties}>
         <div className="home-project-image">
           <ImageWithFallback
@@ -65,11 +57,11 @@ function ProjectCard({ project, index, paused }: { project: typeof projects[numb
           <span className="home-project-read">Explore case study <ArrowUpRight size={14} aria-hidden="true" /></span>
         </div>
       </Link>
-    </motion.article>
+    </article>
   );
 }
 
-export function Projects({ paused }: { paused: boolean }) {
+export function Projects() {
   return (
     <section id="projects" className="home-projects" tabIndex={-1} aria-labelledby="selected-work-heading">
       <div className="home-work-heading">
@@ -77,7 +69,7 @@ export function Projects({ paused }: { paused: boolean }) {
         <p>A closer look at how I bring clarity to complex products, from the first question to the final interaction.</p>
       </div>
       <div className="home-project-grid">
-        {projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} paused={paused} />)}
+        {projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} />)}
         <aside className="home-contact-card" aria-labelledby="home-contact-heading">
           <span className="home-contact-orb" aria-hidden="true" />
           <p className="home-eyebrow">The next chapter</p>

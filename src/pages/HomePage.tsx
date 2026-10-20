@@ -8,7 +8,7 @@ export function HomePage() {
   return (
     <main className="orbital-home" data-motion={paused ? 'paused' : 'playing'}>
       <Hero paused={paused} onToggleMotion={() => setPaused(value => !value)} />
-      <Projects paused={paused} />
+      <Projects />
     </main>
   );
 }
