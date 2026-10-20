@@ -1,5 +1,6 @@
-import { Clock3, Focus, History, PanelsTopLeft, ShieldCheck } from "lucide-react";
+import { History, PanelsTopLeft, ShieldCheck } from "lucide-react";
 import { PersonaAvatar } from "./PersonaAvatar";
+import { MetricIllustration, type MetricKind } from "./MetricIllustration";
 
 const painPoints = [
   {
@@ -22,30 +23,30 @@ const painPoints = [
   },
 ];
 
-const metrics = [
+const metrics: { kind: MetricKind; title: string; outcome: string; measure: string }[] = [
   {
-    icon: Clock3,
-    title: "Time to a supported diagnosis",
-    measure: "Median time from receiving an incident scenario to identifying a diagnosis supported by evidence.",
-    signal: "Less time than the existing console workflow, with diagnosis accuracy maintained.",
+    kind: "diagnosis",
+    title: "Find the cause sooner",
+    outcome: "Spend less time searching for clues while still reaching a diagnosis backed by evidence.",
+    measure: "Median time to a supported diagnosis, compared with the current workflow, while maintaining accuracy.",
   },
   {
-    icon: Focus,
-    title: "Correct object selection",
-    measure: "Share of tasks where the operator selects the intended host or vCenter on the first attempt, without a facilitator’s help.",
-    signal: "Fewer wrong-object selections, including when names are similar.",
+    kind: "selection",
+    title: "Start with the right object",
+    outcome: "Help operators pick the intended host or vCenter, even when names look alike.",
+    measure: "How often the correct object is selected on the first attempt, without a facilitator’s help.",
   },
   {
-    icon: ShieldCheck,
-    title: "Informed remediation decisions",
-    measure: "Share of tasks where the operator correctly explains the proposed scope, expected change, and remaining issues before approval.",
-    signal: "More decisions supported by evidence, with fewer approvals based on a misunderstood scope.",
+    kind: "decision",
+    title: "Understand before approving",
+    outcome: "Make it clear what a suggested fix will change and what it will leave unresolved.",
+    measure: "How often operators correctly explain the scope, expected change, and remaining issues before approval.",
   },
   {
-    icon: History,
-    title: "Recovery after interruption",
-    measure: "Median time to find the right session and identify the next unresolved step after a planned interruption.",
-    signal: "Faster resumption with fewer repeated checks or lost findings.",
+    kind: "continuity",
+    title: "Pick up where you left off",
+    outcome: "Return to an interrupted investigation without repeating checks or losing earlier findings.",
+    measure: "Median time to find the right session and identify the next unresolved step after an interruption.",
   },
 ];
 
@@ -83,15 +84,18 @@ export function TargetUsersAndPainPoints() {
 
 export function SuccessMetrics() {
   return <>
-    <div className="ai-prose"><p>Success means reaching a well-supported decision with less effort. I would compare the assistant with the current console workflow using equivalent incident scenarios, including similar object names, partial fixes, and interrupted investigations.</p></div>
-    <p className="ai-note">Proposed evaluation measures, not measured outcomes. Establish a baseline before setting numeric targets; balance speed with correctness.</p>
+    <div className="ai-prose"><p>In discussions with the PM and Engineering Lead, we focused on how the assistant could make everyday troubleshooting easier. That meant helping operators find the right issue sooner, understand a suggested fix, and return to unfinished work with less effort.</p></div>
+    <p className="ai-note">Planned evaluation measures; results and numeric targets are still to be established.</p>
     <div className="ai-framework-grid ai-metrics-grid">
-      {metrics.map(({ icon: Icon, title, measure, signal }) => <article key={title} className="ai-metric">
-        <h3 className="ai-node-heading"><Icon size={24} aria-hidden="true" /><span>{title}</span></h3>
-        <p>{measure}</p>
-        <p><strong>Success signal:</strong> {signal}</p>
+      {metrics.map(({ kind, title, outcome, measure }) => <article key={kind} className="ai-metric">
+        <div className="ai-metric-heading">
+          <MetricIllustration kind={kind} />
+          <h3 className="ai-node-heading">{title}</h3>
+        </div>
+        <p>{outcome}</p>
+        <p className="ai-metric-measure"><strong>How to measure:</strong> {measure}</p>
       </article>)}
     </div>
-    <div className="ai-prose ai-pilot-measures"><p>In a pilot, I would also track repeat use across eligible incidents and task satisfaction to understand whether the assistant earns a place in everyday Network Operations.</p></div>
+    <p className="ai-note">In a pilot, repeat use and task satisfaction would also help us understand how well the assistant fits into everyday work.</p>
   </>;
 }

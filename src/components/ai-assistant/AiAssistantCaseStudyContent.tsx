@@ -11,11 +11,11 @@ export const aiAssistantSections = [
   { id: "problem", label: "Problem" },
   { id: "goal", label: "Goal" },
   { id: "target-users", label: "Target Users & Pain Points" },
+  { id: "success-metrics", label: "Success Metrics" },
   { id: "research-synthesis", label: "Research & Synthesis" },
   { id: "approach-strategy", label: "Design Strategy" },
   { id: "early-explorations", label: "Design Explorations" },
   { id: "final-implementation", label: "Final Solution" },
-  { id: "success-metrics", label: "Success Metrics" },
   { id: "validation", label: "Validation" },
   { id: "impact", label: "Outcome & Reflection" },
 ];
@@ -44,6 +44,8 @@ const content: Record<string, ReactNode> = {
   </>,
 
   "target-users": <TargetUsersAndPainPoints />,
+
+  "success-metrics": <SuccessMetrics />,
 
   "research-synthesis": <>
     <Copy><p>The shared design review and prototype explored how operators return to work, identify an object, and understand a diagnosis. Together, these patterns point to a common need: preserve context across the investigation.</p></Copy>
@@ -109,8 +111,6 @@ const content: Record<string, ReactNode> = {
       ]} />
     </Feature>
   </>,
-
-  "success-metrics": <SuccessMetrics />,
 
   validation: <>
     <Copy><p>The prototype walkthrough checked normal flows, unsupported requests, and partial completion. The next round should compare the design alternatives with network operators and test whether the explanations support sound decisions.</p></Copy>

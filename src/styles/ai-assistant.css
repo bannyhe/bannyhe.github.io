@@ -79,9 +79,12 @@
 .ai-case-study .ai-pain-points dd { min-width: 0; margin: 0; }
 .ai-case-study .ai-pain-points p, .ai-case-study .ai-metric p { color: var(--ai-copy); font-size: 1rem; line-height: 1.625; margin: 0; }
 .ai-case-study .ai-pain-points p + p, .ai-case-study .ai-metric p + p { margin-top: .75rem; }
-.ai-case-study .ai-metrics-grid { gap: 2rem; }
-.ai-case-study .ai-metric { min-width: 0; border-top: 2px solid var(--ai-line); padding-top: 1.25rem; }
-.ai-case-study .ai-pilot-measures { margin-top: 2rem; }
+.ai-case-study .ai-metrics-grid { gap: 1.5rem; }
+.ai-case-study .ai-metric { min-width: 0; padding: 1.25rem; border: 1px solid var(--ai-line); border-radius: 10px; background: var(--ai-surface); }
+.ai-case-study .ai-metric-heading { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.ai-case-study .ai-metric-heading .ai-node-heading { min-width: 0; margin: 0; }
+.ai-case-study .ai-metric-illustration { display: block; flex: 0 0 96px; width: 96px; height: auto; color: var(--ai-ink); }
+.ai-case-study .ai-metric .ai-metric-measure { border-top: 1px solid var(--ai-line); padding-top: 1rem; margin-top: 1rem; }
 .ai-case-study .ai-reflection-aspect { margin-top: 2rem; }
 .ai-case-study .ai-reflection-aspect > h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .875rem; }
 .ai-case-study .ai-validation-grid h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .75rem; }
@@ -125,6 +128,8 @@
   .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-setup-grid, .ai-case-study .ai-framework-grid, .ai-case-study .ai-pain-points > div { grid-template-columns: 1fr; }
   .ai-case-study .ai-pain-points > div { gap: .875rem; }
   .ai-case-study .ai-persona-avatar { flex-basis: 64px; width: 64px; height: 64px; }
+  .ai-case-study .ai-metric { padding: 1rem; }
+  .ai-case-study .ai-metric-illustration { flex-basis: 72px; width: 72px; }
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
   .ai-case-study .ai-feature-heading h3 { font-size: 1.25rem; }
   .ai-case-study .ai-media-stage { padding: .5rem; }
