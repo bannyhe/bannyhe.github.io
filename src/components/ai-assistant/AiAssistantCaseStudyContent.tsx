@@ -2,16 +2,20 @@ import type { ReactNode } from "react";
 import { ArrowRight, ClipboardCheck, Compass, KeyRound, ListChecks, PanelsTopLeft, Search } from "lucide-react";
 import { CaseStudyClip, CaseStudyFigure } from "./CaseStudyMedia";
 import { DesignExplorations } from "./DesignExplorations";
+import { SuccessMetrics, TargetUsersAndPainPoints } from "./ProjectFramework";
 import { InvestigationMap, ResearchSynthesisMap, StrategyFlow } from "./InvestigationDiagrams";
 import "../../styles/ai-assistant.css";
 
 export const aiAssistantSections = [
   { id: "brief", label: "Brief" },
   { id: "problem", label: "Problem" },
+  { id: "goal", label: "Goal" },
+  { id: "target-users", label: "Target Users & Pain Points" },
   { id: "research-synthesis", label: "Research & Synthesis" },
   { id: "approach-strategy", label: "Design Strategy" },
   { id: "early-explorations", label: "Design Explorations" },
   { id: "final-implementation", label: "Final Solution" },
+  { id: "success-metrics", label: "Success Metrics" },
   { id: "validation", label: "Validation" },
   { id: "impact", label: "Outcome & Reflection" },
 ];
@@ -34,6 +38,12 @@ const content: Record<string, ReactNode> = {
     <Copy><p>The broader VCF exploration moved from scanning health dashboards to prioritizing active issues. The next challenge was helping an operator investigate those issues without repeatedly moving between inventory, alerts, and diagnostic detail.</p><p>For Network Operations, a useful answer needs to establish <strong>which object</strong> it concerns, <strong>what supports the diagnosis</strong>, and <strong>what the next action will change</strong>.</p></Copy>
     <InvestigationMap />
   </>,
+
+  goal: <>
+    <Copy><p>Help network operators move from an infrastructure symptom to a justified next action in one workspace. The experience should reduce time spent reconstructing context while keeping the affected object, diagnostic evidence, and remediation scope visible.</p><p>For VCF Operations, the opportunity is to turn monitoring insights into guided investigation. Operators should be able to understand a recommendation, decide whether to approve it, and resume unfinished work without starting over.</p></Copy>
+  </>,
+
+  "target-users": <TargetUsersAndPainPoints />,
 
   "research-synthesis": <>
     <Copy><p>The shared design review and prototype explored how operators return to work, identify an object, and understand a diagnosis. Together, these patterns point to a common need: preserve context across the investigation.</p></Copy>
@@ -99,6 +109,8 @@ const content: Record<string, ReactNode> = {
       ]} />
     </Feature>
   </>,
+
+  "success-metrics": <SuccessMetrics />,
 
   validation: <>
     <Copy><p>The prototype walkthrough checked normal flows, unsupported requests, and partial completion. The next round should compare the design alternatives with network operators and test whether the explanations support sound decisions.</p></Copy>

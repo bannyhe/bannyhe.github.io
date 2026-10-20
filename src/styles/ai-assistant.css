@@ -59,6 +59,21 @@
 .ai-case-study .ai-strategy-return { display: flex; align-items: flex-start; gap: .875rem; padding: 1rem 1.25rem; margin-top: 1rem; border: 1px dashed var(--ai-line); border-radius: 10px; }
 .ai-case-study .ai-strategy-return > svg { flex: 0 0 24px; color: var(--ai-ink); margin-top: .15rem; }
 .ai-case-study .ai-strategy-return strong { color: var(--ai-ink); }
+.ai-case-study .ai-framework-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+.ai-case-study .ai-user-profiles p + p { margin-top: .875rem; }
+.ai-case-study .ai-user-profiles .ai-framework-label { color: var(--ai-muted); font-size: .875rem; margin: 0 0 .75rem; }
+.ai-case-study .ai-framework-subheading { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 2.5rem 0 0; }
+.ai-case-study .ai-framework-subheading + .ai-note { margin-top: .5rem; }
+.ai-case-study .ai-pain-points { margin: 1.5rem 0 0; }
+.ai-case-study .ai-pain-points > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 1.5rem; padding: 1.5rem 0; border-top: 1px solid var(--ai-line); }
+.ai-case-study .ai-pain-points dt { display: flex; align-items: flex-start; gap: .65rem; color: var(--ai-ink); font-size: 1.125rem; font-weight: 500; line-height: 1.5; }
+.ai-case-study .ai-pain-points dt > svg { flex: 0 0 24px; margin-top: .1rem; }
+.ai-case-study .ai-pain-points dd { min-width: 0; margin: 0; }
+.ai-case-study .ai-pain-points p, .ai-case-study .ai-metric p { color: var(--ai-copy); font-size: 1rem; line-height: 1.625; margin: 0; }
+.ai-case-study .ai-pain-points p + p, .ai-case-study .ai-metric p + p { margin-top: .75rem; }
+.ai-case-study .ai-metrics-grid { gap: 2rem; }
+.ai-case-study .ai-metric { min-width: 0; border-top: 2px solid var(--ai-line); padding-top: 1.25rem; }
+.ai-case-study .ai-pilot-measures { margin-top: 2rem; }
 .ai-case-study .ai-reflection-aspect { margin-top: 2rem; }
 .ai-case-study .ai-reflection-aspect > h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .875rem; }
 .ai-case-study .ai-validation-grid h3 { color: var(--ai-ink); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0 0 .75rem; }
@@ -99,7 +114,8 @@
   .ai-case-study .ai-problem-flow .ai-node-heading, .ai-case-study .ai-synthesis-branch .ai-node-heading { min-height: 0; }
 }
 @media (max-width: 767px) {
-  .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-setup-grid { grid-template-columns: 1fr; }
+  .ai-case-study .ai-project-meta, .ai-case-study .ai-validation-grid, .ai-case-study .ai-setup-grid, .ai-case-study .ai-framework-grid, .ai-case-study .ai-pain-points > div { grid-template-columns: 1fr; }
+  .ai-case-study .ai-pain-points > div { gap: .875rem; }
   .ai-case-study .ai-visual-panel, .ai-case-study .ai-concept-node, .ai-case-study .ai-synthesis-branch, .ai-case-study .ai-synthesis-principle { padding: 1rem; }
   .ai-case-study .ai-feature-heading h3 { font-size: 1.25rem; }
   .ai-case-study .ai-media-stage { padding: .5rem; }
