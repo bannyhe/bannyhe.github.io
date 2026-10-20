@@ -126,9 +126,6 @@ export function ResumePage() {
             <h1 className="text-5xl md:text-6xl mb-6 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent text-center">
               Resume
             </h1>
-            <p className="resume-summary text-gray-700 dark:text-gray-200">
-              Senior Product Designer with 7 years in enterprise SaaS, cloud infrastructure, and cybersecurity. Leads Network Operations UX and conversational AI concept design, shaping agentic UX and AI-driven workflows with human-in-the-loop controls.
-            </p>
           </div>
 
           {/* Download Button */}

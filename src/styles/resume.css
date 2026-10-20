@@ -1,13 +1,4 @@
 /* Scoped additions to the existing resume cards and site typography. */
-.resume-summary {
-  max-width: 800px;
-  margin-inline: auto;
-  font-size: 18px;
-  line-height: 1.7;
-  text-align: center;
-  text-wrap: pretty;
-}
-
 .resume-page .resume-section {
   min-width: 0;
   padding: clamp(20px, 4vw, 48px);
