@@ -1,3 +1,4 @@
+import { localize } from "../../i18n/locale";
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Cpu, Network, ShieldCheck } from 'lucide-react';
@@ -138,24 +139,24 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
         <circle ref={marker} className="galaxy-traveler" cx={layout.start.x} cy={layout.start.y} r="3" />
       </svg>
       <canvas ref={canvas} className="galaxy-canvas" aria-hidden="true" />
-      {destinations.map(({ name, description, project, Icon }, index) => (
+      {localize(destinations.map(({ name, description, project, Icon }, index) => (
         <Link
           key={project}
           ref={node => { links.current[index] = node; }}
           className={`galaxy-object galaxy-object-${index}`}
           style={{ left: layout.stops[index].x, top: layout.stops[index].y, width: layout.radius * 2, height: layout.radius * 2, '--stop-radius': `${layout.radius}px` } as CSSProperties}
           to={`/project/${project}`}
-          aria-label={`Explore ${name}: ${description}`}
+          aria-label={localize(`Explore ${name}: ${description}`)}
           onClick={() => trackEvent('project_view', project)}
         >
           <Icon className="galaxy-fallback-icon" aria-hidden="true" strokeWidth={1.25} />
           <span className="galaxy-object-label">
-            <span className="galaxy-stop-index">0{index + 1}</span>
-            <span className="galaxy-stop-title">{name}<ArrowUpRight size={13} aria-hidden="true" /></span>
-            <span className="galaxy-stop-description">{description}</span>
+            <span className="galaxy-stop-index">0{localize(index + 1)}</span>
+            <span className="galaxy-stop-title">{localize(name)}<ArrowUpRight size={13} aria-hidden="true" /></span>
+            <span className="galaxy-stop-description">{localize(description)}</span>
           </span>
         </Link>
-      ))}
+      )))}
     </div>
   );
 }

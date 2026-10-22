@@ -89,7 +89,20 @@
           const description = escapeHtml(meta.description);
           const url = SITE_URL + (meta.path === '/' ? '/' : meta.path);
 
-          let html = template;
+          const chinese = meta.path === '/zh/' || meta.path.startsWith('/zh/');
+          const plainPath = meta.path.replace(/^\/zh(?=\/|$)/, '') || '/';
+          const englishUrl = SITE_URL + plainPath;
+          const chineseUrl = SITE_URL + '/zh' + (plainPath === '/' ? '/' : plainPath);
+          let html = template.replace('<html lang="en">', '<html lang="' + (chinese ? 'zh-CN' : 'en') + '">');
+          html = html.replace('</head>', [
+            '<meta property="og:locale" content="' + (chinese ? 'zh_CN' : 'en_US') + '" />',
+            '<link rel="alternate" hreflang="en" href="' + englishUrl + '" />',
+            '<link rel="alternate" hreflang="zh-CN" href="' + chineseUrl + '" />',
+            '<link rel="alternate" hreflang="x-default" href="' + englishUrl + '" />',
+            ...(meta.noIndex ? ['<meta name="robots" content="noindex, nofollow" />'] : []),
+            '</head>'
+          ].join('\n'));
+
           // The tab title is the same site-wide by request; og:title and
           // twitter:title below stay per-route so shared links keep a
           // meaningful headline.
@@ -139,7 +152,7 @@
         const written: string[] = [];
 
         for (const meta of ROUTE_META) {
-          if (meta.noIndex) continue;
+          // Admin also gets a direct-load entry, while remaining excluded from search.
 
           const html = render(meta);
 

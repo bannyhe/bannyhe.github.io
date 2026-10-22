@@ -1,7 +1,9 @@
+import { localize } from "../i18n/locale";
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LanguageSwitch } from "./LanguageSwitch";
 import logoImage from "../assets/mh_logo.png";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -44,8 +46,8 @@ function ThemeToggle() {
       onMouseLeave={() => setIsHovered(false)}
       onFocus={(e) => setShowFocusRing(e.currentTarget.matches(":focus-visible"))}
       onBlur={() => setShowFocusRing(false)}
-      title={isDark ? "Dark mode — switch to light" : "Light mode — switch to dark"}
-      aria-label={isDark ? "Dark mode. Switch to light mode." : "Light mode. Switch to dark mode."}
+      title={localize(isDark ? "Dark mode — switch to light" : "Light mode — switch to dark")}
+      aria-label={localize(isDark ? "Dark mode. Switch to light mode." : "Light mode. Switch to dark mode.")}
       style={{
         position: "relative",
         display: "inline-flex",
@@ -111,11 +113,11 @@ function ThemeToggle() {
             : "0 1px 4px rgba(16,47,86,0.35)",
         }}
       >
-        {isDark ? (
+        {localize(isDark ? (
           <Moon aria-hidden="true" style={{ width: 14, height: 14, color: "#102F56" }} />
         ) : (
           <Sun aria-hidden="true" style={{ width: 14, height: 14, color: "#f59e0b" }} />
-        )}
+        ))}
       </span>
     </button>
   );
@@ -254,7 +256,7 @@ export function Navigation() {
           >
             <img
               src={logoImage}
-              alt="Mu He — Home"
+              alt={localize("Mu He — Home")}
               className="h-14 w-auto transition-all duration-300"
               style={{
                 filter: theme === 'dark'
@@ -266,7 +268,7 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
-            {navLinks.map((link) => (
+            {localize(navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -277,14 +279,16 @@ export function Navigation() {
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-800/50 backdrop-blur-sm hover:shadow-md"
                 }`}
               >
-                {link.label}
+                {localize(link.label)}
               </Link>
-            ))}
+            )))}
+            <LanguageSwitch />
             <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitch />
             <ThemeToggle />
             <Button
               id={MOBILE_MENU_BUTTON_ID}
@@ -292,19 +296,19 @@ export function Navigation() {
               size="icon"
               className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-200"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={localize(isMobileMenuOpen ? "Close menu" : "Open menu")}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
             >
-              {isMobileMenuOpen ? <X /> : <Menu />}
+              {localize(isMobileMenuOpen ? <X /> : <Menu />)}
             </Button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
+        {localize(isMobileMenuOpen && (
           <div ref={mobileMenuRef} id="mobile-menu" className="md:hidden mt-4 py-4 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/20">
-            {navLinks.map((link) => (
+            {localize(navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -315,11 +319,11 @@ export function Navigation() {
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-800/50"
                 }`}
               >
-                {link.label}
+                {localize(link.label)}
               </Link>
-            ))}
+            )))}
           </div>
-        )}
+        ))}
       </div>
     </nav>
   );

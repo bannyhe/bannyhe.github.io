@@ -1,3 +1,4 @@
+import { languageTag, isChinese, localize } from "../../i18n/locale.ts";
 // PST is a fixed UTC-08:00 offset, including during daylight-saving months.
 export const REPORT_TIME_ZONE = "Etc/GMT+8";
 export const TIME_RANGES = [
@@ -21,8 +22,8 @@ export interface VisitList { visitors: VisitorRow[]; total: number; page: number
 export interface VisitDetail extends VisitorRow { pageViews: { id: string; path: string; entered_at: string; duration: number | null; scroll_depth: number | null }[]; interactions: { id: string; type: string; target: string; path: string; created_at: string }[] }
 export const PAGE_NAMES: Record<string, string> = { "/": "Home", "/about": "About", "/resume": "Résumé", "/project/malware-prevention": "Malware Prevention", "/project/ai-assistant": "Network AI Assistant", "/project/northstar-onboarding": "Northstar Onboarding", "/project/vcf-network": "VCF Network Operations", "/project/xenith-website": "Xenith Website" };
 export function canonicalPath(path: string) { return (path || "/").replace(/^\/?#(?=\/)/, "").split(/[?#]/)[0].replace(/\/$/, "") || "/"; }
-export function pageName(path: string) { return PAGE_NAMES[canonicalPath(path)] || path || "Home"; }
-export function formatNumber(value: number) { return Number(value || 0).toLocaleString("en-US"); }
+export function pageName(path: string) { const canonical = canonicalPath(path); const chinese = /^\/zh(?:\/|$)/.test(canonical); const plain = canonical.replace(/^\/zh(?=\/|$)/, "") || "/"; return localize(PAGE_NAMES[plain] || path || "Home") + (chinese ? (isChinese ? " · 中文" : " · Chinese") : ""); }
+export function formatNumber(value: number) { return Number(value || 0).toLocaleString(languageTag === "zh-CN" ? "zh-CN" : "en-US"); }
 export function formatDuration(ms: number | null | undefined) {
   if (ms == null || !Number.isFinite(ms)) return "—";
   const seconds = Math.max(0, Math.round(ms / 1000));
@@ -32,11 +33,11 @@ export function formatPercent(fraction: number | null | undefined) { return frac
 export function formatDate(iso: string, short = false) {
   const date = new Date(iso);
   if (!Number.isFinite(date.getTime())) return "—";
-  return date.toLocaleString("en-US", { timeZone: REPORT_TIME_ZONE, month: "short", day: "numeric", ...(short ? {} : { hour: "numeric", minute: "2-digit" }) });
+  return date.toLocaleString(languageTag === "zh-CN" ? "zh-CN" : "en-US", { timeZone: REPORT_TIME_ZONE, month: "short", day: "numeric", ...(short ? {} : { hour: "numeric", minute: "2-digit" }) });
 }
 export function formatTime(value: string | number | Date) {
   const date = new Date(value);
-  return Number.isFinite(date.getTime()) ? date.toLocaleTimeString("en-US", { timeZone: REPORT_TIME_ZONE, hour: "numeric", minute: "2-digit" }) : "—";
+  return Number.isFinite(date.getTime()) ? date.toLocaleTimeString(languageTag === "zh-CN" ? "zh-CN" : "en-US", { timeZone: REPORT_TIME_ZONE, hour: "numeric", minute: "2-digit" }) : "—";
 }
 export function formatExportDate(value: string | number | Date) {
   const date = new Date(value);
@@ -77,7 +78,7 @@ export function toCsv(rows: (string | number | null | undefined)[][]) {
   }).join(",")).join("\r\n");
 }
 export function downloadCsv(filename: string, rows: (string | number | null | undefined)[][]) {
-  const url = URL.createObjectURL(new Blob(["\ufeff", toCsv(rows)], { type: "text/csv;charset=utf-8" }));
+  const url = URL.createObjectURL(new Blob(["\ufeff", toCsv(rows.map((row, index) => index === 0 ? row.map(value => typeof value === "string" ? localize(value) : value) : row))], { type: "text/csv;charset=utf-8" }));
   const anchor = document.createElement("a"); anchor.href = url; anchor.download = filename; anchor.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

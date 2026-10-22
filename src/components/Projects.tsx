@@ -1,3 +1,4 @@
+import { localize } from "../i18n/locale";
 import type { CSSProperties } from 'react';
 import { ArrowUpRight, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -44,17 +45,17 @@ function ProjectCard({ project, index }: { project: typeof projects[number]; ind
       <Link to={`/project/${project.id}`} className="home-project-link" onClick={() => trackEvent('project_view', project.id)} aria-labelledby={`project-title-${project.id}`} style={{ '--project-accent': project.accent } as CSSProperties}>
         <div className="home-project-image">
           <ImageWithFallback
-            src={project.image} alt={`${project.title} project preview`} loading="lazy" decoding="async" width={800} height={600}
+            src={project.image} alt={localize(`${project.title} project preview`)} loading="lazy" decoding="async" width={800} height={600}
             className={project.crop ? 'home-project-thumbnail home-project-thumbnail-crop' : 'home-project-thumbnail'}
           />
-          {project.protected && <span className="home-project-lock"><Lock size={12} aria-hidden="true" />Protected</span>}
+          {localize(project.protected && <span className="home-project-lock"><Lock size={12} aria-hidden="true" />{localize("Protected")}</span>)}
           <span className="home-project-open" aria-hidden="true"><ArrowUpRight size={22} /></span>
         </div>
         <div className="home-project-details">
-          <div className="home-project-topline"><span>{project.category}</span><span className="home-project-number">0{index + 1}</span></div>
-          <h3 id={`project-title-${project.id}`}>{project.title}</h3>
-          <p>{project.description}</p>
-          <span className="home-project-read">Explore case study <ArrowUpRight size={14} aria-hidden="true" /></span>
+          <div className="home-project-topline"><span>{localize(project.category)}</span><span className="home-project-number">0{localize(index + 1)}</span></div>
+          <h3 id={`project-title-${project.id}`}>{localize(project.title)}</h3>
+          <p>{localize(project.description)}</p>
+          <span className="home-project-read">{localize("Explore case study ")}<ArrowUpRight size={14} aria-hidden="true" /></span>
         </div>
       </Link>
     </article>
@@ -65,17 +66,17 @@ export function Projects() {
   return (
     <section id="projects" className="home-projects" tabIndex={-1} aria-labelledby="selected-work-heading">
       <div className="home-work-heading">
-        <div><p className="home-eyebrow">Selected work / 01—05</p><h2 id="selected-work-heading">Different challenges.<br /><span>The same care.</span></h2></div>
-        <p>A closer look at how I bring clarity to complex products, from the first question to the final interaction.</p>
+        <div><p className="home-eyebrow">{localize("Selected work / 01—05")}</p><h2 id="selected-work-heading">{localize("Different challenges.")}<br /><span>{localize("The same care.")}</span></h2></div>
+        <p>{localize("A closer look at how I bring clarity to complex products, from the first question to the final interaction.")}</p>
       </div>
       <div className="home-project-grid">
-        {projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} />)}
+        {localize(projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} />))}
         <aside className="home-contact-card" aria-labelledby="home-contact-heading">
           <span className="home-contact-orb" aria-hidden="true" />
-          <p className="home-eyebrow">The next chapter</p>
-          <h3 id="home-contact-heading">Have something<br />in mind?</h3>
-          <p>Let’s make it feel simple.</p>
-          <a className="home-secondary-action" href="mailto:bannyhe@umich.edu">Start a conversation <ArrowUpRight size={17} aria-hidden="true" /></a>
+          <p className="home-eyebrow">{localize("The next chapter")}</p>
+          <h3 id="home-contact-heading">{localize("Have something")}<br />{localize("in mind?")}</h3>
+          <p>{localize("Let’s make it feel simple.")}</p>
+          <a className="home-secondary-action" href="mailto:bannyhe@umich.edu">{localize("Start a conversation ")}<ArrowUpRight size={17} aria-hidden="true" /></a>
         </aside>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { localize } from "../i18n/locale";
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
@@ -7,9 +8,9 @@ import { GalaxyScene } from './home/GalaxyScene';
 
 const chapters = [
   { label: 'Overview', at: 0 },
-  { label: 'AI', at: .30, eyebrow: '01 / Artificial intelligence', title: <>AI that works<br/>with you.</>, description: 'Turning complex investigations into clear, contextual conversations.', project: 'ai-assistant', link: 'Explore Network AI Assistant' },
-  { label: 'Networks', at: .64, eyebrow: '02 / Connected systems', title: <>See the whole<br/>network.</>, description: 'Making connections visible, so operators can find the signal and act with confidence.', project: 'vcf-network', link: 'Explore Network Operations' },
-  { label: 'Security', at: 1, eyebrow: '03 / Security & trust', title: <>Clarity when<br/>it matters.</>, description: 'Helping people understand threats, prioritize risk, and protect what matters.', project: 'malware-prevention', link: 'Explore Malware Prevention' },
+  { label: 'AI', at: .30, eyebrow: '01 / Artificial intelligence', title: <>{localize("AI that works")}<br/>{localize("with you.")}</>, description: 'Turning complex investigations into clear, contextual conversations.', project: 'ai-assistant', link: 'Explore Network AI Assistant' },
+  { label: 'Networks', at: .64, eyebrow: '02 / Connected systems', title: <>{localize("See the whole")}<br/>{localize("network.")}</>, description: 'Making connections visible, so operators can find the signal and act with confidence.', project: 'vcf-network', link: 'Explore Network Operations' },
+  { label: 'Security', at: 1, eyebrow: '03 / Security & trust', title: <>{localize("Clarity when")}<br/>{localize("it matters.")}</>, description: 'Helping people understand threats, prioritize risk, and protect what matters.', project: 'malware-prevention', link: 'Explore Malware Prevention' },
 ];
 export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMotion: () => void }) {
   const section=useRef<HTMLElement>(null);
@@ -38,26 +39,26 @@ export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMoti
       <div className="galaxy-editorial">
         <div className="galaxy-copy-stack">
           <div className="galaxy-copy galaxy-introduction" data-active={active===0} {...(active!==0?{inert: ''}:{})} aria-hidden={active!==0}>
-            <p className="home-eyebrow"><span className="home-status-dot"/>Mu He · Product designer</p>
-            <h1 id="home-heading">Complexity,<br/>made clear.</h1>
-            <p className="home-intro">I design intuitive experiences for the people behind complex systems.</p>
-            <p className="home-experience">7+ years in B2B · AI, cloud & enterprise</p>
-            <div className="home-actions"><button type="button" className="home-primary-action" onClick={explore}>Explore my work<ArrowDown size={16} aria-hidden="true"/></button><Link className="home-secondary-action" to="/about">Meet Mu<ArrowUpRight size={16} aria-hidden="true"/></Link></div>
+            <p className="home-eyebrow"><span className="home-status-dot"/>{localize("Mu He · Product designer")}</p>
+            <h1 id="home-heading">{localize("Complexity,")}<br/>{localize("made clear.")}</h1>
+            <p className="home-intro">{localize("I design intuitive experiences for the people behind complex systems.")}</p>
+            <p className="home-experience">{localize("7+ years in B2B · AI, cloud & enterprise")}</p>
+            <div className="home-actions"><button type="button" className="home-primary-action" onClick={explore}>{localize("Explore my work")}<ArrowDown size={16} aria-hidden="true"/></button><Link className="home-secondary-action" to="/about">{localize("Meet Mu")}<ArrowUpRight size={16} aria-hidden="true"/></Link></div>
           </div>
-          {chapters.slice(1).map((item,i)=><div key={item.project} className="galaxy-copy galaxy-chapter-copy" data-active={active===i+1} {...(active!==i+1?{inert: ''}:{})} aria-hidden={active!==i+1}>
-            <p className="home-eyebrow">{item.eyebrow}</p><h2>{item.title}</h2><p className="home-intro">{item.description}</p>
-            <Link className="home-secondary-action galaxy-case-link" to={`/project/${item.project}`}>{item.link}<ArrowUpRight size={16} aria-hidden="true"/></Link>
-            <button type="button" className="galaxy-all-work" onClick={explore}>View all projects<ArrowDown size={12} aria-hidden="true"/></button>
-          </div>)}
+          {localize(chapters.slice(1).map((item,i)=><div key={item.project} className="galaxy-copy galaxy-chapter-copy" data-active={active===i+1} {...(active!==i+1?{inert: ''}:{})} aria-hidden={active!==i+1}>
+            <p className="home-eyebrow">{localize(item.eyebrow)}</p><h2>{localize(item.title)}</h2><p className="home-intro">{localize(item.description)}</p>
+            <Link className="home-secondary-action galaxy-case-link" to={`/project/${item.project}`}>{localize(item.link)}<ArrowUpRight size={16} aria-hidden="true"/></Link>
+            <button type="button" className="galaxy-all-work" onClick={explore}>{localize("View all projects")}<ArrowDown size={12} aria-hidden="true"/></button>
+          </div>))}
         </div>
       </div>
-      <p className="galaxy-coordinate" aria-hidden="true">Three domains.<br/><span>One connected practice.</span></p>
+      <p className="galaxy-coordinate" aria-hidden="true">{localize("Three domains.")}<br/><span>{localize("One connected practice.")}</span></p>
       <div className="galaxy-footer">
         <div className="galaxy-journey-controls">
-          <p className="galaxy-scroll-hint"><ArrowDown size={13} aria-hidden="true"/>{reduced?'Explore the case studies below':'Scroll to follow the connections'}</p>
-          {!reduced&&<nav className="galaxy-chapters" aria-label="Explore design domains">{chapters.map((item,i)=><button key={item.label} type="button" aria-current={active===i?'step':undefined} onClick={()=>seek(i)}><span className="galaxy-chapter-dot"/>{item.label}</button>)}</nav>}
+          <p className="galaxy-scroll-hint"><ArrowDown size={13} aria-hidden="true"/>{localize(reduced?'Explore the case studies below':'Scroll to follow the connections')}</p>
+          {localize(!reduced&&<nav className="galaxy-chapters" aria-label={localize("Explore design domains")}>{localize(chapters.map((item,i)=><button key={item.label} type="button" aria-current={active===i?'step':undefined} onClick={()=>seek(i)}><span className="galaxy-chapter-dot"/>{localize(item.label)}</button>))}</nav>)}
         </div>
-        <button type="button" className="home-motion-toggle" onClick={onToggleMotion} aria-pressed={paused||reduced} disabled={reduced}>{enabled?<Pause size={12} aria-hidden="true"/>:<Play size={12} aria-hidden="true"/>}{reduced?'Reduced motion':paused?'Resume ambience':'Pause ambience'}</button>
+        <button type="button" className="home-motion-toggle" onClick={onToggleMotion} aria-pressed={paused||reduced} disabled={reduced}>{localize(enabled?<Pause size={12} aria-hidden="true"/>:<Play size={12} aria-hidden="true"/>)}{localize(reduced?'Reduced motion':paused?'Resume ambience':'Pause ambience')}</button>
       </div>
       <div className="home-scroll-progress" aria-hidden="true"><motion.span style={{width:reduced?'100%':phaseWidth}}/></div>
     </div>

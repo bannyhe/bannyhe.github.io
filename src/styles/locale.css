@@ -1,0 +1,45 @@
+/* Chinese typography: system fonts, restrained weights, readable vertical rhythm.
+   Reference: Alibaba's official typography guidance (article 119060).
+   The existing color tokens, grids, assets and animation remain shared. */
+.language-switch {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 44px; min-height: 44px; padding: 8px 10px;
+  border-radius: 999px; color: #102f56; font-size: 14px;
+  font-weight: 500; text-decoration: none; transition: background-color 180ms;
+}
+.dark .language-switch { color: #93c5fd; }
+.language-switch:hover { background: rgb(16 47 86 / 8%); }
+.dark .language-switch:hover { background: rgb(147 197 253 / 12%); }
+.language-switch:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+html:lang(zh-CN) {
+  --zh-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC",
+    "Noto Sans SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  font-family: var(--zh-font); line-break: strict; word-break: normal;
+}
+html:lang(zh-CN) body,
+html:lang(zh-CN) button,
+html:lang(zh-CN) input,
+html:lang(zh-CN) select,
+html:lang(zh-CN) textarea { font-family: var(--zh-font); }
+html:lang(zh-CN) :is(h1,h2,h3,h4,.home-eyebrow,.admin-eyebrow,.project-hero-tags) {
+  letter-spacing: normal; text-transform: none;
+}
+html:lang(zh-CN) :is(p,li,figcaption,blockquote) { line-height: 1.8; }
+html:lang(zh-CN) :is(h1,h2,h3,h4) { line-height: 1.4; }
+html:lang(zh-CN) .galaxy-copy :is(h1,h2) {
+  font-size: clamp(2.8rem, 5.1vw, 5.5rem); line-height: 1.22;
+}
+html:lang(zh-CN) :is(.home-eyebrow,.galaxy-coordinate,.home-project-topline) { line-height: 1.6; }
+html:lang(zh-CN) .project-hero h1 { font-weight: 500; }
+html:lang(zh-CN) .project-hero-description { line-height: 1.75; }
+html:lang(zh-CN) :is(.project-contents,.admin-page) { overflow-wrap: anywhere; }
+html:lang(zh-CN) .ai-case-study :is(p,li) { word-break: normal; }
+@media (max-width: 600px) {
+  html:lang(zh-CN) .galaxy-copy :is(h1,h2) { font-size: clamp(2.35rem, 9vw, 3.3rem); }
+  html:lang(zh-CN) .galaxy-copy .home-intro { line-height: 1.65; }
+  html:lang(zh-CN) .galaxy-footer { gap: 12px; }
+}
+
+.project-gate-language { position: fixed; top: 20px; right: 24px; z-index: 1; }
+
+html:lang(zh-CN) .project-hero-description { text-wrap: balance; }

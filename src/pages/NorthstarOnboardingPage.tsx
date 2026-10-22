@@ -1,3 +1,4 @@
+import { localize } from "../i18n/locale";
 import { ProjectImageLightbox, activateImageOnKey } from "../components/case-study/ProjectImageLightbox";
 import { ProjectHero } from "../components/case-study/ProjectHero";
 import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
@@ -56,8 +57,8 @@ export function NorthstarOnboardingPage() {
   return (
     <main className="case-study pt-20 pb-24 northstar-body">
       <ProjectHero
-        title="Northstar Onboarding"
-        description="Streamlines B2B SaaS multi-cloud networking through centralized automation and enhanced visibility."
+        title={localize("Northstar Onboarding")}
+        description={localize("Streamlines B2B SaaS multi-cloud networking through centralized automation and enhanced visibility.")}
         icon={Cloud}
         image={{ src: "/media/project-covers/northstar.png", alt: "Northstar Onboarding welcome screen with setup prerequisites and cloud gateway guidance.", width: 1815, height: 906, crop: { x: 1002, y: 178, width: 702, height: 550 } }}
       />
@@ -76,94 +77,76 @@ export function NorthstarOnboardingPage() {
             {/* Project Metadata in 2x2 Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Project Type</p>
-                <p className="text-lg text-gray-900 dark:text-gray-100">UI/UX Design</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{localize("Project Type")}</p>
+                <p className="text-lg text-gray-900 dark:text-gray-100">{localize("UI/UX Design")}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">My Role</p>
-                <p className="text-lg text-gray-900 dark:text-gray-100">Lead UX designer</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{localize("My Role")}</p>
+                <p className="text-lg text-gray-900 dark:text-gray-100">{localize("Lead UX designer")}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Team</p>
-                <p className="text-lg text-gray-900 dark:text-gray-100">2 Product Managers, 8 Engineers</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{localize("Team")}</p>
+                <p className="text-lg text-gray-900 dark:text-gray-100">{localize("2 Product Managers, 8 Engineers")}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Timeline</p>
-                <p className="text-lg text-gray-900 dark:text-gray-100">March 2022 - March 2023</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{localize("Timeline")}</p>
+                <p className="text-lg text-gray-900 dark:text-gray-100">{localize("March 2022 - March 2023")}</p>
               </div>
             </div>
           </div>
 
           {/* Brief */}
           <div className="mb-16" id="brief">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              What is NSX+?
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("What is NSX+?")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                <p>
-                  NSX+ is a B2B SaaS cloud-native networking and security platform, designed to provide advanced networking capabilities and security services for traditional data centers.
-                </p>
-                <p>
-                  It extends the capabilities of VMware NSX, emphasizing integration with cloud environments and simplifying networking and security operations in complex deployments, enhancing agility and security for businesses adopting cloud technologies.
-                </p>
+                <p>{localize("NSX+ is a B2B SaaS cloud-native networking and security platform, designed to provide advanced networking capabilities and security services for traditional data centers.")}</p>
+                <p>{localize("It extends the capabilities of VMware NSX, emphasizing integration with cloud environments and simplifying networking and security operations in complex deployments, enhancing agility and security for businesses adopting cloud technologies.")}</p>
               </div>
               <div>
                 <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
                   <img
                     src={traditionalDataCenterImg}
-                    alt="Traditional Data Center"
+                    alt={localize("Traditional Data Center")}
                     className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.05)', transformOrigin: 'center center' }}
                     role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: traditionalDataCenterImg, alt: "Traditional Data Center" })}
                   />
                 </div>
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Traditional Data Center</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("Traditional Data Center")}</p>
               </div>
             </div>
           </div>
 
           {/* Problem */}
           <div className="mb-16" id="problem">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              The Challenge
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("The Challenge")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div>
                 <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
                   <img
                     src={challengeImg}
-                    alt="Private Cloud to Public Cloud Transition"
+                    alt={localize("Private Cloud to Public Cloud Transition")}
                     className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.1)', transformOrigin: 'center center' }}
                     role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: challengeImg, alt: "Private Cloud to Public Cloud Transition" })}
                   />
                 </div>
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">SaaS Transformation</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("SaaS Transformation")}</p>
               </div>
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                <p>
-                  VMware NSX is facing the challenge of transforming from private cloud solutions to seamlessly integrating public cloud services.
-                </p>
-                <p>
-                  This transition highlights the necessity for a holistic approach to selecting bundles and onboarding processes, which is essential for providing users with a smooth and engaging start.
-                </p>
-                <p>
-                  The Northstar onboarding experience serves as the critical initial touchpoint, making it imperative to design an intuitive interface that empowers users to thrive and effectively meet their needs.
-                </p>
+                <p>{localize("VMware NSX is facing the challenge of transforming from private cloud solutions to seamlessly integrating public cloud services.")}</p>
+                <p>{localize("This transition highlights the necessity for a holistic approach to selecting bundles and onboarding processes, which is essential for providing users with a smooth and engaging start.")}</p>
+                <p>{localize("The Northstar onboarding experience serves as the critical initial touchpoint, making it imperative to design an intuitive interface that empowers users to thrive and effectively meet their needs.")}</p>
               </div>
             </div>
           </div>
 
           {/* Solution Overview */}
           <div className="mb-16" id="solution-overview">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Solution Highlight
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Solution Highlight")}</h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-              <p>
-                The Northstar project aims to simplify the free trial and onboarding process for users, optimizing workflow in complex environments. By integrating and adopting cloud technologies, businesses can enhance agility and security when managing their data centers.
-              </p>
+              <p>{localize("The Northstar project aims to simplify the free trial and onboarding process for users, optimizing workflow in complex environments. By integrating and adopting cloud technologies, businesses can enhance agility and security when managing their data centers.")}</p>
             </div>
 
             {/* Carousel */}
@@ -180,28 +163,28 @@ export function NorthstarOnboardingPage() {
                   animate={{ x: `-${currentSlide * 100}%` }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
-                  {carouselSlides.map((slide, index) => (
+                  {localize(carouselSlides.map((slide, index) => (
                     <div key={index} className="min-w-full h-full relative bg-[#1c2a35]">
                       <img
                         src={slide.src}
-                        alt={slide.label}
+                        alt={localize(slide.label)}
                         className="w-full h-full object-cover"
                       />
                       {/* Overlay Label */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                         <p className="text-white text-lg">
-                          {slide.label}
+                          {localize(slide.label)}
                         </p>
                       </div>
                     </div>
-                  ))}
+                  )))}
                 </motion.div>
               </motion.div>
 
               {/* Navigation Buttons */}
               <button
                 onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : carouselSlides.length - 1))}
-                aria-label="Previous slide"
+                aria-label={localize("Previous slide")}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm hover:bg-white p-3 shadow-lg transition-all"
                 style={{ borderRadius: '10px' }}
               >
@@ -209,7 +192,7 @@ export function NorthstarOnboardingPage() {
               </button>
               <button
                 onClick={() => setCurrentSlide((prev) => (prev < carouselSlides.length - 1 ? prev + 1 : 0))}
-                aria-label="Next slide"
+                aria-label={localize("Next slide")}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm hover:bg-white p-3 shadow-lg transition-all"
                 style={{ borderRadius: '10px' }}
               >
@@ -218,7 +201,7 @@ export function NorthstarOnboardingPage() {
 
               {/* Dots Indicator */}
               <div className="flex justify-center gap-2 mt-6">
-                {carouselSlides.map((_, index) => (
+                {localize(carouselSlides.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
@@ -226,79 +209,64 @@ export function NorthstarOnboardingPage() {
                       index === currentSlide ? 'bg-blue-600 w-8' : 'bg-gray-300'
                     }`}
                   />
-                ))}
+                )))}
               </div>
             </div>
           </div>
 
           {/* Design Challenge */}
           <div className="mb-16" id="design-challenge">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Target User & Pain Point
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Target User & Pain Point")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                <p>
-                  The main target user is the IT Administrator, who is responsible for managing the organization's virtual network infrastructure and maintaining system performance in the IT department. Their main duties include configuring network settings, monitoring network health, and troubleshooting issues.
-                </p>
-                <p>
-                  The key pain point for these administrators is the desire to self-onboard NSX+ using their actual data center rather than relying on sales personnel. They seek a streamlined, intuitive onboarding process that allows them to efficiently integrate NSX+ into their existing environment, enabling them to securely leverage real data and configurations in a cloud environment.
-                </p>
+                <p>{localize("The main target user is the IT Administrator, who is responsible for managing the organization's virtual network infrastructure and maintaining system performance in the IT department. Their main duties include configuring network settings, monitoring network health, and troubleshooting issues.")}</p>
+                <p>{localize("The key pain point for these administrators is the desire to self-onboard NSX+ using their actual data center rather than relying on sales personnel. They seek a streamlined, intuitive onboarding process that allows them to efficiently integrate NSX+ into their existing environment, enabling them to securely leverage real data and configurations in a cloud environment.")}</p>
               </div>
               <div>
                 <img
                   src={targetUserImg}
-                  alt="IT Administrator Target User"
+                  alt={localize("IT Administrator Target User")}
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
                   role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: targetUserImg, alt: "IT Administrator Target User" })}
                 />
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Persona</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("Persona")}</p>
               </div>
             </div>
           </div>
 
           {/* Redefine Onboarding */}
           <div className="mb-16" id="redefine-onboarding">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Redefine Onboarding Experience
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Redefine Onboarding Experience")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                <p>
-                  Previously, the onboarding process required users to talk directly to sales whenever they ran into issues with key features or related subscriptions.
-                </p>
-                <p>
-                  The goal is to make the onboarding process more intuitive and self-explanatory, so users can explore it with customized recommendations based on their actual environment. In short, this switches the onboarding experience from <span className="text-gray-900 dark:text-gray-100">Sales Led → Product Led</span>.
+                <p>{localize("Previously, the onboarding process required users to talk directly to sales whenever they ran into issues with key features or related subscriptions.")}</p>
+                <p>{localize("The goal is to make the onboarding process more intuitive and self-explanatory, so users can explore it with customized recommendations based on their actual environment. In short, this switches the onboarding experience from ")}<span className="text-gray-900 dark:text-gray-100">{localize("Sales Led → Product Led")}</span>.
                 </p>
               </div>
               <div>
                 <img
                   src={redefineOnboardingImg}
-                  alt="Redefine Onboarding Experience - Sales Led to Product Led"
+                  alt={localize("Redefine Onboarding Experience - Sales Led to Product Led")}
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
                   role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: redefineOnboardingImg, alt: "Redefine Onboarding Experience - Sales Led to Product Led" })}
                 />
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">End-to-End Experience</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("End-to-End Experience")}</p>
               </div>
             </div>
           </div>
 
           {/* Design Principles */}
           <div className="mb-16" id="approach-strategy">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Design Principles
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Design Principles")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                <p>
-                  To address these challenges and pain points, I collaborated with key stakeholders to empower IT Administrators to onboard NSX+ with confidence. I led the design strategy with a focus on three core principles:
-                </p>
+                <p>{localize("To address these challenges and pain points, I collaborated with key stakeholders to empower IT Administrators to onboard NSX+ with confidence. I led the design strategy with a focus on three core principles:")}</p>
                 <div className="flex items-center justify-center overflow-hidden" style={{ borderRadius: '10px' }}>
                   <img
                     src={designPrinciplesImg}
-                    alt="Design Principles - Efficient, Intuitive, Trustworthy"
+                    alt={localize("Design Principles - Efficient, Intuitive, Trustworthy")}
                     className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                     style={{ transform: 'scale(1.25)', transformOrigin: 'center center' }}
                     role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: designPrinciplesImg, alt: "Design Principles - Efficient, Intuitive, Trustworthy" })}
@@ -308,14 +276,11 @@ export function NorthstarOnboardingPage() {
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-4">
                   <li>
-                    <span className="font-bold text-gray-900 dark:text-gray-100">Efficient:</span> The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.
-                  </li>
+                    <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Efficient:")}</span>{localize(" The onboarding process should be streamlined, ensuring users are not overwhelmed by excessive steps or time commitments.")}</li>
                   <li>
-                    <span className="font-bold text-gray-900 dark:text-gray-100">Intuitive:</span> Each step must be clear and instructional, providing guidance that eliminates the need for documentation or technical support.
-                  </li>
+                    <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Intuitive:")}</span>{localize(" Each step must be clear and instructional, providing guidance that eliminates the need for documentation or technical support.")}</li>
                   <li>
-                    <span className="font-bold text-gray-900 dark:text-gray-100">Trustworthy:</span> Users should feel secure and confident when connecting to their own data centers, fostering a sense of safety throughout the onboarding experience.
-                  </li>
+                    <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Trustworthy:")}</span>{localize(" Users should feel secure and confident when connecting to their own data centers, fostering a sense of safety throughout the onboarding experience.")}</li>
                 </ul>
               </div>
             </div>
@@ -323,19 +288,15 @@ export function NorthstarOnboardingPage() {
 
           {/* Success Metrics */}
           <div className="mb-16" id="success-metrics">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Success Metrics
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Success Metrics")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-                <p>
-                  The goal of this project is to promote usage of key networking and security features and to increase product revenue as users grow satisfied with the onboarding experience. Thus, I initiated a discussion with PMs and engineers to track the following metrics:
-                </p>
+                <p>{localize("The goal of this project is to promote usage of key networking and security features and to increase product revenue as users grow satisfied with the onboarding experience. Thus, I initiated a discussion with PMs and engineers to track the following metrics:")}</p>
               </div>
               <div className="overflow-hidden rounded-[10px]" style={{ aspectRatio: '1140 / 320' }}>
                 <img
                   src={successMetricsImg}
-                  alt="Success Metrics - Adoption, Revenue, Satisfaction"
+                  alt={localize("Success Metrics - Adoption, Revenue, Satisfaction")}
                   className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" style={{ objectPosition: '50% 43%' }}
                   role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: successMetricsImg, alt: "Success Metrics - Adoption, Revenue, Satisfaction" })}
                 />
@@ -345,66 +306,49 @@ export function NorthstarOnboardingPage() {
 
           {/* Optimizing Workflow */}
           <div className="mb-16" id="optimizing-workflow">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Optimizing Workflow
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Optimizing Workflow")}</h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-              <p>
-                With the goals and metrics in mind, I collaborated with key stakeholders on project requirements and visualized the major steps to build a clear, shared understanding of how cloud and on-premises environments connect. This made it more straightforward to identify the key areas that need intuitive, instructional design.
-              </p>
+              <p>{localize("With the goals and metrics in mind, I collaborated with key stakeholders on project requirements and visualized the major steps to build a clear, shared understanding of how cloud and on-premises environments connect. This made it more straightforward to identify the key areas that need intuitive, instructional design.")}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-10">
               <div>
                 <img
                   src={optimizingWorkflowImg}
-                  alt="Optimizing Workflow - Major Steps Overview"
+                  alt={localize("Optimizing Workflow - Major Steps Overview")}
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
                   role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: optimizingWorkflowImg, alt: "Optimizing Workflow - Major Steps Overview" })}
                 />
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Before</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("Before")}</p>
               </div>
               <div>
                 <img
                   src={workflowDiagramImg}
-                  alt="Optimized Workflow Diagram - Cloud and On-Premises Environment"
+                  alt={localize("Optimized Workflow Diagram - Cloud and On-Premises Environment")}
                   className="w-full h-auto cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ borderRadius: '10px' }}
                   role="button" tabIndex={0} aria-haspopup="dialog" onKeyDown={activateImageOnKey} onClick={() => setExpandedImage({ src: workflowDiagramImg, alt: "Optimized Workflow Diagram - Cloud and On-Premises Environment" })}
                 />
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">After</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("After")}</p>
               </div>
             </div>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-              <p>
-                I closed the gap by bringing the customer's voice to the table. The optimized workflow addresses key user concerns by:
-              </p>
+              <p>{localize("I closed the gap by bringing the customer's voice to the table. The optimized workflow addresses key user concerns by:")}</p>
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Protecting credentials</span> by introducing a cloud gateway, which bridges the gap between cloud and on-premises data centers and builds user trust in the safety of the connection.
-                </li>
-                <li>
-                  Encouraging users to <span className="font-bold text-gray-900 dark:text-gray-100">explore features</span> by making the process intuitive, clear, and simple.
-                </li>
-                <li>
-                  Providing an <span className="font-bold text-gray-900 dark:text-gray-100">onboarding guide</span> to make users feel more confident about purchasing a subscription.
-                </li>
+                  <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Protecting credentials")}</span>{localize(" by introducing a cloud gateway, which bridges the gap between cloud and on-premises data centers and builds user trust in the safety of the connection.")}</li>
+                <li>{localize("Encouraging users to ")}<span className="font-bold text-gray-900 dark:text-gray-100">{localize("explore features")}</span>{localize(" by making the process intuitive, clear, and simple.")}</li>
+                <li>{localize("Providing an ")}<span className="font-bold text-gray-900 dark:text-gray-100">{localize("onboarding guide")}</span>{localize(" to make users feel more confident about purchasing a subscription.")}</li>
               </ul>
             </div>
           </div>
 
           {/* Transitional Pages */}
           <div className="mb-16" id="transitional-pages">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Transitional Pages
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Transitional Pages")}</h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-10">
-              <p>
-                The old transitional page provided limited access to the home page, showing only a progress bar on a full page.
-              </p>
-              <p>
-                The proposed pattern solves this pain point by showing a progress bar and visual instructions in a pop-up modal, presented as a slideshow carousel. The experience gives IT admins and tenants quick tutorials to learn more about their permissions to the system.
-              </p>
+              <p>{localize("The old transitional page provided limited access to the home page, showing only a progress bar on a full page.")}</p>
+              <p>{localize("The proposed pattern solves this pain point by showing a progress bar and visual instructions in a pop-up modal, presented as a slideshow carousel. The experience gives IT admins and tenants quick tutorials to learn more about their permissions to the system.")}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -415,12 +359,12 @@ export function NorthstarOnboardingPage() {
                 >
                   <img
                     src={oldTransitionalPatternImg}
-                    alt="Old Transitional Pattern"
+                    alt={localize("Old Transitional Pattern")}
                     className="w-full h-auto block"
                     style={{ transform: 'scale(1.0101)', transformOrigin: 'bottom right' }}
                   />
                 </div>
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Old Transitional Pattern</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("Old Transitional Pattern")}</p>
               </div>
               <div>
                 <div
@@ -430,12 +374,12 @@ export function NorthstarOnboardingPage() {
                 >
                   <img
                     src={proposedOnboardingGuideImg}
-                    alt="Proposed Onboarding Guide"
+                    alt={localize("Proposed Onboarding Guide")}
                     className="w-full h-auto block"
                     style={{ transform: 'scale(1.0101)', transformOrigin: 'bottom right' }}
                   />
                 </div>
-                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">Proposed Onboarding Guide</p>
+                <p className="text-center text-gray-700 dark:text-gray-200 mt-4">{localize("Proposed Onboarding Guide")}</p>
               </div>
             </div>
           </div>
@@ -444,18 +388,13 @@ export function NorthstarOnboardingPage() {
           {/* Placement study. The three options and the reason the third won
               are the ones already recorded against this project. */}
           <div className="mb-16" id="placement-study">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Where Should the Guide Live?
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Where Should the Guide Live?")}</h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-              <p>
-                Deciding what the guide said was the easy half. The harder question
-                was where it sat, and I sketched three placements against a single
-                test: <span className="text-gray-900 dark:text-gray-100 font-bold">can a user leave it and come back?</span>
+              <p>{localize("Deciding what the guide said was the easy half. The harder question was where it sat, and I sketched three placements against a single test: ")}<span className="text-gray-900 dark:text-gray-100 font-bold">{localize("can a user leave it and come back?")}</span>
               </p>
               <img
                 src={northstarPlacementImg}
-                alt="Three sketched placements for the onboarding tutorial: a full-screen modal, a docked side panel, and a minimized non-modal dialog that tracks progress."
+                alt={localize("Three sketched placements for the onboarding tutorial: a full-screen modal, a docked side panel, and a minimized non-modal dialog that tracks progress.")}
                 className="w-full h-auto mt-2 cursor-pointer hover:opacity-90 transition-opacity bg-white"
                 style={{ borderRadius: '10px' }}
                 onClick={() =>
@@ -465,58 +404,36 @@ export function NorthstarOnboardingPage() {
                   })
                 }
               />
-              <p>
-                The modal failed that test outright — engineering flagged that users
-                would lose access to the tutorial the moment they closed it, which
-                made an unmissable dialog an unacceptable one. The docked panel
-                passed, but charged for it by narrowing the deployment view that
-                users had come to look at.
-              </p>
-              <p>
-                The <span className="text-gray-900 dark:text-gray-100 font-bold">minimized non-modal dialog</span> was the only option
-                that let the guide be dismissed without being lost. It keeps progress
-                visible, stays out of the way of the console, and can be reopened at
-                any point — which is what turned a one-shot tutorial into something
-                users could actually return to mid-deployment.
-              </p>
+              <p>{localize("The modal failed that test outright — engineering flagged that users would lose access to the tutorial the moment they closed it, which made an unmissable dialog an unacceptable one. The docked panel passed, but charged for it by narrowing the deployment view that users had come to look at.")}</p>
+              <p>{localize("The ")}<span className="text-gray-900 dark:text-gray-100 font-bold">{localize("minimized non-modal dialog")}</span>{localize(" was the only option that let the guide be dismissed without being lost. It keeps progress visible, stays out of the way of the console, and can be reopened at any point — which is what turned a one-shot tutorial into something users could actually return to mid-deployment.")}</p>
             </div>
           </div>
 
           <div className="mb-16" id="impact">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Impact
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Impact")}</h2>
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  <span className="text-gray-900 dark:text-gray-100"><span className="font-bold">80%+</span> adoption rate</span> from onboarding experience to subscribing to key networking and security features.
-                </li>
+                  <span className="text-gray-900 dark:text-gray-100"><span className="font-bold">80%+</span>{localize(" adoption rate")}</span>{localize(" from onboarding experience to subscribing to key networking and security features.")}</li>
                 <li>
-                  <span className="text-gray-900 dark:text-gray-100"><span className="font-bold">30%</span> increase</span> in total revenue of NSX+ subscription.
-                </li>
+                  <span className="text-gray-900 dark:text-gray-100"><span className="font-bold">30%</span>{localize(" increase")}</span>{localize(" in total revenue of NSX+ subscription.")}</li>
                 <li>
-                  <span className="text-gray-900 dark:text-gray-100 font-bold">9/10</span> in customer satisfaction rate.
-                </li>
+                  <span className="text-gray-900 dark:text-gray-100 font-bold">9/10</span>{localize(" in customer satisfaction rate.")}</li>
               </ul>
             </div>
           </div>
 
           {/* Learnings & Reflections */}
           <div className="mb-16" id="learnings-reflections">
-            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-              Learnings & Reflections
-            </h2>
+            <h2 className="text-3xl md:text-4xl leading-tight mb-10 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Learnings & Reflections")}</h2>
             <div className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
               <ul className="list-disc pl-6 space-y-4">
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Take ownership</span> as the design lead, guiding the project from concept to completion.
-                </li>
+                  <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Take ownership")}</span>{localize(" as the design lead, guiding the project from concept to completion.")}</li>
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Embrace the uncertainty</span> by sharing objectives with stakeholders and clarifying ambiguity together.
-                </li>
+                  <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Embrace the uncertainty")}</span>{localize(" by sharing objectives with stakeholders and clarifying ambiguity together.")}</li>
                 <li>
-                  <span className="font-bold text-gray-900 dark:text-gray-100">Proactive communication</span> with cross-functional teams to align design decisions with user needs and business goals.
-                </li>
+                  <span className="font-bold text-gray-900 dark:text-gray-100">{localize("Proactive communication")}</span>{localize(" with cross-functional teams to align design decisions with user needs and business goals.")}</li>
               </ul>
             </div>
           </div>

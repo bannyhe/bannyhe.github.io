@@ -1,3 +1,4 @@
+import { localize, isChinese, languagePath, languageTag } from "./i18n/locale";
 import {
   BrowserRouter as Router,
   Routes,
@@ -36,7 +37,25 @@ function DocumentTitle() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const { description } = metaForPath(pathname);
+    const meta = metaForPath(languagePath(pathname, isChinese ? "zh" : "en"));
+    const { description } = meta;
+    document.documentElement.lang = languageTag;
+    const canonical = "https://muheportfolio.com" + meta.path;
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonical);
+    for (const [property, content] of Object.entries({ "og:title": meta.title, "og:description": description, "og:url": canonical, "og:locale": isChinese ? "zh_CN" : "en_US" })) {
+      document.querySelector('meta[property="' + property + '"]')?.setAttribute("content", content);
+    }
+    for (const [name, content] of Object.entries({ "twitter:title": meta.title, "twitter:description": description })) {
+      document.querySelector('meta[name="' + name + '"]')?.setAttribute("content", content);
+    }
+    for (const lang of ["en", "zh-CN", "x-default"]) {
+      let link = document.querySelector<HTMLLinkElement>('link[rel="alternate"][hreflang="' + lang + '"]');
+      if (!link) { link = document.createElement("link"); link.rel = "alternate"; link.hreflang = lang; document.head.append(link); }
+      link.href = "https://muheportfolio.com" + languagePath(pathname, lang === "zh-CN" ? "zh" : "en");
+    }
+    let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (!robots) { robots = document.createElement("meta"); robots.name = "robots"; document.head.append(robots); }
+    robots.content = meta.noIndex ? "noindex, nofollow" : "index, follow";
     document.title = BROWSER_TITLE;
 
     const descriptionTag = document.querySelector(
@@ -117,7 +136,7 @@ function RouteFallback() {
       aria-live="polite"
       className="page-min-height flex items-center justify-center"
     >
-      <span className="sr-only">Loading page…</span>
+      <span className="sr-only">{localize("Loading page…")}</span>
       <span aria-hidden="true" className="route-spinner" />
     </div>
   );
@@ -170,7 +189,7 @@ function AppContent() {
         <footer className="relative text-gray-600 dark:text-gray-300 py-8 mt-24">
           <div className="container mx-auto px-4 text-center">
             <div className="flex items-center justify-center gap-4 mb-6">
-              {[
+              {localize([
                 {
                   icon: Github,
                   href: "https://github.com/bannyhe",
@@ -200,16 +219,13 @@ function AppContent() {
                 >
                   <Icon className="w-5 h-5" />
                 </motion.a>
-              ))}
+              )))}
             </div>
-            <p className="text-gray-500 dark:text-gray-400">
-              © 2026 Designed by Mu He. All rights
-              reserved.
-            </p>
+            <p className="text-gray-500 dark:text-gray-400">{localize("© 2026 Designed by Mu He. All rights reserved.")}</p>
           </div>
         </footer>
       </div>
-      <Toaster />
+      <Toaster containerAriaLabel={localize("Notifications")} toastOptions={{ closeButtonAriaLabel: localize("Close notification") }} />
     </div>
   );
 }
@@ -217,7 +233,7 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename={isChinese ? "/zh" : "/"}>
         <AppContent />
       </Router>
     </ThemeProvider>

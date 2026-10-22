@@ -1,3 +1,4 @@
+import { localize } from "../../i18n/locale";
 import { useId, type CSSProperties } from "react";
 import type { LucideIcon } from "lucide-react";
 import "../../styles/case-study.css";
@@ -32,15 +33,15 @@ export function ProjectHero({ title, description, image, icon: Icon, tags = ["UX
     <div className="max-w-6xl mx-auto py-12">
       <header className="project-hero" data-tone={tone} aria-labelledby={titleId}>
         <div className="project-hero-copy">
-          <h1 id={titleId} tabIndex={-1}><Icon aria-hidden="true" strokeWidth={1.5} /><span>{title}</span></h1>
-          <p className="project-hero-description">{description}</p>
-          <ul className="project-hero-tags" aria-label="Design disciplines">
-            {tags.map(tag => <li key={tag}>/ {tag}</li>)}
+          <h1 id={titleId} tabIndex={-1}><Icon aria-hidden="true" strokeWidth={1.5} /><span>{localize(title)}</span></h1>
+          <p className="project-hero-description">{localize(description)}</p>
+          <ul className="project-hero-tags" aria-label={localize("Design disciplines")}>
+            {localize(tags.map(tag => <li key={tag}>/ {localize(tag)}</li>))}
           </ul>
         </div>
         <div className="project-hero-visual">
           <div className="project-hero-art" style={{ aspectRatio: crop ? `${crop.width} / ${crop.height}` : `${image.width} / ${image.height}` }}>
-            <img src={image.src} alt={image.alt} width={image.width} height={image.height} style={imageStyle} fetchPriority="high" />
+            <img src={image.src} alt={localize(image.alt)} width={image.width} height={image.height} style={imageStyle} fetchPriority="high" />
           </div>
         </div>
       </header>

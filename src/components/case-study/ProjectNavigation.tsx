@@ -1,3 +1,4 @@
+import { localize } from "../../i18n/locale";
 import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
@@ -68,23 +69,22 @@ export function ProjectNavigation({ sections }: { sections: Section[] }) {
   }
 
   return <>
-    <nav ref={nav} className="project-contents" aria-label="Project contents"
+    <nav ref={nav} className="project-contents" aria-label={localize("Project contents")}
       onKeyDown={event => { if (event.key === "Escape" && open) { event.preventDefault(); close(); } }}
       onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
-      <button ref={toggle} type="button" className="project-contents-toggle" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(value => !value)}>
-        Contents <ChevronDown size={18} aria-hidden="true" />
+      <button ref={toggle} type="button" className="project-contents-toggle" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(value => !value)}>{localize("Contents ")}<ChevronDown size={18} aria-hidden="true" />
       </button>
-      {open && <div id={panelId} className="project-contents-panel">
-        <div className="project-contents-heading"><span>On this page</span><button type="button" aria-label="Close contents" onClick={close}><X size={20} aria-hidden="true" /></button></div>
-        <ul>{sections.map(section => <li key={section.id}>
-          <a href={`#${section.id}`} aria-current={active === section.id ? "location" : undefined} onClick={event => goToSection(event, section.id)}>{section.label}</a>
-        </li>)}</ul>
-      </div>}
+      {localize(open && <div id={panelId} className="project-contents-panel">
+        <div className="project-contents-heading"><span>{localize("On this page")}</span><button type="button" aria-label={localize("Close contents")} onClick={close}><X size={20} aria-hidden="true" /></button></div>
+        <ul>{localize(sections.map(section => <li key={section.id}>
+          <a href={`#${section.id}`} aria-current={active === section.id ? "location" : undefined} onClick={event => goToSection(event, section.id)}>{localize(section.label)}</a>
+        </li>))}</ul>
+      </div>)}
     </nav>
-    {showTop && <button type="button" className="project-back-to-top" aria-label="Back to top" onClick={() => {
+    {localize(showTop && <button type="button" className="project-back-to-top" aria-label={localize("Back to top")} onClick={() => {
       setOpen(false);
       document.querySelector<HTMLElement>(".project-hero h1")?.focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
-    }}><ChevronUp size={24} aria-hidden="true" /></button>}
+    }}><ChevronUp size={24} aria-hidden="true" /></button>)}
   </>;
 }

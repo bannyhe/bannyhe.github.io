@@ -1,3 +1,4 @@
+import { localize, isChinese } from "../i18n/locale";
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Briefcase, GraduationCap, Download, Award, Cpu } from "lucide-react";
@@ -123,22 +124,18 @@ export function ResumePage() {
         >
           {/* Header */}
           <div className="mb-12">
-            <h1 className="text-5xl md:text-6xl mb-6 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent text-center">
-              Resume
-            </h1>
+            <h1 className="text-5xl md:text-6xl mb-6 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent text-center">{localize("Resume")}</h1>
           </div>
 
           {/* Download Button */}
           <div className="flex justify-end mb-8">
             <Button asChild className="resume-download cursor-pointer backdrop-blur-xl bg-white/30 dark:bg-gray-800/70 border border-white/20 dark:border-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-700/80 hover:border-white/30 dark:hover:border-gray-600/60 transition-all duration-300 shadow-sm hover:shadow-md text-sm">
               <a
-                href="/resume/Mu-He-Resume.pdf"
-                download="Mu-He-Resume.pdf"
+                href={isChinese ? "/resume/Mu-He-Resume-zh-CN.pdf" : "/resume/Mu-He-Resume.pdf"}
+                download={isChinese ? "Mu-He-Resume-zh-CN.pdf" : "Mu-He-Resume.pdf"}
                 onClick={() => trackEvent('resume_download', 'pdf')}
               >
-                <Download className="w-4 h-4" aria-hidden="true" />
-                Download PDF
-              </a>
+                <Download className="w-4 h-4" aria-hidden="true" />{localize("Download PDF")}</a>
             </Button>
           </div>
 
@@ -154,13 +151,11 @@ export function ResumePage() {
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#102F56] to-[#1a4d7a] dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg">
                 <Briefcase className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                Work experience
-              </h2>
+              <h2 className="text-3xl md:text-4xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Work experience")}</h2>
             </div>
 
             <div className="space-y-8">
-              {experience.map((job, index) => (
+              {localize(experience.map((job, index) => (
                 <motion.div
                   key={`${job.company}-${job.period}-${index}`}
                   initial={prefersReducedMotion ? false : { opacity: 0, x: -30 }}
@@ -171,25 +166,25 @@ export function ResumePage() {
                   <div className="resume-entry-heading flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                     <div>
                       <h3 className="text-xl mb-1 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
-                        {job.title}
+                        {localize(job.title)}
                       </h3>
-                      <p className="resume-accent">{job.company}</p>
+                      <p className="resume-accent">{localize(job.company)}</p>
                     </div>
                     <div className="mt-2 md:mt-0 md:text-right">
-                      <p className="text-gray-600 dark:text-gray-300">{job.period}</p>
-                      {job.location && <p className="text-gray-500 dark:text-gray-400">{job.location}</p>}
+                      <p className="text-gray-600 dark:text-gray-300">{localize(job.period)}</p>
+                      {localize(job.location && <p className="text-gray-500 dark:text-gray-400">{localize(job.location)}</p>)}
                     </div>
                   </div>
                   <ul className="resume-achievements space-y-2">
-                    {job.achievements.map((achievement, i) => (
+                    {localize(job.achievements.map((achievement, i) => (
                       <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-gray-200">
                         <span className="resume-accent" aria-hidden="true">•</span>
-                        <span>{achievement}</span>
+                        <span>{localize(achievement)}</span>
                       </li>
-                    ))}
+                    )))}
                   </ul>
                 </motion.div>
-              ))}
+              )))}
             </div>
           </motion.div>
 
@@ -204,13 +199,11 @@ export function ResumePage() {
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#102F56] to-[#1a4d7a] dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg">
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-3xl md:text-4xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                Education
-              </h2>
+              <h2 className="text-3xl md:text-4xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Education")}</h2>
             </div>
 
             <div className="space-y-6">
-              {education.map((edu, index) => (
+              {localize(education.map((edu, index) => (
                 <motion.div
                   key={edu.institution}
                   initial={prefersReducedMotion ? false : { opacity: 0, x: -30 }}
@@ -221,18 +214,18 @@ export function ResumePage() {
                   <div className="resume-entry-heading flex flex-col md:flex-row md:justify-between md:items-start mb-3">
                     <div>
                       <h3 className="text-xl mb-1 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
-                        {edu.degree}
+                        {localize(edu.degree)}
                       </h3>
-                      <p className="resume-accent">{edu.institution}</p>
+                      <p className="resume-accent">{localize(edu.institution)}</p>
                     </div>
                     <div className="mt-2 md:mt-0 md:text-right">
-                      <p className="text-gray-600 dark:text-gray-300">{edu.period}</p>
-                      {edu.location && <p className="text-gray-500 dark:text-gray-400">{edu.location}</p>}
+                      <p className="text-gray-600 dark:text-gray-300">{localize(edu.period)}</p>
+                      {localize(edu.location && <p className="text-gray-500 dark:text-gray-400">{localize(edu.location)}</p>)}
                     </div>
                   </div>
-                  <p className="text-gray-700 dark:text-gray-200">{edu.description}</p>
+                  <p className="text-gray-700 dark:text-gray-200">{localize(edu.description)}</p>
                 </motion.div>
-              ))}
+              )))}
             </div>
           </motion.div>
 
@@ -249,26 +242,24 @@ export function ResumePage() {
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#102F56] to-[#1a4d7a] dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg">
                   <Cpu className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Skills &amp; tools
-                </h2>
+                <h2 className="text-2xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Skills & tools")}</h2>
               </div>
               <div className="space-y-6">
-                {Object.entries(skills).map(([category, items]) => (
+                {localize(Object.entries(skills).map(([category, items]) => (
                   <div key={category}>
-                    <h3 className="text-lg mb-3 text-gray-800 dark:text-gray-200">{category}</h3>
+                    <h3 className="text-lg mb-3 text-gray-800 dark:text-gray-200">{localize(category)}</h3>
                     <div className="flex flex-wrap gap-2">
-                      {items.map((skill) => (
+                      {localize(items.map((skill) => (
                         <span
                           key={skill}
                           className="px-3 py-1 backdrop-blur-xl bg-white/60 dark:bg-gray-700/60 border border-white/30 dark:border-gray-600/30 rounded-full text-sm text-gray-700 dark:text-gray-200 break-words"
                         >
-                          {skill}
+                          {localize(skill)}
                         </span>
-                      ))}
+                      )))}
                     </div>
                   </div>
-                ))}
+                )))}
               </div>
             </motion.div>
 
@@ -283,12 +274,10 @@ export function ResumePage() {
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#102F56] to-[#1a4d7a] dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg">
                   <Award className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">
-                  Certifications
-                </h2>
+                <h2 className="text-2xl bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent">{localize("Certifications")}</h2>
               </div>
               <div className="space-y-4">
-                {certifications.map((cert, index) => (
+                {localize(certifications.map((cert, index) => (
                   <motion.div
                     key={cert}
                     initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
@@ -297,9 +286,9 @@ export function ResumePage() {
                     className="flex items-center gap-3 p-4 backdrop-blur-xl bg-white/60 dark:bg-gray-700/80 border border-white/30 dark:border-gray-600/50 rounded-xl hover:shadow-lg transition-all duration-300"
                   >
                     <span className="resume-accent flex-shrink-0">✓</span>
-                    <span className="text-gray-700 dark:text-gray-200 text-sm break-words">{cert}</span>
+                    <span className="text-gray-700 dark:text-gray-200 text-sm break-words">{localize(cert)}</span>
                   </motion.div>
-                ))}
+                )))}
               </div>
             </motion.div>
           </div>

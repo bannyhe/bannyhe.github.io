@@ -1,3 +1,4 @@
+import { localize } from "../i18n/locale";
 import { motion } from "motion/react";
 import { useInView } from "motion/react";
 import { useRef } from "react";
@@ -19,9 +20,7 @@ export function AboutPage() {
         >
           {/* Hero Section */}
           <div className="mb-12">
-            <h1 className="text-5xl md:text-6xl mb-6 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent text-center">
-              About Me
-            </h1>
+            <h1 className="text-5xl md:text-6xl mb-6 bg-gradient-to-r from-[#102F56] to-[#1a4d7a] dark:from-blue-300 dark:to-blue-400 bg-clip-text text-transparent text-center">{localize("About Me")}</h1>
           </div>
 
           {/* Profile Image */}
@@ -33,7 +32,7 @@ export function AboutPage() {
           >
             <img
               src={profileImage}
-              alt="Mu He - Product Designer"
+              alt={localize("Mu He - Product Designer")}
               className="w-full h-auto object-cover rounded-[10px]"
               style={{ aspectRatio: '24/9', objectPosition: 'center 15%' }}
             />
@@ -47,34 +46,24 @@ export function AboutPage() {
             transition={{ duration: 0.6 }}
           >
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
-              <p>
-                Mu is a product designer with 7+ years of experience, shaping cutting-edge experiences for B2B SaaS Networking & Security solutions at VMware by Broadcom. Mu's design solutions have earned the Gold Prize in the{" "}
+              <p>{localize("Mu is a product designer with 7+ years of experience, shaping cutting-edge experiences for B2B SaaS Networking & Security solutions at VMware by Broadcom. Mu's design solutions have earned the Gold Prize in the")}{localize(" ")}
                 <a 
                   href="https://cybersecurity-excellence-awards.com/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-indigo-600 dark:text-indigo-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors underline"
-                >
-                  Cybersecurity Excellence Awards
-                </a>.
+                >{localize("Cybersecurity Excellence Awards")}</a>.
               </p>
               
-              <p>
-                Mu is a creative and rigorous designer with a diverse background in both enterprise and customer-facing products. His design philosophy emphasizes thinking outside the box and crafting user experiences from a panoramic view, exploring potential consumer needs through iterative research and simulation, and shaping them with empathy and innovation.
-              </p>
+              <p>{localize("Mu is a creative and rigorous designer with a diverse background in both enterprise and customer-facing products. His design philosophy emphasizes thinking outside the box and crafting user experiences from a panoramic view, exploring potential consumer needs through iterative research and simulation, and shaping them with empathy and innovation.")}</p>
               
-              <p>
-                Beyond his professional work, Mu is passionate about cooking, traveling, and photography. A record-holder in the 100-meter dash and the starting power forward for his college men's basketball team, he also loves pushing his limits through workouts and new challenges.
-              </p>
+              <p>{localize("Beyond his professional work, Mu is passionate about cooking, traveling, and photography. A record-holder in the 100-meter dash and the starting power forward for his college men's basketball team, he also loves pushing his limits through workouts and new challenges.")}</p>
 
-              <p>
-                For design collaboration opportunities or general inquiries, feel free to reach out to Mu at{" "}
+              <p>{localize("For design collaboration opportunities or general inquiries, feel free to reach out to Mu at")}{localize(" ")}
                 <a 
                   href="mailto:bannyhe@umich.edu"
                   className="text-indigo-600 dark:text-indigo-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors underline"
-                >
-                  bannyhe@umich.edu
-                </a>!
+                >{localize("bannyhe@umich.edu")}</a>!
               </p>
             </div>
           </motion.div>

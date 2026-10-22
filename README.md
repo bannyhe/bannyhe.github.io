@@ -172,3 +172,17 @@ Original design created in Figma:
 ---
 
 © 2026 Mu He. All rights reserved.
+
+## English and Simplified Chinese
+
+English lives at `/`; Simplified Chinese lives at `/zh/` (a path, not a subdomain). Published pages, case studies, and admin views share the same React components. The language switch keeps the current page, query string, and hash. It reloads the page, so an unlocked case study or unsaved form input is not retained. Password screens also include the switch.
+
+Copy lives in `src/i18n/zh-CN.json`, with supplemental labels and contextual phrases in `src/i18n/terms.ts`. Wrap display text and accessible labels in `localize(...)`; keep IDs, API fields, URLs, and user input unchanged. When editing English copy, update its Chinese entry. Untranslated copy falls back to English.
+
+`src/styles/locale.css` scopes Chinese typography to `lang="zh-CN"`. PingFang SC, Noto Sans CJK SC, or Microsoft YaHei load from the device. System fonts and restrained hierarchy follow [Alibaba's official typography guidance](https://jaq-doc.alibaba.com/docs/doc.htm?articleId=119060&docType=1&treeId=624); spacing is adapted to the portfolio. Original screenshots, recordings, and design artifacts retain their source language; captions, HTML diagrams, walkthroughs, and accessibility labels are translated.
+
+The existing Vite prerender step emits both languages with separate canonical URLs, reciprocal language links, and sitemap entries. Admin remains noindex and excluded from both tracking and the sitemap. No DNS or hosting changes are needed. Analytics records the actual language URL, and Chinese admin timestamps still use fixed PST.
+
+The Chinese resume downloads `public/resume/Mu-He-Resume-zh-CN.pdf`. Regenerate it with `node tests/localization-browser.mjs http://127.0.0.1:3000 --export-resume`.
+
+Validation (Node.js 24+): `npm run build`, then `node --test tests/localization.test.mjs tests/admin-model.test.mjs`. With a preview server running, use `node tests/localization-browser.mjs http://127.0.0.1:3000`. Browser checks mock analytics and use case-study passwords from local environment variables or `.env.local`; they never write analytics to production.

@@ -1,3 +1,4 @@
+import { localize } from "../../i18n/locale";
 import { ArrowRight, History, PanelsTopLeft, ShieldCheck } from "lucide-react";
 import { PersonaAvatar } from "./PersonaAvatar";
 import { MetricIllustration, type MetricKind } from "./MetricIllustration";
@@ -83,72 +84,72 @@ const metrics: {
 
 export function TargetUsersAndPainPoints() {
   return <>
-    <div className="ai-prose"><p>The primary user is a network operator responsible for monitoring connectivity and troubleshooting infrastructure issues. A platform administrator supports the experience by preparing access and model configuration.</p></div>
+    <div className="ai-prose"><p>{localize("The primary user is a network operator responsible for monitoring connectivity and troubleshooting infrastructure issues. A platform administrator supports the experience by preparing access and model configuration.")}</p></div>
     <div className="ai-framework-grid ai-user-profiles">
       <article className="ai-concept-node">
         <div className="ai-persona-heading">
           <PersonaAvatar role="operator" />
-          <div><p className="ai-framework-label">Primary user</p><h3 className="ai-node-heading">Network operator</h3></div>
+          <div><p className="ai-framework-label">{localize("Primary user")}</p><h3 className="ai-node-heading">{localize("Network operator")}</h3></div>
         </div>
-        <p>Investigates connectivity and vMotion failures, correlates health signals, and decides which checks or actions to take.</p>
-        <p><strong>Needs:</strong> fast object discovery, understandable evidence, and a reliable way to return to an active incident.</p>
+        <p>{localize("Investigates connectivity and vMotion failures, correlates health signals, and decides which checks or actions to take.")}</p>
+        <p><strong>{localize("Needs:")}</strong>{localize(" fast object discovery, understandable evidence, and a reliable way to return to an active incident.")}</p>
       </article>
       <article className="ai-concept-node">
         <div className="ai-persona-heading">
           <PersonaAvatar role="administrator" />
-          <div><p className="ai-framework-label">Supporting user</p><h3 className="ai-node-heading">Platform administrator</h3></div>
+          <div><p className="ai-framework-label">{localize("Supporting user")}</p><h3 className="ai-node-heading">{localize("Platform administrator")}</h3></div>
         </div>
-        <p>Prepares assistant access, connects model providers, and configures model availability for the environment.</p>
-        <p><strong>Needs:</strong> clear prerequisites, permission guidance, and a distinct setup path for provider models or Private AI Services.</p>
+        <p>{localize("Prepares assistant access, connects model providers, and configures model availability for the environment.")}</p>
+        <p><strong>{localize("Needs:")}</strong>{localize(" clear prerequisites, permission guidance, and a distinct setup path for provider models or Private AI Services.")}</p>
       </article>
     </div>
-    <h3 className="ai-framework-subheading">Pain points shaping the experience</h3>
-    <p className="ai-note">Working hypotheses from the design review and prototype scenarios, to validate with network operators.</p>
+    <h3 className="ai-framework-subheading">{localize("Pain points shaping the experience")}</h3>
+    <p className="ai-note">{localize("Working hypotheses from the design review and prototype scenarios, to validate with network operators.")}</p>
     <dl className="ai-pain-points">
-      {painPoints.map(({ icon: Icon, title, pain, need }) => <div key={title}>
-        <dt><Icon size={24} aria-hidden="true" /><span>{title}</span></dt>
-        <dd><p>{pain}</p><p><strong>Design need:</strong> {need}</p></dd>
-      </div>)}
+      {localize(painPoints.map(({ icon: Icon, title, pain, need }) => <div key={title}>
+        <dt><Icon size={24} aria-hidden="true" /><span>{localize(title)}</span></dt>
+        <dd><p>{localize(pain)}</p><p><strong>{localize("Design need:")}</strong> {localize(need)}</p></dd>
+      </div>))}
     </dl>
   </>;
 }
 
 export function SuccessMetrics() {
   return <>
-    <div className="ai-prose"><p>In discussions with the PM and Engineering Lead, we focused on how the assistant could make everyday troubleshooting easier. That meant helping operators find the right issue sooner, understand a suggested fix, and return to unfinished work with less effort.</p></div>
-    <p className="ai-note">Planned evaluation measures; results and numeric targets are still to be established.</p>
+    <div className="ai-prose"><p>{localize("In discussions with the PM and Engineering Lead, we focused on how the assistant could make everyday troubleshooting easier. That meant helping operators find the right issue sooner, understand a suggested fix, and return to unfinished work with less effort.")}</p></div>
+    <p className="ai-note">{localize("Planned evaluation measures; results and numeric targets are still to be established.")}</p>
     <div className="ai-framework-grid ai-metrics-grid">
-      {metrics.map(({ kind, title, outcome, measure }) => <article key={kind} id={`metric-${kind}`} tabIndex={-1} aria-labelledby={`metric-${kind}-heading`} className="ai-metric">
+      {localize(metrics.map(({ kind, title, outcome, measure }) => <article key={kind} id={`metric-${kind}`} tabIndex={-1} aria-labelledby={`metric-${kind}-heading`} className="ai-metric">
         <div className="ai-metric-heading">
           <MetricIllustration kind={kind} />
-          <h3 id={`metric-${kind}-heading`} className="ai-node-heading">{title}</h3>
+          <h3 id={`metric-${kind}-heading`} className="ai-node-heading">{localize(title)}</h3>
         </div>
-        <p>{outcome}</p>
-        <p className="ai-metric-measure"><strong>How to measure:</strong> {measure}</p>
-      </article>)}
+        <p>{localize(outcome)}</p>
+        <p className="ai-metric-measure"><strong>{localize("How to measure:")}</strong> {localize(measure)}</p>
+      </article>))}
     </div>
-    <p className="ai-note">In a pilot, repeat use and task satisfaction would also help us understand how well the assistant fits into everyday work.</p>
+    <p className="ai-note">{localize("In a pilot, repeat use and task satisfaction would also help us understand how well the assistant fits into everyday work.")}</p>
   </>;
 }
 
 export function MetricConnection({ kind }: { kind: MetricKind }) {
   const metric = metrics.find(item => item.kind === kind)!;
-  return <p className="ai-feature-metric"><a href={`#metric-${kind}`}>Success metric: {metric.title}</a></p>;
+  return <p className="ai-feature-metric"><a href={`#metric-${kind}`}>{localize("Success metric: ")}{localize(metric.title)}</a></p>;
 }
 
 export function SolutionImpact() {
   return <>
-    <div className="ai-prose"><p>The prototype brings the investigation into one place, from choosing the affected host to reviewing a fix and returning to unfinished work. Each of the four goals discussed with the PM and Engineering Lead now has a corresponding interaction we can evaluate with operators.</p></div>
-    <p className="ai-note">The benefits below are intended outcomes. Their effect on speed, accuracy, and decision-making still needs to be validated with operators.</p>
+    <div className="ai-prose"><p>{localize("The prototype brings the investigation into one place, from choosing the affected host to reviewing a fix and returning to unfinished work. Each of the four goals discussed with the PM and Engineering Lead now has a corresponding interaction we can evaluate with operators.")}</p></div>
+    <p className="ai-note">{localize("The benefits below are intended outcomes. Their effect on speed, accuracy, and decision-making still needs to be validated with operators.")}</p>
     <dl className="ai-impact-map">
-      {metrics.map(({ kind, title, solution, benefit }) => <div key={kind}>
-        <dt><MetricIllustration kind={kind} /><span>{title}</span></dt>
+      {localize(metrics.map(({ kind, title, solution, benefit }) => <div key={kind}>
+        <dt><MetricIllustration kind={kind} /><span>{localize(title)}</span></dt>
         <dd>
-          <p><strong>In the prototype:</strong> {solution.description}</p>
-          <p><strong>Intended benefit:</strong> {benefit}</p>
-          <a className="ai-text-link" href={`#${solution.id}`}><span>{solution.label}</span><ArrowRight size={18} aria-hidden="true" /></a>
+          <p><strong>{localize("In the prototype:")}</strong> {localize(solution.description)}</p>
+          <p><strong>{localize("Intended benefit:")}</strong> {localize(benefit)}</p>
+          <a className="ai-text-link" href={`#${solution.id}`}><span>{localize(solution.label)}</span><ArrowRight size={18} aria-hidden="true" /></a>
         </dd>
-      </div>)}
+      </div>))}
     </dl>
   </>;
 }

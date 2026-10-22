@@ -91,7 +91,7 @@ async function initSession(sessionId: string): Promise<boolean> {
 }
 
 export function trackingAllowed(path = window.location.pathname) {
-  return navigator.doNotTrack !== "1" && !/^\/admin(?:\/|$)/.test(path);
+  return navigator.doNotTrack !== "1" && !/^\/(?:zh\/)?admin(?:\/|$)/.test(path);
 }
 
 // Share initialization across page tracking and action handlers. The server must

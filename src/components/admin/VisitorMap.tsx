@@ -1,3 +1,4 @@
+import { localize } from "../../i18n/locale";
 import { useMemo, useState, type ReactNode } from "react";
 import { COUNTRIES, COUNTRY_CENTROIDS, project } from "./worldLand";
 import { countryFlag } from "./countryFlag";
@@ -123,7 +124,7 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
   const approxCount = points.filter(p => p.approx).length;
 
   if (points.length === 0 && byCountry.size === 0) {
-    return <p className="text-sm text-gray-600 dark:text-gray-300">No locations to plot yet.</p>;
+    return <p className="text-sm text-gray-600 dark:text-gray-300">{localize("No locations to plot yet.")}</p>;
   }
 
   const zoomShape = zoomTo ? COUNTRIES[zoomTo] : null;
@@ -135,13 +136,13 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
           viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`}
           style={{ width: "100%", height: "auto", display: "block" }}
           role="img"
-          aria-label={`World map of visitor locations. ${points.length} locations across ${byCountry.size} countries.`}
+          aria-label={localize(`World map of visitor locations. ${points.length} locations across ${byCountry.size} countries.`)}
         >
           <g
             transform={`translate(${tx} ${ty}) scale(${scale})`}
             style={{ transition: "transform 0.55s cubic-bezier(0.4,0,0.2,1)" }}
           >
-            {Object.entries(COUNTRIES).map(([code, shape]) => {
+            {localize(Object.entries(COUNTRIES).map(([code, shape]) => {
               const total = byCountry.get(code);
               const isActive = !!total;
               const isHovered = hoverCountry === code;
@@ -169,9 +170,9 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
                   onClick={isActive ? () => setZoomTo(prev => (prev === code ? null : code)) : undefined}
                 />
               );
-            })}
+            }))}
 
-            {points.map(p => {
+            {localize(points.map(p => {
               const isOn = (hoverPoint ?? selectedLocation) === p.location;
               const dim = (hoverPoint ?? selectedLocation) !== null && !isOn;
               const cc = p.country_code?.toUpperCase() ?? null;
@@ -202,58 +203,57 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
                   }}
                 />
               );
-            })}
+            }))}
           </g>
         </svg>
 
         {/* Country tooltip — only when not hovering a specific city pin. */}
-        {hoveredCountry && hoverCountry && !activePoint && (() => {
+        {localize(hoveredCountry && hoverCountry && !activePoint && (() => {
           const shape = COUNTRIES[hoverCountry];
           const c = { x: (shape.b[0] + shape.b[2]) / 2, y: (shape.b[1] + shape.b[3]) / 2 };
           const s = toScreen(c.x, c.y);
           return (
             <Tooltip dark={dark} x={s.x} y={s.y}>
-              <div style={{ fontWeight: 600 }}>{countryFlag(hoverCountry)} {shape.n}</div>
+              <div style={{ fontWeight: 600 }}>{localize(countryFlag(hoverCountry))} {localize(shape.n)}</div>
               <div style={{ color: dark ? "#91c5ff" : "#28619a", fontWeight: 600 }}>
-                {hoveredCountry.visitors} {hoveredCountry.visitors === 1 ? "visit" : "visits"}
+                {localize(hoveredCountry.visitors)} {localize(hoveredCountry.visitors === 1 ? "visit" : "visits")}
                 <span style={{ color: dark ? "#94a3b8" : "#64748b", fontWeight: 400 }}>
-                  {" "}· {hoveredCountry.places} {hoveredCountry.places === 1 ? "location" : "locations"}
+                  {localize(" ")}· {localize(hoveredCountry.places)} {localize(hoveredCountry.places === 1 ? "location" : "locations")}
                 </span>
               </div>
               <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>
-                {zoomTo === hoverCountry ? "Click to zoom out" : "Click to zoom in"}
+                {localize(zoomTo === hoverCountry ? "Click to zoom out" : "Click to zoom in")}
               </div>
             </Tooltip>
           );
-        })()}
+        })())}
 
         {/* City pin tooltip */}
-        {activePoint && (() => {
+        {localize(activePoint && (() => {
           const s = toScreen(activePoint.x, activePoint.y);
           return (
             <Tooltip dark={dark} x={s.x} y={s.y}>
               <div style={{ fontWeight: 600 }}>
-                {countryFlag(activePoint.country_code)} {activePoint.location}
+                {localize(countryFlag(activePoint.country_code))} {localize(activePoint.location)}
               </div>
               <div style={{ color: dark ? "#91c5ff" : "#28619a", fontWeight: 600 }}>
-                {activePoint.visitors} {activePoint.visitors === 1 ? "visit" : "visits"}
+                {localize(activePoint.visitors)} {localize(activePoint.visitors === 1 ? "visit" : "visits")}
                 <span style={{ color: dark ? "#94a3b8" : "#64748b", fontWeight: 400 }}>
-                  {" "}· {Math.round((activePoint.visitors / plottedVisitors) * 100)}% of plotted
-                </span>
+                  {localize(" ")}· {localize(Math.round((activePoint.visitors / plottedVisitors) * 100))}{localize("% of plotted")}</span>
               </div>
-              {activePoint.approx && (
-                <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>Approximate — country center</div>
-              )}
+              {localize(activePoint.approx && (
+                <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>{localize("Approximate — country center")}</div>
+              ))}
               <div style={{ color: dark ? "#94a3b8" : "#64748b" }}>
-                {activePoint.country_code && zoomTo !== activePoint.country_code.toUpperCase()
+                {localize(activePoint.country_code && zoomTo !== activePoint.country_code.toUpperCase()
                   ? "Click to zoom in"
-                  : "Click to filter"}
+                  : "Click to filter")}
               </div>
             </Tooltip>
           );
-        })()}
+        })())}
 
-        {zoomShape && (
+        {localize(zoomShape && (
           <button
             onClick={() => setZoomTo(null)}
             style={{
@@ -270,24 +270,22 @@ export function VisitorMap({ rows, theme, selectedLocation, onSelect }: Props) {
               border: `1px solid ${dark ? "rgba(145,197,255,0.4)" : "rgba(23,79,131,0.35)"}`,
               boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
-          >
-            ← Back to world
-          </button>
-        )}
+          >{localize("← Back to world")}</button>
+        ))}
       </div>
 
       <p className="admin-footnote">
-        {zoomShape ? (
+        {localize(zoomShape ? (
           // Zoomed in: describe this country only. The approximate/unmapped
           // tallies below are world-wide, so they would mislead here.
           `${countryFlag(zoomTo)} ${zoomShape.n} · ${byCountry.get(zoomTo!)?.visitors ?? 0} visits · ${byCountry.get(zoomTo!)?.places ?? 0} ${byCountry.get(zoomTo!)?.places === 1 ? "location" : "locations"}`
         ) : (
           <>
-            {`${points.length} ${points.length === 1 ? "location" : "locations"} · ${byCountry.size} ${byCountry.size === 1 ? "country" : "countries"} · ${plottedVisitors} plotted`}
-            {approxCount > 0 && ` · ${approxCount} at country center`}
-            {unmapped > 0 && ` · ${unmapped} without coordinates`}
+            {localize(`${points.length} ${points.length === 1 ? "location" : "locations"} · ${byCountry.size} ${byCountry.size === 1 ? "country" : "countries"} · ${plottedVisitors} plotted`)}
+            {localize(approxCount > 0 && ` · ${approxCount} at country center`)}
+            {localize(unmapped > 0 && ` · ${unmapped} without coordinates`)}
           </>
-        )}
+        ))}
       </p>
     </div>
   );
@@ -316,7 +314,7 @@ function Tooltip({ dark, x, y, children }: { dark: boolean; x: number; y: number
         boxShadow: "0 6px 18px rgba(0,0,0,0.18)",
       }}
     >
-      {children}
+      {localize(children)}
     </div>
   );
 }

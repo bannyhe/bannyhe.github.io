@@ -7,7 +7,9 @@ export function usePageAnalytics() {
   const { pathname } = useLocation();
   const previousPath = useRef("");
   useEffect(() => {
-    if (!trackingAllowed(pathname)) return;
+    // BrowserRouter strips the locale base; analytics should retain the actual URL.
+    const path = window.location.pathname;
+    if (!trackingAllowed(path)) return;
     let disposed = false;
     let pageId: string | null = null;
     let elapsed = 0;
@@ -32,11 +34,11 @@ export function usePageAnalytics() {
     // Defer one tick so React Strict Mode's effect rehearsal never records a view.
     const timer = window.setTimeout(async () => {
       const referrer = previousPath.current;
-      previousPath.current = pathname;
+      previousPath.current = path;
       const session = await readySession();
       if (!session) return;
       if (!disposed) measure();
-      pageId = await trackPageView(session, pathname, referrer || undefined);
+      pageId = await trackPageView(session, path, referrer || undefined);
       // Finalize the correct visit even if its response arrives after navigation.
       if (disposed || document.visibilityState === "hidden") flush();
     }, 0);
