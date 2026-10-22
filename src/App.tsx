@@ -6,7 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
-import { metaForPath, BROWSER_TITLE } from "./lib/routeMeta";
+import { metaForPath, BROWSER_TITLE, CHINESE_SITE_NAME } from "./lib/routeMeta";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,7 +42,7 @@ function DocumentTitle() {
     document.documentElement.lang = languageTag;
     const canonical = "https://muheportfolio.com" + meta.path;
     document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonical);
-    for (const [property, content] of Object.entries({ "og:title": meta.title, "og:description": description, "og:url": canonical, "og:locale": isChinese ? "zh_CN" : "en_US" })) {
+    for (const [property, content] of Object.entries({ "og:title": meta.title, "og:description": description, "og:url": canonical, "og:locale": isChinese ? "zh_CN" : "en_US", "og:site_name": isChinese ? CHINESE_SITE_NAME : "Mu He", "og:image:alt": isChinese ? "何沐 · 产品设计师，专注企业 SaaS、网络与安全。" : "Mu He — Product Designer. B2B SaaS, networking and security." })) {
       document.querySelector('meta[property="' + property + '"]')?.setAttribute("content", content);
     }
     for (const [name, content] of Object.entries({ "twitter:title": meta.title, "twitter:description": description })) {
@@ -56,7 +56,7 @@ function DocumentTitle() {
     let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (!robots) { robots = document.createElement("meta"); robots.name = "robots"; document.head.append(robots); }
     robots.content = meta.noIndex ? "noindex, nofollow" : "index, follow";
-    document.title = BROWSER_TITLE;
+    document.title = isChinese ? CHINESE_SITE_NAME : BROWSER_TITLE;
 
     const descriptionTag = document.querySelector(
       'meta[name="description"]',

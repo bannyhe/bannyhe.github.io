@@ -3,7 +3,7 @@
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
   import { fileURLToPath } from 'url';
-  import { ROUTE_META, SITE_URL, BROWSER_TITLE } from './src/lib/routeMeta';
+  import { ROUTE_META, SITE_URL, BROWSER_TITLE, CHINESE_SITE_NAME } from './src/lib/routeMeta';
 
   // Plugin to handle ../src/assets paths - uses placeholder for missing files
   const assetPathPlugin = () => {
@@ -109,7 +109,7 @@
           html = swap(
             html,
             /<title>[\s\S]*?<\/title>/,
-            `<title>${escapeHtml(BROWSER_TITLE)}</title>`
+            `<title>${escapeHtml(chinese ? CHINESE_SITE_NAME : BROWSER_TITLE)}</title>`
           );
           html = swap(
             html,
@@ -146,6 +146,12 @@
             /<meta name="twitter:description" content="[^"]*"\s*\/?>/,
             `<meta name="twitter:description" content="${description}" />`
           );
+          if (chinese) {
+            html = swap(html, /<meta property="og:site_name" content="[^"]*"\s*\/?>/,
+              `<meta property="og:site_name" content="${CHINESE_SITE_NAME}" />`);
+            html = swap(html, /<meta property="og:image:alt" content="[^"]*"\s*\/?>/,
+              '<meta property="og:image:alt" content="何沐 · 产品设计师，专注企业 SaaS、网络与安全。" />');
+          }
           return html;
         };
 
