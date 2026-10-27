@@ -45,7 +45,7 @@ export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMoti
             <p className="home-experience">{localize("7+ years in B2B · AI, cloud & enterprise")}</p>
             <div className="home-actions"><button type="button" className="home-primary-action" onClick={explore}>{localize("Explore my work")}<ArrowDown size={16} aria-hidden="true"/></button><Link className="home-secondary-action" to="/about">{localize("Meet Mu")}<ArrowUpRight size={16} aria-hidden="true"/></Link></div>
           </div>
-          {localize(chapters.slice(1).map((item,i)=><div key={item.project} className="galaxy-copy galaxy-chapter-copy" data-active={active===i+1} {...(active!==i+1?{inert: ''}:{})} aria-hidden={active!==i+1}>
+          {localize(chapters.slice(1).map((item,i)=><div key={item.project} className="galaxy-copy galaxy-chapter-copy" data-domain={item.project} data-active={active===i+1} {...(active!==i+1?{inert: ''}:{})} aria-hidden={active!==i+1}>
             <p className="home-eyebrow">{localize(item.eyebrow)}</p><h2>{localize(item.title)}</h2><p className="home-intro">{localize(item.description)}</p>
             <Link className="home-secondary-action galaxy-case-link" to={`/project/${item.project}`}>{localize(item.link)}<ArrowUpRight size={16} aria-hidden="true"/></Link>
             <button type="button" className="galaxy-all-work" onClick={explore}>{localize("View all projects")}<ArrowDown size={12} aria-hidden="true"/></button>

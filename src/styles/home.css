@@ -63,6 +63,7 @@
   to { background-position: 100% 50%; }
 }
 .home-intro { font-size: clamp(16px,1.4vw,19px); line-height: 1.65; color: var(--home-muted); }
+.galaxy-chapter-copy:is([data-domain="vcf-network"], [data-domain="malware-prevention"]) .home-intro { max-width: 24em; text-wrap: balance; }
 .home-experience { margin-top: 19px; font-size: 16px; line-height: 1.6; color: var(--home-muted); }
 .home-actions { display: flex; gap: 27px; align-items: center; margin-top: 30px; }
 .home-primary-action { display: inline-flex; align-items: center; justify-content: center; gap: 17px; padding: 15px 22px; border-radius: 999px; border: 1px solid #203d5c; background: #203d5c; color: #fff; font-size: 14px !important; line-height: 1.5; transition: transform .25s,background .25s,box-shadow .25s; box-shadow: 0 5px 20px #203d5c12; }
