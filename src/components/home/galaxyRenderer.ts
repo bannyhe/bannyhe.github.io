@@ -46,11 +46,12 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   // keeps a fixed footprint while the background responds to scrolling.
   let seed = 47;
   const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-  const count = 1100;
+  const count = 850;
   const dustPositions = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
+  const prominence = new Float32Array(count);
   for (let i = 0; i < count; i++) {
-    if (i < 800) {
+    if (i % 11 < 8) {
       const radius = Math.sqrt(random()) * 27;
       const arm = Math.floor(random() * 3) * Math.PI * 2 / 3;
       const angle = radius * .23 + arm + (random() - .5) * .7;
@@ -62,24 +63,36 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     } else {
       dustPositions.set([(random() - .5) * 70, (random() - .5) * 42, -8 - random() * 48], i * 3);
     }
-    sizes[i] = .6 + random() * 2.4;
+    const anchor = random() > .87;
+    sizes[i] = anchor ? 2.8 + random() * 1.1 : 1.15 + random() * 1.15;
+    prominence[i] = anchor ? 1 : .45 + random() * .35;
   }
   const dustGeometry = new THREE.BufferGeometry();
   dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
   dustGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  dustGeometry.setAttribute('prominence', new THREE.BufferAttribute(prominence, 1));
   const dustMaterial = new THREE.ShaderMaterial({
-    transparent: true, depthWrite: false,
+    transparent: true, depthWrite: false, toneMapped: false,
     uniforms: {
-      color: { value: new THREE.Color(0x5277a7) },
-      opacity: { value: .45 }, density: { value: 1 },
+      color: { value: new THREE.Color(0x375b83) },
+      opacity: { value: .52 }, density: { value: 1 }, time: { value: 0 },
     },
-    vertexShader: `attribute float size; uniform float density; varying float fade;
+    vertexShader: `attribute float size; attribute float prominence;
+      uniform float density; uniform float time; varying float fade;
       void main() { vec4 p=modelViewMatrix*vec4(position,1.);
-        gl_Position=projectionMatrix*p; gl_PointSize=clamp(size*38./max(5.,-p.z),.7,3.)*density;
-        fade=1.-smoothstep(55.,95.,-p.z); }`,
+        gl_Position=projectionMatrix*p;
+        float distant=clamp(size*42./max(20.,-p.z),1.45,2.6);
+        float anchor=clamp(size*48./max(20.,-p.z),2.5,4.4);
+        gl_PointSize=mix(distant,anchor,step(.95,prominence))*density;
+        float shimmer=.94+.06*sin(time*.55+position.x*1.7+position.y);
+        fade=(.55+.45*prominence)*shimmer*(1.-smoothstep(65.,105.,-p.z)); }`,
     fragmentShader: `uniform vec3 color; uniform float opacity; varying float fade;
       void main() { float r=length(gl_PointCoord-.5);
-        gl_FragColor=vec4(color,(1.-smoothstep(.05,.5,r))*opacity*fade); }`,
+        float core=1.-smoothstep(.12,.34,r);
+        float halo=1.-smoothstep(.18,.5,r);
+        gl_FragColor=vec4(color,(core*.8+halo*.2)*opacity*fade);
+        #include <colorspace_fragment>
+      }`,
   });
   const dust = new THREE.Points(dustGeometry, dustMaterial);
   scene.add(dust);
@@ -96,6 +109,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     dustMaterial.uniforms.density.value = density;
+    dustGeometry.setDrawRange(0, compact ? 480 : count);
     const unitsPerPixel = 2 * 18 * Math.tan(THREE.MathUtils.degToRad(20)) / height;
     models.forEach((group, i) => {
       group.position.set(
@@ -122,8 +136,9 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     const delta = THREE.MathUtils.clamp(time - previousTime, 0, .1);
     previousTime = time;
     motion.advance(delta, activeIndex, hoveredIndex);
-    dustMaterial.uniforms.color.value.set(dark ? 0xb4cdf6 : 0x5277a7);
-    dustMaterial.uniforms.opacity.value = dark ? .38 : .20;
+    dustMaterial.uniforms.color.value.set(dark ? 0xc4daf5 : 0x375b83);
+    dustMaterial.uniforms.opacity.value = dark ? .66 : .52;
+    dustMaterial.uniforms.time.value = time;
     scene.environmentIntensity = dark ? 1.05 : 1.15;
     renderer.toneMappingExposure = dark ? 1.05 : 1.12;
     pointerTilt.setFromEuler(pointerEuler.set(pointer.y * .06, pointer.x * .1, 0));
@@ -135,8 +150,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     });
     sculpture.animate(time, activeIndex, dark);
     // Gentle parallax stays behind the route; it cannot push a stop over the copy.
-    dust.position.set(pointer.x * .25, -pointer.y * .16 - progress * .45, 0);
-    dust.rotation.z = -.18 + progress * .055;
+    dust.position.set(pointer.x * .25 + Math.sin(time * .09) * .16, -pointer.y * .16 - progress * .45, 0);
+    dust.rotation.z = -.18 + progress * .055 + Math.sin(time * .07) * .012;
     renderer.render(scene, camera);
   }
 

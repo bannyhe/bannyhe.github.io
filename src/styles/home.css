@@ -25,12 +25,34 @@
 .orbital-home button:disabled { cursor: default; }
 
 .galaxy-hero { position: relative; height: 350svh; min-height: 2100px; }
-.galaxy-stage { position: sticky; top: 0; height: 100svh; min-height: 640px; isolation: isolate; overflow: hidden; }
+.galaxy-stage { --home-muted: #45566c; --home-faint: #45566c; position: sticky; top: 0; height: 100svh; min-height: 640px; isolation: isolate; overflow: hidden; }
+.dark .galaxy-stage { --home-muted: #b0bfd2; --home-faint: #a9bad0; }
 .galaxy-atmosphere, .galaxy-scene, .galaxy-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .galaxy-atmosphere { z-index: -1; overflow: hidden; pointer-events: none; background: linear-gradient(135deg,#f5f6fa 10%,#edf2f8 55%,#e9eaf4); }
 .dark .galaxy-atmosphere { background: linear-gradient(135deg,#0a111e,#101a30 55%,#14182b); }
-.galaxy-nebula { position: absolute; inset: -35%; background: radial-gradient(ellipse at 76% 40%,#b5c3ec77,transparent 30%),radial-gradient(ellipse at 50% 75%,#9bc7df77,transparent 30%),radial-gradient(ellipse at 85% 85%,#c4b3d973,transparent 25%); filter: blur(40px); }
-.dark .galaxy-nebula { background: radial-gradient(ellipse at 76% 40%,#4d3a873d,transparent 32%),radial-gradient(ellipse at 50% 75%,#1d658740,transparent 30%),radial-gradient(ellipse at 85% 85%,#74549333,transparent 25%); }
+.galaxy-nebula { position: absolute; inset: -16%; background: radial-gradient(ellipse at 80% 35%,#b9cae273,transparent 55%),radial-gradient(ellipse at 55% 85%,#a7cbd957,transparent 50%); }
+.dark .galaxy-nebula { background: radial-gradient(ellipse at 80% 35%,#39497666,transparent 55%),radial-gradient(ellipse at 55% 85%,#2362804d,transparent 50%); }
+/* Broad curved reflections move as composited layers; no animated blur or hue filter. */
+.galaxy-reflection { position: absolute; inset: -8%; transform-origin: 72% 48%;
+  background: radial-gradient(ellipse 90% 105% at 110% -12%,transparent 36%,#9bb6d13d 47%,#fafdffcf 52%,#a5bcd866 56%,transparent 68%),radial-gradient(ellipse at 77% 72%,#b6acd252,transparent 56%);
+  animation: galaxy-reflection-drift 26s ease-in-out infinite;
+}
+.galaxy-reflection-secondary { transform-origin: 66% 65%;
+  background: radial-gradient(ellipse 100% 88% at 25% 130%,transparent 39%,#9a9ac138 49%,#f8f5ffb3 54%,#b8a8cc40 58%,transparent 70%),radial-gradient(ellipse at 83% 35%,#99cbd64d,transparent 50%);
+  animation: galaxy-reflection-return 34s ease-in-out infinite;
+}
+.dark .galaxy-reflection { background: radial-gradient(ellipse 90% 105% at 110% -12%,transparent 36%,#477b9f26 47%,#9dbbda4d 52%,#52699838 56%,transparent 68%),radial-gradient(ellipse at 77% 72%,#77669e52,transparent 56%); }
+.dark .galaxy-reflection-secondary { background: radial-gradient(ellipse 100% 88% at 25% 130%,transparent 39%,#67639233 49%,#9caddb33 54%,#7563a140 58%,transparent 70%),radial-gradient(ellipse at 83% 35%,#438da64d,transparent 50%); }
+@keyframes galaxy-reflection-drift {
+  0%,100% { transform: translate3d(-3%,-2%,0) rotate(-8deg) scale(1.04); opacity: .72; }
+  50% { transform: translate3d(4%,3%,0) rotate(7deg) scale(1.12); opacity: 1; }
+}
+@keyframes galaxy-reflection-return {
+  0%,100% { transform: translate3d(3%,2%,0) rotate(6deg) scale(1.1); opacity: .9; }
+  50% { transform: translate3d(-4%,-3%,0) rotate(-8deg) scale(1.02); opacity: .48; }
+}
+.galaxy-atmosphere[data-motion="paused"] .galaxy-reflection { animation-play-state: paused; }
+.galaxy-atmosphere[data-motion="reduced"] .galaxy-reflection { animation: none; }
 .galaxy-horizon { position: absolute; inset: 0; background: linear-gradient(90deg,var(--home-bg),transparent 64%); opacity: .72; }
 .galaxy-scene { z-index: 1; }
 .galaxy-canvas { pointer-events: none; mask-image: linear-gradient(90deg,transparent 27%,#000 49%); transition: opacity .65s ease; }
@@ -219,6 +241,7 @@
 .galaxy-hero-static .galaxy-stage { position: relative; }
 .orbital-home[data-motion="paused"] * { animation-play-state: paused !important; }
 @media (prefers-reduced-motion: reduce) {
+  .galaxy-reflection { animation: none; }
   .orbital-home :is(.galaxy-copy, .home-work-heading, .home-contact-card) :is(h1, h2, h3) { animation: none; }
   .galaxy-hero { height: auto; min-height: 0; }
   .galaxy-stage { position: relative; }

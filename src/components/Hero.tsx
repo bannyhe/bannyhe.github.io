@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useMotionValueEvent } from 'motion/rea
 import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import { GalaxyScene } from './home/GalaxyScene';
+import { GalaxyAtmosphere } from './home/GalaxyAtmosphere';
 
 const chapters = [
   { label: 'Overview', at: 0 },
@@ -34,7 +35,7 @@ export function Hero({ paused, onToggleMotion }: { paused: boolean; onToggleMoti
   };
   return <section ref={section} className={`galaxy-hero${reduced?' galaxy-hero-static':''}`} aria-labelledby="home-heading" data-chapter={active}>
     <div className="galaxy-stage">
-      <div className="galaxy-atmosphere" aria-hidden="true"><motion.div className="galaxy-nebula" style={reduced?undefined:{x:glowX,rotate:glowRotate}}/><div className="galaxy-horizon"/></div>
+      <GalaxyAtmosphere x={glowX} rotate={glowRotate} enabled={enabled} reduced={reduced}/>
       <GalaxyScene progress={scrollYProgress} enabled={enabled} reduced={reduced}/>
       <div className="galaxy-editorial">
         <div className="galaxy-copy-stack">
