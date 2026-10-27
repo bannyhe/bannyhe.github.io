@@ -7,6 +7,7 @@ import type { CSSProperties } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import { galaxyLayout, journeyPoint } from './galaxyLayout';
+import { advanceGalaxyPointer, galaxyPointerTarget } from './galaxyPointer';
 
 const destinations = [
   { name: 'AI', description: 'Intelligent experiences', project: 'ai-assistant', Icon: Cpu },
@@ -33,11 +34,14 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
     wake.current();
   }, [enabled, reduced, theme]);
 
+  useEffect(() => { wake.current(); }, [layout]);
+
   useEffect(() => {
     const element = host.current, surface = canvas.current;
     if (!element || !surface) return;
     let renderer: ReturnType<typeof import('./galaxyRenderer').createGalaxyRenderer> | undefined;
     let disposed = false, visible = true, lost = false, frame = 0;
+    let readabilityDirty = true;
     let previous = performance.now(), time = 0;
     let currentLayout = galaxyLayout(element.clientWidth, element.clientHeight, window.matchMedia('(max-width: 767px)').matches);
     const pointer = { x: 0, y: 0 }, target = { x: 0, y: 0 };
@@ -51,14 +55,25 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
       if (enabled) {
         const delta = Math.max(0, Math.min(now - previous, 100)) / 1000;
         time += delta;
-        const follow = 1 - Math.exp(-4.2 * delta);
-        pointer.x += (target.x - pointer.x) * follow;
-        pointer.y += (target.y - pointer.y) * follow;
+        advanceGalaxyPointer(pointer, target, delta);
       }
       if (reduced) { time = 0; pointer.x = pointer.y = 0; }
       previous = now;
       const phase = reduced ? 0 : Math.max(0, Math.min(1, progress.get()));
       const active = phase < .16 ? -1 : phase < .48 ? 0 : phase < .8 ? 1 : 2;
+      if (renderer && readabilityDirty) {
+        const origin = element.getBoundingClientRect();
+        const stage = element.closest('.galaxy-stage');
+        const labels = [...stage?.querySelectorAll('.galaxy-object-label, .galaxy-copy-stack, .galaxy-coordinate, .galaxy-footer, .home-motion-toggle') || []];
+        const navigation = document.querySelector('nav.fixed');
+        if (navigation) labels.push(navigation);
+        // Fade stars around live text so even a bright star cannot lower contrast.
+        renderer.setReadabilityAreas(labels.filter(label => label.getBoundingClientRect().width).map(label => {
+          const rect = label.getBoundingClientRect();
+          return { x: rect.left - origin.left, y: rect.top - origin.top, width: rect.width, height: rect.height };
+        }));
+        readabilityDirty = false;
+      }
       if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active, reduced ? -1 : hovered.current);
       const point = journeyPoint(currentLayout, phase);
       marker.current?.setAttribute('cx', String(point.x));
@@ -78,6 +93,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
       currentLayout = galaxyLayout(element.clientWidth, element.clientHeight, window.matchMedia('(max-width: 767px)').matches);
       setLayout(currentLayout);
       renderer?.resize(element.clientWidth, element.clientHeight);
+      readabilityDirty = true;
       request();
     };
     const observer = new ResizeObserver(resize);
@@ -93,10 +109,14 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
       else { previous = performance.now(); request(); }
     };
     const onMove = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse' || !options.current.enabled) return;
+      if (event.pointerType !== 'mouse' || !options.current.enabled || options.current.reduced) return;
       const bounds = element.getBoundingClientRect();
-      target.x = (event.clientX - bounds.left) / bounds.width * 2 - 1;
-      target.y = (event.clientY - bounds.top) / bounds.height * 2 - 1;
+      const next = galaxyPointerTarget(
+        (event.clientX - bounds.left) / bounds.width,
+        (event.clientY - bounds.top) / bounds.height,
+        window.matchMedia('(max-width: 767px)').matches,
+      );
+      target.x = next.x; target.y = next.y;
       request();
     };
     const onLeave = () => { target.x = target.y = 0; request(); };
@@ -112,8 +132,13 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
     element.addEventListener('pointerleave', onLeave);
     surface.addEventListener('webglcontextlost', onLost);
     surface.addEventListener('webglcontextrestored', onRestore);
-    wake.current = () => { previous = performance.now(); request(); };
+    wake.current = () => {
+      if (!options.current.enabled) target.x = target.y = 0;
+      readabilityDirty = true;
+      previous = performance.now(); request();
+    };
     resize();
+    document.fonts.ready.then(() => { if (!disposed) { readabilityDirty = true; request(); } });
     import('./galaxyRenderer').then(({ createGalaxyRenderer }) => {
       if (disposed) return;
       try { renderer = createGalaxyRenderer(surface); setReady(true); resize(); }

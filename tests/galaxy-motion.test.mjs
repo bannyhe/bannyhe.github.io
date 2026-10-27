@@ -2,6 +2,37 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Vector3 } from 'three';
 import { createGalaxyMotion } from '../src/components/home/galaxyMotion.ts';
+import { advanceGalaxyPointer, galaxyPointerTarget } from '../src/components/home/galaxyPointer.ts';
+
+test('the spherical pointer effect stays in the galaxy and fades at its boundary', () => {
+  assert.deepEqual(galaxyPointerTarget(.2, .5, false), { x: 0, y: 0 });
+  assert.deepEqual(galaxyPointerTarget(.75, .02, false), { x: 0, y: 0 });
+  assert.ok(galaxyPointerTarget(.9, .5, false).x > .5);
+  assert.ok(galaxyPointerTarget(.75, .7, false).y > .4);
+  assert.deepEqual(galaxyPointerTarget(.5, .5, true), { x: 0, y: 0 });
+  const edge = galaxyPointerTarget(.75 + .27 * .999, .5, false);
+  assert.ok(Math.abs(edge.x) < .001, 'Hot-area boundary snaps');
+});
+
+test('rapid mouse reversals stay bounded and settle at the same pace across refresh rates', () => {
+  const simulatePointer = hz => {
+    const pointer = { x: 0, y: 0 };
+    for (let frame = 0; frame < hz * 8; frame++) {
+      const previous = { ...pointer };
+      const target = frame < hz * 2 ? { x: .7, y: .2 } : frame < hz * 4 ? { x: -.7, y: -.3 } : { x: 0, y: 0 };
+      advanceGalaxyPointer(pointer, target, 1 / hz);
+      assert.ok(Math.hypot(pointer.x - previous.x, pointer.y - previous.y) <= .7 / hz + 1e-12);
+      assert.ok(Math.hypot(pointer.x, pointer.y) < 1);
+    }
+    return pointer;
+  };
+  const a = simulatePointer(60), b = simulatePointer(120);
+  assert.ok(Math.hypot(a.x - b.x, a.y - b.y) < .001);
+  assert.ok(Math.hypot(a.x, a.y) < .001, 'Pointer exit did not settle');
+  const frozen = { x: .4, y: -.2 };
+  advanceGalaxyPointer(frozen, { x: -.4, y: .2 }, 0);
+  assert.deepEqual(frozen, { x: .4, y: -.2 });
+});
 
 function simulate(hz) {
   const motion = createGalaxyMotion();

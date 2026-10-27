@@ -2,36 +2,47 @@
 .home-shell {
   --home-bg: #f5f6f8;
   --home-ink: #172b43;
-  --home-muted: #5b697b;
-  --home-faint: #5b697b;
+  --home-muted: #2f4056;
+  --home-faint: #2f4056;
   --home-line: rgba(36, 60, 91, .14);
   --home-panel: rgba(255, 255, 255, .7);
+  --theme-track-border: #566b83;
+  --theme-sun-hint: #365571;
+  --theme-moon-hint: #365571;
+  --theme-active-sun: #8c4b00;
   background: var(--home-bg);
 }
 .dark .home-shell {
   --home-bg: #0a111d;
   --home-ink: #edf2f9;
-  --home-muted: #b0bfd2;
-  --home-faint: #a9bad0;
+  --home-muted: #c4cfe0;
+  --home-faint: #c4cfe0;
   --home-line: rgba(167, 188, 216, .17);
   --home-panel: rgba(21, 34, 53, .76);
+  --theme-track-border: #8ca4c3;
+  --theme-sun-hint: #d9c99b;
+  --theme-moon-hint: #b8cbe5;
 }
 .home-shell > .fixed { display: none; }
 .home-shell > .relative > footer { margin-top: 0; padding-top: 56px; }
+.home-shell > .relative > footer p { color: var(--home-muted); }
 .home-shell nav > .container { max-width: 1440px; padding-inline: clamp(24px, 5vw, 88px); }
+.home-shell nav.fixed a { color: #24364e; }
+.dark .home-shell nav.fixed a { color: #d3deed; }
+.home-shell nav.fixed a:focus-visible, .home-shell nav.fixed button:focus-visible { outline: 2px solid var(--home-ink); outline-offset: 4px; }
 .orbital-home { color: var(--home-ink); overflow: clip; }
-.orbital-home :is(a, button):focus-visible { outline: 2px solid #478bcc; outline-offset: 6px; }
+.orbital-home :is(a, button):focus-visible { outline: 2px solid var(--home-ink); outline-offset: 6px; }
 .orbital-home button { cursor: pointer; font: inherit; }
 .orbital-home button:disabled { cursor: default; }
 
 .galaxy-hero { position: relative; height: 350svh; min-height: 2100px; }
-.galaxy-stage { --home-muted: #45566c; --home-faint: #45566c; position: sticky; top: 0; height: 100svh; min-height: 640px; isolation: isolate; overflow: hidden; }
-.dark .galaxy-stage { --home-muted: #b0bfd2; --home-faint: #a9bad0; }
+.galaxy-stage { --home-muted: #293b52; --home-faint: #293b52; position: sticky; top: 0; height: 100svh; min-height: 640px; isolation: isolate; overflow: hidden; }
+.dark .galaxy-stage { --home-muted: #c4cfe0; --home-faint: #c4cfe0; }
 .galaxy-atmosphere, .galaxy-scene, .galaxy-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .galaxy-atmosphere { z-index: -1; overflow: hidden; pointer-events: none; background: linear-gradient(135deg,#f5f6fa 10%,#edf2f8 55%,#e9eaf4); }
-.dark .galaxy-atmosphere { background: linear-gradient(135deg,#0a111e,#101a30 55%,#14182b); }
+.dark .galaxy-atmosphere { background: linear-gradient(135deg,#070d17,#0a1220 55%,#0e1020); }
 .galaxy-nebula { position: absolute; inset: -16%; background: radial-gradient(ellipse at 80% 35%,#b9cae273,transparent 55%),radial-gradient(ellipse at 55% 85%,#a7cbd957,transparent 50%); }
-.dark .galaxy-nebula { background: radial-gradient(ellipse at 80% 35%,#39497666,transparent 55%),radial-gradient(ellipse at 55% 85%,#2362804d,transparent 50%); }
+.dark .galaxy-nebula { background: radial-gradient(ellipse at 80% 35%,#26365633,transparent 55%),radial-gradient(ellipse at 55% 85%,#1a435329,transparent 50%); }
 /* Broad curved reflections move as composited layers; no animated blur or hue filter. */
 .galaxy-reflection { position: absolute; inset: -8%; transform-origin: 72% 48%;
   background: radial-gradient(ellipse 90% 105% at 110% -12%,transparent 36%,#9bb6d13d 47%,#fafdffcf 52%,#a5bcd866 56%,transparent 68%),radial-gradient(ellipse at 77% 72%,#b6acd252,transparent 56%);
@@ -41,8 +52,8 @@
   background: radial-gradient(ellipse 100% 88% at 25% 130%,transparent 39%,#9a9ac138 49%,#f8f5ffb3 54%,#b8a8cc40 58%,transparent 70%),radial-gradient(ellipse at 83% 35%,#99cbd64d,transparent 50%);
   animation: galaxy-reflection-return 34s ease-in-out infinite;
 }
-.dark .galaxy-reflection { background: radial-gradient(ellipse 90% 105% at 110% -12%,transparent 36%,#477b9f26 47%,#9dbbda4d 52%,#52699838 56%,transparent 68%),radial-gradient(ellipse at 77% 72%,#77669e52,transparent 56%); }
-.dark .galaxy-reflection-secondary { background: radial-gradient(ellipse 100% 88% at 25% 130%,transparent 39%,#67639233 49%,#9caddb33 54%,#7563a140 58%,transparent 70%),radial-gradient(ellipse at 83% 35%,#438da64d,transparent 50%); }
+.dark .galaxy-reflection { background: radial-gradient(ellipse 90% 105% at 110% -12%,transparent 36%,#3148631a 47%,#627e9c24 52%,#3845681f 56%,transparent 68%),radial-gradient(ellipse at 77% 72%,#493b6029,transparent 56%); }
+.dark .galaxy-reflection-secondary { background: radial-gradient(ellipse 100% 88% at 25% 130%,transparent 39%,#38344f1f 49%,#6572971f 54%,#46365926 58%,transparent 70%),radial-gradient(ellipse at 83% 35%,#28526426,transparent 50%); }
 @keyframes galaxy-reflection-drift {
   0%,100% { transform: translate3d(-3%,-2%,0) rotate(-8deg) scale(1.04); opacity: .72; }
   50% { transform: translate3d(4%,3%,0) rotate(7deg) scale(1.12); opacity: 1; }
@@ -63,9 +74,9 @@
 .home-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--home-muted); letter-spacing: .015em; font-weight: 500; line-height: 1.6; }
 .home-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #6185a3; box-shadow: 0 0 0 4px #6185a314; }
 .galaxy-copy h1, .galaxy-copy h2 { margin: 25px 0 24px; font-size: clamp(48px,5.6vw,80px); line-height: 1.06; letter-spacing: -.055em; font-weight: 500; }
-/* Same rendered palette and eight-second sweep as the original “Mu is a…” headline. */
+/* Deeper jewel tones preserve the color sweep at AAA large-text contrast. */
 .orbital-home :is(.galaxy-copy, .home-work-heading, .home-contact-card) :is(h1, h2, h3) {
-  background-image: linear-gradient(to right in oklab, var(--color-pink-500), var(--color-purple-500), var(--color-pink-500));
+  background-image: linear-gradient(to right in oklab, #9e2465 0%, #7134ad 16.667%, #24549a 33.333%, #9e2465 50%, #7134ad 66.667%, #24549a 83.333%, #9e2465 100%);
   background-size: 200% 100%;
   background-position: 0% 50%;
   background-clip: text;
@@ -111,11 +122,11 @@
 .galaxy-object-label { position: absolute; left: calc(100% + 31px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 5px; white-space: nowrap; color: var(--home-muted); transition: color .4s; }
 .galaxy-stop-index { font-size: 13px; line-height: 1.4; font-variant-numeric: tabular-nums; color: var(--home-faint); }
 .galaxy-stop-title { display: inline-flex; align-items: center; gap: 13px; font-size: 22px; line-height: 1.25; letter-spacing: -.025em; }
-.galaxy-stop-title svg { opacity: .4; transition: opacity .2s; }
+.galaxy-stop-title svg { opacity: 1; transition: transform .2s; }
 .galaxy-stop-description { font-size: 14px; line-height: 1.5; color: var(--home-muted); }
 .galaxy-object[data-active="true"] .galaxy-object-label, .galaxy-object:hover .galaxy-object-label, .galaxy-object:focus-visible .galaxy-object-label { color: var(--home-ink); }
 .galaxy-object[data-active="true"] .galaxy-stop-title svg, .galaxy-object:hover .galaxy-stop-title svg { opacity: 1; }
-.galaxy-fallback-icon { display: block; opacity: 0; width: 55%; height: 55%; color: #7c9cb9; transition: opacity .3s ease; }
+.galaxy-fallback-icon { display: block; opacity: 0; width: 55%; height: 55%; color: var(--home-muted); transition: opacity .3s ease; }
 .galaxy-scene[data-renderer="fallback"] .galaxy-canvas { opacity: 0; }
 .galaxy-scene[data-renderer="fallback"] .galaxy-fallback-icon { opacity: 1; }
 .galaxy-coordinate { position: absolute; top: 125px; right: max(5%,calc((100% - 1264px)/2)); z-index: 2; font-size: 14px; font-weight: 500; line-height: 1.6; color: var(--home-muted); text-align: right; pointer-events: none; }
@@ -146,7 +157,7 @@
 .home-project-thumbnail { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; transform-origin: center bottom; transition: transform .65s cubic-bezier(.2,.7,.2,1); }
 .home-project-thumbnail-crop { position: absolute; top: -1%; left: 0; height: 101%; }
 .home-project-link:hover .home-project-thumbnail, .home-project-link:focus-visible .home-project-thumbnail { transform: scale(1.045); }
-.home-project-lock { position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 6px; background: var(--home-panel); color: var(--home-ink); padding: 6px 10px; border: 1px solid var(--home-line); border-radius: 999px; font-size: 13px; line-height: 1.5; backdrop-filter: blur(10px); }
+.home-project-lock { position: absolute; top: 15px; right: 15px; display: flex; align-items: center; gap: 6px; background: var(--home-bg); color: var(--home-ink); padding: 6px 10px; border: 1px solid var(--home-line); border-radius: 999px; font-size: 13px; line-height: 1.5; }
 .home-project-open { position: absolute; right: 18px; bottom: 18px; display: grid; place-items: center; width: 44px; height: 44px; background: #f6f9fdeb; color: #173552; border-radius: 50%; transform: translateY(9px); opacity: 0; transition: transform .3s, opacity .3s; }
 .home-project-link:hover .home-project-open, .home-project-link:focus-visible .home-project-open { opacity: 1; transform: none; }
 .home-project-details { padding: 22px 2px 0; }

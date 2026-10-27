@@ -79,10 +79,19 @@ try {
   const errors=[];
   const oldHandler=ws.onmessage;ws.onmessage=event=>{const m=JSON.parse(event.data);if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text);if(m.method==='Runtime.consoleAPICalled'&&m.params.type==='error')errors.push(m.params.args.map(a=>a.value||a.description).join(' '));oldHandler(event);};
   await tab('Page.addScriptToEvaluateOnNewDocument',{source:"Object.defineProperty(navigator,'doNotTrack',{get:()=> '1'});"});
+  // Observe the actual star-field transform without exposing test hooks in production.
+  await tab('Page.addScriptToEvaluateOnNewDocument',{source:`(()=>{
+    const proto=WebGL2RenderingContext.prototype,names=new WeakMap(),matrices=new WeakMap();let currentProgram;
+    const location=proto.getUniformLocation,uniform=proto.uniformMatrix4fv,draw=proto.drawArrays,use=proto.useProgram;
+    proto.useProgram=function(program){currentProgram=program;return use.apply(this,arguments)};
+    proto.getUniformLocation=function(program,name){const value=location.call(this,program,name);if(value)names.set(value,{name,program});return value};
+    proto.uniformMatrix4fv=function(location,transpose,value){const entry=names.get(location);if(entry?.name==='modelViewMatrix')matrices.set(entry.program,Array.from(value));return uniform.apply(this,arguments)};
+    proto.drawArrays=function(mode){if(mode===this.POINTS)window.__starMatrix=matrices.get(currentProgram);return draw.apply(this,arguments)};
+  })()`});
   const viewport=async(width,height=960)=>{await tab('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:2,mobile:width<768});await delay(150);};
   const seek=async progress=>{await evaluate("(()=>{const s=document.querySelector('.galaxy-hero');scrollTo({top:s.offsetTop+(s.offsetHeight-s.querySelector('.galaxy-stage').offsetHeight)*"+progress+",behavior:'instant'})})()");await delay(900);};
   await tab('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
-  for(const path of ['/','/zh/']){
+  for(const path of process.argv.includes('--controls-only')?[]:['/','/zh/']){
     await viewport(1440);await navigate(path);await waitFor("document.querySelector('.galaxy-scene')?.dataset.renderer==='webgl'");
     for(const width of [1440,768,390,320]){
       await viewport(width,width<768?844:960);
@@ -100,7 +109,25 @@ try {
       }
     }
   }
+  if(process.argv.includes('--controls-only')){
+    await viewport(1440);await navigate('/zh/');
+    await waitFor("document.readyState==='complete' && document.querySelector('.galaxy-scene')?.dataset.renderer==='webgl'");
+    await delay(500);
+  }
   await viewport(1440);await seek(0);await delay(300);
+  const stars=()=>evaluate('window.__starMatrix');
+  const distance=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
+  await waitFor('window.__starMatrix?.length===16');
+  const neutral=await stars();
+  const labels=()=>evaluate("[...document.querySelectorAll('.galaxy-object-label,.galaxy-copy-stack')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height]})");
+  const fixedLabels=await labels();
+  await tab('Input.dispatchMouseEvent',{type:'mouseMoved',x:1296,y:480});await delay(1800);
+  const turned=await stars();
+  assert.ok(distance(neutral,turned)>.08,'Pointer did not rotate the spherical star field');
+  assert.deepEqual(turned.slice(12,15),neutral.slice(12,15),'Pointer moved the galaxy center or camera');
+  assert.deepEqual(await labels(),fixedLabels,'Pointer shifted text or project positions');
+  await tab('Input.dispatchMouseEvent',{type:'mouseMoved',x:80,y:480});await delay(3500);
+  assert.ok(distance(neutral,await stars())<.003,'Star field did not settle after leaving the hot area');
   const reflectionTimes=()=>evaluate("[...document.querySelectorAll('.galaxy-reflection')].map(e=>e.getAnimations()[0]?.currentTime)");
   await waitFor("document.querySelector('.galaxy-atmosphere').dataset.motion==='playing'");
   const movingReflections=await reflectionTimes();await delay(700);
@@ -116,10 +143,13 @@ try {
   await evaluate("document.querySelector('.home-motion-toggle').click()");await delay(1000);
   await waitFor("document.querySelector('.galaxy-atmosphere').dataset.motion==='paused'");
   const pausedReflections=await reflectionTimes();
+  const pausedStars=await stars();
+  await tab('Input.dispatchMouseEvent',{type:'mouseMoved',x:1250,y:380});
   const frozen=await frame();await delay(700);const pausedDifference=await frameDifference(frozen,await frame());
   // Composited gradients can dither by 1–3 color levels while fully paused.
   assert.ok(pausedDifference.max<=3&&pausedDifference.mean<.6,'Paused scene moved: '+JSON.stringify(pausedDifference));
   assert.deepEqual(await reflectionTimes(),pausedReflections,'Pause did not freeze the reflections');
+  assert.deepEqual(await stars(),pausedStars,'Pointer moved the star field while paused');
   await evaluate("document.querySelector('.home-motion-toggle').click();document.querySelector('.galaxy-object').focus()");
   await delay(1600);assert.ok((await frameDifference(frozen,await frame())).max>12,'Resume did not animate the object');
   assert.notDeepEqual(await reflectionTimes(),pausedReflections,'Resume did not animate the reflections');
@@ -137,7 +167,12 @@ try {
   await waitFor("document.querySelector('.galaxy-atmosphere').dataset.motion==='reduced'");
   assert.ok(await evaluate("[...document.querySelectorAll('.galaxy-reflection')].every(e=>e.getAnimations().length===0)"),'Reduced motion still animates the reflections');
   assert.equal(await evaluate("document.querySelector('.galaxy-hero').dataset.chapter"),'0');
+  await delay(300);
+  const reducedStars=await stars();
+  await tab('Input.dispatchMouseEvent',{type:'mouseMoved',x:1300,y:500});await delay(500);
+  assert.deepEqual(await stars(),reducedStars,'Pointer motion ignored the reduced-motion preference');
   await screenshot('reduced-motion');
   assert.deepEqual(errors,[]);
-  console.log(JSON.stringify({passed:true,artifacts,checks:'EN/ZH, four widths, light/dark, all scroll stops, reflections, pause/resume, offscreen pause, reduced motion, context recovery, runtime errors'}));
+  const layoutChecks=process.argv.includes('--controls-only')?'':'EN/ZH, four widths, light/dark, all scroll stops, ';
+  console.log(JSON.stringify({passed:true,artifacts,checks:layoutChecks+'spherical pointer motion, reflections, pause/resume, offscreen pause, reduced motion, context recovery, runtime errors'}));
 }finally{if(ws?.readyState===1)ws.close();chrome.kill('SIGTERM');}

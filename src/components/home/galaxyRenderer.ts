@@ -42,8 +42,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     return Math.max(size.x, size.y, size.z);
   });
 
-  // A distant spiral field gives the route a larger setting; each destination
-  // keeps a fixed footprint while the background responds to scrolling.
+  // A spiral suspended inside a distant sphere turns around its own center.
+  // The camera and domain destinations retain their fixed, readable footprint.
   let seed = 47;
   const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
   const count = 850;
@@ -52,16 +52,24 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   const prominence = new Float32Array(count);
   for (let i = 0; i < count; i++) {
     if (i % 11 < 8) {
-      const radius = Math.sqrt(random()) * 27;
+      const radius = Math.sqrt(random()) * 26;
       const arm = Math.floor(random() * 3) * Math.PI * 2 / 3;
       const angle = radius * .23 + arm + (random() - .5) * .7;
       dustPositions.set([
-        Math.cos(angle) * radius + 9,
-        Math.sin(angle) * radius * .42,
-        -22 + (random() - .5) * 6,
+        Math.cos(angle) * radius,
+        Math.sin(angle) * radius * .56,
+        Math.sin(angle) * radius * .48 + (random() - .5) * 5,
       ], i * 3);
     } else {
-      dustPositions.set([(random() - .5) * 70, (random() - .5) * 42, -8 - random() * 48], i * 3);
+      const radius = 24 + random() * 7;
+      const latitude = random() * 2 - 1;
+      const longitude = random() * Math.PI * 2;
+      const ring = Math.sqrt(1 - latitude * latitude);
+      dustPositions.set([
+        radius * ring * Math.cos(longitude),
+        radius * latitude,
+        radius * ring * Math.sin(longitude),
+      ], i * 3);
     }
     const anchor = random() > .87;
     sizes[i] = anchor ? 2.8 + random() * 1.1 : 1.15 + random() * 1.15;
@@ -76,16 +84,26 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     uniforms: {
       color: { value: new THREE.Color(0x375b83) },
       opacity: { value: .52 }, density: { value: 1 }, time: { value: 0 },
+      viewport: { value: new THREE.Vector2(1, 1) },
+      clearAreas: { value: Array.from({ length: 8 }, () => new THREE.Vector4(-100, -100, -100, -100)) },
     },
     vertexShader: `attribute float size; attribute float prominence;
-      uniform float density; uniform float time; varying float fade;
+      uniform float density; uniform float time; uniform vec2 viewport;
+      uniform vec4 clearAreas[8]; varying float fade;
       void main() { vec4 p=modelViewMatrix*vec4(position,1.);
         gl_Position=projectionMatrix*p;
         float distant=clamp(size*42./max(20.,-p.z),1.45,2.6);
         float anchor=clamp(size*48./max(20.,-p.z),2.5,4.4);
         gl_PointSize=mix(distant,anchor,step(.95,prominence))*density;
         float shimmer=.94+.06*sin(time*.55+position.x*1.7+position.y);
-        fade=(.55+.45*prominence)*shimmer*(1.-smoothstep(65.,105.,-p.z)); }`,
+        fade=(.55+.45*prominence)*shimmer*(1.-smoothstep(65.,105.,-p.z));
+        vec2 screen=(gl_Position.xy/gl_Position.w*.5+.5)*viewport;
+        screen.y=viewport.y-screen.y;
+        for(int i=0;i<8;i++) {
+          vec2 edge=max(clearAreas[i].xy-screen,screen-clearAreas[i].zw);
+          fade*=smoothstep(0.,14.,max(edge.x,edge.y));
+        }
+      }`,
     fragmentShader: `uniform vec3 color; uniform float opacity; varying float fade;
       void main() { float r=length(gl_PointCoord-.5);
         float core=1.-smoothstep(.12,.34,r);
@@ -109,6 +127,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     dustMaterial.uniforms.density.value = density;
+    dustMaterial.uniforms.viewport.value.set(width, height);
     dustGeometry.setDrawRange(0, compact ? 480 : count);
     const unitsPerPixel = 2 * 18 * Math.tan(THREE.MathUtils.degToRad(20)) / height;
     models.forEach((group, i) => {
@@ -149,14 +168,21 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       group.position.y += Math.sin(time * .48 + index * 1.8) * .012;
     });
     sculpture.animate(time, activeIndex, dark);
-    // Gentle parallax stays behind the route; it cannot push a stop over the copy.
-    dust.position.set(pointer.x * .25 + Math.sin(time * .09) * .16, -pointer.y * .16 - progress * .45, 0);
-    dust.rotation.z = -.18 + progress * .055 + Math.sin(time * .07) * .012;
+    // Bounded spherical rotation follows the mouse without camera travel or zoom.
+    dust.position.set(10, -progress * .45, -32);
+    dust.rotation.set(pointer.y * .16, pointer.x * .24, -.18 + progress * .055 + pointer.x * .025);
     renderer.render(scene, camera);
   }
 
   return {
     resize, draw,
+    setReadabilityAreas(areas: { x: number; y: number; width: number; height: number }[]) {
+      dustMaterial.uniforms.clearAreas.value.forEach((area: THREE.Vector4, index: number) => {
+        const bounds = areas[index];
+        if (bounds) area.set(bounds.x - 6, bounds.y - 6, bounds.x + bounds.width + 6, bounds.y + bounds.height + 6);
+        else area.set(-100, -100, -100, -100);
+      });
+    },
     restore() { restoreEnvironment = true; },
     dispose() {
       const geometries = new Set<THREE.BufferGeometry>();

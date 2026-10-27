@@ -25,11 +25,11 @@ function ThemeToggle() {
   const track = isDark
     ? {
         background: isHovered ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.10)",
-        borderColor: "rgba(109,178,255,0.35)",
+        borderColor: "var(--theme-track-border, rgba(109,178,255,0.35))",
       }
     : {
         background: isHovered ? "rgba(16,47,86,0.16)" : "rgba(16,47,86,0.10)",
-        borderColor: "rgba(16,47,86,0.20)",
+        borderColor: "var(--theme-track-border, rgba(16,47,86,0.20))",
       };
 
   const focusRing = isDark
@@ -75,7 +75,7 @@ function ThemeToggle() {
           left: 10,
           width: 14,
           height: 14,
-          color: isDark ? "rgba(253,230,138,0.45)" : "rgba(16,47,86,0.35)",
+          color: isDark ? "var(--theme-sun-hint, rgba(253,230,138,0.45))" : "var(--theme-sun-hint, rgba(16,47,86,0.35))",
           pointerEvents: "none",
         }}
       />
@@ -86,7 +86,7 @@ function ThemeToggle() {
           right: 10,
           width: 14,
           height: 14,
-          color: isDark ? "rgba(109,178,255,0.55)" : "rgba(16,47,86,0.35)",
+          color: isDark ? "var(--theme-moon-hint, rgba(109,178,255,0.55))" : "var(--theme-moon-hint, rgba(16,47,86,0.35))",
           pointerEvents: "none",
         }}
       />
@@ -116,7 +116,7 @@ function ThemeToggle() {
         {localize(isDark ? (
           <Moon aria-hidden="true" style={{ width: 14, height: 14, color: "#102F56" }} />
         ) : (
-          <Sun aria-hidden="true" style={{ width: 14, height: 14, color: "#f59e0b" }} />
+          <Sun aria-hidden="true" style={{ width: 14, height: 14, color: "var(--theme-active-sun, #f59e0b)" }} />
         ))}
       </span>
     </button>
