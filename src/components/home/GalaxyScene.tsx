@@ -24,6 +24,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
   const trail = useRef<SVGLineElement>(null);
   const options = useRef({ enabled, reduced, dark: theme === 'dark' });
   const wake = useRef(() => {});
+  const hovered = useRef(-1);
   const [ready, setReady] = useState(false);
   const [layout, setLayout] = useState(() => galaxyLayout(1440, 900, false));
 
@@ -58,7 +59,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
       previous = now;
       const phase = reduced ? 0 : Math.max(0, Math.min(1, progress.get()));
       const active = phase < .16 ? -1 : phase < .48 ? 0 : phase < .8 ? 1 : 2;
-      if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active);
+      if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active, reduced ? -1 : hovered.current);
       const point = journeyPoint(currentLayout, phase);
       marker.current?.setAttribute('cx', String(point.x));
       marker.current?.setAttribute('cy', String(point.y));
@@ -104,7 +105,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
       setReady(false); request();
     };
     // Three.js restores its GL resources before the next scheduled redraw.
-    const onRestore = () => { lost = false; setReady(true); resize(); };
+    const onRestore = () => { lost = false; renderer?.restore(); setReady(true); resize(); };
     const unsubscribe = progress.on('change', request);
     document.addEventListener('visibilitychange', onVisibility);
     element.addEventListener('pointermove', onMove);
@@ -147,6 +148,10 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
           style={{ left: layout.stops[index].x, top: layout.stops[index].y, width: layout.radius * 2, height: layout.radius * 2, '--stop-radius': `${layout.radius}px` } as CSSProperties}
           to={`/project/${project}`}
           aria-label={localize(`Explore ${name}: ${description}`)}
+          onPointerEnter={event => { if (event.pointerType === 'mouse') { hovered.current = index; wake.current(); } }}
+          onPointerLeave={() => { hovered.current = -1; wake.current(); }}
+          onFocus={() => { hovered.current = index; wake.current(); }}
+          onBlur={() => { hovered.current = -1; wake.current(); }}
           onClick={() => trackEvent('project_view', project)}
         >
           <Icon className="galaxy-fallback-icon" aria-hidden="true" strokeWidth={1.25} />

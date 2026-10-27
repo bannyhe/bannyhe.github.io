@@ -2,7 +2,7 @@
 export function galaxyLayout(width: number, height: number, compact: boolean) {
   const radius = compact
     ? Math.max(23, Math.min(32, width * .075))
-    : Math.max(30, Math.min(46, height * .047));
+    : Math.max(34, Math.min(54, height * .054));
   const stops = compact
     ? [0, 1, 2].map(i => ({ x: width * (.19 + i * .31), y: height * .46 }))
     : [0, 1, 2].map(i => ({ x: width * .64 + Math.min(50, width * .04) * i, y: height * (.30 + i * .20) }));

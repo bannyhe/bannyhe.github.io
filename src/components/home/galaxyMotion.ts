@@ -1,50 +1,34 @@
-import { Euler, Quaternion, Vector3 } from 'three';
+import { Euler, Quaternion } from 'three';
 
-const bases = [
-  new Quaternion().setFromEuler(new Euler(.12, -.24, -.10)),
-  new Quaternion().setFromEuler(new Euler(.12, .15, .06)),
-  new Quaternion().setFromEuler(new Euler(.12, -.19, .10)),
-];
-const axes = [
-  new Vector3(.48, .76, .38),
-  new Vector3(-.42, .66, .57),
-  new Vector3(.58, .48, -.42),
-];
+const bases = [new Euler(.22, -.30, -.09), new Euler(.22, .24, .04), new Euler(.13, -.24, .07)]
+  .map(euler => new Quaternion().setFromEuler(euler));
 
-/** Smooth rotation about oblique axes, independent of the display's frame rate. */
+/** Slow, bounded turns keep each symbol readable; selection eases into motion. */
 export function createGalaxyMotion() {
   const orientations = bases.map(base => base.clone());
-  const speeds = [0, 0, 0];
-  const axis = new Vector3();
-  const increment = new Quaternion();
-  let elapsed = 0;
-
+  const weights = [0, 0, 0], phases = [0, 1.7, 3.4];
+  const tilt = new Quaternion(), target = new Quaternion(), euler = new Euler();
   return {
-    orientations,
+    orientations, weights,
     reset() {
-      elapsed = 0;
-      speeds.fill(0);
-      orientations.forEach((orientation, index) => orientation.copy(bases[index]));
+      weights.fill(0); phases.splice(0, 3, 0, 1.7, 3.4);
+      orientations.forEach((value, index) => value.copy(bases[index]));
     },
-    advance(delta: number, activeIndex: number) {
+    advance(delta: number, activeIndex: number, hoveredIndex = -1) {
       if (delta <= 0) return;
-      const midpoint = elapsed + delta / 2;
-      elapsed += delta;
-      const damping = 2.8;
-      const decay = Math.exp(-damping * delta);
+      const blend = 1 - Math.exp(-3.2 * delta);
       orientations.forEach((orientation, index) => {
-        const targetSpeed = index === activeIndex ? .30 : 0;
-        // Integrate the easing curve exactly; dropped frames do not change pace.
-        const angle = targetSpeed * delta + (speeds[index] - targetSpeed) * (1 - decay) / damping;
-        speeds[index] = targetSpeed + (speeds[index] - targetSpeed) * decay;
-        if (angle < 1e-8) return;
-        axis.copy(axes[index]);
-        axis.x += Math.sin(midpoint * .17 + index) * .12;
-        axis.y += Math.cos(midpoint * .13 + index) * .09;
-        axis.z += Math.sin(midpoint * .15 + index * .7) * .12;
-        axis.normalize();
-        increment.setFromAxisAngle(axis, angle);
-        orientation.premultiply(increment).normalize();
+        const selected = index === activeIndex || index === hoveredIndex ? 1 : 0;
+        weights[index] += (selected - weights[index]) * blend;
+        phases[index] += delta * (.22 + weights[index] * .2);
+        const phase = phases[index], amount = weights[index];
+        tilt.setFromEuler(euler.set(
+          Math.sin(phase * .8) * (.035 + amount * .13),
+          Math.sin(phase) * (.07 + amount * .38),
+          Math.sin(phase * .67) * (.025 + amount * .08),
+        ));
+        target.copy(bases[index]).multiply(tilt);
+        orientation.slerp(target, blend).normalize();
       });
     },
   };

@@ -1,149 +1,56 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { galaxyLayout } from './galaxyLayout';
 import { createGalaxyMotion } from './galaxyMotion';
+import { createGalaxyModels } from './galaxyModels';
 
-
-// These are solid, beveled models, rather than symbols placed on a sphere.
-function roundedShape(w: number, h: number, r: number) {
-  const s = new THREE.Shape();
-  s.moveTo(-w/2+r, -h/2); s.lineTo(w/2-r, -h/2);
-  s.quadraticCurveTo(w/2, -h/2, w/2, -h/2+r); s.lineTo(w/2, h/2-r);
-  s.quadraticCurveTo(w/2, h/2, w/2-r, h/2); s.lineTo(-w/2+r, h/2);
-  s.quadraticCurveTo(-w/2, h/2, -w/2, h/2-r); s.lineTo(-w/2, -h/2+r);
-  s.quadraticCurveTo(-w/2, -h/2, -w/2+r, -h/2);
-  return s;
-}
-function extrude(shape: THREE.Shape, depth: number, material: THREE.Material, bevel = .055) {
-  const geometry = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: bevel, bevelThickness: bevel, curveSegments: 20 });
-  geometry.translate(0, 0, -depth / 2);
-  return new THREE.Mesh(geometry, material);
-}
-function slab(w: number, h: number, depth: number, material: THREE.Material, r = .12) {
-  return extrude(roundedShape(w, h, r), depth, material, Math.min(.045, depth / 3));
-}
-function rod(a: THREE.Vector3, b: THREE.Vector3, radius: number, material: THREE.Material) {
-  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, a.distanceTo(b), 8), material);
-  mesh.position.copy(a).add(b).multiplyScalar(.5);
-  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
-  return mesh;
-}
-function sparkle(material: THREE.Material) {
-  const shape = new THREE.Shape();
-  shape.moveTo(0, .54);
-  shape.quadraticCurveTo(.1, .1, .54, 0); shape.quadraticCurveTo(.1, -.1, 0, -.54);
-  shape.quadraticCurveTo(-.1, -.1, -.54, 0); shape.quadraticCurveTo(-.1, .1, 0, .54);
-  return extrude(shape, .12, material, .025);
+function studioEnvironment(renderer: THREE.WebGLRenderer) {
+  const studio = new THREE.Scene();
+  studio.background = new THREE.Color(0x263442);
+  const panels: THREE.Mesh[] = [];
+  const panel = (width: number, height: number, color: THREE.Color, x: number, y: number, z: number) => {
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide }));
+    mesh.position.set(x, y, z); mesh.lookAt(0, 0, 0); studio.add(mesh); panels.push(mesh);
+  };
+  panel(6, 9, new THREE.Color(3.2, 3.5, 4), -5, 4, 6);
+  panel(3, 7, new THREE.Color(1.4, 1.8, 2.4), 5, 1, 3);
+  panel(7, 3, new THREE.Color(2, 2.3, 2.8), 0, 6, -4);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const target = pmrem.fromScene(studio, .12);
+  panels.forEach(mesh => { mesh.geometry.dispose(); (mesh.material as THREE.Material).dispose(); });
+  pmrem.dispose();
+  return target;
 }
 
 export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'default' });
   renderer.setClearColor(0, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, 1, .1, 130);
-  const environment = new RoomEnvironment();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  const envTarget = pmrem.fromScene(environment, .04);
+  let envTarget = studioEnvironment(renderer), restoreEnvironment = false;
   scene.environment = envTarget.texture;
-  environment.dispose(); pmrem.dispose();
-  const ambient = new THREE.HemisphereLight(0xd6eaff, 0x6779a4, 1.5);
-  scene.add(ambient);
-  const key = new THREE.DirectionalLight(0xe6f6ff, 2.5); key.position.set(-4, 7, 10); scene.add(key);
-  const rim = new THREE.DirectionalLight(0x8c8bff, 3); rim.position.set(6, -1, -2); scene.add(rim);
-  const material = (color: number, metalness = .55, roughness = .26) => new THREE.MeshStandardMaterial({ color, metalness, roughness });
-  const silver = material(0xb9d5e7, .82, .2);
-  const pale = material(0xd4e7f4, .55, .24);
-  const blue = material(0x5f819a, .72, .3);
-  const navy = material(0x182c52, .65, .23);
-  const violet = material(0x8c8eae, .65, .3);
-  const glow = new THREE.MeshStandardMaterial({ color: 0x8ce8ff, emissive: 0x2d99ca, emissiveIntensity: .75, metalness: .25, roughness: .24 });
-  const gold = material(0xc6a987, .8, .25);
-  const wire = material(0x5c9dc1, .55, .3);
-
-  const ai = new THREE.Group();
-  ai.add(slab(2.25, 2.25, .21, navy));
-  const board = slab(2.1, 2.1, .11, silver); board.position.z = .19; ai.add(board);
-  const core = new THREE.Group();
-  core.add(slab(1.58, 1.58, .18, blue));
-  const face = slab(1.34, 1.34, .055, navy); face.position.z = .13; core.add(face);
-  const emblem = sparkle(pale); emblem.scale.setScalar(.72); emblem.position.z = .25; core.add(emblem);
-  const smallSpark = sparkle(glow); smallSpark.scale.setScalar(.22); smallSpark.position.set(.44, .43, .23); core.add(smallSpark);
-  core.position.z = .35; ai.add(core);
-  for (let side = 0; side < 4; side++) {
-    const bank = new THREE.Group(); bank.rotation.z = side * Math.PI / 2;
-    for (let n = 0; n < 8; n++) {
-      const pin = slab(.105, .33, .10, silver, .025); pin.position.set((n-3.5)*.235, 1.24, -.02); bank.add(pin);
-      const trace = slab(.025, .30, .012, gold, .008); trace.position.set((n-3.5)*.235, .91, .27); bank.add(trace);
-    }
-    ai.add(bank);
-  }
-  for (const x of [-.91, .91]) for (const y of [-.91, .91]) {
-    const screw = new THREE.Mesh(new THREE.CylinderGeometry(.055, .055, .03, 12), navy);
-    screw.rotation.x = Math.PI/2; screw.position.set(x,y,.29); ai.add(screw);
-  }
-
-  const network = new THREE.Group();
-  const router = new THREE.Group();
-  router.add(slab(1.65, .93, .66, silver));
-  const front = slab(1.45, .66, .035, navy, .08); front.position.z=.38; router.add(front);
-  for (let i=0;i<5;i++) {
-    const port = slab(.19,.17,.025,blue,.025); port.position.set(-.5+i*.25,-.08,.42); router.add(port);
-    const led = slab(.075,.025,.025,glow,.008); led.position.set(-.5+i*.25,.17,.42); router.add(led);
-  }
-  network.add(router);
-  const nodes: THREE.Group[] = [];
-  const nodePositions = [new THREE.Vector3(-1.28,1.02,.15), new THREE.Vector3(1.27,.96,-.20), new THREE.Vector3(-1.21,-1.07,-.25), new THREE.Vector3(1.24,-1.07,.4)];
-  const connections = new THREE.Group(); network.add(connections);
-  const wireGeometry = new THREE.CylinderGeometry(.026,.026,1,8);
-  const cables: THREE.Mesh[] = [];
-  const packets: THREE.Mesh[] = [];
-  nodePositions.forEach((position, i) => {
-    const node = new THREE.Group();
-    node.add(slab(.55,.55,.45,i%2?blue:violet,.10));
-    const window = slab(.31,.21,.025,pale,.04); window.position.z=.27; node.add(window);
-    node.position.copy(position); nodes.push(node); network.add(node);
-    const cable = new THREE.Mesh(wireGeometry, wire); cables.push(cable); connections.add(cable);
-    const packet = new THREE.Mesh(new THREE.SphereGeometry(.065,10,8), glow); packets.push(packet); connections.add(packet);
-  });
-
-  const shieldShape = new THREE.Shape();
-  shieldShape.moveTo(0,1.42); shieldShape.quadraticCurveTo(.55,1.09,1.10,1.02);
-  shieldShape.lineTo(1.1,.05); shieldShape.bezierCurveTo(1.03,-.72,.45,-1.18,0,-1.45);
-  shieldShape.bezierCurveTo(-.45,-1.18,-1.03,-.72,-1.1,.05); shieldShape.lineTo(-1.1,1.02);
-  shieldShape.quadraticCurveTo(-.55,1.09,0,1.42);
-  const shield = new THREE.Group();
-  shield.add(extrude(shieldShape,.23,silver,.085));
-  const shieldFace = new THREE.Group();
-  const inset = extrude(shieldShape,.12,blue,.07); inset.scale.set(.85,.85,1); shieldFace.add(inset);
-  const tickA=rod(new THREE.Vector3(-.45,.03,.14),new THREE.Vector3(-.12,-.30,.14),.085,pale);
-  const tickB=rod(new THREE.Vector3(-.12,-.30,.14),new THREE.Vector3(.48,.40,.14),.085,pale);
-  shieldFace.add(tickA,tickB); shieldFace.position.z=.26; shield.add(shieldFace);
-
-  // Each domain has the same visual footprint. Scroll never changes its scale.
-  const models = [ai, network, shield];
+  scene.add(new THREE.HemisphereLight(0xe1edff, 0x344a64, 1.0));
+  const key = new THREE.DirectionalLight(0xf0f5ff, 2.3); key.position.set(-4, 6, 8); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x89b9eb, 1.5); rim.position.set(5, 2, -3); scene.add(rim);
+  const sculpture = createGalaxyModels();
+  const models = sculpture.models;
+  const centers = models.map(() => new THREE.Vector3());
   const modelExtents = models.map(group => {
     scene.add(group);
     const size = new THREE.Box3().setFromObject(group).getSize(new THREE.Vector3());
     return Math.max(size.x, size.y, size.z);
   });
-  nodes.forEach((node, i) => {
-    const cable = cables[i];
-    cable.position.copy(node.position).multiplyScalar(.5);
-    cable.scale.y = node.position.length();
-    cable.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), node.position.clone().normalize());
-  });
 
-  // A distant spiral field gives the route a larger setting. Only this backdrop
-  // drifts; the three destinations remain in place and equally sized.
+  // A distant spiral field gives the route a larger setting; each destination
+  // keeps a fixed footprint while the background responds to scrolling.
   let seed = 47;
   const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-  const count = 3000;
+  const count = 1100;
   const dustPositions = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
   for (let i = 0; i < count; i++) {
-    if (i < 2100) {
+    if (i < 800) {
       const radius = Math.sqrt(random()) * 27;
       const arm = Math.floor(random() * 3) * Math.PI * 2 / 3;
       const angle = radius * .23 + arm + (random() - .5) * .7;
@@ -183,7 +90,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   function resize(width: number, height: number) {
     const compact = window.matchMedia('(max-width: 767px)').matches;
     layout = galaxyLayout(width, height, compact);
-    const density = Math.min(window.devicePixelRatio || 1, compact ? 1.35 : 1.5);
+    const density = Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(density);
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
@@ -196,7 +103,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
         (height / 2 - layout.stops[i].y) * unitsPerPixel,
         0,
       );
-      group.scale.setScalar(layout.radius * 1.65 * unitsPerPixel / modelExtents[i]);
+      centers[i].copy(group.position);
+      group.scale.setScalar(layout.radius * 1.95 * unitsPerPixel / modelExtents[i]);
     });
   }
 
@@ -205,23 +113,27 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   const pointerEuler = new THREE.Euler();
   let previousTime = 0;
 
-  function draw(progress: number, time: number, dark: boolean, pointer: { x: number; y: number }, activeIndex: number) {
+  function draw(progress: number, time: number, dark: boolean, pointer: { x: number; y: number }, activeIndex: number, hoveredIndex = -1) {
+    if (restoreEnvironment) {
+      envTarget.dispose(); envTarget = studioEnvironment(renderer); scene.environment = envTarget.texture; restoreEnvironment = false;
+    }
     // Time freezes when ambience is paused and resets when reduced motion starts.
     if (time < previousTime) motion.reset();
     const delta = THREE.MathUtils.clamp(time - previousTime, 0, .1);
     previousTime = time;
-    motion.advance(delta, activeIndex);
+    motion.advance(delta, activeIndex, hoveredIndex);
     dustMaterial.uniforms.color.value.set(dark ? 0xb4cdf6 : 0x5277a7);
-    dustMaterial.uniforms.opacity.value = dark ? .66 : .36;
-    scene.environmentIntensity = dark ? .85 : 1.05;
-    renderer.toneMappingExposure = dark ? 1 : 1.15;
-    pointerTilt.setFromEuler(pointerEuler.set(pointer.y * .045, pointer.x * .065, 0));
+    dustMaterial.uniforms.opacity.value = dark ? .38 : .20;
+    scene.environmentIntensity = dark ? 1.05 : 1.15;
+    renderer.toneMappingExposure = dark ? 1.05 : 1.12;
+    pointerTilt.setFromEuler(pointerEuler.set(pointer.y * .06, pointer.x * .1, 0));
     models.forEach((group, index) => {
-      // The quaternion preserves momentum on any axis and coasts to rest.
-      // It never changes the object's position or its scale within the stop.
+      // A fixed footprint, bounded turn and sub-pixel drift keep labels clear.
       group.quaternion.copy(pointerTilt).multiply(motion.orientations[index]);
+      group.position.copy(centers[index]);
+      group.position.y += Math.sin(time * .48 + index * 1.8) * .012;
     });
-    packets.forEach((packet, i) => packet.position.copy(nodePositions[i]).multiplyScalar((time * .14 + i * .25) % 1));
+    sculpture.animate(time, activeIndex, dark);
     // Gentle parallax stays behind the route; it cannot push a stop over the copy.
     dust.position.set(pointer.x * .25, -pointer.y * .16 - progress * .45, 0);
     dust.rotation.z = -.18 + progress * .055;
@@ -230,6 +142,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
 
   return {
     resize, draw,
+    restore() { restoreEnvironment = true; },
     dispose() {
       const geometries = new Set<THREE.BufferGeometry>();
       const materials = new Set<THREE.Material>();
