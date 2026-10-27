@@ -6,6 +6,7 @@ import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
 import { Network } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
+import { useAnalytics } from "../hooks/useAnalytics";
 import { ExternalLink, Lock } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
@@ -24,6 +25,7 @@ import netopsLearningsImg from "../assets/netops/netops-learnings.png";
 import netopsAffinityImg from "../assets/netops/netops-affinity.svg";
 
 export function VcfNetworkPage() {
+  const { trackEvent } = useAnalytics();
   const reduceMotion = useReducedMotion();
   // `cropped` mirrors the 1% trim the two product screenshots get in the page,
   // so the expanded view shows the same framing rather than the raw capture.
@@ -68,7 +70,10 @@ export function VcfNetworkPage() {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isAccessConfigured && passwordInput === PROJECT_PASSWORD) {
+      // Record only successful password entry, using the existing interaction API.
+      trackEvent("click", "project_unlock");
       setIsAuthenticated(true);
+      setPasswordInput("");
       setError(false);
     } else {
       setError(true);

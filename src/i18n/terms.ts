@@ -1,5 +1,15 @@
 // Supplemental labels and contextual phrases used by the shared pages.
 export const terms: Record<string, string> = {
+  "Last 8 hours": "最近 8 小时",
+  "Protected project access": "受保护项目的访问情况",
+  "Unlocked during this visit": "本次访问已成功解锁",
+  "No unlock recorded": "未记录到成功解锁",
+  "Last unlocked (PST)": "最近解锁时间（PST）",
+  "Page views alone do not confirm access. Earlier visits may not include unlock tracking.": "仅浏览页面不能确认是否已解锁。较早的访问可能没有解锁记录。",
+  "No password-protected projects recorded.": "未记录到对密码保护项目的访问。",
+  "Project unlocks": "项目解锁",
+  "Successful password entry": "密码验证成功",
+  "Clicks & project unlocks": "点击与项目解锁",
   "Network": "网络",
   "User Research": "用户研究",
   "Design & AI Tools": "设计与 AI 工具",

@@ -3,6 +3,7 @@ import { localize } from "../i18n/locale";
 import { ProjectHero } from "../components/case-study/ProjectHero";
 import { ProjectNavigation } from "../components/case-study/ProjectNavigation";
 import { useState, type FormEvent } from "react";
+import { useAnalytics } from "../hooks/useAnalytics";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, Lock, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -15,6 +16,7 @@ import assistantMainScreenImg from "../assets/ai-assistant/assistant-main-screen
 const PROJECT_PASSWORD = import.meta.env.VITE_AI_ASSISTANT_PASSWORD ?? "";
 
 export function AiAssistantPage() {
+  const { trackEvent } = useAnalytics();
   const reduceMotion = useReducedMotion();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
@@ -24,6 +26,8 @@ export function AiAssistantPage() {
   function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isAccessConfigured && passwordInput === PROJECT_PASSWORD) {
+      // The existing click endpoint accepts this success marker; never send the password.
+      trackEvent("click", "project_unlock");
       setIsAuthenticated(true);
       setPasswordInput("");
       setError(false);

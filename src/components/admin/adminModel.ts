@@ -3,6 +3,7 @@ import { languageTag, isChinese, localize } from "../../i18n/locale.ts";
 export const REPORT_TIME_ZONE = "Etc/GMT+8";
 export const TIME_RANGES = [
   { value: "1h", label: "Last 1 hour", ms: 3600000, days: 1, granularity: "15min" },
+  { value: "8h", label: "Last 8 hours", ms: 8 * 3600000, days: 1, granularity: "hour" },
   { value: "24h", label: "Last 24 hours", ms: 86400000, days: 1, granularity: "hour" },
   { value: "7d", label: "Last 7 days", ms: 7 * 86400000, days: 7, granularity: "day" },
   { value: "30d", label: "Last 30 days", ms: 30 * 86400000, days: 30, granularity: "day" },
@@ -54,7 +55,28 @@ export function locationName(visit: Pick<VisitorRow, "city" | "region" | "countr
   return visit.country_code === "US" && visit.city && visit.region ? `${visit.city}, ${visit.region}` : [visit.city, visit.country].filter(Boolean).join(", ") || "Location unavailable";
 }
 export function referrerName(raw: string | null | undefined) { if (!raw) return "Direct / not reported"; try { return new URL(raw).hostname.replace(/^www\./, ""); } catch { return "Unrecognized source"; } }
-export function actionName(type: string) { return ({ project_view: "Project open clicks", contact_click: "Contact link clicks", resume_download: "Résumé download clicks" } as Record<string, string>)[type] || type.replace(/_/g, " "); }
+export function actionName(type: string, target?: string | null) {
+  if (type === "click" && target === "project_unlock") return "Project unlocks";
+  return ({ project_view: "Project open clicks", contact_click: "Contact link clicks", resume_download: "Résumé download clicks" } as Record<string, string>)[type] || type.replace(/_/g, " ");
+}
+// A page view can be the password screen. Only a successful-submit event
+// confirms access; missing events (including historical visits) remain unknown.
+export function protectedProjectAccess(visit: Pick<VisitDetail, "pageViews" | "interactions">) {
+  const projects = new Map<string, { path: string; unlockedAt: string | null }>();
+  const include = (rawPath: string) => {
+    const path = canonicalPath(rawPath);
+    if (!/^\/(?:zh\/)?project\/(?:ai-assistant|vcf-network)$/.test(path)) return;
+    if (!projects.has(path)) projects.set(path, { path, unlockedAt: null });
+    return projects.get(path)!;
+  };
+  visit.pageViews.forEach(page => include(page.path));
+  visit.interactions.forEach(action => {
+    if (action.type !== "click" || action.target !== "project_unlock" || !Number.isFinite(Date.parse(action.created_at))) return;
+    const project = include(action.path);
+    if (project && (!project.unlockedAt || Date.parse(action.created_at) > Date.parse(project.unlockedAt))) project.unlockedAt = action.created_at;
+  });
+  return [...projects.values()];
+}
 // A stable minute boundary also lets the existing server's response cache work.
 export function rangeStart(range: TimeRange, now = Date.now()) { return new Date(Math.floor(now / 60000) * 60000 - TIME_RANGES.find(item => item.value === range)!.ms).toISOString(); }
 export function endpoint(name: string, since: string, extras: Record<string, string | number> = {}) {

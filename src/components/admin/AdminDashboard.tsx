@@ -1,9 +1,9 @@
 import { localize } from "../../i18n/locale";
 import { lazy, Suspense, useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { ArrowDown, ArrowRight, ArrowUp, ChevronLeft, ChevronRight, Download, Eye, LayoutDashboard, List, LogOut, Map as MapIcon, MousePointer2, RefreshCw, Route, Search, Users, X, FileText } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ChevronLeft, ChevronRight, Download, Eye, LayoutDashboard, List, LogOut, Map as MapIcon, MousePointer2, RefreshCw, Route, Search, Users, X, FileText, CheckCircle2, CircleHelp } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { AdminDataProvider, useAdminQuery, type Seed } from "./adminApi";
-import { TIME_RANGES, actionName, bucketDate, downloadCsv, endpoint, formatDate, formatExportDate, formatTime, formatDuration, formatNumber, formatPercent, locationName, mergeReferrers, pageName, rangeStart, rankTransitions, referrerName, type ActionRow, type DeviceData, type FlowData, type GeoRow, type Overview, type PageRow, type ReferrerRow, type TimeRange, type TimelineRow, type View, type VisitDetail, type VisitList } from "./adminModel";
+import { TIME_RANGES, actionName, bucketDate, downloadCsv, endpoint, formatDate, formatExportDate, formatTime, formatDuration, formatNumber, formatPercent, locationName, mergeReferrers, pageName, protectedProjectAccess, rangeStart, rankTransitions, referrerName, type ActionRow, type DeviceData, type FlowData, type GeoRow, type Overview, type PageRow, type ReferrerRow, type TimeRange, type TimelineRow, type View, type VisitDetail, type VisitList } from "./adminModel";
 import { TrafficChart } from "./TrafficChart";
 import { countryFlag } from "./countryFlag";
 const VisitorMap = lazy(() => import("./VisitorMap").then(module => ({ default: module.VisitorMap })).catch(() => ({ default: () => <p className="admin-muted">{localize("The map could not load. Please use the location list.")}</p> })));
@@ -34,7 +34,7 @@ function OverviewPanels({ since, range }: { since: string; range: TimeRange }) {
   const actions = useAdminQuery<ActionRow[]>(endpoint("interactions", since));
   const sourceRows = mergeReferrers(sources.data || []);
   const grouped = new Map<string, number>();
-  (actions.data || []).forEach(row => grouped.set(row.type, (grouped.get(row.type) || 0) + Number(row.count)));
+  (actions.data || []).forEach(row => { const label = actionName(row.type, row.target); grouped.set(label, (grouped.get(label) || 0) + Number(row.count)); });
   return <>
     <Panel title={localize("Traffic over time")} description={localize("See when people discover and return to your portfolio. Times are in PST.")} query={timeline} tools={<button className="admin-button admin-button-quiet" type="button" disabled={!timeline.data?.length} onClick={() => downloadCsv(`portfolio-traffic-${range}.csv`, [["Period starting (PST)", "Visits", "Page views"], ...(timeline.data || []).map(row => [formatExportDate(bucketDate(row.date)), row.sessions, row.pageViews])])}><Download size={16} />{localize(" Export")}</button>}>
       {localize(timeline.data && (timeline.data.length ? <><TrafficChart rows={timeline.data} /><p className="admin-footnote">{localize("Chart labels mark interval start times in PST. Totals cover the full period; the first partial interval may be omitted.")}</p></> : <Empty>{localize("No traffic recorded in this period.")}</Empty>))}
@@ -44,8 +44,8 @@ function OverviewPanels({ since, range }: { since: string; range: TimeRange }) {
         {localize(sources.data && <><Rankings rows={sourceRows} empty="No external referrals recorded in this period." /><p className="admin-footnote">{localize("Top reported referrers. Direct visits and unreported sources are not included.")}</p></>)}
       </Panel>
       <Panel title={localize("Actions that signal interest")} description={localize("See which next steps visitors choose.")} query={actions}>
-        {localize(actions.data && <><Rankings rows={[...grouped].sort((a, b) => b[1] - a[1]).map(([type, count]) => ({ name: actionName(type), count }))} empty="No tracked actions in this period." />
-          {localize(actions.data.length > 0 && <details className="admin-action-details"><summary>{localize("Break down actions by destination")}</summary><ul>{localize(actions.data.map((row, i) => <li key={i}><span>{localize(actionName(row.type))}<small>{localize(row.type === "project_view" ? pageName(`/project/${row.target}`) : row.target || "Not specified")}</small></span><strong>{localize(formatNumber(row.count))}</strong></li>))}</ul></details>)}
+        {localize(actions.data && <><Rankings rows={[...grouped].sort((a, b) => b[1] - a[1]).map(([type, count]) => ({ name: type, count }))} empty="No tracked actions in this period." />
+          {localize(actions.data.length > 0 && <details className="admin-action-details"><summary>{localize("Break down actions by destination")}</summary><ul>{localize(actions.data.map((row, i) => <li key={i}><span>{localize(actionName(row.type, row.target))}<small>{localize(row.type === "click" && row.target === "project_unlock" ? "Successful password entry" : row.type === "project_view" ? pageName(`/project/${row.target}`) : row.target || "Not specified")}</small></span><strong>{localize(formatNumber(row.count))}</strong></li>))}</ul></details>)}
           <p className="admin-footnote">{localize("Top 50 action destinations. Counts represent clicks, not completed downloads or conversations.")}</p></>)}
       </Panel>
     </div>
@@ -77,14 +77,27 @@ function VisitDrawer({ id, onClose }: { id: string; onClose: () => void }) {
     return () => { element.removeEventListener("close", closed); element.close(); document.body.style.overflow = overflow; if (opener instanceof HTMLElement && opener.isConnected) opener.focus({ preventScroll: true }); };
   }, []);
   const visit = query.data;
+  const projectAccess = visit ? protectedProjectAccess(visit) : [];
   return <dialog className="admin-visit-dialog" ref={dialog} aria-labelledby="admin-visit-title" onClick={event => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.current?.close(); } }}>
     <header><div><p className="admin-eyebrow">{localize("Visit details")}</p><h2 id="admin-visit-title">{localize(visit ? locationName(visit) : "Visit history")}</h2></div><button className="admin-icon-button" type="button" aria-label={localize("Close visit details")} onClick={() => dialog.current?.close()} autoFocus><X size={22} /></button></header>
     <div className="admin-visit-body">
       {localize(query.loading && !visit && <Loading />)}{localize(query.error && <div className="admin-error" role="alert"><span>{localize(query.error)}</span><button type="button" onClick={query.retry}>{localize("Retry")}</button></div>)}
       {localize(visit && <><div className="admin-visit-meta"><div><span>{localize("Started (PST)")}</span><strong>{localize(formatDate(visit.first_seen_at))}</strong></div><div><span>{localize("Device")}</span><strong>{localize(visit.device)} · {localize(visit.browser || "Unknown browser")}</strong></div><div><span>{localize("Source")}</span><strong>{localize(referrerName(visit.referrer))}</strong></div><div><span>{localize("Campaign")}</span><strong>{localize([visit.utm_source, visit.utm_medium, visit.utm_campaign].filter(Boolean).join(" / ") || "Not reported")}</strong></div></div>
+        <section className="admin-project-access" aria-labelledby="admin-project-access-title">
+          <h3 id="admin-project-access-title">{localize("Protected project access")}</h3>
+          <p className="admin-footnote">{localize("Page views alone do not confirm access. Earlier visits may not include unlock tracking.")}</p>
+          {projectAccess.length ? <ul>{projectAccess.map(project => <li key={project.path}>
+            <strong>{pageName(project.path)}</strong>
+            <span className="admin-access-status" data-unlocked={!!project.unlockedAt}>
+              {project.unlockedAt ? <CheckCircle2 size={17} aria-hidden="true" /> : <CircleHelp size={17} aria-hidden="true" />}
+              {localize(project.unlockedAt ? "Unlocked during this visit" : "No unlock recorded")}
+            </span>
+            {project.unlockedAt && <p>{localize("Last unlocked (PST)")}: <time dateTime={project.unlockedAt}>{formatDate(project.unlockedAt)}</time></p>}
+          </li>)}</ul> : <Empty>{localize("No password-protected projects recorded.")}</Empty>}
+        </section>
         <h3>{localize("Pages explored")}</h3><p className="admin-footnote">{localize("Full history for this visit, in PST.")}</p>
         {localize(visit.pageViews.length ? <ol className="admin-journey-timeline">{localize(visit.pageViews.map(page => <li key={page.id}><div><strong>{localize(pageName(page.path))}</strong><time>{localize(formatDate(page.entered_at))}</time></div><p>{localize(formatDuration(page.duration))}{localize(" recorded · ")}{localize(formatPercent(page.scroll_depth))}{localize(" scroll depth")}</p></li>))}</ol> : <Empty>{localize("No page history was recorded for this visit.")}</Empty>)}
-        <h3>{localize("Tracked actions")}</h3>{localize(visit.interactions.length ? <ul className="admin-detail-actions">{localize(visit.interactions.map(action => <li key={action.id}><strong>{localize(actionName(action.type))}</strong><span>{localize(pageName(action.path))} · {localize(formatDate(action.created_at))}</span></li>))}</ul> : <Empty>{localize("No actions recorded during this visit.")}</Empty>)}
+        <h3>{localize("Tracked actions")}</h3>{localize(visit.interactions.length ? <ul className="admin-detail-actions">{localize(visit.interactions.map(action => <li key={action.id}><strong>{localize(actionName(action.type, action.target))}</strong><span>{localize(pageName(action.path))} · {localize(formatDate(action.created_at))}</span></li>))}</ul> : <Empty>{localize("No actions recorded during this visit.")}</Empty>)}
       </>)}
     </div>
   </dialog>;
@@ -127,7 +140,7 @@ const VIEWS = [{ id: "overview", label: "Overview", icon: LayoutDashboard }, { i
 function Workspace({ range, since, view, setView, changeRange, refresh, onLogout, autoRefresh, setAutoRefresh }: { range: TimeRange; since: string; view: View; setView: (view: View) => void; changeRange: (range: TimeRange) => void; refresh: () => void; onLogout: () => void; autoRefresh: boolean; setAutoRefresh: (value: boolean) => void }) {
   const overview = useAdminQuery<Overview>(endpoint("overview", since));
   const data = overview.data?.allTime;
-  const metrics = [{ label: "Visits", value: data ? formatNumber(data.totalSessions) : "—", note: "Browser sessions", icon: Users }, { label: "Page views", value: data ? formatNumber(data.totalPageViews) : "—", note: "Pages opened", icon: Eye }, { label: "Tracked actions", value: data ? formatNumber(data.totalInteractions) : "—", note: "Project, résumé & contact clicks", icon: MousePointer2 }, { label: "Views per visit", value: data ? data.totalSessions ? (data.totalPageViews / data.totalSessions).toFixed(1) : "—" : "—", note: "Page views ÷ visits", icon: FileText }];
+  const metrics = [{ label: "Visits", value: data ? formatNumber(data.totalSessions) : "—", note: "Browser sessions", icon: Users }, { label: "Page views", value: data ? formatNumber(data.totalPageViews) : "—", note: "Pages opened", icon: Eye }, { label: "Tracked actions", value: data ? formatNumber(data.totalInteractions) : "—", note: "Clicks & project unlocks", icon: MousePointer2 }, { label: "Views per visit", value: data ? data.totalSessions ? (data.totalPageViews / data.totalSessions).toFixed(1) : "—" : "—", note: "Page views ÷ visits", icon: FileText }];
   return <main className="admin-page">
     <header className="admin-header"><div><p className="admin-eyebrow">{localize("Your portfolio, in perspective")}</p><h1>{localize("Portfolio analytics")}</h1><p>{localize("Understand what brings people in—and what keeps their attention.")}</p></div><button className="admin-button admin-button-quiet" type="button" onClick={onLogout}><LogOut size={17} />{localize(" Sign out")}</button></header>
     <div className="admin-toolbar"><label className="admin-range">{localize("Time range")}<select value={range} onChange={event => changeRange(event.target.value as TimeRange)}>{localize(TIME_RANGES.map(item => <option key={item.value} value={item.value}>{localize(item.label)}</option>))}</select></label><div className="admin-toolbar-status"><span className="admin-connection-dot" data-loading={overview.loading} aria-hidden="true" /><span role="status">{localize(overview.loading ? "Updating insights…" : overview.error ? "Connection needs attention" : overview.at ? `Updated ${formatTime(overview.at)} PST` : "Connecting…")}</span></div><label className="admin-auto-refresh"><input type="checkbox" checked={autoRefresh} onChange={event => setAutoRefresh(event.target.checked)} />{localize(" Update every minute")}</label><button className="admin-button" type="button" onClick={refresh} disabled={overview.loading}><RefreshCw size={17} />{localize(" Refresh")}</button></div>

@@ -111,6 +111,10 @@ try {
       else if (name === 'visitors') { const page=Number(url.searchParams.get('page')||1), filtered=url.searchParams.has('location'), total=empty?0:filtered?1:21;data={visitors:Array.from({length:Math.max(0,Math.min(20,total-(page-1)*20))},(_,i)=>visit((page-1)*20+i)),total,page,totalPages:Math.ceil(total/20),limit:20}; }
       else if (name.startsWith('visitors/')) data = {...visit(0),pageViews:pages.map((p,i)=>({id:'pv'+i,path:p.path,entered_at:'2026-10-19T09:15:00Z',duration:p.avg_duration_ms,scroll_depth:p.avg_scroll_depth})),interactions:[{id:'action1',type:'project_view',target:'ai-assistant',path:'/',created_at:'2026-10-19T09:15:00Z'}]};
       else if (url.pathname === '/api/analytics/pageview') data = {pageViewId:'tracked-'+state.log.length};
+      if (name.startsWith('visitors/') && state.accessFixture) {
+        data.pageViews.push({id:'protected-vcf',path:'/zh/project/vcf-network/',entered_at:'2026-10-19T09:16:00Z',duration:45000,scroll_depth:1});
+        if (state.accessFixture === 'unlocked') data.interactions.push({id:'unlock-1',type:'click',target:'project_unlock',path:'/project/ai-assistant/',created_at:'2026-10-19T09:17:00Z'});
+      }
       return new Promise((resolve,reject)=>{
         const delay = state.slow === name || state.slow === url.pathname ? state.delay : 35;
         const complete=()=>{clearTimeout(timer);record.done=true;resolve(new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}}));};
@@ -127,12 +131,72 @@ try {
   const theme = async dark => { if(await evaluate(`document.documentElement.classList.contains('dark')!==${dark}`)) await click('button[role="switch"]'); };
   const key = async name => { await tab('Input.dispatchKeyEvent',{type:'keyDown',key:name,code:name,windowsVirtualKeyCode:{Escape:27,Home:36,ArrowLeft:37}[name]});await tab('Input.dispatchKeyEvent',{type:'keyUp',key:name,code:name});await delay(100); };
   const view = async name => { await click('.admin-view-nav button',name);await waitFor(`!document.querySelector('.admin-view-content [aria-busy="true"]')`); };
-  if (process.argv.includes('--time-check')) {
+  if (process.argv.includes('--access-check')) {
+    for (const chinese of [false, true]) {
+      await viewport(1440);await navigate(chinese ? '/zh/admin' : '/admin');await waitFor(`!!document.querySelector('#api-key')`);
+      await evaluate(`window.__mock.slow='';window.__mock.accessFixture='unlocked'`);
+      await input('#api-key','test-key');await evaluate(`document.querySelector('#api-key').form.requestSubmit()`);
+      await waitFor(`!!document.querySelector('.admin-view-nav')`);
+      assert.ok((await evaluate(`document.querySelector('.admin-range').textContent`)).includes(chinese?'最近 8 小时':'Last 8 hours'));
+      await evaluate(`(()=>{const e=document.querySelector('.admin-range select');e.value='8h';e.dispatchEvent(new Event('change',{bubbles:true}))})()`);
+      await waitFor(`window.__mock.log.some(r=>r.path.endsWith('/timeline')&&r.query.includes('granularity=hour'))`);
+      const params=new URLSearchParams(await evaluate(`window.__mock.log.filter(r=>r.path.endsWith('/timeline')).at(-1).query`));
+      assert.equal(params.get('granularity'),'hour');
+      const age=Date.now()-Date.parse(params.get('since'));assert.ok(age>=8*3600000&&age<8*3600000+61000);
+      await view(chinese?'访客':'Audience');
+      await evaluate(`window.openerControl=document.querySelector('.admin-visit-link');window.openerControl.focus();window.openerControl.click()`);
+      await waitFor(`document.querySelectorAll('.admin-project-access li').length===2`);
+      assert.equal(await evaluate(`document.querySelectorAll('.admin-access-status[data-unlocked="true"]').length`),1);
+      assert.equal(await evaluate(`document.querySelectorAll('.admin-access-status[data-unlocked="false"]').length`),1);
+      assert.ok((await evaluate(`document.querySelector('.admin-project-access').textContent`)).includes(chinese?'本次访问已成功解锁':'Unlocked during this visit'));
+      assert.equal(await evaluate(`document.querySelector('.admin-project-access time').dateTime`),'2026-10-19T09:17:00Z');
+      for(const dark of [false,true])for(const width of [1440,390,320]){
+        await theme(dark);await viewport(width);
+        assert.ok(await evaluate(`document.querySelector('dialog').scrollWidth<=document.querySelector('dialog').clientWidth+1`),'Visit details overflow');
+        if(width!==320)await screenshot(`protected-access-${chinese?'zh':'en'}-${dark?'dark':'light'}-${width}`);
+      }
+      await key('Escape');await waitFor(`!document.querySelector('dialog')`);
+      assert.equal(await evaluate(`document.activeElement===window.openerControl`),true);
+      // Historical visits have page views but no success event; never label them unlocked.
+      await evaluate(`window.__mock.accessFixture='legacy';document.querySelectorAll('.admin-visit-link')[1].click()`);
+      await waitFor(`document.querySelectorAll('.admin-project-access li').length===2`);
+      assert.equal(await evaluate(`document.querySelectorAll('.admin-access-status[data-unlocked="true"]').length`),0);
+      assert.ok((await evaluate(`document.querySelector('.admin-project-access').textContent`)).includes(chinese?'较早的访问':'Earlier visits'));
+      await key('Escape');
+    }
+    if (!process.argv.includes('--skip-unlock')) {
+      try { process.loadEnvFile('.env.local'); } catch {}
+      const projects=[['ai-assistant',process.env.VITE_AI_ASSISTANT_PASSWORD],['vcf-network',process.env.VITE_VCF_PROJECT_PASSWORD||'local-translation-check']];
+      for(const prefix of ['', '/zh'])for(const [slug,password] of projects){
+        assert.ok(password,'Set the local test password for '+slug);
+        const path=prefix+'/project/'+slug;
+        await navigate(path);await waitFor(`!!document.querySelector('input[type=password]')`);
+        await evaluate(`window.__mock.dnt='0';window.__mock.log=[];window.__mock.slow=''`);
+        await input('input[type=password]','deliberately-wrong-test-password');
+        await evaluate(`document.querySelector('input[type=password]').form.requestSubmit()`);await delay(150);
+        assert.equal(await evaluate(`window.__mock.log.filter(r=>r.body?.target==='project_unlock').length`),0);
+        assert.ok(await evaluate(`!!document.querySelector('input[type=password]')`));
+        await input('input[type=password]',password);
+        await evaluate(`document.querySelector('input[type=password]').form.requestSubmit()`);
+        await waitFor(`window.__mock.log.some(r=>r.body?.target==='project_unlock'&&r.done)`);
+        const events=await evaluate(`window.__mock.log.filter(r=>r.body?.target==='project_unlock').map(r=>r.body)`);
+        assert.equal(events.length,1);assert.equal(events[0].path,path);assert.equal(events[0].type,'click');assert.equal(events[0].metadata,null);
+        assert.ok(!JSON.stringify(events).includes(password),'Password leaked into analytics');
+        assert.equal(await evaluate(`!!document.querySelector('input[type=password]')`),false);
+        // Returning to the gate is not another successful unlock.
+        await navigate(path);await waitFor(`!!document.querySelector('input[type=password]')`);
+        await input('input[type=password]',password);await evaluate(`document.querySelector('input[type=password]').form.requestSubmit()`);await delay(200);
+        assert.equal(await evaluate(`window.__mock.log.filter(r=>r.path.startsWith('/api/analytics')).length`),0,'Do Not Track ignored');
+      }
+    }
+    assert.deepEqual(errors,[]);
+    console.log(JSON.stringify({passed:true,checks:'Eight-hour filter; EN/ZH visit access status, historical unknowns, PST timestamps, responsive themes, successful/failed password submissions, no password payload, DNT',artifacts}));
+  } else if (process.argv.includes('--time-check')) {
     await tab('Emulation.setTimezoneOverride',{timezoneId:'Asia/Tokyo'});
     await viewport(1440);await navigate('/admin');await waitFor(`!!document.querySelector('#api-key')`);
     await evaluate(`window.__mock.slow='';Date.now=()=>Date.parse('2026-10-19T09:15:00Z')`);
     await input('#api-key','test-key');await evaluate(`document.querySelector('#api-key').form.requestSubmit()`);await waitFor(`!!document.querySelector('.admin-traffic-chart')`);
-    assert.deepEqual(await evaluate(`Array.from(document.querySelectorAll('.admin-range option')).map(e=>e.textContent)`),['Last 1 hour','Last 24 hours','Last 7 days','Last 30 days']);
+    assert.deepEqual(await evaluate(`Array.from(document.querySelectorAll('.admin-range option')).map(e=>e.textContent)`),['Last 1 hour','Last 8 hours','Last 24 hours','Last 7 days','Last 30 days']);
     assert.equal(await evaluate(`document.querySelector('.admin-toolbar-status [role="status"]').textContent`),'Updated 1:15 AM PST');
     await evaluate(`document.querySelector('.admin-traffic-chart').focus()`);await key('Home');
     assert.ok((await evaluate(`document.querySelector('.admin-chart-readout').textContent`)).includes('Oct 12, 4:00 PM PST'));
