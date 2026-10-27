@@ -87,7 +87,8 @@ try {
     for(const width of [1440,768,390,320]){
       await viewport(width,width<768?844:960);
       for(const dark of [false,true]){
-        await evaluate("document.documentElement.classList.toggle('dark',"+dark+")");
+        await evaluate("(()=>{const toggle=[...document.querySelectorAll('button[role=switch]')].find(e=>e.getBoundingClientRect().width>0);if(toggle.getAttribute('aria-checked')!=="+JSON.stringify(String(dark))+")toggle.click()})()");
+        await waitFor("document.documentElement.classList.contains('dark')==="+dark);
         for(const [chapter,position] of [[0,0],[1,.30],[2,.64],[3,1]]){
           await seek(position);
           await waitFor("document.querySelector('.galaxy-hero').dataset.chapter==="+JSON.stringify(String(chapter)));
