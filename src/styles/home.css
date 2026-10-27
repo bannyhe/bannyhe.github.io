@@ -130,7 +130,7 @@
 .home-project-topline { display: flex; justify-content: space-between; gap: 16px; font-size: 14px; line-height: 1.5; font-weight: 500; color: var(--home-muted); }
 .home-project-number { flex-shrink: 0; font-variant-numeric: tabular-nums; }
 .home-project h3 { margin-top: 12px; font-size: clamp(22px, 2vw, 28px); line-height: 1.25; font-weight: 500; letter-spacing: -.025em; }
-.home-project-details > p { max-width: 430px; font-size: 16px; line-height: 1.65; color: var(--home-muted); margin-top: 10px; }
+.home-project-details > p { font-size: 16px; line-height: 1.65; color: var(--home-muted); margin-top: 10px; }
 .home-project-read { margin-top: 18px; display: inline-flex; align-items: center; gap: 7px; font-size: 14px; line-height: 1.5; color: var(--home-muted); }
 .home-contact-card { align-self: center; padding: 40px 12% 50px; }
 .home-contact-orb { display: block; width: 56px; height: 56px; border-radius: 50%; margin-bottom: 36px; background: radial-gradient(circle at 32% 24%, #f5f3f8, #b5b8cc 28%, #61738f 60%, #304664 80%, #aeb9d0); box-shadow: 6px 12px 20px #2838521a; }
