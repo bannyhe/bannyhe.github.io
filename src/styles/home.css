@@ -74,9 +74,11 @@
 .home-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--home-muted); letter-spacing: .015em; font-weight: 500; line-height: 1.6; }
 .home-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #6185a3; box-shadow: 0 0 0 4px #6185a314; }
 .galaxy-copy h1, .galaxy-copy h2 { margin: 25px 0 24px; font-size: clamp(48px,5.6vw,80px); line-height: 1.06; letter-spacing: -.055em; font-weight: 500; }
-/* Deeper jewel tones preserve the color sweep at AAA large-text contrast. */
+/* Saturated rose, violet and fuchsia keep the light-mode sweep colorful at AAA large-text contrast. */
 .orbital-home :is(.galaxy-copy, .home-work-heading, .home-contact-card) :is(h1, h2, h3) {
-  background-image: linear-gradient(to right in oklab, #9e2465 0%, #7134ad 16.667%, #24549a 33.333%, #9e2465 50%, #7134ad 66.667%, #24549a 83.333%, #9e2465 100%);
+  background-image: linear-gradient(to right in oklab,
+    #bd0879 0%, #9223de 12.5%, #bd2049 25%, #ad0bb5 37.5%, #bd0879 50%,
+    #9223de 62.5%, #bd2049 75%, #ad0bb5 87.5%, #bd0879 100%);
   background-size: 200% 100%;
   background-position: 0% 50%;
   background-clip: text;
