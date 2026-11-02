@@ -86,7 +86,8 @@ try {
     proto.useProgram=function(program){currentProgram=program;return use.apply(this,arguments)};
     proto.getUniformLocation=function(program,name){const value=location.call(this,program,name);if(value)names.set(value,{name,program});return value};
     proto.uniformMatrix4fv=function(location,transpose,value){const entry=names.get(location);if(entry?.name==='modelViewMatrix')matrices.set(entry.program,Array.from(value));return uniform.apply(this,arguments)};
-    proto.drawArrays=function(mode){if(mode===this.POINTS)window.__starMatrix=matrices.get(currentProgram);return draw.apply(this,arguments)};
+    proto.drawArrays=function(mode){window.__draws=(window.__draws||0)+1;if(mode===this.POINTS)window.__starMatrix=matrices.get(currentProgram);return draw.apply(this,arguments)};
+    const drawElements=proto.drawElements;proto.drawElements=function(){window.__draws=(window.__draws||0)+1;return drawElements.apply(this,arguments)};
   })()`});
   const viewport=async(width,height=960)=>{await tab('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:2,mobile:width<768});await delay(150);};
   const seek=async progress=>{await evaluate("(()=>{const s=document.querySelector('.galaxy-hero');scrollTo({top:s.offsetTop+(s.offsetHeight-s.querySelector('.galaxy-stage').offsetHeight)*"+progress+",behavior:'instant'})})()");await delay(900);};
@@ -145,9 +146,13 @@ try {
   const pausedReflections=await reflectionTimes();
   const pausedStars=await stars();
   await tab('Input.dispatchMouseEvent',{type:'mouseMoved',x:1250,y:380});
-  const frozen=await frame();await delay(700);const pausedDifference=await frameDifference(frozen,await frame());
-  // Composited gradients can dither by 1–3 color levels while fully paused.
-  assert.ok(pausedDifference.max<=3&&pausedDifference.mean<.6,'Paused scene moved: '+JSON.stringify(pausedDifference));
+  const frozen=await frame();const drawsBefore=await evaluate('window.__draws');await delay(700);
+  const pausedDifference=await frameDifference(frozen,await frame());
+  // Exact check: a paused scene issues no WebGL draws at all.
+  assert.equal(await evaluate('window.__draws'),drawsBefore,'Paused scene kept rendering');
+  // With no draws, any residual difference is the compositor dithering CSS
+  // gradients through translucent particles: up to 4 levels on a lone pixel.
+  assert.ok(pausedDifference.max<=4&&pausedDifference.mean<.6,'Paused scene moved: '+JSON.stringify(pausedDifference));
   assert.deepEqual(await reflectionTimes(),pausedReflections,'Pause did not freeze the reflections');
   assert.deepEqual(await stars(),pausedStars,'Pointer moved the star field while paused');
   await evaluate("document.querySelector('.home-motion-toggle').click();document.querySelector('.galaxy-object').focus()");

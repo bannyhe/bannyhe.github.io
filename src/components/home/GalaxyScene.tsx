@@ -7,7 +7,7 @@ import type { CSSProperties } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import { galaxyLayout, journeyPoint } from './galaxyLayout';
-import { advanceGalaxyPointer, galaxyPointerTarget } from './galaxyPointer';
+import { advanceGalaxyLens, advanceGalaxyPointer, galaxyLensTarget, galaxyPointerTarget } from './galaxyPointer';
 
 const destinations = [
   { name: 'AI', description: 'Intelligent experiences', project: 'ai-assistant', Icon: Cpu },
@@ -45,6 +45,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
     let previous = performance.now(), time = 0;
     let currentLayout = galaxyLayout(element.clientWidth, element.clientHeight, window.matchMedia('(max-width: 767px)').matches);
     const pointer = { x: 0, y: 0 }, target = { x: 0, y: 0 };
+    const lens = { x: -1e4, y: -1e4, strength: 0 }, lensTarget = { x: -1e4, y: -1e4, strength: 0 };
 
     const request = () => {
       if (!frame && visible && !document.hidden) frame = requestAnimationFrame(draw);
@@ -56,8 +57,9 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
         const delta = Math.max(0, Math.min(now - previous, 100)) / 1000;
         time += delta;
         advanceGalaxyPointer(pointer, target, delta);
+        advanceGalaxyLens(lens, lensTarget, delta);
       }
-      if (reduced) { time = 0; pointer.x = pointer.y = 0; }
+      if (reduced) { time = 0; pointer.x = pointer.y = 0; lens.strength = lensTarget.strength = 0; }
       previous = now;
       const phase = reduced ? 0 : Math.max(0, Math.min(1, progress.get()));
       const active = phase < .16 ? -1 : phase < .48 ? 0 : phase < .8 ? 1 : 2;
@@ -74,7 +76,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
         }));
         readabilityDirty = false;
       }
-      if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active, reduced ? -1 : hovered.current);
+      if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active, reduced ? -1 : hovered.current, lens);
       const point = journeyPoint(currentLayout, phase);
       marker.current?.setAttribute('cx', String(point.x));
       marker.current?.setAttribute('cy', String(point.y));
@@ -117,9 +119,10 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
         window.matchMedia('(max-width: 767px)').matches,
       );
       target.x = next.x; target.y = next.y;
+      Object.assign(lensTarget, galaxyLensTarget(event.clientX - bounds.left, event.clientY - bounds.top, currentLayout.sphere));
       request();
     };
-    const onLeave = () => { target.x = target.y = 0; request(); };
+    const onLeave = () => { target.x = target.y = 0; lensTarget.strength = 0; request(); };
     const onLost = (event: Event) => {
       event.preventDefault(); lost = true;
       setReady(false); request();
@@ -133,7 +136,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
     surface.addEventListener('webglcontextlost', onLost);
     surface.addEventListener('webglcontextrestored', onRestore);
     wake.current = () => {
-      if (!options.current.enabled) target.x = target.y = 0;
+      if (!options.current.enabled) { target.x = target.y = 0; lensTarget.strength = 0; }
       readabilityDirty = true;
       previous = performance.now(); request();
     };

@@ -9,7 +9,14 @@ export function galaxyLayout(width: number, height: number, compact: boolean) {
   const start = compact
     ? { x: width * .06, y: stops[0].y }
     : { x: stops[0].x - (stops[1].x - stops[0].x) * .7, y: stops[0].y - (stops[1].y - stops[0].y) * .7 };
-  return { width, height, radius, stops, start, end: stops[2] };
+  // The particle globe frames the destinations and their labels. On desktop it
+  // sits over the right column, centred where the pointer hot area is centred.
+  const sphere = compact
+    ? { x: width * .5, y: height * .46, radius: Math.min(width * .42, height * .3) }
+    // Centred in the gap between the first two rows so the bright core is
+    // never under a label, where the readability knockout would erase it.
+    : { x: width * .73, y: height * .41, radius: Math.min(height * .36, width * .22) };
+  return { width, height, radius, stops, start, end: stops[2], sphere };
 }
 
 export function journeyPoint(layout: ReturnType<typeof galaxyLayout>, progress: number) {

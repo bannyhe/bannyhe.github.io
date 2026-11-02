@@ -2,7 +2,46 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Vector3 } from 'three';
 import { createGalaxyMotion } from '../src/components/home/galaxyMotion.ts';
-import { advanceGalaxyPointer, galaxyPointerTarget } from '../src/components/home/galaxyPointer.ts';
+import { advanceGalaxyLens, advanceGalaxyPointer, galaxyLensTarget, galaxyPointerTarget } from '../src/components/home/galaxyPointer.ts';
+import { galaxyLayout } from '../src/components/home/galaxyLayout.ts';
+
+test('the cursor lens is live over the globe and fades out just past its rim', () => {
+  const { sphere } = galaxyLayout(1440, 960, false);
+  assert.equal(galaxyLensTarget(sphere.x, sphere.y, sphere).strength, 1);
+  assert.equal(galaxyLensTarget(sphere.x + sphere.radius * .9, sphere.y, sphere).strength, 1);
+  const rim = galaxyLensTarget(sphere.x + sphere.radius * 1.12, sphere.y, sphere).strength;
+  assert.ok(rim > 0 && rim < 1, 'No soft edge at the rim');
+  assert.equal(galaxyLensTarget(sphere.x + sphere.radius * 1.3, sphere.y, sphere).strength, 0);
+  assert.equal(galaxyLensTarget(80, 480, sphere).strength, 0, 'Lens reached the copy column');
+});
+
+test('the globe sits right of the copy and inside the stage on every breakpoint', () => {
+  for (const [width, height, compact] of [[1440, 960, false], [1024, 768, false], [768, 960, false], [390, 844, true], [320, 568, true]]) {
+    const { sphere } = galaxyLayout(width, height, compact);
+    assert.ok(sphere.x - sphere.radius >= 0 && sphere.x + sphere.radius <= width, `Globe clipped at ${width}`);
+    assert.ok(sphere.y - sphere.radius >= 0 && sphere.y + sphere.radius <= height, `Globe clipped vertically at ${width}`);
+    if (!compact) assert.ok(sphere.x - sphere.radius > width * .45, `Globe overlaps the copy at ${width}`);
+  }
+});
+
+test('the lens appears under the cursor, follows it, and fades without popping', () => {
+  const lens = { x: -1e4, y: -1e4, strength: 0 };
+  advanceGalaxyLens(lens, { x: 1000, y: 500, strength: 1 }, 1 / 60);
+  assert.deepEqual([lens.x, lens.y], [1000, 500], 'Lens slid in from off-screen');
+  assert.ok(lens.strength > 0 && lens.strength < .2, 'Lens popped in');
+  for (let i = 0; i < 120; i++) advanceGalaxyLens(lens, { x: 1100, y: 450, strength: 1 }, 1 / 60);
+  assert.ok(Math.hypot(lens.x - 1100, lens.y - 450) < .5 && lens.strength > .99);
+  let previous = lens.strength;
+  for (let i = 0; i < 300; i++) {
+    advanceGalaxyLens(lens, { x: 1100, y: 450, strength: 0 }, 1 / 60);
+    assert.ok(previous - lens.strength < .1, 'Lens dropped out abruptly');
+    previous = lens.strength;
+  }
+  assert.equal(lens.strength, 0, 'Lens never fully released');
+  const frozen = { x: 10, y: 20, strength: .5 };
+  advanceGalaxyLens(frozen, { x: 900, y: 900, strength: 1 }, 0);
+  assert.deepEqual(frozen, { x: 10, y: 20, strength: .5 }, 'Lens moved while paused');
+});
 
 test('the spherical pointer effect stays in the galaxy and fades at its boundary', () => {
   assert.deepEqual(galaxyPointerTarget(.2, .5, false), { x: 0, y: 0 });
