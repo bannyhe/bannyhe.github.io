@@ -42,78 +42,138 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     return Math.max(size.x, size.y, size.z);
   });
 
-  // A spiral suspended inside a distant sphere turns around its own center.
-  // The camera and domain destinations retain their fixed, readable footprint.
+  // A particle globe: a Fibonacci shell you can read as a sphere, with a spiral
+  // galaxy and bright core suspended inside it. Built at unit radius and scaled
+  // to its on-screen footprint in resize(). Kinds are interleaved by index so a
+  // shorter draw range on small screens keeps the same mix.
   let seed = 47;
   const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-  const count = 850;
+  const gauss = () => Math.sqrt(-2 * Math.log(random() + 1e-9)) * Math.cos(2 * Math.PI * random());
+  const count = 4200;
+  const shellTotal = Math.round(count * .5);
   const dustPositions = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
   const prominence = new Float32Array(count);
+  const tones = new Float32Array(count);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  const tilt = new THREE.Matrix4().makeRotationX(-1.08).multiply(new THREE.Matrix4().makeRotationZ(.32));
+  const point = new THREE.Vector3();
+  let shellIndex = 0;
   for (let i = 0; i < count; i++) {
-    if (i % 11 < 8) {
-      const radius = Math.sqrt(random()) * 26;
+    const kind = i % 20;
+    if (kind < 10) {
+      // Shell: even Fibonacci spacing reads as a globe once it turns.
+      const k = shellIndex++ + .5;
+      const y = 1 - 2 * k / shellTotal;
+      const ring = Math.sqrt(1 - y * y), theta = golden * k;
+      const r = 1 + (random() - .5) * .025;
+      point.set(Math.cos(theta) * ring * r, y * r, Math.sin(theta) * ring * r);
+      sizes[i] = 2.1 + random() * 1.2;
+      tones[i] = .1 + random() * .15;
+      prominence[i] = .55 + random() * .3;
+    } else if (kind < 18) {
+      // Spiral disk: three arms, tilted so the galaxy is seen at an angle.
+      const radius = Math.pow(random(), .75) * .8 + .04;
       const arm = Math.floor(random() * 3) * Math.PI * 2 / 3;
-      const angle = radius * .23 + arm + (random() - .5) * .7;
-      dustPositions.set([
-        Math.cos(angle) * radius,
-        Math.sin(angle) * radius * .56,
-        Math.sin(angle) * radius * .48 + (random() - .5) * 5,
-      ], i * 3);
+      const angle = radius * 7.2 + arm + gauss() * .22;
+      point.set(Math.cos(angle) * radius, gauss() * .025 * (1 - radius), Math.sin(angle) * radius).applyMatrix4(tilt);
+      sizes[i] = 1.9 + random() * 1.7;
+      tones[i] = .55 + (1 - radius) * .4;
+      prominence[i] = .5 + random() * .35;
     } else {
-      const radius = 24 + random() * 7;
-      const latitude = random() * 2 - 1;
-      const longitude = random() * Math.PI * 2;
-      const ring = Math.sqrt(1 - latitude * latitude);
-      dustPositions.set([
-        radius * ring * Math.cos(longitude),
-        radius * latitude,
-        radius * ring * Math.sin(longitude),
-      ], i * 3);
+      // Core: a dense, bright cluster at the centre of the disk.
+      point.set(gauss() * .085, gauss() * .05, gauss() * .085).applyMatrix4(tilt);
+      sizes[i] = 2.6 + random() * 1.8;
+      tones[i] = 1;
+      prominence[i] = .85;
     }
-    const anchor = random() > .87;
-    sizes[i] = anchor ? 2.8 + random() * 1.1 : 1.15 + random() * 1.15;
-    prominence[i] = anchor ? 1 : .45 + random() * .35;
+    // A handful of brighter anchor stars give the field a focal hierarchy.
+    if (random() > .95) { sizes[i] += 2.2; prominence[i] = 1; }
+    dustPositions.set([point.x, point.y, point.z], i * 3);
   }
   const dustGeometry = new THREE.BufferGeometry();
   dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
   dustGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
   dustGeometry.setAttribute('prominence', new THREE.BufferAttribute(prominence, 1));
+  dustGeometry.setAttribute('tone', new THREE.BufferAttribute(tones, 1));
   const dustMaterial = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, toneMapped: false,
     uniforms: {
-      color: { value: new THREE.Color(0x375b83) },
-      opacity: { value: .52 }, density: { value: 1 }, time: { value: 0 },
+      shellColor: { value: new THREE.Color(0x3d6aa6) },
+      coreColor: { value: new THREE.Color(0x1c3c74) },
+      lensColor: { value: new THREE.Color(0x2f7de1) },
+      opacity: { value: .9 }, density: { value: 1 }, time: { value: 0 },
+      spin: { value: 0 }, radius: { value: 1 }, sizeScale: { value: 1 }, backFade: { value: .3 },
       viewport: { value: new THREE.Vector2(1, 1) },
+      lens: { value: new THREE.Vector3(-1e4, -1e4, 0) }, lensRadius: { value: 140 },
       clearAreas: { value: Array.from({ length: 8 }, () => new THREE.Vector4(-100, -100, -100, -100)) },
     },
-    vertexShader: `attribute float size; attribute float prominence;
-      uniform float density; uniform float time; uniform vec2 viewport;
-      uniform vec4 clearAreas[8]; varying float fade;
-      void main() { vec4 p=modelViewMatrix*vec4(position,1.);
+    vertexShader: `attribute float size; attribute float prominence; attribute float tone;
+      uniform float density; uniform float time; uniform float spin; uniform float radius;
+      uniform float sizeScale; uniform float backFade; uniform vec2 viewport;
+      uniform vec3 lens; uniform float lensRadius; uniform vec4 clearAreas[8];
+      varying float fade; varying float vTone; varying float vLens;
+      vec2 toScreen(vec4 clip) { vec2 s=(clip.xy/clip.w*.5+.5)*viewport; return vec2(s.x, viewport.y-s.y); }
+      void main() {
+        // Idle spin happens here, not in the object matrix, so the globe's
+        // transform reflects only the pointer and scroll.
+        float c=cos(spin), s=sin(spin);
+        vec3 local=vec3(c*position.x+s*position.z, position.y, -s*position.x+c*position.z);
+        vec4 rest=projectionMatrix*modelViewMatrix*vec4(local,1.);
+        // Cursor lens: particles under the mouse bulge outward and brighten.
+        float near=1.-smoothstep(0., lensRadius, distance(toScreen(rest), lens.xy));
+        float pull=lens.z*near*near*(3.-2.*near);
+        local+=normalize(local+vec3(1e-5))*pull*.2;
+        local*=radius;
+        vec4 p=modelViewMatrix*vec4(local,1.);
         gl_Position=projectionMatrix*p;
-        float distant=clamp(size*42./max(20.,-p.z),1.45,2.6);
-        float anchor=clamp(size*48./max(20.,-p.z),2.5,4.4);
-        gl_PointSize=mix(distant,anchor,step(.95,prominence))*density;
-        float shimmer=.94+.06*sin(time*.55+position.x*1.7+position.y);
-        fade=(.55+.45*prominence)*shimmer*(1.-smoothstep(65.,105.,-p.z));
-        vec2 screen=(gl_Position.xy/gl_Position.w*.5+.5)*viewport;
-        screen.y=viewport.y-screen.y;
+        // Depth cue: the far hemisphere recedes, so rotation reads as a sphere.
+        float centerZ=(modelViewMatrix*vec4(0.,0.,0.,1.)).z;
+        float front=clamp((p.z-centerZ)/radius*.5+.5,0.,1.);
+        float anchor=step(.99,prominence);
+        gl_PointSize=size*sizeScale*mix(.72,1.12,front)*(1.+pull*.9+anchor*.15)*density;
+        float shimmer=.9+.1*sin(time*.7+position.x*9.+position.y*7.);
+        fade=(.5+.5*prominence)*shimmer*mix(backFade,1.,front)*(1.+pull*.6);
+        vec2 screen=toScreen(gl_Position);
         for(int i=0;i<8;i++) {
           vec2 edge=max(clearAreas[i].xy-screen,screen-clearAreas[i].zw);
           fade*=smoothstep(0.,14.,max(edge.x,edge.y));
         }
+        vTone=tone; vLens=pull;
       }`,
-    fragmentShader: `uniform vec3 color; uniform float opacity; varying float fade;
+    fragmentShader: `uniform vec3 shellColor; uniform vec3 coreColor; uniform vec3 lensColor; uniform float opacity;
+      varying float fade; varying float vTone; varying float vLens;
       void main() { float r=length(gl_PointCoord-.5);
-        float core=1.-smoothstep(.12,.34,r);
-        float halo=1.-smoothstep(.18,.5,r);
-        gl_FragColor=vec4(color,(core*.8+halo*.2)*opacity*fade);
+        float core=1.-smoothstep(.22,.42,r);
+        float halo=1.-smoothstep(.3,.5,r);
+        vec3 color=mix(mix(shellColor,coreColor,vTone),lensColor,vLens*.65);
+        gl_FragColor=vec4(color,min(1.,(core*.9+halo*.25)*opacity*fade));
         #include <colorspace_fragment>
       }`,
   });
   const dust = new THREE.Points(dustGeometry, dustMaterial);
+  dust.renderOrder = 2;
+  // Radius is applied in the shader, so the object-space bounds would be wrong.
+  dust.frustumCulled = false;
+
+  // A soft core glow behind the globe gives the galaxy a light source. It is a
+  // mesh, not points, so it never competes with the star field for draw state.
+  const glowMaterial = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, toneMapped: false,
+    uniforms: { color: { value: new THREE.Color(0x9db8e0) }, opacity: { value: .3 } },
+    vertexShader: `varying vec2 vUv; void main() { vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader: `uniform vec3 color; uniform float opacity; varying vec2 vUv;
+      void main() { float r=length(vUv-.5)*2.;
+        float glow=exp(-r*r*5.)*.85+exp(-r*r*40.)*.35;
+        gl_FragColor=vec4(color,glow*opacity*(1.-smoothstep(.85,1.,r)));
+        #include <colorspace_fragment>
+      }`,
+  });
+  const glow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), glowMaterial);
+  glow.renderOrder = 1;
+  scene.add(glow);
   scene.add(dust);
+  let globeRadius = 1;
   camera.position.set(0, 0, 18);
   camera.lookAt(0, 0, 0);
   let layout = galaxyLayout(1, 1, false);
@@ -128,7 +188,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     camera.updateProjectionMatrix();
     dustMaterial.uniforms.density.value = density;
     dustMaterial.uniforms.viewport.value.set(width, height);
-    dustGeometry.setDrawRange(0, compact ? 480 : count);
+    dustGeometry.setDrawRange(0, compact ? 2000 : count);
     const unitsPerPixel = 2 * 18 * Math.tan(THREE.MathUtils.degToRad(20)) / height;
     models.forEach((group, i) => {
       group.position.set(
@@ -139,6 +199,18 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       centers[i].copy(group.position);
       group.scale.setScalar(layout.radius * 1.95 * unitsPerPixel / modelExtents[i]);
     });
+    // Seat the globe behind the destinations: its near surface stays behind the
+    // z=0 plane the 3D symbols live on, at the on-screen size the layout asks for.
+    const slope = 2 * Math.tan(THREE.MathUtils.degToRad(20)) / height;
+    const k = layout.sphere.radius * slope;
+    const depth = 19.5 / (1 - k);
+    globeRadius = k * depth;
+    dust.position.set((layout.sphere.x - width / 2) * slope * depth, (height / 2 - layout.sphere.y) * slope * depth, 18 - depth);
+    dustMaterial.uniforms.radius.value = globeRadius;
+    dustMaterial.uniforms.lensRadius.value = layout.sphere.radius * .42;
+    dustMaterial.uniforms.sizeScale.value = compact ? .9 : 1;
+    glow.position.copy(dust.position);
+    glow.scale.setScalar(globeRadius * 2.7);
   }
 
   const motion = createGalaxyMotion();
@@ -146,7 +218,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   const pointerEuler = new THREE.Euler();
   let previousTime = 0;
 
-  function draw(progress: number, time: number, dark: boolean, pointer: { x: number; y: number }, activeIndex: number, hoveredIndex = -1) {
+  function draw(progress: number, time: number, dark: boolean, pointer: { x: number; y: number }, activeIndex: number, hoveredIndex = -1,
+    lens: { x: number; y: number; strength: number } = { x: -1e4, y: -1e4, strength: 0 }) {
     if (restoreEnvironment) {
       envTarget.dispose(); envTarget = studioEnvironment(renderer); scene.environment = envTarget.texture; restoreEnvironment = false;
     }
@@ -155,9 +228,21 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     const delta = THREE.MathUtils.clamp(time - previousTime, 0, .1);
     previousTime = time;
     motion.advance(delta, activeIndex, hoveredIndex);
-    dustMaterial.uniforms.color.value.set(dark ? 0xc4daf5 : 0x375b83);
-    dustMaterial.uniforms.opacity.value = dark ? .66 : .52;
-    dustMaterial.uniforms.time.value = time;
+    // Dark mode glows additively; light mode needs ink-like particles that
+    // darken the page instead, or the globe washes out against the gradient.
+    const blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+    dustMaterial.blending = glowMaterial.blending = blending;
+    const u = dustMaterial.uniforms;
+    u.shellColor.value.set(dark ? 0x9db9f5 : 0x2c5a99);
+    u.coreColor.value.set(dark ? 0xf4f8ff : 0x142f62);
+    u.lensColor.value.set(dark ? 0xa8ecff : 0x1f72dd);
+    u.opacity.value = dark ? .95 : .92;
+    u.backFade.value = dark ? .24 : .3;
+    u.time.value = time;
+    u.spin.value = time * .045;
+    u.lens.value.set(lens.x, lens.y, lens.strength);
+    glowMaterial.uniforms.color.value.set(dark ? 0x3b5fae : 0xa9c1e4);
+    glowMaterial.uniforms.opacity.value = dark ? .24 : .34;
     scene.environmentIntensity = dark ? 1.05 : 1.15;
     renderer.toneMappingExposure = dark ? 1.05 : 1.12;
     pointerTilt.setFromEuler(pointerEuler.set(pointer.y * .06, pointer.x * .1, 0));
@@ -168,9 +253,9 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       group.position.y += Math.sin(time * .48 + index * 1.8) * .012;
     });
     sculpture.animate(time, activeIndex, dark);
-    // Bounded spherical rotation follows the mouse without camera travel or zoom.
-    dust.position.set(10, -progress * .45, -32);
-    dust.rotation.set(pointer.y * .16, pointer.x * .24, -.18 + progress * .055 + pointer.x * .025);
+    // Trackball: the globe turns toward the cursor and back when it leaves.
+    // Scroll adds a quarter turn across the journey. Its centre never moves.
+    dust.rotation.set(.18 + pointer.y * .42, -.35 + progress * 1.4 + pointer.x * .62, pointer.x * .04);
     renderer.render(scene, camera);
   }
 
