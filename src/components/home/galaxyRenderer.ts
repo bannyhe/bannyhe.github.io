@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { galaxyLayout } from './galaxyLayout';
 import { createGalaxyMotion } from './galaxyMotion';
 import { createGalaxyModels } from './galaxyModels';
+import { createNetworkField } from './galaxyField';
 
 function studioEnvironment(renderer: THREE.WebGLRenderer) {
   const studio = new THREE.Scene();
@@ -49,7 +50,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   let seed = 47;
   const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
   const gauss = () => Math.sqrt(-2 * Math.log(random() + 1e-9)) * Math.cos(2 * Math.PI * random());
-  const count = 4200;
+  const count = 5200;
   const shellTotal = Math.round(count * .5);
   const dustPositions = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
@@ -101,29 +102,22 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     uniforms: {
       shellColor: { value: new THREE.Color(0x3d6aa6) },
       coreColor: { value: new THREE.Color(0x1c3c74) },
-      lensColor: { value: new THREE.Color(0x2f7de1) },
       opacity: { value: .9 }, density: { value: 1 }, time: { value: 0 },
       spin: { value: 0 }, radius: { value: 1 }, sizeScale: { value: 1 }, backFade: { value: .3 },
       viewport: { value: new THREE.Vector2(1, 1) },
-      lens: { value: new THREE.Vector3(-1e4, -1e4, 0) }, lensRadius: { value: 140 },
       clearAreas: { value: Array.from({ length: 8 }, () => new THREE.Vector4(-100, -100, -100, -100)) },
     },
     vertexShader: `attribute float size; attribute float prominence; attribute float tone;
       uniform float density; uniform float time; uniform float spin; uniform float radius;
       uniform float sizeScale; uniform float backFade; uniform vec2 viewport;
-      uniform vec3 lens; uniform float lensRadius; uniform vec4 clearAreas[8];
-      varying float fade; varying float vTone; varying float vLens;
+      uniform vec4 clearAreas[8];
+      varying float fade; varying float vTone;
       vec2 toScreen(vec4 clip) { vec2 s=(clip.xy/clip.w*.5+.5)*viewport; return vec2(s.x, viewport.y-s.y); }
       void main() {
         // Idle spin happens here, not in the object matrix, so the globe's
         // transform reflects only the pointer and scroll.
         float c=cos(spin), s=sin(spin);
         vec3 local=vec3(c*position.x+s*position.z, position.y, -s*position.x+c*position.z);
-        vec4 rest=projectionMatrix*modelViewMatrix*vec4(local,1.);
-        // Cursor lens: particles under the mouse bulge outward and brighten.
-        float near=1.-smoothstep(0., lensRadius, distance(toScreen(rest), lens.xy));
-        float pull=lens.z*near*near*(3.-2.*near);
-        local+=normalize(local+vec3(1e-5))*pull*.2;
         local*=radius;
         vec4 p=modelViewMatrix*vec4(local,1.);
         gl_Position=projectionMatrix*p;
@@ -131,22 +125,22 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
         float centerZ=(modelViewMatrix*vec4(0.,0.,0.,1.)).z;
         float front=clamp((p.z-centerZ)/radius*.5+.5,0.,1.);
         float anchor=step(.99,prominence);
-        gl_PointSize=size*sizeScale*mix(.72,1.12,front)*(1.+pull*.9+anchor*.15)*density;
+        gl_PointSize=size*sizeScale*mix(.72,1.12,front)*(1.+anchor*.15)*density;
         float shimmer=.9+.1*sin(time*.7+position.x*9.+position.y*7.);
-        fade=(.5+.5*prominence)*shimmer*mix(backFade,1.,front)*(1.+pull*.6);
+        fade=(.5+.5*prominence)*shimmer*mix(backFade,1.,front);
         vec2 screen=toScreen(gl_Position);
         for(int i=0;i<8;i++) {
           vec2 edge=max(clearAreas[i].xy-screen,screen-clearAreas[i].zw);
           fade*=smoothstep(0.,14.,max(edge.x,edge.y));
         }
-        vTone=tone; vLens=pull;
+        vTone=tone;
       }`,
-    fragmentShader: `uniform vec3 shellColor; uniform vec3 coreColor; uniform vec3 lensColor; uniform float opacity;
-      varying float fade; varying float vTone; varying float vLens;
+    fragmentShader: `uniform vec3 shellColor; uniform vec3 coreColor; uniform float opacity;
+      varying float fade; varying float vTone;
       void main() { float r=length(gl_PointCoord-.5);
         float core=1.-smoothstep(.22,.42,r);
         float halo=1.-smoothstep(.3,.5,r);
-        vec3 color=mix(mix(shellColor,coreColor,vTone),lensColor,vLens*.65);
+        vec3 color=mix(shellColor,coreColor,vTone);
         gl_FragColor=vec4(color,min(1.,(core*.9+halo*.25)*opacity*fade));
         #include <colorspace_fragment>
       }`,
@@ -173,22 +167,40 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   glow.renderOrder = 1;
   scene.add(glow);
   scene.add(dust);
+  const field = createNetworkField(dustMaterial.uniforms.clearAreas.value);
+  renderer.autoClear = false;
   let globeRadius = 1;
   camera.position.set(0, 0, 18);
   camera.lookAt(0, 0, 0);
   let layout = galaxyLayout(1, 1, false);
+  // Adaptive quality: software-rendered or weak GPUs step down to 1x pixels,
+  // then to half the particles. A capable GPU never leaves full quality.
+  let quality = 0, size = { width: 1, height: 1 }, lastFrame = 0;
+  const intervals: number[] = [];
+  function adapt(now: number) {
+    if (quality < 2 && lastFrame && now - lastFrame < 250) {
+      intervals.push(now - lastFrame);
+      if (intervals.length === 45) {
+        const median = [...intervals].sort((a, b) => a - b)[22];
+        intervals.length = 0;
+        if (median > 26) { quality++; resize(size.width, size.height); }
+      }
+    }
+    lastFrame = now;
+  }
 
   function resize(width: number, height: number) {
     const compact = window.matchMedia('(max-width: 767px)').matches;
     layout = galaxyLayout(width, height, compact);
-    const density = Math.min(window.devicePixelRatio || 1, 2);
+    size = { width, height };
+    const density = quality ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(density);
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     dustMaterial.uniforms.density.value = density;
     dustMaterial.uniforms.viewport.value.set(width, height);
-    dustGeometry.setDrawRange(0, compact ? 2000 : count);
+    dustGeometry.setDrawRange(0, Math.round((compact ? 2000 : count) * (quality > 1 ? .5 : 1)));
     const unitsPerPixel = 2 * 18 * Math.tan(THREE.MathUtils.degToRad(20)) / height;
     models.forEach((group, i) => {
       group.position.set(
@@ -207,10 +219,10 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     globeRadius = k * depth;
     dust.position.set((layout.sphere.x - width / 2) * slope * depth, (height / 2 - layout.sphere.y) * slope * depth, 18 - depth);
     dustMaterial.uniforms.radius.value = globeRadius;
-    dustMaterial.uniforms.lensRadius.value = layout.sphere.radius * .42;
     dustMaterial.uniforms.sizeScale.value = compact ? .9 : 1;
     glow.position.copy(dust.position);
     glow.scale.setScalar(globeRadius * 2.7);
+    field.resize(width, height, layout.sphere, compact, density);
   }
 
   const motion = createGalaxyMotion();
@@ -218,8 +230,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   const pointerEuler = new THREE.Euler();
   let previousTime = 0;
 
-  function draw(progress: number, time: number, dark: boolean, pointer: { x: number; y: number }, activeIndex: number, hoveredIndex = -1,
-    lens: { x: number; y: number; strength: number } = { x: -1e4, y: -1e4, strength: 0 }) {
+  function draw(progress: number, time: number, dark: boolean, pointer: { x: number; y: number }, activeIndex: number, hoveredIndex = -1) {
+    adapt(performance.now());
     if (restoreEnvironment) {
       envTarget.dispose(); envTarget = studioEnvironment(renderer); scene.environment = envTarget.texture; restoreEnvironment = false;
     }
@@ -235,12 +247,10 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     const u = dustMaterial.uniforms;
     u.shellColor.value.set(dark ? 0x9db9f5 : 0x2c5a99);
     u.coreColor.value.set(dark ? 0xf4f8ff : 0x142f62);
-    u.lensColor.value.set(dark ? 0xa8ecff : 0x1f72dd);
     u.opacity.value = dark ? .95 : .92;
     u.backFade.value = dark ? .24 : .3;
     u.time.value = time;
     u.spin.value = time * .045;
-    u.lens.value.set(lens.x, lens.y, lens.strength);
     glowMaterial.uniforms.color.value.set(dark ? 0x3b5fae : 0xa9c1e4);
     glowMaterial.uniforms.opacity.value = dark ? .24 : .34;
     scene.environmentIntensity = dark ? 1.05 : 1.15;
@@ -253,9 +263,12 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       group.position.y += Math.sin(time * .48 + index * 1.8) * .012;
     });
     sculpture.animate(time, activeIndex, dark);
-    // Trackball: the globe turns toward the cursor and back when it leaves.
-    // Scroll adds a quarter turn across the journey. Its centre never moves.
-    dust.rotation.set(.18 + pointer.y * .42, -.35 + progress * 1.4 + pointer.x * .62, pointer.x * .04);
+    // A gentle parallax toward the cursor, easing back when it leaves; scroll
+    // turns the globe across the journey. Its centre never moves.
+    dust.rotation.set(.18 + pointer.y * .1, -.35 + progress * 1.4 + pointer.x * .16, pointer.x * .015);
+    field.update(time, dark);
+    renderer.clear();
+    renderer.render(field.scene, field.camera);
     renderer.render(scene, camera);
   }
 
@@ -279,6 +292,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       });
       geometries.forEach(g => g.dispose());
       materials.forEach(m => m.dispose());
+      field.dispose();
       envTarget.dispose();
       renderer.dispose();
     },

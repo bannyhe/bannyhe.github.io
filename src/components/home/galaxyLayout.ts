@@ -9,13 +9,24 @@ export function galaxyLayout(width: number, height: number, compact: boolean) {
   const start = compact
     ? { x: width * .06, y: stops[0].y }
     : { x: stops[0].x - (stops[1].x - stops[0].x) * .7, y: stops[0].y - (stops[1].y - stops[0].y) * .7 };
-  // The particle globe frames the destinations and their labels. On desktop it
-  // sits over the right column, centred where the pointer hot area is centred.
-  const sphere = compact
-    ? { x: width * .5, y: height * .46, radius: Math.min(width * .42, height * .3) }
-    // Centred in the gap between the first two rows so the bright core is
-    // never under a label, where the readability knockout would erase it.
-    : { x: width * .73, y: height * .41, radius: Math.min(height * .36, width * .22) };
+  // The particle globe holds all three domains, symbols and labels together.
+  let sphere;
+  if (compact) {
+    const cover = Math.hypot(stops[2].x - width * .5 + radius, 30) + 14;
+    sphere = { x: width * .5, y: stops[1].y + 18, radius: Math.min(width * .48, Math.max(cover, width * .4)) };
+  } else {
+    // Labels sit 31px right of each symbol; their width is estimated here.
+    const left = stops[0].x - radius, top = stops[0].y - radius, bottom = stops[2].y + radius;
+    const right = Math.min(width - 16, stops[2].x + radius + 31 + Math.min(160, width * .12));
+    let x = (left + right) / 2;
+    let r = Math.min(Math.hypot((right - left) / 2, (bottom - top) / 2) + 18, height * .49);
+    // Fit on the stage where there is room; an off-axis sphere projects up to ~15%
+    // wider than its radius at this field of view. The copy column wins over
+    // fitting, so on narrow screens the globe runs off the right edge instead.
+    x = Math.max(Math.min(x, width - r * 1.18 - 20), width * .47 + r);
+    r = Math.min(r, x - width * .44);
+    sphere = { x, y: (top + bottom) / 2, radius: r };
+  }
   return { width, height, radius, stops, start, end: stops[2], sphere };
 }
 
