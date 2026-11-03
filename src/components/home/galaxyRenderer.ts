@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { galaxyLayout } from './galaxyLayout';
+import { galaxyLayout, globeShellSlot } from './galaxyLayout';
 import { createGalaxyMotion } from './galaxyMotion';
 import { createGalaxyModels } from './galaxyModels';
 import { createNetworkField } from './galaxyField';
@@ -64,7 +64,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     const kind = i % 20;
     if (kind < 10) {
       // Shell: even Fibonacci spacing reads as a globe once it turns.
-      const k = shellIndex++ + .5;
+      // Strided so any shortened draw range still covers the whole sphere.
+      const k = globeShellSlot(shellIndex++, shellTotal) + .5;
       const y = 1 - 2 * k / shellTotal;
       const ring = Math.sqrt(1 - y * y), theta = golden * k;
       const r = 1 + (random() - .5) * .025;

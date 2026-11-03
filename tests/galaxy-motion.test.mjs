@@ -3,7 +3,20 @@ import assert from 'node:assert/strict';
 import { Vector3 } from 'three';
 import { createGalaxyMotion } from '../src/components/home/galaxyMotion.ts';
 import { advanceGalaxyPointer, galaxyPointerTarget } from '../src/components/home/galaxyPointer.ts';
-import { galaxyLayout } from '../src/components/home/galaxyLayout.ts';
+import { galaxyLayout, globeShellSlot } from '../src/components/home/galaxyLayout.ts';
+
+test('a shortened draw range still shows the whole globe, not just its top', () => {
+  const total = 2600;
+  const slots = Array.from({ length: total }, (_, i) => globeShellSlot(i, total));
+  assert.equal(new Set(slots).size, total, 'Some shell slots were skipped or repeated');
+  // Mobile and the adaptive-quality step draw only a prefix of the particles.
+  for (const share of [.25, .38, .5]) {
+    const ys = slots.slice(0, Math.round(total * share)).map(k => 1 - 2 * (k + .5) / total);
+    const below = ys.filter(y => y < 0).length / ys.length;
+    assert.ok(Math.abs(below - .5) < .03, `Prefix of ${share} is lopsided: ${below.toFixed(2)} below the equator`);
+    assert.ok(Math.min(...ys) < -.95 && Math.max(...ys) > .95, `Prefix of ${share} misses a pole`);
+  }
+});
 
 test('the globe holds all three domains and stays clear of the copy', () => {
   const inside = (sphere, x, y, reach) => Math.hypot(x - sphere.x, y - sphere.y) + reach <= sphere.radius + 2;
