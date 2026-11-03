@@ -6,17 +6,21 @@ import { createNetworkField } from './galaxyField';
 
 function studioEnvironment(renderer: THREE.WebGLRenderer) {
   const studio = new THREE.Scene();
-  studio.background = new THREE.Color(0x263442);
+  // A product-photography setup: a dark cyclorama so the lacquer reads deep,
+  // a large soft key, a cool fill, a violet rim to catch the bevels, and a
+  // thin strip that draws one clean highlight line along each tile.
+  studio.background = new THREE.Color(0x141c2a);
   const panels: THREE.Mesh[] = [];
   const panel = (width: number, height: number, color: THREE.Color, x: number, y: number, z: number) => {
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide }));
     mesh.position.set(x, y, z); mesh.lookAt(0, 0, 0); studio.add(mesh); panels.push(mesh);
   };
-  panel(6, 9, new THREE.Color(3.2, 3.5, 4), -5, 4, 6);
-  panel(3, 7, new THREE.Color(1.4, 1.8, 2.4), 5, 1, 3);
-  panel(7, 3, new THREE.Color(2, 2.3, 2.8), 0, 6, -4);
+  panel(7, 8, new THREE.Color(3.6, 3.8, 4.2), -5.5, 4.5, 6);
+  panel(4, 7, new THREE.Color(1.1, 1.5, 2.3), 6, .5, 3.5);
+  panel(5, 6, new THREE.Color(2.1, 1.5, 3.4), 2, 1, -6);
+  panel(9, .5, new THREE.Color(5, 5.2, 5.6), 0, 7, 2);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const target = pmrem.fromScene(studio, .12);
+  const target = pmrem.fromScene(studio, .05);
   panels.forEach(mesh => { mesh.geometry.dispose(); (mesh.material as THREE.Material).dispose(); });
   pmrem.dispose();
   return target;
@@ -270,7 +274,7 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       group.position.copy(centers[index]);
       group.position.y += Math.sin(time * .48 + index * 1.8) * .012;
     });
-    sculpture.animate(time, activeIndex, dark);
+    sculpture.animate(time, activeIndex, dark, hoveredIndex);
     // A gentle parallax toward the cursor, easing back when it leaves; scroll
     // turns the globe across the journey. Its centre never moves.
     dust.rotation.set(.18 + pointer.y * .1, -.35 + progress * 1.4 + pointer.x * .16, pointer.x * .015);
