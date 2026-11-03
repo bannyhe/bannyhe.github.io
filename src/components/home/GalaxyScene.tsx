@@ -7,7 +7,7 @@ import type { CSSProperties } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import { galaxyLayout, journeyPoint } from './galaxyLayout';
-import { advanceGalaxyLens, advanceGalaxyPointer, galaxyLensTarget, galaxyPointerTarget } from './galaxyPointer';
+import { advanceGalaxyPointer, galaxyPointerTarget } from './galaxyPointer';
 
 const destinations = [
   { name: 'AI', description: 'Intelligent experiences', project: 'ai-assistant', Icon: Cpu },
@@ -41,11 +41,10 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
     if (!element || !surface) return;
     let renderer: ReturnType<typeof import('./galaxyRenderer').createGalaxyRenderer> | undefined;
     let disposed = false, visible = true, lost = false, frame = 0;
-    let readabilityDirty = true;
+    let readabilityDirty = true, lastActive = -2, settle = 0, settleTimer = 0;
     let previous = performance.now(), time = 0;
     let currentLayout = galaxyLayout(element.clientWidth, element.clientHeight, window.matchMedia('(max-width: 767px)').matches);
     const pointer = { x: 0, y: 0 }, target = { x: 0, y: 0 };
-    const lens = { x: -1e4, y: -1e4, strength: 0 }, lensTarget = { x: -1e4, y: -1e4, strength: 0 };
 
     const request = () => {
       if (!frame && visible && !document.hidden) frame = requestAnimationFrame(draw);
@@ -57,26 +56,42 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
         const delta = Math.max(0, Math.min(now - previous, 100)) / 1000;
         time += delta;
         advanceGalaxyPointer(pointer, target, delta);
-        advanceGalaxyLens(lens, lensTarget, delta);
       }
-      if (reduced) { time = 0; pointer.x = pointer.y = 0; lens.strength = lensTarget.strength = 0; }
+      if (reduced) { time = 0; pointer.x = pointer.y = 0; }
       previous = now;
       const phase = reduced ? 0 : Math.max(0, Math.min(1, progress.get()));
       const active = phase < .16 ? -1 : phase < .48 ? 0 : phase < .8 ? 1 : 2;
+      // Each chapter's copy has its own height and slides in, so the readable
+      // areas follow it through the transition rather than keeping the last one.
+      if (active !== lastActive) {
+        lastActive = active; settle = 48; readabilityDirty = true;
+        clearTimeout(settleTimer);
+        settleTimer = window.setTimeout(() => { readabilityDirty = true; request(); }, 750);
+      }
+      if (settle > 0) { settle--; readabilityDirty = true; }
       if (renderer && readabilityDirty) {
         const origin = element.getBoundingClientRect();
         const stage = element.closest('.galaxy-stage');
-        const labels = [...stage?.querySelectorAll('.galaxy-object-label, .galaxy-copy-stack, .galaxy-coordinate, .galaxy-footer, .home-motion-toggle') || []];
+        const local = (rect: DOMRect) => ({ x: rect.left - origin.left, y: rect.top - origin.top, width: rect.width, height: rect.height });
+        const labels = [...stage?.querySelectorAll('.galaxy-object-label, .galaxy-coordinate, .galaxy-footer, .home-motion-toggle') || []];
         const navigation = document.querySelector('nav.fixed');
         if (navigation) labels.push(navigation);
-        // Fade stars around live text so even a bright star cannot lower contrast.
-        renderer.setReadabilityAreas(labels.filter(label => label.getBoundingClientRect().width).map(label => {
-          const rect = label.getBoundingClientRect();
-          return { x: rect.left - origin.left, y: rect.top - origin.top, width: rect.width, height: rect.height };
-        }));
+        const areas = labels.map(label => label.getBoundingClientRect()).filter(rect => rect.width).map(local);
+        // The copy can wrap taller than its stack (longer Chinese lines on
+        // mobile push the actions below it), so cover what it actually renders.
+        const stack = stage?.querySelector('.galaxy-copy-stack');
+        if (stack) {
+          const rects = [stack, ...(stage?.querySelector('.galaxy-copy[data-active="true"]')?.children || [])]
+            .map(node => node.getBoundingClientRect()).filter(rect => rect.width);
+          const left = Math.min(...rects.map(r => r.left)), top = Math.min(...rects.map(r => r.top));
+          const right = Math.max(...rects.map(r => r.right)), bottom = Math.max(...rects.map(r => r.bottom));
+          areas.unshift(local(new DOMRect(left, top, right - left, bottom - top)));
+        }
+        // Fade particles around live text so even a bright one cannot lower contrast.
+        renderer.setReadabilityAreas(areas);
         readabilityDirty = false;
       }
-      if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active, reduced ? -1 : hovered.current, lens);
+      if (!lost) renderer?.draw(phase, time, dark, pointer, reduced ? -1 : active, reduced ? -1 : hovered.current);
       const point = journeyPoint(currentLayout, phase);
       marker.current?.setAttribute('cx', String(point.x));
       marker.current?.setAttribute('cy', String(point.y));
@@ -119,10 +134,9 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
         window.matchMedia('(max-width: 767px)').matches,
       );
       target.x = next.x; target.y = next.y;
-      Object.assign(lensTarget, galaxyLensTarget(event.clientX - bounds.left, event.clientY - bounds.top, currentLayout.sphere));
       request();
     };
-    const onLeave = () => { target.x = target.y = 0; lensTarget.strength = 0; request(); };
+    const onLeave = () => { target.x = target.y = 0; request(); };
     const onLost = (event: Event) => {
       event.preventDefault(); lost = true;
       setReady(false); request();
@@ -136,7 +150,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
     surface.addEventListener('webglcontextlost', onLost);
     surface.addEventListener('webglcontextrestored', onRestore);
     wake.current = () => {
-      if (!options.current.enabled) { target.x = target.y = 0; lensTarget.strength = 0; }
+      if (!options.current.enabled) target.x = target.y = 0;
       readabilityDirty = true;
       previous = performance.now(); request();
     };
@@ -148,7 +162,7 @@ export function GalaxyScene({ progress, enabled, reduced }: { progress: MotionVa
       catch { setReady(false); }
     }).catch(() => { if (!disposed) setReady(false); });
     return () => {
-      disposed = true; wake.current = () => {};
+      disposed = true; wake.current = () => {}; clearTimeout(settleTimer);
       cancelAnimationFrame(frame);
       observer.disconnect(); visibility.disconnect(); unsubscribe();
       document.removeEventListener('visibilitychange', onVisibility);
