@@ -41,3 +41,16 @@ export function journeyPoint(layout: ReturnType<typeof galaxyLayout>, progress: 
     y: points[index].y + (points[index + 1].y - points[index].y) * t,
   };
 }
+
+/**
+ * Fibonacci order runs pole to pole, so a shortened draw range (mobile, or
+ * adaptive quality) would show only the top of the globe. Striding by a
+ * golden-ratio step, coprime with the total, visits every slot once and makes
+ * every prefix sample the whole sphere evenly.
+ */
+export function globeShellSlot(index: number, total: number) {
+  const gcd = (a: number, b: number): number => b ? gcd(b, a % b) : a;
+  let stride = Math.round(total * .618);
+  while (gcd(stride, total) !== 1) stride++;
+  return (index * stride) % total;
+}

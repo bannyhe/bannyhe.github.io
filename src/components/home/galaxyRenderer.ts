@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { galaxyLayout } from './galaxyLayout';
+import { galaxyLayout, globeShellSlot } from './galaxyLayout';
 import { createGalaxyMotion } from './galaxyMotion';
 import { createGalaxyModels } from './galaxyModels';
 import { createNetworkField } from './galaxyField';
@@ -64,7 +64,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     const kind = i % 20;
     if (kind < 10) {
       // Shell: even Fibonacci spacing reads as a globe once it turns.
-      const k = shellIndex++ + .5;
+      // Strided so any shortened draw range still covers the whole sphere.
+      const k = globeShellSlot(shellIndex++, shellTotal) + .5;
       const y = 1 - 2 * k / shellTotal;
       const ring = Math.sqrt(1 - y * y), theta = golden * k;
       const r = 1 + (random() - .5) * .025;
@@ -106,11 +107,12 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
       spin: { value: 0 }, radius: { value: 1 }, sizeScale: { value: 1 }, backFade: { value: .3 },
       viewport: { value: new THREE.Vector2(1, 1) },
       clearAreas: { value: Array.from({ length: 8 }, () => new THREE.Vector4(-100, -100, -100, -100)) },
+      icons: { value: Array.from({ length: 3 }, () => new THREE.Vector3(-1e4, -1e4, 0)) },
     },
     vertexShader: `attribute float size; attribute float prominence; attribute float tone;
       uniform float density; uniform float time; uniform float spin; uniform float radius;
       uniform float sizeScale; uniform float backFade; uniform vec2 viewport;
-      uniform vec4 clearAreas[8];
+      uniform vec4 clearAreas[8]; uniform vec3 icons[3];
       varying float fade; varying float vTone;
       vec2 toScreen(vec4 clip) { vec2 s=(clip.xy/clip.w*.5+.5)*viewport; return vec2(s.x, viewport.y-s.y); }
       void main() {
@@ -131,8 +133,11 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
         vec2 screen=toScreen(gl_Position);
         for(int i=0;i<8;i++) {
           vec2 edge=max(clearAreas[i].xy-screen,screen-clearAreas[i].zw);
-          fade*=smoothstep(0.,14.,max(edge.x,edge.y));
+          fade*=smoothstep(0.,22.,max(edge.x,edge.y));
         }
+        // Each 3D symbol gets clear air: particles thin out just past its
+        // silhouette, so a turning icon is never lost in the field.
+        for(int i=0;i<3;i++) fade*=smoothstep(icons[i].z*1.1,icons[i].z*1.95,distance(screen,icons[i].xy));
         vTone=tone;
       }`,
     fragmentShader: `uniform vec3 shellColor; uniform vec3 coreColor; uniform float opacity;
@@ -222,6 +227,9 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     dustMaterial.uniforms.sizeScale.value = compact ? .9 : 1;
     glow.position.copy(dust.position);
     glow.scale.setScalar(globeRadius * 2.7);
+    // Icon centres and silhouette radius, in the same CSS pixels as the shader.
+    dustMaterial.uniforms.icons.value.forEach((icon: THREE.Vector3, i: number) =>
+      icon.set(layout.stops[i].x, layout.stops[i].y, layout.radius));
     field.resize(width, height, layout.sphere, compact, density);
   }
 
