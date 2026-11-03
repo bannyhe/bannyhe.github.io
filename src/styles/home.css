@@ -74,11 +74,15 @@
 .home-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--home-muted); letter-spacing: .015em; font-weight: 500; line-height: 1.6; }
 .home-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #6185a3; box-shadow: 0 0 0 4px #6185a314; }
 .galaxy-copy h1, .galaxy-copy h2 { margin: 25px 0 24px; font-size: clamp(48px,5.6vw,80px); line-height: 1.06; letter-spacing: -.055em; font-weight: 500; }
-/* Ocean blue, iris and orchid echo the scene's cool metallic and lavender accents. */
+/* Dark mode's hues (pink, violet, blue, cyan) at the most saturated value
+   each can hold while every rendered blend keeps 4.5:1 on the page. The cycle
+   runs out and back so each blend is between hue neighbours: cyan straight
+   into magenta passes through grey at this depth and reads as mud. */
 .orbital-home :is(.galaxy-copy, .home-work-heading, .home-contact-card) :is(h1, h2, h3) {
   background-image: linear-gradient(to right in oklab,
-    #30669c 0%, #6c50bb 12.5%, #884c99 25%, #5b56b7 37.5%, #30669c 50%,
-    #6c50bb 62.5%, #884c99 75%, #5b56b7 87.5%, #30669c 100%);
+    #bd007d 0%, #9600e9 8.333%, #0061bb 16.667%, #006986 25%, #0061bb 33.333%, #9600e9 41.667%,
+    #bd007d 50%, #9600e9 58.333%, #0061bb 66.667%, #006986 75%, #0061bb 83.333%, #9600e9 91.667%,
+    #bd007d 100%);
   background-size: 200% 100%;
   background-position: 0% 50%;
   background-clip: text;
