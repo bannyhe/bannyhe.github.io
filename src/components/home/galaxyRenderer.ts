@@ -6,21 +6,21 @@ import { createNetworkField } from './galaxyField';
 
 function studioEnvironment(renderer: THREE.WebGLRenderer) {
   const studio = new THREE.Scene();
-  // A product-photography setup: a dark cyclorama so the lacquer reads deep,
-  // a large soft key, a cool fill, a violet rim to catch the bevels, and a
-  // thin strip that draws one clean highlight line along each tile.
-  studio.background = new THREE.Color(0x141c2a);
+  // A soft-box studio: broad, overlapping sources and a mid-tone surround, so
+  // reflections become gentle gradients rather than hard hotspots. A faint
+  // violet bounce from behind separates silhouettes without a rim glint.
+  studio.background = new THREE.Color(0x232c3a);
   const panels: THREE.Mesh[] = [];
   const panel = (width: number, height: number, color: THREE.Color, x: number, y: number, z: number) => {
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide }));
     mesh.position.set(x, y, z); mesh.lookAt(0, 0, 0); studio.add(mesh); panels.push(mesh);
   };
-  panel(7, 8, new THREE.Color(3.6, 3.8, 4.2), -5.5, 4.5, 6);
-  panel(4, 7, new THREE.Color(1.1, 1.5, 2.3), 6, .5, 3.5);
-  panel(5, 6, new THREE.Color(2.1, 1.5, 3.4), 2, 1, -6);
-  panel(9, .5, new THREE.Color(5, 5.2, 5.6), 0, 7, 2);
+  panel(10, 10, new THREE.Color(2.3, 2.4, 2.6), -5, 5, 6);   // large, low-contrast key
+  panel(8, 9, new THREE.Color(1.3, 1.5, 1.9), 6, 0, 4);      // cool fill
+  panel(12, 4, new THREE.Color(1.6, 1.7, 1.9), 0, 8, 0);     // overhead bounce
+  panel(7, 6, new THREE.Color(1.5, 1.2, 2.1), 1, 1, -7);     // violet back bounce
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const target = pmrem.fromScene(studio, .05);
+  const target = pmrem.fromScene(studio, .2);
   panels.forEach(mesh => { mesh.geometry.dispose(); (mesh.material as THREE.Material).dispose(); });
   pmrem.dispose();
   return target;
@@ -30,14 +30,19 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'default' });
   renderer.setClearColor(0, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  // Khronos PBR Neutral: keeps base colour and contrast, rolls highlights off
+  // gently, so satin surfaces read rich rather than washed or blown.
+  renderer.toneMapping = THREE.NeutralToneMapping;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, 1, .1, 130);
   let envTarget = studioEnvironment(renderer), restoreEnvironment = false;
   scene.environment = envTarget.texture;
-  scene.add(new THREE.HemisphereLight(0xe1edff, 0x344a64, 1.0));
-  const key = new THREE.DirectionalLight(0xf0f5ff, 2.3); key.position.set(-4, 6, 8); scene.add(key);
-  const rim = new THREE.DirectionalLight(0x89b9eb, 1.5); rim.position.set(5, 2, -3); scene.add(rim);
+  // A dominant soft key wraps a light-to-shadow gradient around each form;
+  // ambient stays low so the forms keep volume; a cool rim separates edges.
+  scene.add(new THREE.HemisphereLight(0xe8f0ff, 0x1c2534, .35));
+  // Raking from the side rather than the camera, which is what models a form.
+  const key = new THREE.DirectionalLight(0xfff4ea, 2.8); key.position.set(-8, 5, 3); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x9fb2f2, 1.5); rim.position.set(6, 3, -4); scene.add(rim);
   const sculpture = createGalaxyModels();
   const models = sculpture.models;
   const centers = models.map(() => new THREE.Vector3());
@@ -265,8 +270,8 @@ export function createGalaxyRenderer(canvas: HTMLCanvasElement) {
     u.spin.value = time * .045;
     glowMaterial.uniforms.color.value.set(dark ? 0x3b5fae : 0xa9c1e4);
     glowMaterial.uniforms.opacity.value = dark ? .24 : .34;
-    scene.environmentIntensity = dark ? 1.05 : 1.15;
-    renderer.toneMappingExposure = dark ? 1.05 : 1.12;
+    scene.environmentIntensity = dark ? .5 : .6;
+    renderer.toneMappingExposure = dark ? 1 : 1;
     pointerTilt.setFromEuler(pointerEuler.set(pointer.y * .06, pointer.x * .1, 0));
     models.forEach((group, index) => {
       // A fixed footprint, bounded turn and sub-pixel drift keep labels clear.
