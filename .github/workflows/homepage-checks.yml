@@ -1,0 +1,58 @@
+name: Homepage checks
+
+# The galaxy suites drive Chrome with software WebGL, which needs a quiet
+# machine to be reliable. Running them here keeps the verdict independent of
+# whatever else a laptop is doing. Pull requests only; deploys are unaffected.
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - '.github/workflows/homepage-checks.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: homepage-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CHROME_PATH: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+
+      # The suites use global WebSocket and type-stripped TypeScript imports.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Unit tests
+        run: node --test --experimental-strip-types tests/galaxy-motion.test.mjs
+
+      # Ubuntu 24.04 blocks the user namespaces Chrome's sandbox relies on.
+      - name: Allow Chrome's sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Serve the build
+        run: |
+          npx vite preview --port 3000 --strictPort --host 127.0.0.1 --outDir build &
+          for i in $(seq 1 60); do curl -sf -o /dev/null http://127.0.0.1:3000/ && exit 0; sleep 1; done
+          echo "preview server did not start" && exit 1
+
+      - name: AAA contrast
+        run: node tests/home-contrast.mjs http://127.0.0.1:3000
+
+      - name: Galaxy browser suite
+        run: node tests/galaxy-browser.mjs http://127.0.0.1:3000
