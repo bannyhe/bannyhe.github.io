@@ -11,8 +11,9 @@ function LoginScreen({ onLogin, message }: { onLogin: (key: string, seed: Seed) 
   const active = useRef<AbortController | null>(null);
   useEffect(() => {
     const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), 75000);
-    // One user-initiated visit can wake an idle host while the key is entered.
-    fetch(`${server}/health`, { signal: controller.signal, cache: "no-store" }).catch(() => {});
+    // One user-initiated visit can wake an idle host while the key is entered;
+    // ?deep=1 also opens the database connection, so the first query is warm.
+    fetch(`${server}/health?deep=1`, { signal: controller.signal, cache: "no-store" }).catch(() => {});
     return () => { clearTimeout(timer); controller.abort(); active.current?.abort(); };
   }, [server]);
   useEffect(() => { if (!loading) { setSlow(false); return; } const timer = setTimeout(() => setSlow(true), 6000); return () => clearTimeout(timer); }, [loading]);

@@ -1,0 +1,33 @@
+name: Keep analytics warm
+
+# The analytics service runs on a host that sleeps after 15 idle minutes and
+# takes up to a minute to wake, which is what made the admin page slow to open.
+# A light ping every 10 minutes keeps it awake. ?deep=1 also touches the
+# database, so its connection stays warm too.
+#
+# Scheduled runs only fire from the repository's default branch.
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Ping the analytics service
+        env:
+          BASE: ${{ secrets.VITE_ANALYTICS_URL }}
+        run: |
+          if [ -z "$BASE" ]; then echo "VITE_ANALYTICS_URL is not set"; exit 1; fi
+          # Up to three tries: the first may land on a cold start.
+          for attempt in 1 2 3; do
+            if curl -fsS --max-time 90 -o /dev/null -w "attempt $attempt: HTTP %{http_code} in %{time_total}s\n" "${BASE%/}/health?deep=1"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "analytics service did not respond" && exit 1
