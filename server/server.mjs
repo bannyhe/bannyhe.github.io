@@ -62,6 +62,7 @@ async function initDb() {
     `CREATE INDEX IF NOT EXISTS idx_pv_session ON page_views(session_id)`,
     `CREATE INDEX IF NOT EXISTS idx_pv_path    ON page_views(path)`,
     `CREATE INDEX IF NOT EXISTS idx_pv_entered ON page_views(entered_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_pv_session_entered ON page_views(session_id, entered_at)`,
     `CREATE TABLE IF NOT EXISTS interactions (
       id         TEXT PRIMARY KEY,
       session_id TEXT NOT NULL REFERENCES visitor_sessions(id) ON DELETE CASCADE,
@@ -70,6 +71,9 @@ async function initDb() {
     )`,
     `CREATE INDEX IF NOT EXISTS idx_int_session ON interactions(session_id)`,
     `CREATE INDEX IF NOT EXISTS idx_int_type    ON interactions(type)`,
+    // Overview counts and the Interactions panel filter on this; without it
+    // both scanned the whole table.
+    `CREATE INDEX IF NOT EXISTS idx_int_created ON interactions(created_at)`,
   ], 'deferred');
 }
 
@@ -384,17 +388,21 @@ on('GET', '/api/dashboard/devices', async (req, res) => {
 
 on('GET', '/api/dashboard/referrers', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url   = new URL('http://x' + req.url);
   const since = url.searchParams.get('since') ?? new Date(0).toISOString();
   const r = await db.execute({ sql: `SELECT referrer,COUNT(*) AS visitors FROM visitor_sessions WHERE is_bot=0 AND referrer IS NOT NULL AND referrer!='' AND first_seen_at>=? GROUP BY referrer ORDER BY visitors DESC LIMIT 30`, args: [since] });
+  cacheSet(req.url, r.rows);
   send(res, 200, r.rows);
 });
 
 on('GET', '/api/dashboard/interactions', async (req, res) => {
   if (!authGuard(req, res)) return;
+  const cached = cacheGet(req.url); if (cached) return send(res, 200, cached);
   const url   = new URL('http://x' + req.url);
   const since = url.searchParams.get('since') ?? new Date(0).toISOString();
   const r = await db.execute({ sql: `SELECT type,target,COUNT(*) AS count FROM interactions WHERE created_at>=? GROUP BY type,target ORDER BY count DESC LIMIT 50`, args: [since] });
+  cacheSet(req.url, r.rows);
   send(res, 200, r.rows);
 });
 
@@ -404,26 +412,22 @@ on('GET', '/api/dashboard/flow', async (req, res) => {
   const url      = new URL('http://x' + req.url);
   const since    = url.searchParams.get('since') ?? new Date(0).toISOString();
   const location = url.searchParams.get('location') || null;
-  const flowLoc  = location ? ` AND p1.session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
+  const flowLoc  = location ? ` AND session_id IN (SELECT id FROM visitor_sessions WHERE (${LOC_EXPR})=?)` : '';
   const la       = location ? [location] : [];
+  // Each view paired with the next view in its session, in one ordered pass.
+  // Equivalent to the old self-join + NOT EXISTS (verified on synthetic data),
+  // which compared every view with every later view in the session.
   const r = await db.execute({ sql: `
-    SELECT p1.path AS source_path, p2.path AS target_path, COUNT(*) AS value
-    FROM page_views p1
-    JOIN page_views p2
-      ON  p1.session_id = p2.session_id
-      AND p2.entered_at > p1.entered_at
-      AND p1.path != p2.path
-      AND p1.path != '/admin'
-      AND p2.path != '/admin'
-      AND p2.path != '/'
-      AND p1.entered_at >= ?${flowLoc}
-      AND NOT EXISTS (
-        SELECT 1 FROM page_views p3
-        WHERE p3.session_id = p1.session_id
-          AND p3.entered_at > p1.entered_at
-          AND p3.entered_at < p2.entered_at
-      )
-    GROUP BY p1.path, p2.path
+    SELECT source_path, target_path, COUNT(*) AS value FROM (
+      SELECT path AS source_path,
+             LEAD(path) OVER (PARTITION BY session_id ORDER BY entered_at, id) AS target_path
+      FROM page_views
+      WHERE entered_at >= ?${flowLoc}
+    )
+    WHERE target_path IS NOT NULL
+      AND source_path != target_path
+      AND source_path != '/admin' AND target_path != '/admin' AND target_path != '/'
+    GROUP BY source_path, target_path
     ORDER BY value DESC
     LIMIT 30
   `, args: [since, ...la] });
@@ -509,30 +513,40 @@ on('GET', '/api/dashboard/timeline', async (req, res) => {
 });
 
 // ── HTTP server ────────────────────────────────────────────────────────────────
-initDb().then(() => {
-  createServer(async (req, res) => {
-    setCors(req, res);
-    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+// The server listens the moment the process starts, and initialises the
+// database alongside. On a host that sleeps when idle this takes the database
+// round trip off every cold start; routes that need the database wait for it.
+const bootedAt = Date.now();
+const ready = initDb();
+ready.then(() => console.log(`[db]     Turso ready   →  ${TURSO_URL}`))
+     .catch(err => { console.error('[db] Failed to initialize database:', err); process.exit(1); });
 
-    const pathname = new URL('http://x' + req.url).pathname;
-    if (req.method === 'GET' && pathname === '/health')
-      return send(res, 200, { status: 'ok', ts: new Date().toISOString() });
+createServer(async (req, res) => {
+  setCors(req, res);
+  if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
-    const match = matchRoute(req.method, pathname);
-    if (!match) return send(res, 404, { error: 'Not found' });
-
-    try {
-      await match.handler(req, res, match.params ?? {});
-    } catch (err) {
-      console.error('[server] Error:', err);
-      send(res, 500, { error: 'Internal server error' });
+  const url = new URL('http://x' + req.url);
+  if (req.method === 'GET' && url.pathname === '/health') {
+    const body = { status: 'ok', ts: new Date().toISOString(), uptimeSeconds: Math.round((Date.now() - bootedAt) / 1000) };
+    // ?deep=1 also proves the database answers, which keeps its connection warm.
+    if (url.searchParams.get('deep') === '1') {
+      try { await ready; await db.execute('SELECT 1'); body.db = 'ok'; }
+      catch { return send(res, 503, { ...body, status: 'degraded', db: 'unavailable' }); }
     }
-  }).listen(PORT, () => {
-    console.log(`[db]     Turso ready   →  ${TURSO_URL}`);
-    console.log(`[server] Listening     →  http://localhost:${PORT}`);
-    console.log(`[server] CORS origins  →  ${CORS_ORIGINS.join(', ')}`);
-  });
-}).catch(err => {
-  console.error('[db] Failed to initialize database:', err);
-  process.exit(1);
+    return send(res, 200, body);
+  }
+
+  const match = matchRoute(req.method, url.pathname);
+  if (!match) return send(res, 404, { error: 'Not found' });
+
+  try {
+    await ready;
+    await match.handler(req, res, match.params ?? {});
+  } catch (err) {
+    console.error('[server] Error:', err);
+    if (!res.headersSent) send(res, 500, { error: 'Internal server error' });
+  }
+}).listen(PORT, () => {
+  console.log(`[server] Listening     →  http://localhost:${PORT}`);
+  console.log(`[server] CORS origins  →  ${CORS_ORIGINS.join(', ')}`);
 });
