@@ -166,6 +166,11 @@ try {
   await navigate('/about');await waitFor("!!document.querySelector('.footer-guideline-link')");
   await evaluate("document.querySelector('.footer-guideline-link').click()");await ready();
   assert.equal(await evaluate('location.pathname'),'/guideline');
+  // GitHub Pages redirects directory routes to a trailing slash.
+  for (const path of ['/guideline/', '/zh/guideline/']) {
+    await navigate(path); await ready();
+    assert.ok(await evaluate("!!document.querySelector('.guideline-shell')"), 'Direct directory URL lost its theme');
+  }
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({passed:true,artifacts,checks:'EN/ZH, light/dark, 1440/768/390/320, direct fragment and browser history, clipboard, token download, responsive demo, button states, media dialog/Escape/focus return, finite motion and reduced motion, mobile contents, footer navigation, runtime errors'}));
 }finally{if(ws?.readyState===1)ws.close();chrome.kill('SIGTERM');}

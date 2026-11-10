@@ -152,9 +152,10 @@ function AppContent() {
   const { trackEvent } = useAnalytics();
   const pathname = useLocation().pathname;
   const isHome = pathname === "/";
+  const isGuideline = pathname.replace(/\/+$/, "") === "/guideline";
 
   return (
-    <div className={`${isHome ? "home-shell " : pathname === "/guideline" ? "guideline-shell " : ""}min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300`}>
+    <div className={`${isHome ? "home-shell " : isGuideline ? "guideline-shell " : ""}min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300`}>
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-transparent to-transparent dark:from-blue-900/20 opacity-60 pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-purple-100 via-transparent to-transparent dark:from-purple-900/20 opacity-60 pointer-events-none" />
 
