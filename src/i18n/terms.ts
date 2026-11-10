@@ -1,5 +1,6 @@
 // Supplemental labels and contextual phrases used by the shared pages.
 export const terms: Record<string, string> = {
+  "Design guidelines": "设计指南",
   "Last 8 hours": "最近 8 小时",
   "Protected project access": "受保护项目的访问情况",
   "Unlocked during this visit": "本次访问已成功解锁",

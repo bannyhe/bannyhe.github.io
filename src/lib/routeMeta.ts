@@ -45,6 +45,11 @@ export interface RouteMeta {
 
 const EN_ROUTE_META: RouteMeta[] = [
   {
+    path: "/guideline",
+    title: "Design guidelines — Mu He",
+    description: "The visual language of Mu He’s portfolio: color, typography, layout, components, motion, and accessible interaction patterns. Explore examples in light and dark mode.",
+  },
+  {
     path: "/",
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
@@ -102,6 +107,7 @@ const EN_ROUTE_META: RouteMeta[] = [
 
 /** Chinese URLs share the same components and have their own crawlable metadata. */
 const ZH_META: Record<string, [string, string]> = {
+  "/guideline": ["设计指南 — 何沐", "何沐作品集的设计语言：色彩、字体、布局、组件、动效与无障碍交互。在浅色与深色模式下探索设计示例。"],
   "/": ["何沐 — 产品设计师", "何沐的产品设计作品集：拥有 7 年以上企业 SaaS 经验，专注 AI、云基础设施、网络与安全领域的用户体验设计与研究。"],
   "/about": ["关于何沐", "了解何沐：拥有 7 年以上经验的产品设计师，在 VMware by Broadcom 设计企业网络与安全产品，参与的方案曾获网络安全卓越奖金奖。"],
   "/resume": ["简历 — 何沐", "何沐的简历：高级产品设计师，专注企业 SaaS、云基础设施与网络安全，主导网络运维体验和对话式 AI 概念设计。"],

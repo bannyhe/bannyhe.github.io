@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Link,
   useLocation,
 } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
@@ -84,6 +85,9 @@ const AboutPage = lazy(() =>
 const ResumePage = lazy(() =>
   import("./pages/ResumePage").then((m) => ({ default: m.ResumePage })),
 );
+const GuidelinePage = lazy(() =>
+  import("./pages/GuidelinePage").then((m) => ({ default: m.GuidelinePage })),
+);
 const MalwarePreventionPage = lazy(() =>
   import("./pages/MalwarePreventionPage").then((m) => ({
     default: m.MalwarePreventionPage,
@@ -146,10 +150,11 @@ function RouteFallback() {
 function AppContent() {
   usePageAnalytics();
   const { trackEvent } = useAnalytics();
-  const isHome = useLocation().pathname === "/";
+  const pathname = useLocation().pathname;
+  const isHome = pathname === "/";
 
   return (
-    <div className={`${isHome ? "home-shell " : ""}min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300`}>
+    <div className={`${isHome ? "home-shell " : pathname === "/guideline" ? "guideline-shell " : ""}min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300`}>
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-transparent to-transparent dark:from-blue-900/20 opacity-60 pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-purple-100 via-transparent to-transparent dark:from-purple-900/20 opacity-60 pointer-events-none" />
 
@@ -162,6 +167,7 @@ function AppContent() {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/resume" element={<ResumePage />} />
+            <Route path="/guideline" element={<GuidelinePage />} />
             <Route
               path="/project/malware-prevention"
               element={<MalwarePreventionPage />}
@@ -221,6 +227,7 @@ function AppContent() {
                 </motion.a>
               )))}
             </div>
+            <Link className="footer-guideline-link" to="/guideline">{localize("Design guidelines")}</Link>
             <p className="text-gray-500 dark:text-gray-400">{localize("© 2026 Designed by Mu He. All rights reserved.")}</p>
           </div>
         </footer>

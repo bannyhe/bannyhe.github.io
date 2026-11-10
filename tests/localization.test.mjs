@@ -5,7 +5,7 @@ import { localeForPath, languagePath, translateText, localize } from '../src/i18
 import { ROUTE_META, metaForPath } from '../src/lib/routeMeta.ts';
 
 test('language paths are reversible and do not confuse similarly named routes',()=>{
-  for(const path of ['/','/about','/resume','/project/ai-assistant','/admin']){
+  for(const path of ['/','/about','/resume','/guideline','/project/ai-assistant','/admin']){
     const chinese=languagePath(path,'zh');
     assert.equal(localeForPath(chinese),'zh');
     assert.equal(languagePath(chinese,'en'),path);
